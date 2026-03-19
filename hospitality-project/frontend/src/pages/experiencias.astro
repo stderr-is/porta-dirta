@@ -1,0 +1,892 @@
+---
+/**
+ * experiencias.astro — Local Experiences page for Porta D'irta
+ *
+ * Sections:
+ *   1. Hero — full-viewport with overlay, badge pills, scroll chevron
+ *   2. Intro ("Más allá de la villa") — two-column, image mosaic
+ *   3. Sierra de Irta — dramatic full-width dark split, activity list
+ *   4. Mar & Playa — 3-column activity card grid
+ *   5. Cultura & Gastronomía — 2 large glassmorphism cards on dark
+ *   6. Colaboraciones Locales — 4 partner logo placeholders
+ *   7. Booking / Contact form — frosted glass, anchor: #contacto
+ *   8. Cross-sell strip — Hotel, Restaurante, Eventos & Celebraciones
+ *
+ * Wave 2 notes:
+ *   - Replace all picsum images with real photography.
+ *   - Wire up form to n8n webhook or email backend.
+ *   - Replace partner logo divs with real partner logos.
+ */
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Experiencias"
+  description="Descubre la Costa del Azahar con excursiones, actividades náuticas, cultura y gastronomía diseñadas exclusivamente para los huéspedes de Porta D'irta en Peñíscola."
+  lang="es"
+  ogImage="https://picsum.photos/1200/630?random=50"
+>
+
+  <!-- ============================================================
+       SECTION 1: HERO
+       Full-viewport, photo background with brand-blue/65 overlay.
+       Centred label, display heading, subtitle, badge pills, chevron.
+       ============================================================ -->
+  <section
+    class="relative flex items-center justify-center min-h-screen w-full overflow-hidden"
+    aria-label="Hero — Experiencias en Peñíscola"
+  >
+
+    <!-- Background photo -->
+    <!-- REPLACE: real aerial/landscape hero photo -->
+    <img
+      src="https://picsum.photos/1920/1080?random=50"
+      alt="Costa del Azahar vista desde Peñíscola"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+      decoding="async"
+    />
+
+    <!-- Brand-blue overlay -->
+    <div
+      class="absolute inset-0 bg-brand-blue/65"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Hero content -->
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
+
+      <!-- Section label -->
+      <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">
+        EXPERIENCIAS
+      </p>
+
+      <!-- Main heading -->
+      <h1 class="font-display italic text-7xl text-white leading-tight">
+        Descubre la Costa del Azahar
+      </h1>
+
+      <!-- Thin gold divider -->
+      <div class="w-16 h-px bg-brand-gold opacity-60" aria-hidden="true"></div>
+
+      <!-- Subtitle -->
+      <p class="font-body text-white/80 text-lg leading-relaxed max-w-xl">
+        Excursiones, gastronomía y aventuras diseñadas para nuestros huéspedes
+      </p>
+
+      <!-- Badge pills -->
+      <div class="flex flex-wrap justify-center gap-3 mt-2">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+          Naturaleza
+        </span>
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+          Mar
+        </span>
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+          Cultura
+        </span>
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+          Gastronomía
+        </span>
+      </div>
+
+      <!-- Scroll chevron -->
+      <a
+        href="#experiencias"
+        class="mt-6 inline-flex items-center gap-2 font-body text-white/70 text-xs uppercase tracking-widest hover:text-white transition-colors duration-300"
+        aria-label="Descubrir experiencias"
+      >
+        Descubrir experiencias
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 2: INTRO ("MÁS ALLÁ DE LA VILLA")
+       Two-column: copy left, 2×2 image mosaic right.
+       ============================================================ -->
+  <section
+    id="experiencias"
+    class="bg-brand-cream py-24 md:py-32 px-4"
+    aria-label="Más allá de la villa — experiencias para huéspedes"
+  >
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Two-column grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Left: text -->
+        <div class="flex flex-col gap-6">
+
+          <!-- Label -->
+          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+            PARA NUESTROS HUÉSPEDES
+          </p>
+
+          <!-- Heading -->
+          <h2 class="font-display font-light text-5xl text-brand-blue leading-tight">
+            Todo lo que Peñíscola tiene que ofrecerte
+          </h2>
+
+          <!-- Thin gold rule -->
+          <div class="w-12 h-px bg-brand-gold"></div>
+
+          <!-- Paragraphs -->
+          <p class="font-body text-brand-stone text-lg leading-relaxed">
+            En Porta D'irta creemos que una estancia perfecta va mucho más allá de las comodidades
+            de la villa. Por eso hemos seleccionado las mejores experiencias de la Costa del Azahar
+            y las hemos organizado exclusivamente para nuestros huéspedes, desde rutas de montaña
+            en la Sierra de Irta hasta aventuras acuáticas en el Mediterráneo cristalino.
+          </p>
+          <p class="font-body text-brand-stone text-lg leading-relaxed">
+            Trabajamos con guías locales certificados y colaboradores de confianza para garantizarte
+            autenticidad, seguridad y momentos únicos. Solo tienes que decirnos qué te apetece y
+            nuestro equipo lo organiza todo: recogida, reservas y hasta la cesta de picnic para el
+            camino.
+          </p>
+
+        </div>
+
+        <!-- Right: 2×2 image mosaic -->
+        <div class="grid grid-cols-2 gap-4">
+
+          <!-- REPLACE: real photo -->
+          <div class="overflow-hidden rounded-xl">
+            <img
+              src="https://picsum.photos/400/300?random=51"
+              alt="Senderismo en la Sierra de Irta"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <!-- REPLACE: real photo -->
+          <div class="overflow-hidden rounded-xl">
+            <img
+              src="https://picsum.photos/400/300?random=52"
+              alt="Kayak en el Mediterráneo"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <!-- REPLACE: real photo -->
+          <div class="overflow-hidden rounded-xl">
+            <img
+              src="https://picsum.photos/400/300?random=53"
+              alt="Castillo de Peñíscola"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <!-- REPLACE: real photo -->
+          <div class="overflow-hidden rounded-xl">
+            <img
+              src="https://picsum.photos/400/300?random=54"
+              alt="Gastronomía local — arroz a banda"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3: SIERRA DE IRTA
+       Dramatic full-width dark split: image left, content right.
+       ============================================================ -->
+  <section
+    class="bg-brand-blue min-h-screen flex flex-col lg:flex-row overflow-hidden"
+    aria-label="Sierra de Irta — parque natural"
+  >
+
+    <!-- Left: large image taking full height -->
+    <!-- REPLACE: real Sierra de Irta photo -->
+    <div class="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen flex-shrink-0">
+      <img
+        src="https://picsum.photos/800/900?random=55"
+        alt="Sierra de Irta, parque natural de Peñíscola"
+        class="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <!-- Right: content -->
+    <div class="w-full lg:w-1/2 flex items-center py-24 md:py-32 px-8 md:px-16">
+      <div class="flex flex-col gap-8 max-w-lg">
+
+        <!-- Label -->
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+          NATURALEZA
+        </p>
+
+        <!-- Heading -->
+        <h2 class="font-display italic text-6xl text-white leading-tight">
+          Sierra de Irta
+        </h2>
+
+        <!-- Thin gold rule -->
+        <div class="w-12 h-px bg-brand-gold"></div>
+
+        <!-- Paragraphs -->
+        <p class="font-body text-white/80 text-base leading-relaxed">
+          El Parque Natural de la Sierra de Irta es uno de los últimos tramos de litoral virgen
+          del Mediterráneo español. Con más de 5.000 hectáreas de monte bajo, acantilados y calas
+          secretas, es el escenario ideal para conectar con la naturaleza a pocos minutos de la
+          villa.
+        </p>
+        <p class="font-body text-white/80 text-base leading-relaxed">
+          Nuestros guías locales te llevan por los senderos más espectaculares, adaptando el
+          recorrido a tu nivel físico y tus intereses. Una experiencia que combina paisaje,
+          historia y biodiversidad en estado puro.
+        </p>
+
+        <!-- Activity list -->
+        <ul class="flex flex-col gap-4" aria-label="Actividades en la Sierra de Irta">
+
+          <!-- Senderismo guiado -->
+          <li class="flex items-center gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span class="font-body text-white text-base">Senderismo guiado</span>
+          </li>
+
+          <!-- Rutas en bicicleta -->
+          <li class="flex items-center gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span class="font-body text-white text-base">Rutas en bicicleta</span>
+          </li>
+
+          <!-- Observación de aves -->
+          <li class="flex items-center gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span class="font-body text-white text-base">Observación de aves</span>
+          </li>
+
+          <!-- Fotografía de naturaleza -->
+          <li class="flex items-center gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span class="font-body text-white text-base">Fotografía de naturaleza</span>
+          </li>
+
+        </ul>
+
+        <!-- CTA -->
+        <div class="pt-2">
+          <a
+            href="#contacto"
+            class="inline-flex items-center justify-center px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg"
+          >
+            Reservar Excursión
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 4: MAR & PLAYA
+       Cream background. 3-column activity card grid.
+       ============================================================ -->
+  <section
+    class="bg-brand-cream py-24 md:py-32 px-4"
+    aria-label="Actividades acuáticas — Mar y Playa"
+  >
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section heading -->
+      <div class="text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          MAR &amp; PLAYA
+        </p>
+        <h2 class="font-display font-light text-5xl text-brand-blue">
+          El Mediterráneo a tu puerta
+        </h2>
+      </div>
+
+      <!-- Cards grid -->
+      <!-- REPLACE: real activity photos -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Card 1: Kayak & Paddleboard -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+
+          <!-- Image with hover zoom -->
+          <div class="relative overflow-hidden">
+            <img
+              src="https://picsum.photos/400/300?random=56"
+              alt="Kayak y paddleboard en Peñíscola"
+              class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Price badge -->
+            <div class="absolute top-4 right-4">
+              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                desde €25/persona
+              </span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-3 p-6 flex-1">
+            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
+              Kayak &amp; Paddleboard
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Explora las calas y acantilados de la Sierra de Irta desde el agua con nuestros
+              equipos de kayak y paddleboard. El instructor adapta la ruta a todos los niveles,
+              desde principiantes hasta deportistas experimentados.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                aria-label="Consultar disponibilidad de Kayak y Paddleboard"
+              >
+                Consultar disponibilidad
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Card 2: Snorkel en las Cuevas -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+
+          <!-- Image with hover zoom -->
+          <div class="relative overflow-hidden">
+            <img
+              src="https://picsum.photos/400/300?random=57"
+              alt="Snorkel en las cuevas marinas de Peñíscola"
+              class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Price badge -->
+            <div class="absolute top-4 right-4">
+              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                desde €35/persona
+              </span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-3 p-6 flex-1">
+            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
+              Snorkel en las Cuevas
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Sumérgete en las cuevas y grutas submarinas de la costa de Peñíscola. Nuestros
+              monitores de buceo certificados te acompañan para descubrir un mundo submarino
+              lleno de vida y colores, con todo el material incluido.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                aria-label="Consultar disponibilidad de Snorkel en las Cuevas"
+              >
+                Consultar disponibilidad
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Card 3: Pesca Tradicional -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+
+          <!-- Image with hover zoom -->
+          <div class="relative overflow-hidden">
+            <img
+              src="https://picsum.photos/400/300?random=58"
+              alt="Pesca tradicional en Peñíscola"
+              class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Price badge -->
+            <div class="absolute top-4 right-4">
+              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                desde €45/persona
+              </span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-3 p-6 flex-1">
+            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
+              Pesca Tradicional
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Embárcate con pescadores locales al amanecer y aprende las técnicas de pesca
+              artesanal del Mediterráneo. Una experiencia auténtica que termina con los
+              mejores ejemplares cocinados a bordo o en nuestra cocina.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                aria-label="Consultar disponibilidad de Pesca Tradicional"
+              >
+                Consultar disponibilidad
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 5: CULTURA & GASTRONOMÍA
+       Dark bg. Two large glassmorphism cards side by side.
+       ============================================================ -->
+  <section
+    class="bg-brand-blue py-24 md:py-32 px-4"
+    aria-label="Cultura y Gastronomía en Peñíscola"
+  >
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section heading -->
+      <div class="text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          CULTURA &amp; GASTRONOMÍA
+        </p>
+        <h2 class="font-display font-light italic text-5xl text-white">
+          Peñíscola, historia y sabor
+        </h2>
+      </div>
+
+      <!-- Two large cards -->
+      <!-- REPLACE: real culture/food photos -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Left card: Peñíscola Histórica -->
+        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
+
+          <!-- Image -->
+          <div class="relative overflow-hidden">
+            <img
+              src="https://picsum.photos/700/500?random=59"
+              alt="Castillo templario y casco antiguo de Peñíscola"
+              class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/70 to-transparent"></div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-4 p-8 flex-1">
+            <h3 class="font-display text-3xl text-white font-light">Peñíscola Histórica</h3>
+            <p class="font-body text-white/80 text-base leading-relaxed">
+              Descubre los secretos del castillo templario donde el Papa Luna escribió sus
+              bulas, y pasea por las callejuelas empedradas de la ciudad amurallada. Nuestros
+              guías locales dan vida a siglos de historia medieval, árabe y cristiana en un
+              recorrido personalizado a tu ritmo.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
+              >
+                Explorar
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Right card: Ruta Gastronómica -->
+        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
+
+          <!-- Image -->
+          <div class="relative overflow-hidden">
+            <img
+              src="https://picsum.photos/700/500?random=60"
+              alt="Ruta gastronómica — vinos y mariscos de la Costa del Azahar"
+              class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/70 to-transparent"></div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-4 p-8 flex-1">
+            <h3 class="font-display text-3xl text-white font-light">Ruta Gastronómica</h3>
+            <p class="font-body text-white/80 text-base leading-relaxed">
+              De los viñedos de Bodegas Costa Azahar al mercado de la lonja, pasando por una
+              clase magistral de arroz a banda con un chef local. La ruta gastronómica de
+              Porta D'irta es un viaje sensorial por los sabores auténticos del Mediterráneo:
+              vinos blancos, mariscos frescos y la tradición arrocera valenciana.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
+              >
+                Explorar
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 6: COLABORACIONES LOCALES
+       Cream bg. 4 partner logo placeholder tiles.
+       ============================================================ -->
+  <section
+    class="bg-brand-cream py-24 md:py-32 px-4"
+    aria-label="Colaboradores locales de Porta D'irta"
+  >
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Section heading -->
+      <div class="text-center mb-6">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          COLABORADORES
+        </p>
+        <h2 class="font-display font-light text-5xl text-brand-blue">
+          Nuestros colaboradores locales
+        </h2>
+      </div>
+
+      <!-- Subtitle -->
+      <p class="font-body text-brand-stone text-base text-center leading-relaxed max-w-2xl mx-auto mb-16">
+        Trabajamos con los mejores proveedores de la zona para ofrecerte experiencias auténticas
+      </p>
+
+      <!-- Partner logo tiles -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+        <!-- Partner 1: Aventura Irta -->
+        <div class="bg-brand-stone/20 rounded-xl h-24 flex items-center justify-center">
+          <span class="text-brand-stone font-body text-sm uppercase tracking-widest text-center px-4">
+            Aventura Irta
+          </span>
+        </div>
+
+        <!-- Partner 2: Mar i Vent Diving -->
+        <div class="bg-brand-stone/20 rounded-xl h-24 flex items-center justify-center">
+          <span class="text-brand-stone font-body text-sm uppercase tracking-widest text-center px-4">
+            Mar i Vent Diving
+          </span>
+        </div>
+
+        <!-- Partner 3: Peñíscola Tours -->
+        <div class="bg-brand-stone/20 rounded-xl h-24 flex items-center justify-center">
+          <span class="text-brand-stone font-body text-sm uppercase tracking-widest text-center px-4">
+            Peñíscola Tours
+          </span>
+        </div>
+
+        <!-- Partner 4: Bodegas Costa Azahar -->
+        <div class="bg-brand-stone/20 rounded-xl h-24 flex items-center justify-center">
+          <span class="text-brand-stone font-body text-sm uppercase tracking-widest text-center px-4">
+            Bodegas Costa Azahar
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 7: BOOKING / CONTACT FORM
+       Dark bg. Frosted glass form card. Anchor: #contacto.
+       REPLACE: form backend / n8n webhook
+       ============================================================ -->
+  <!-- REPLACE: form backend / n8n webhook -->
+  <section
+    id="contacto"
+    class="bg-brand-blue py-24 md:py-32 px-4"
+    aria-label="Formulario de reserva de experiencias"
+  >
+    <div class="max-w-3xl mx-auto">
+
+      <!-- Section heading -->
+      <div class="text-center mb-12">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          PLANIFICA TU ESTANCIA
+        </p>
+        <h2 class="font-display font-light italic text-5xl text-white leading-tight">
+          Diseña tu experiencia perfecta
+        </h2>
+        <p class="font-body text-white/60 text-base mt-4 leading-relaxed">
+          Cuéntanos qué te apetece y lo organizamos todo por ti
+        </p>
+      </div>
+
+      <!-- Frosted glass form card -->
+      <div class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12">
+
+        <form
+          method="POST"
+          action="#"
+          class="flex flex-col gap-6"
+          aria-label="Formulario de reserva de experiencias"
+        >
+
+          <!-- Row: Nombre + Email -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-2">
+              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Nombre *
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                required
+                placeholder="Tu nombre completo"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="tu@email.com"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+          </div>
+
+          <!-- Row: Teléfono + Tipo de experiencia -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-2">
+              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Teléfono
+              </label>
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                placeholder="+34 600 000 000"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="tipo-experiencia" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Tipo de experiencia *
+              </label>
+              <select
+                id="tipo-experiencia"
+                name="tipo-experiencia"
+                required
+                class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 appearance-none"
+              >
+                <option value="" disabled selected class="text-brand-blue">Selecciona una opción</option>
+                <option value="sierra-irta" class="text-brand-blue">Sierra de Irta</option>
+                <option value="actividades-acuaticas" class="text-brand-blue">Actividades Acuáticas</option>
+                <option value="cultura-historia" class="text-brand-blue">Cultura &amp; Historia</option>
+                <option value="gastronomia" class="text-brand-blue">Gastronomía</option>
+                <option value="combinacion" class="text-brand-blue">Combinación personalizada</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Row: Fecha de llegada + Nº personas -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-2">
+              <label for="fecha-llegada" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Fecha de llegada
+              </label>
+              <input
+                type="date"
+                id="fecha-llegada"
+                name="fecha-llegada"
+                class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 [color-scheme:dark]"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Nº personas
+              </label>
+              <input
+                type="number"
+                id="personas"
+                name="personas"
+                min="1"
+                max="20"
+                placeholder="Ej. 4"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+          </div>
+
+          <!-- Mensaje especial -->
+          <div class="flex flex-col gap-2">
+            <label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              Mensaje especial
+            </label>
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              rows="5"
+              placeholder="Cuéntanos tus preferencias, nivel físico, alergias alimentarias o cualquier detalle especial..."
+              class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 resize-y"
+            ></textarea>
+          </div>
+
+          <!-- Submit button -->
+          <div class="flex flex-col items-center gap-4 pt-2">
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto"
+            >
+              Planificar mi Experiencia
+            </button>
+
+            <!-- Reassurance text -->
+            <p class="font-body text-white/50 text-xs text-center">
+              Incluido en estancias de 3 noches o más &middot; Resto bajo reserva previa
+            </p>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 8: CROSS-SELL STRIP
+       Three internal links: Hotel, Restaurante, Eventos & Celebraciones.
+       ============================================================ -->
+  <section
+    class="bg-brand-cream py-24 md:py-32 px-4 border-t border-brand-sand/30"
+    aria-label="Descubrir más en Porta D'irta"
+  >
+    <div class="max-w-5xl mx-auto">
+
+      <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12">
+        DESCUBRE MÁS
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Hotel -->
+        <a
+          href="/hotel"
+          class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
+          aria-label="Ver El Hotel"
+        >
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+            El Hotel →
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <!-- Restaurante -->
+        <a
+          href="/restaurante"
+          class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
+          aria-label="Ver El Restaurante"
+        >
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+            El Restaurante →
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <!-- Eventos & Celebraciones -->
+        <a
+          href="/eventos"
+          class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
+          aria-label="Ver Eventos y Celebraciones"
+        >
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+            Eventos &amp; Celebraciones →
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+</Layout>
