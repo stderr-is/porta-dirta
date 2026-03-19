@@ -1,0 +1,239 @@
+---
+/**
+ * Footer.astro — Dark elegant footer for Porta D'irta
+ *
+ * Layout: 3-column grid on md+, single column stack on mobile.
+ * Col 1 — Logo, tagline, social icons (Instagram + Facebook, inline SVG).
+ * Col 2 — Site navigation links.
+ * Col 3 — Contact information (placeholder — Wave 2 replaces with real data).
+ *
+ * Design tokens used: bg-brand-blue, text-brand-gold, text-brand-sand.
+ * No external icon libraries — all icons are inline SVG.
+ */
+---
+
+<footer class="bg-brand-blue text-white" aria-label="Pie de página">
+
+  <!-- ── Main grid ─────────────────────────────────────────── -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+
+      <!-- ── Col 1: Logo + tagline + social ─────────────────── -->
+      <div class="flex flex-col gap-6">
+        <!-- Logo -->
+        <a href="/" aria-label="Porta D'irta — inicio">
+          <img
+            src="https://portadirta.com/wp-content/uploads/2026/02/LOGO-negativo.png"
+            alt="Porta D'irta"
+            class="h-14 w-auto object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+
+        <!-- Tagline -->
+        <p class="font-body text-brand-sand text-sm tracking-wider">
+          Peñíscola, Costa del Azahar
+        </p>
+
+        <!-- Social icons -->
+        <div class="flex items-center gap-4">
+
+          <!-- Instagram -->
+          <a
+            href="https://instagram.com/portadirta"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Síguenos en Instagram"
+            class="text-white/60 hover:text-brand-gold transition-colors duration-200"
+          >
+            <!-- Instagram SVG icon (outline style) -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+
+          <!-- Facebook -->
+          <a
+            href="https://facebook.com/portadirta"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Síguenos en Facebook"
+            class="text-white/60 hover:text-brand-gold transition-colors duration-200"
+          >
+            <!-- Facebook SVG icon (outline style) -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- ── Col 2: Navigation links ────────────────────────── -->
+      <div>
+        <h3 class="font-body text-xs uppercase tracking-widest text-brand-gold mb-6">
+          Navegación
+        </h3>
+        <ul class="list-none m-0 p-0 flex flex-col gap-3">
+          <li>
+            <a href="/hotel" class="font-body text-sm text-white/80 hover:text-brand-gold transition-colors duration-200">
+              Hotel
+            </a>
+          </li>
+          <li>
+            <a href="/restaurante" class="font-body text-sm text-white/80 hover:text-brand-gold transition-colors duration-200">
+              Restaurante
+            </a>
+          </li>
+          <li>
+            <a href="/eventos" class="font-body text-sm text-white/80 hover:text-brand-gold transition-colors duration-200">
+              Eventos
+            </a>
+          </li>
+          <li>
+            <a href="/experiencias" class="font-body text-sm text-white/80 hover:text-brand-gold transition-colors duration-200">
+              Experiencias
+            </a>
+          </li>
+          <li>
+            <a href="/contacto" class="font-body text-sm text-white/80 hover:text-brand-gold transition-colors duration-200">
+              Contacto
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── Col 3: Contact info ─────────────────────────────── -->
+      <!-- Wave 2: replace placeholders with real venue details -->
+      <div>
+        <h3 class="font-body text-xs uppercase tracking-widest text-brand-gold mb-6">
+          Contacto
+        </h3>
+        <address class="not-italic flex flex-col gap-4">
+
+          <!-- Address -->
+          <div class="flex items-start gap-3">
+            <!-- Location pin icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="mt-0.5 flex-shrink-0 text-brand-gold"
+              aria-hidden="true"
+            >
+              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <p class="font-body text-sm text-white/80 leading-relaxed">
+              Calle Porta D'irta, s/n<br />
+              12598 Peñíscola<br />
+              Castellón, España
+            </p>
+          </div>
+
+          <!-- Phone -->
+          <div class="flex items-center gap-3">
+            <!-- Phone icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="flex-shrink-0 text-brand-gold"
+              aria-hidden="true"
+            >
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.4 2 2 0 0 1 3.56 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16.92z"/>
+            </svg>
+            <a
+              href="tel:+34964000000"
+              class="font-body text-sm text-white/80 hover:text-brand-gold transition-colors duration-200"
+            >
+              +34 964 00 00 00
+            </a>
+          </div>
+
+          <!-- Email -->
+          <div class="flex items-center gap-3">
+            <!-- Email icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="flex-shrink-0 text-brand-gold"
+              aria-hidden="true"
+            >
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <a
+              href="mailto:info@portadirta.com"
+              class="font-body text-sm text-white/80 hover:text-brand-gold transition-colors duration-200"
+            >
+              info@portadirta.com
+            </a>
+          </div>
+
+        </address>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Bottom bar ─────────────────────────────────────────── -->
+  <div class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="font-body text-xs text-white/40 text-center sm:text-left">
+        &copy; 2026 Porta D'irta. Todos los derechos reservados.
+      </p>
+      <!-- Wave 2: add legal links — Política de privacidad, Aviso legal, Cookies -->
+      <div class="flex gap-5">
+        <a href="/privacidad" class="font-body text-xs text-white/40 hover:text-white/70 transition-colors duration-200">Privacidad</a>
+        <a href="/legal" class="font-body text-xs text-white/40 hover:text-white/70 transition-colors duration-200">Aviso legal</a>
+        <a href="/cookies" class="font-body text-xs text-white/40 hover:text-white/70 transition-colors duration-200">Cookies</a>
+      </div>
+    </div>
+  </div>
+
+</footer>

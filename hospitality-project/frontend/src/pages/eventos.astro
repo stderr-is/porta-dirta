@@ -1,0 +1,792 @@
+---
+/**
+ * eventos.astro — Events & Celebrations page for Porta D'irta
+ *
+ * Sections:
+ *   1. Hero — full-viewport with overlay, badge pills
+ *   2. Venue intro — description, image mosaic, feature row
+ *   3. Event types — 3 large glassmorphism cards on bg-brand-blue
+ *   4. Upcoming events — 3 placeholder Hi.Events cards
+ *   5. Contact / inquiry form — frosted glass form, anchor: #contacto
+ *   6. Cross-sell strip — Hotel, Restaurante, Experiencias links
+ *
+ * Wave 2 notes:
+ *   - Replace all picsum images with real photography.
+ *   - Wire up form to n8n webhook or email backend.
+ *   - Replace upcoming events section with Hi.Events API feed.
+ */
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Eventos & Celebraciones"
+  description="Celebra tu boda, comunión o evento privado en Porta D'irta, villa boutique frente al mar en Peñíscola. Jardines, terraza y restaurante propio para hasta 120 invitados."
+  lang="es"
+  ogImage="https://picsum.photos/1200/630?random=40"
+>
+
+  <!-- ============================================================
+       SECTION 1: HERO
+       Full-viewport, photo background with brand-blue overlay.
+       Centred label, display heading, and badge pills.
+       ============================================================ -->
+  <section
+    class="relative flex items-center justify-center min-h-screen w-full overflow-hidden"
+    aria-label="Hero — Eventos & Celebraciones"
+  >
+
+    <!-- Background photo -->
+    <!-- REPLACE: real event/garden photo -->
+    <img
+      src="https://picsum.photos/1920/1080?random=40"
+      alt="Jardines de Porta D'irta para eventos"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+      decoding="async"
+    />
+
+    <!-- Brand-blue overlay -->
+    <div
+      class="absolute inset-0 bg-brand-blue/70"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Hero content -->
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
+
+      <!-- Section label -->
+      <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">
+        EVENTOS &amp; CELEBRACIONES
+      </p>
+
+      <!-- Main heading -->
+      <h1 class="font-display italic text-7xl text-white leading-tight">
+        Momentos que duran<br />para siempre
+      </h1>
+
+      <!-- Thin gold divider -->
+      <div class="w-16 h-px bg-brand-gold opacity-60" aria-hidden="true"></div>
+
+      <!-- Badge pills -->
+      <div class="flex flex-wrap justify-center gap-3 mt-2">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+          Bodas
+        </span>
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+          Comuniones
+        </span>
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+          Cumpleaños
+        </span>
+      </div>
+
+      <!-- CTA scroll hint -->
+      <a
+        href="#espacio"
+        class="mt-6 inline-flex items-center gap-2 font-body text-white/70 text-xs uppercase tracking-widest hover:text-white transition-colors duration-300"
+        aria-label="Descubrir el espacio"
+      >
+        Descubrir el espacio
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 2: VENUE INTRO
+       Two-column layout: copy + image mosaic. Feature row below.
+       ============================================================ -->
+  <section
+    id="espacio"
+    class="bg-brand-cream py-24 md:py-32 px-4"
+    aria-label="El espacio para eventos"
+  >
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Two-column grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Left: text -->
+        <div class="flex flex-col gap-6">
+
+          <!-- Label -->
+          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+            EL ESPACIO
+          </p>
+
+          <!-- Heading -->
+          <h2 class="font-display font-light text-5xl text-brand-blue leading-tight">
+            Un entorno único
+          </h2>
+
+          <!-- Thin gold rule -->
+          <div class="w-12 h-px bg-brand-gold"></div>
+
+          <!-- Paragraphs -->
+          <p class="font-body text-brand-stone text-lg leading-relaxed">
+            Porta D'irta te ofrece un espacio privilegiado donde la naturaleza y la elegancia se
+            encuentran. Nuestros jardines mediterráneos, con palmeras centenarias y buganvillas en
+            flor, crean el escenario perfecto para celebraciones al aire libre. La amplia terraza
+            con vistas al mar Mediterráneo transforma cualquier evento en una experiencia
+            verdaderamente irrepetible.
+          </p>
+          <p class="font-body text-brand-stone text-lg leading-relaxed">
+            Disponemos de distintas zonas para adaptarnos a cada tipo de celebración: desde íntimas
+            reuniones familiares hasta grandes banquetes de boda. La pista de tenis, la piscina y
+            los rincones ajardinados ofrecen infinitas posibilidades para que cada detalle refleje
+            exactamente lo que imaginas para tu día especial.
+          </p>
+
+        </div>
+
+        <!-- Right: image mosaic -->
+        <div class="flex flex-col gap-4">
+
+          <!-- REPLACE: real event/venue photo -->
+          <img
+            src="https://picsum.photos/600/350?random=41"
+            alt="Jardines y terraza de Porta D'irta"
+            class="w-full h-64 object-cover rounded-xl shadow-md"
+            loading="lazy"
+            decoding="async"
+          />
+
+          <!-- REPLACE: real event/venue photo -->
+          <img
+            src="https://picsum.photos/600/350?random=42"
+            alt="Piscina y zona de eventos de Porta D'irta"
+            class="w-full h-64 object-cover rounded-xl shadow-md"
+            loading="lazy"
+            decoding="async"
+          />
+
+        </div>
+
+      </div>
+
+      <!-- Feature row -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-12 border-t border-brand-sand/40">
+
+        <!-- Capacity -->
+        <div class="flex flex-col items-center text-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-brand-blue/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D2B45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Capacidad</p>
+          <p class="font-display text-2xl text-brand-blue font-light">Hasta 120 invitados</p>
+        </div>
+
+        <!-- Outdoor -->
+        <div class="flex flex-col items-center text-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-brand-blue/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D2B45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Exterior</p>
+          <p class="font-display text-2xl text-brand-blue font-light">Jardín y terraza</p>
+        </div>
+
+        <!-- Sports -->
+        <div class="flex flex-col items-center text-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-brand-blue/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D2B45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+            </svg>
+          </div>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Deportes</p>
+          <p class="font-display text-2xl text-brand-blue font-light">Pista de tenis</p>
+        </div>
+
+        <!-- Catering -->
+        <div class="flex flex-col items-center text-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-brand-blue/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D2B45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+              <line x1="6" y1="1" x2="6" y2="4"/>
+              <line x1="10" y1="1" x2="10" y2="4"/>
+              <line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Gastronomía</p>
+          <p class="font-display text-2xl text-brand-blue font-light">Restaurante propio</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3: EVENT TYPES
+       3 large glassmorphism cards on bg-brand-blue background.
+       ============================================================ -->
+  <section
+    class="bg-brand-blue py-24 md:py-32 px-4"
+    aria-label="Tipos de eventos"
+  >
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section heading -->
+      <div class="text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          CELEBRACIONES
+        </p>
+        <h2 class="font-display font-light italic text-5xl text-white">
+          ¿Qué estás celebrando?
+        </h2>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Card 1: Bodas -->
+        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
+
+          <!-- Image -->
+          <!-- REPLACE: real event photos -->
+          <div class="relative">
+            <img
+              src="https://picsum.photos/700/400?random=43"
+              alt="Bodas en Porta D'irta"
+              class="w-full h-56 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/60 to-transparent"></div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-4 p-7 flex-1">
+            <h3 class="font-display text-3xl text-white font-light">Bodas</h3>
+            <p class="font-body text-white/80 text-base leading-relaxed">
+              Tu boda en Porta D'irta es mucho más que una ceremonia: es el inicio de una historia
+              inolvidable. Nuestros paquetes nupciales incluyen decoración personalizada, menú de
+              alta gastronomía mediterránea y coordinación total del evento para que solo te
+              preocupes de disfrutar.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
+              >
+                Solicitar Información
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Card 2: Comuniones -->
+        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
+
+          <!-- Image -->
+          <!-- REPLACE: real event photos -->
+          <div class="relative">
+            <img
+              src="https://picsum.photos/700/400?random=44"
+              alt="Comuniones en Porta D'irta"
+              class="w-full h-56 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/60 to-transparent"></div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-4 p-7 flex-1">
+            <h3 class="font-display text-3xl text-white font-light">Comuniones</h3>
+            <p class="font-body text-white/80 text-base leading-relaxed">
+              Celebra este momento único rodeado de los seres más queridos en un entorno mágico
+              frente al Mediterráneo. Ofrecemos menús especialmente diseñados para todas las
+              edades, animación infantil y espacios adaptados para que los más pequeños disfruten
+              tanto como los mayores.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
+              >
+                Solicitar Información
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Card 3: Eventos Privados -->
+        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
+
+          <!-- Image -->
+          <!-- REPLACE: real event photos -->
+          <div class="relative">
+            <img
+              src="https://picsum.photos/700/400?random=45"
+              alt="Eventos privados y cumpleaños en Porta D'irta"
+              class="w-full h-56 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/60 to-transparent"></div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-4 p-7 flex-1">
+            <h3 class="font-display text-3xl text-white font-light">Eventos Privados</h3>
+            <p class="font-body text-white/80 text-base leading-relaxed">
+              Desde cumpleaños íntimos hasta cenas de empresa o retiros corporativos, nuestra
+              villa se adapta a cualquier tipo de evento privado. Disponemos de espacios flexibles
+              tanto en interior como en exterior, con tecnología audiovisual y catering a medida
+              para sorprender a tus invitados.
+            </p>
+            <div class="mt-auto pt-4">
+              <a
+                href="#contacto"
+                class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
+              >
+                Solicitar Información
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 4: UPCOMING EVENTS (Hi.Events)
+       3 event cards with image, title, date badge, price, CTA.
+       REPLACE: Hi.Events API feed
+       ============================================================ -->
+  <!-- REPLACE: Hi.Events API feed -->
+  <section
+    class="bg-brand-cream py-24 md:py-32 px-4"
+    aria-label="Próximos eventos"
+  >
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section heading -->
+      <div class="text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          AGENDA
+        </p>
+        <h2 class="font-display font-light text-5xl text-brand-blue">
+          Próximos Eventos en Porta D'irta
+        </h2>
+      </div>
+
+      <!-- Event cards row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Event Card 1: Jazz -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+
+          <!-- Image -->
+          <!-- REPLACE: real event photos -->
+          <div class="relative">
+            <img
+              src="https://picsum.photos/400/250?random=46"
+              alt="Noche de Jazz en la Terraza"
+              class="w-full h-48 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Date badge -->
+            <div class="absolute top-4 left-4">
+              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                15 Jul 2026
+              </span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-3 p-6 flex-1">
+            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
+              Noche de Jazz en la Terraza
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Una velada mágica bajo las estrellas con los mejores músicos de jazz del mediterráneo.
+              Copas, brisa marina y música en vivo.
+            </p>
+            <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
+              <span class="font-display text-xl text-brand-blue">€25 <span class="font-body text-sm text-brand-stone font-normal">/ persona</span></span>
+              <a
+                href="#"
+                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                aria-label="Comprar entradas para Noche de Jazz"
+              >
+                Comprar Entradas
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Event Card 2: Wine pairing -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+
+          <!-- Image -->
+          <!-- REPLACE: real event photos -->
+          <div class="relative">
+            <img
+              src="https://picsum.photos/400/250?random=47"
+              alt="Cena Maridaje — Vinos de la Terra Alta"
+              class="w-full h-48 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Date badge -->
+            <div class="absolute top-4 left-4">
+              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                22 Jul 2026
+              </span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-3 p-6 flex-1">
+            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
+              Cena Maridaje — Vinos de la Terra Alta
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Nuestro chef y sumiller te guían por un recorrido sensorial de platos mediterráneos
+              acompañados de los mejores vinos de la Terra Alta.
+            </p>
+            <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
+              <span class="font-display text-xl text-brand-blue">€65 <span class="font-body text-sm text-brand-stone font-normal">/ persona</span></span>
+              <a
+                href="#"
+                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                aria-label="Comprar entradas para Cena Maridaje"
+              >
+                Comprar Entradas
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Event Card 3: Yoga & Brunch -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+
+          <!-- Image -->
+          <!-- REPLACE: real event photos -->
+          <div class="relative">
+            <img
+              src="https://picsum.photos/400/250?random=48"
+              alt="Yoga & Brunch de Verano"
+              class="w-full h-48 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Date badge -->
+            <div class="absolute top-4 left-4">
+              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                3 Ago 2026
+              </span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="flex flex-col gap-3 p-6 flex-1">
+            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
+              Yoga &amp; Brunch de Verano
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Empieza el domingo con una sesión de yoga al amanecer junto al mar, seguida de un
+              brunch saludable con productos locales y zumos naturales en nuestra terraza.
+            </p>
+            <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
+              <span class="font-display text-xl text-brand-blue">€30 <span class="font-body text-sm text-brand-stone font-normal">/ persona</span></span>
+              <a
+                href="#"
+                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                aria-label="Comprar entradas para Yoga & Brunch"
+              >
+                Comprar Entradas
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 5: CONTACT / INQUIRY FORM
+       Frosted glass form card on bg-brand-blue. Anchor: #contacto.
+       REPLACE: form backend / n8n webhook
+       ============================================================ -->
+  <!-- REPLACE: form backend / n8n webhook -->
+  <section
+    id="contacto"
+    class="bg-brand-blue py-24 md:py-32 px-4"
+    aria-label="Formulario de contacto para eventos"
+  >
+    <div class="max-w-3xl mx-auto">
+
+      <!-- Section heading -->
+      <div class="text-center mb-12">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          CONTACTO
+        </p>
+        <h2 class="font-display font-light italic text-5xl text-white leading-tight">
+          Cuéntanos tu evento
+        </h2>
+        <p class="font-body text-white/60 text-base mt-4 leading-relaxed">
+          Rellena el formulario y nuestro equipo te contactará para diseñar juntos la celebración perfecta.
+        </p>
+      </div>
+
+      <!-- Frosted glass form card -->
+      <div class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12">
+
+        <form
+          method="POST"
+          action="#"
+          class="flex flex-col gap-6"
+          aria-label="Formulario de consulta de evento"
+        >
+
+          <!-- Row: Nombre + Email -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-2">
+              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Nombre *
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                required
+                placeholder="Tu nombre completo"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="tu@email.com"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+          </div>
+
+          <!-- Row: Teléfono + Tipo de evento -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-2">
+              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Teléfono
+              </label>
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                placeholder="+34 600 000 000"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="tipo-evento" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Tipo de evento *
+              </label>
+              <select
+                id="tipo-evento"
+                name="tipo-evento"
+                required
+                class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 appearance-none"
+              >
+                <option value="" disabled selected class="text-brand-blue">Selecciona una opción</option>
+                <option value="boda" class="text-brand-blue">Boda</option>
+                <option value="comunion" class="text-brand-blue">Comunión</option>
+                <option value="cumpleanos" class="text-brand-blue">Cumpleaños</option>
+                <option value="corporativo" class="text-brand-blue">Evento corporativo</option>
+                <option value="otro" class="text-brand-blue">Otro</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Row: Fecha + Invitados -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-2">
+              <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Fecha aproximada
+              </label>
+              <input
+                type="date"
+                id="fecha"
+                name="fecha"
+                class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 [color-scheme:dark]"
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="invitados" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+                Número de invitados
+              </label>
+              <input
+                type="number"
+                id="invitados"
+                name="invitados"
+                min="1"
+                max="120"
+                placeholder="Ej. 80"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
+              />
+            </div>
+
+          </div>
+
+          <!-- Mensaje -->
+          <div class="flex flex-col gap-2">
+            <label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              Mensaje
+            </label>
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              rows="5"
+              placeholder="Cuéntanos tu visión: tipo de celebración, necesidades especiales, preguntas..."
+              class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 resize-y"
+            ></textarea>
+          </div>
+
+          <!-- Submit button -->
+          <div class="flex flex-col items-center gap-4 pt-2">
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto"
+            >
+              Enviar Consulta
+            </button>
+
+            <!-- Reassurance text -->
+            <p class="font-body text-white/50 text-xs text-center">
+              Respondemos en menos de 48 horas &middot; info@portadirta.com
+            </p>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 6: CROSS-SELL STRIP
+       Three internal links: Hotel, Restaurante, Experiencias.
+       ============================================================ -->
+  <section
+    class="bg-brand-cream py-24 md:py-32 px-4 border-t border-brand-sand/30"
+    aria-label="Descubrir más en Porta D'irta"
+  >
+    <div class="max-w-5xl mx-auto">
+
+      <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12">
+        DESCUBRE MÁS
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Hotel -->
+        <a
+          href="/hotel"
+          class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
+          aria-label="Ver El Hotel"
+        >
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+            El Hotel
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <!-- Restaurante -->
+        <a
+          href="/restaurante"
+          class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
+          aria-label="Ver El Restaurante"
+        >
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+            El Restaurante
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+        <!-- Experiencias -->
+        <a
+          href="/experiencias"
+          class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
+          aria-label="Ver Experiencias"
+        >
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+            Experiencias
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

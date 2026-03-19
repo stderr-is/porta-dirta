@@ -1,0 +1,564 @@
+---
+/**
+ * index.astro — Full "Scroll Journey" homepage for Porta D'irta
+ *
+ * Sections:
+ *   1. Hero          — Full-viewport video background, booking widget placeholder
+ *   2. El Hotel      — Rooms overview, editorial split layout
+ *   3. El Restaurante— Dark dramatic full-width section
+ *   4. Experiencias  — Card grid, cream background
+ *   5. Final CTA     — Dark full-width call to action
+ */
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Villa & Restaurante en Peñíscola"
+  description="Porta D'irta — Villa boutique y restaurante de cocina mediterránea frente al mar en Peñíscola, Costa del Azahar."
+  lang="es"
+>
+
+  <!-- ============================================================
+       SECTION 1: HERO
+       Full-viewport video background with dark overlay.
+       Centered brand name, subtitle, CTAs, and booking widget.
+       ============================================================ -->
+  <section
+    class="relative flex flex-col items-center justify-center min-h-screen w-full overflow-hidden"
+    aria-label="Hero — Porta D'irta"
+  >
+
+    <!-- Background video — REPLACE: real brand video -->
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      poster="https://picsum.photos/1920/1080?grayscale"
+      aria-hidden="true"
+    >
+      <!-- REPLACE: real photo -->
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Dark overlay -->
+    <div
+      class="absolute inset-0 bg-brand-blue/80 pointer-events-none"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Hero content -->
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center pt-24 pb-16">
+
+      <!-- Property name -->
+      <h1 class="font-display font-light italic text-8xl md:text-9xl text-white leading-none tracking-tight">
+        Porta D'irta
+      </h1>
+
+      <!-- Location subtitle -->
+      <p class="font-body uppercase tracking-[0.4em] text-brand-sand text-sm">
+        Peñíscola &middot; Costa del Azahar
+      </p>
+
+      <!-- Thin gold divider -->
+      <div class="w-16 h-px bg-brand-gold opacity-60" aria-hidden="true"></div>
+
+      <!-- CTA buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
+        <!-- Primary gold CTA -->
+        <a
+          href="/reservar"
+          class="inline-flex items-center px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg"
+        >
+          Reservar Ahora
+        </a>
+
+        <!-- Ghost button -->
+        <a
+          href="#hotel"
+          class="inline-flex items-center px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+        >
+          Descubrir
+        </a>
+      </div>
+
+      <!-- ── Beds24 booking widget placeholder ─────────────────────────────
+           REPLACE: Beds24 widget
+           The inputs below are a visual placeholder only. Wire up the real
+           Beds24 embed or JS widget here before launch.
+           ──────────────────────────────────────────────────────────────── -->
+      <div
+        class="mt-8 w-full max-w-2xl backdrop-blur-md bg-white/10 border border-white/20 rounded-sm px-6 py-6"
+        aria-label="Formulario de disponibilidad"
+      >
+        <!-- REPLACE: Beds24 widget -->
+        <p class="font-body text-xs uppercase tracking-widest text-brand-sand mb-5 text-center">
+          Comprueba disponibilidad
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+          <!-- Llegada -->
+          <div class="flex flex-col gap-1">
+            <label
+              for="check-in"
+              class="font-body text-xs uppercase tracking-widest text-white/60"
+            >
+              Llegada
+            </label>
+            <input
+              id="check-in"
+              type="date"
+              class="bg-white/10 border border-white/20 rounded-sm px-3 py-2 font-body text-sm text-white placeholder-white/40 focus:outline-none focus:border-brand-gold transition-colors duration-200"
+            />
+          </div>
+
+          <!-- Salida -->
+          <div class="flex flex-col gap-1">
+            <label
+              for="check-out"
+              class="font-body text-xs uppercase tracking-widest text-white/60"
+            >
+              Salida
+            </label>
+            <input
+              id="check-out"
+              type="date"
+              class="bg-white/10 border border-white/20 rounded-sm px-3 py-2 font-body text-sm text-white placeholder-white/40 focus:outline-none focus:border-brand-gold transition-colors duration-200"
+            />
+          </div>
+
+          <!-- Huéspedes -->
+          <div class="flex flex-col gap-1">
+            <label
+              for="guests"
+              class="font-body text-xs uppercase tracking-widest text-white/60"
+            >
+              Huéspedes
+            </label>
+            <select
+              id="guests"
+              class="bg-white/10 border border-white/20 rounded-sm px-3 py-2 font-body text-sm text-white focus:outline-none focus:border-brand-gold transition-colors duration-200"
+            >
+              <option value="1" class="text-brand-blue">1 persona</option>
+              <option value="2" class="text-brand-blue" selected>2 personas</option>
+              <option value="3" class="text-brand-blue">3 personas</option>
+              <option value="4" class="text-brand-blue">4 personas</option>
+              <option value="5" class="text-brand-blue">5+ personas</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Submit -->
+        <div class="mt-4 flex justify-center">
+          <button
+            type="button"
+            class="inline-flex items-center px-8 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 w-full sm:w-auto justify-center"
+          >
+            Comprobar disponibilidad
+          </button>
+        </div>
+      </div>
+      <!-- End Beds24 widget placeholder -->
+
+    </div>
+
+    <!-- Scroll hint chevron -->
+    <div
+      class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce"
+      aria-hidden="true"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 2: EL HOTEL
+       Cream background, editorial split layout — text left, image
+       grid right. Anchored via id="hotel".
+       ============================================================ -->
+  <section
+    id="hotel"
+    class="bg-brand-cream min-h-screen flex items-center py-24 md:py-32"
+    aria-labelledby="hotel-heading"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Left: editorial text -->
+        <div class="flex flex-col gap-6">
+
+          <!-- Small label -->
+          <span class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
+            Alojamiento
+          </span>
+
+          <!-- Display heading -->
+          <h2
+            id="hotel-heading"
+            class="font-display font-light text-5xl md:text-6xl text-brand-blue leading-tight"
+          >
+            Despierta frente al<br />Mediterráneo
+          </h2>
+
+          <!-- Gold rule -->
+          <div class="w-12 h-px bg-brand-gold"></div>
+
+          <!-- Body paragraph -->
+          <p class="font-body text-brand-stone text-lg leading-relaxed max-w-md">
+            Nuestras habitaciones y suites fusionan la arquitectura histórica
+            de Peñíscola con el confort contemporáneo. Cada estancia ofrece
+            vistas al Mediterráneo, materiales nobles y una atención
+            personalizada que convierte cada visita en un recuerdo imborrable.
+          </p>
+
+          <!-- CTA -->
+          <div class="mt-2">
+            <a
+              href="/hotel"
+              class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-md"
+            >
+              Ver Habitaciones
+              <!-- Inline arrow SVG -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Right: 2x2 image grid -->
+        <div class="grid grid-cols-2 gap-3">
+
+          <div class="overflow-hidden rounded-sm">
+            <!-- REPLACE: real photo -->
+            <img
+              src="https://picsum.photos/600/400?random=1"
+              alt="Habitación con vistas al mar"
+              class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="overflow-hidden rounded-sm">
+            <!-- REPLACE: real photo -->
+            <img
+              src="https://picsum.photos/600/400?random=2"
+              alt="Suite mediterránea"
+              class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="overflow-hidden rounded-sm">
+            <!-- REPLACE: real photo -->
+            <img
+              src="https://picsum.photos/600/400?random=3"
+              alt="Terraza con vistas"
+              class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="overflow-hidden rounded-sm">
+            <!-- REPLACE: real photo -->
+            <img
+              src="https://picsum.photos/600/400?random=4"
+              alt="Detalle de habitación boutique"
+              class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3: EL RESTAURANTE
+       Dark dramatic section, full-width background image with
+       dark overlay, centered text, feature pills, CTA.
+       ============================================================ -->
+  <section
+    class="relative min-h-screen flex items-center bg-brand-blue py-24 md:py-32 overflow-hidden"
+    aria-labelledby="restaurante-heading"
+  >
+
+    <!-- Background image with dark overlay -->
+    <div class="absolute inset-0" aria-hidden="true">
+      <!-- REPLACE: real photo -->
+      <img
+        src="https://picsum.photos/1920/600?random=5"
+        alt=""
+        class="w-full h-full object-cover opacity-30"
+        loading="lazy"
+        decoding="async"
+      />
+      <!-- Extra gradient for depth -->
+      <div class="absolute inset-0 bg-gradient-to-t from-brand-blue via-brand-blue/60 to-brand-blue/40"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center flex flex-col items-center gap-8">
+
+      <!-- Small label -->
+      <span class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
+        Gastronomía
+      </span>
+
+      <!-- Display heading -->
+      <h2
+        id="restaurante-heading"
+        class="font-display font-light italic text-5xl md:text-7xl text-white leading-tight"
+      >
+        Sabores del Mediterráneo
+      </h2>
+
+      <!-- Gold rule -->
+      <div class="w-12 h-px bg-brand-gold"></div>
+
+      <!-- Body paragraph -->
+      <p class="font-body text-white/75 text-lg leading-relaxed max-w-xl">
+        Nuestra cocina celebra el producto local y la tradición levantina.
+        Del mar a la mesa: arroces, pescados de lonja y tapas que capturan
+        la esencia de la Costa del Azahar en cada bocado.
+      </p>
+
+      <!-- Feature pills -->
+      <div class="flex flex-wrap justify-center gap-3">
+
+        <span class="font-body text-xs uppercase tracking-widest text-white border border-white/30 rounded-full px-5 py-2">
+          Menú del Día
+        </span>
+
+        <span class="font-body text-xs uppercase tracking-widest text-white border border-white/30 rounded-full px-5 py-2">
+          Carta de Temporada
+        </span>
+
+        <span class="font-body text-xs uppercase tracking-widest text-white border border-white/30 rounded-full px-5 py-2">
+          Eventos Privados
+        </span>
+
+      </div>
+
+      <!-- CTA -->
+      <a
+        href="/restaurante"
+        class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg mt-2"
+      >
+        Reservar Mesa
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 4: EXPERIENCIAS
+       Cream background, 3-column card grid, stacks on mobile.
+       ============================================================ -->
+  <section
+    class="bg-brand-cream py-24 md:py-32"
+    aria-labelledby="experiencias-heading"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Section header -->
+      <div class="text-center flex flex-col items-center gap-4 mb-16">
+        <span class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
+          Descubrir
+        </span>
+        <h2
+          id="experiencias-heading"
+          class="font-display font-light text-5xl md:text-6xl text-brand-blue leading-tight"
+        >
+          Más allá del alojamiento
+        </h2>
+        <div class="w-12 h-px bg-brand-gold"></div>
+        <p class="font-body text-brand-stone text-lg leading-relaxed max-w-lg">
+          Peñíscola y sus alrededores ofrecen experiencias únicas que
+          complementan tu estancia en Porta D'irta.
+        </p>
+      </div>
+
+      <!-- 3-column card grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Card 1: Sierra de Irta -->
+        <article class="group bg-white rounded-sm shadow-md overflow-hidden border border-transparent hover:border-brand-gold transition-colors duration-300">
+          <div class="overflow-hidden">
+            <!-- REPLACE: real photo -->
+            <img
+              src="https://picsum.photos/400/300?random=6"
+              alt="Sierra de Irta — parque natural"
+              class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="font-display font-light text-2xl text-brand-blue leading-snug">
+              Sierra de Irta
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Senderismo y naturaleza en el parque natural que rodea la villa.
+              Rutas costeras con vistas incomparables al Mediterráneo.
+            </p>
+          </div>
+        </article>
+
+        <!-- Card 2: Gastronomía Local -->
+        <article class="group bg-white rounded-sm shadow-md overflow-hidden border border-transparent hover:border-brand-gold transition-colors duration-300">
+          <div class="overflow-hidden">
+            <!-- REPLACE: real photo -->
+            <img
+              src="https://picsum.photos/400/300?random=7"
+              alt="Gastronomía local — mercado y tapas"
+              class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="font-display font-light text-2xl text-brand-blue leading-snug">
+              Gastronomía Local
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Mercados de temporada, bodegas y restaurantes de la Costa del
+              Azahar. Una ruta de sabores que no olvidarás.
+            </p>
+          </div>
+        </article>
+
+        <!-- Card 3: Eventos & Celebraciones -->
+        <article class="group bg-white rounded-sm shadow-md overflow-hidden border border-transparent hover:border-brand-gold transition-colors duration-300">
+          <div class="overflow-hidden">
+            <!-- REPLACE: real photo -->
+            <img
+              src="https://picsum.photos/400/300?random=8"
+              alt="Eventos y celebraciones privadas"
+              class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="font-display font-light text-2xl text-brand-blue leading-snug">
+              Eventos &amp; Celebraciones
+            </h3>
+            <p class="font-body text-brand-stone text-sm leading-relaxed">
+              Bodas, aniversarios y reuniones privadas en un entorno único.
+              Nuestro equipo cuida cada detalle para que sea perfecto.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 5: FINAL CTA
+       Dark full-width section, two buttons side by side.
+       ============================================================ -->
+  <section
+    class="bg-brand-blue py-24 md:py-32"
+    aria-labelledby="cta-heading"
+  >
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center gap-8">
+
+      <!-- Display heading -->
+      <h2
+        id="cta-heading"
+        class="font-display font-light italic text-5xl md:text-7xl text-white leading-tight"
+      >
+        ¿Listo para escapar?
+      </h2>
+
+      <!-- Gold rule -->
+      <div class="w-12 h-px bg-brand-gold"></div>
+
+      <!-- Subtitle -->
+      <p class="font-body text-white/70 text-lg leading-relaxed max-w-lg">
+        Reserva tu estancia o mesa en Porta D'irta y déjate envolver por
+        el Mediterráneo. Te esperamos en Peñíscola.
+      </p>
+
+      <!-- Two CTAs side by side -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
+
+        <!-- Primary gold — hotel booking -->
+        <a
+          href="/hotel"
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg"
+        >
+          Reservar Habitación
+        </a>
+
+        <!-- Ghost white — restaurant booking -->
+        <a
+          href="/restaurante"
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm border border-white/60 hover:border-white hover:bg-white/10 text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+        >
+          Reservar Mesa
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

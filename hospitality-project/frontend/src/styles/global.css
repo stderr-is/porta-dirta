@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Porta D'irta — Design Tokens (Tailwind v4 @theme)
+   These map directly to Tailwind utility classes:
+     color: brand-blue, brand-gold, etc.
+     font-family: font-display, font-body
+   ========================================================================== */
+@theme {
+  /* --- Brand colours --- */
+  --color-brand-blue: #0D2B45;        /* Deep Mediterranean Blue — primary */
+  --color-brand-blue-light: #1A4A6E;  /* Lighter blue for hover states */
+  --color-brand-gold: #C9A84C;        /* CTA / primary action colour */
+  --color-brand-coral: #E07B5A;       /* Alternative CTA */
+  --color-brand-sand: #C4A882;        /* Sandy neutral accent */
+  --color-brand-stone: #8B7355;       /* Warm stone accent */
+  --color-brand-white: #FFFFFF;
+  --color-brand-cream: #FAF8F5;       /* Off-white page background */
+
+  /* --- Typography --- */
+  --font-family-display: 'Cormorant Garamond', serif;
+  --font-family-body: 'Inter', sans-serif;
+}
+
+/* Base resets */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
