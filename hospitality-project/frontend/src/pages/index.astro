@@ -84,84 +84,29 @@ import Layout from '../layouts/Layout.astro';
         </a>
       </div>
 
-      <!-- ── Beds24 booking widget placeholder ─────────────────────────────
-           REPLACE: Beds24 widget
-           The inputs below are a visual placeholder only. Wire up the real
-           Beds24 embed or JS widget here before launch.
+      <!-- ── Beds24 booking widget ──────────────────────────────────────────
+           Beds24 iframe embed. Keep the frosted glass card as the wrapper.
            ──────────────────────────────────────────────────────────────── -->
       <div
         class="mt-8 w-full max-w-2xl backdrop-blur-md bg-white/10 border border-white/20 rounded-sm px-6 py-6"
-        aria-label="Formulario de disponibilidad"
+        aria-label="Widget de reserva"
       >
-        <!-- REPLACE: Beds24 widget -->
-        <p class="font-body text-xs uppercase tracking-widest text-brand-sand mb-5 text-center">
-          Comprueba disponibilidad
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-
-          <!-- Llegada -->
-          <div class="flex flex-col gap-1">
-            <label
-              for="check-in"
-              class="font-body text-xs uppercase tracking-widest text-white/60"
-            >
-              Llegada
-            </label>
-            <input
-              id="check-in"
-              type="date"
-              class="bg-white/10 border border-white/20 rounded-sm px-3 py-2 font-body text-sm text-white placeholder-white/40 focus:outline-none focus:border-brand-gold transition-colors duration-200"
-            />
-          </div>
-
-          <!-- Salida -->
-          <div class="flex flex-col gap-1">
-            <label
-              for="check-out"
-              class="font-body text-xs uppercase tracking-widest text-white/60"
-            >
-              Salida
-            </label>
-            <input
-              id="check-out"
-              type="date"
-              class="bg-white/10 border border-white/20 rounded-sm px-3 py-2 font-body text-sm text-white placeholder-white/40 focus:outline-none focus:border-brand-gold transition-colors duration-200"
-            />
-          </div>
-
-          <!-- Huéspedes -->
-          <div class="flex flex-col gap-1">
-            <label
-              for="guests"
-              class="font-body text-xs uppercase tracking-widest text-white/60"
-            >
-              Huéspedes
-            </label>
-            <select
-              id="guests"
-              class="bg-white/10 border border-white/20 rounded-sm px-3 py-2 font-body text-sm text-white focus:outline-none focus:border-brand-gold transition-colors duration-200"
-            >
-              <option value="1" class="text-brand-blue">1 persona</option>
-              <option value="2" class="text-brand-blue" selected>2 personas</option>
-              <option value="3" class="text-brand-blue">3 personas</option>
-              <option value="4" class="text-brand-blue">4 personas</option>
-              <option value="5" class="text-brand-blue">5+ personas</option>
-            </select>
-          </div>
-
-        </div>
-
-        <!-- Submit -->
-        <div class="mt-4 flex justify-center">
-          <button
-            type="button"
-            class="inline-flex items-center px-8 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 w-full sm:w-auto justify-center"
-          >
-            Comprobar disponibilidad
-          </button>
+        <!-- Beds24 Booking Widget -->
+        <!-- REPLACE: set real propid in src attribute -->
+        <div class="w-full max-w-2xl mx-auto">
+          <iframe
+            src="https://beds24.com/booking2.php?propid=REPLACE_WITH_PROPERTY_ID&amp;style=2"
+            width="100%"
+            height="200"
+            frameborder="0"
+            scrolling="no"
+            class="rounded-xl"
+            title="Reservar habitación en Porta D'irta"
+          ></iframe>
+          <p class="text-white/50 text-xs text-center mt-2 font-body">Reserva segura · Confirmación inmediata</p>
         </div>
       </div>
-      <!-- End Beds24 widget placeholder -->
+      <!-- End Beds24 booking widget -->
 
     </div>
 

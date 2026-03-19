@@ -653,6 +653,38 @@ import Layout from '../layouts/Layout.astro';
        Dark bg. Frosted glass form card. Anchor: #contacto.
        REPLACE: form backend / n8n webhook
        ============================================================ -->
+  <script>
+    document.getElementById('experiencias-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+
+      try {
+        const data = Object.fromEntries(new FormData(form));
+        const res = await fetch('REPLACE_WITH_N8N_EXPERIENCIAS_WEBHOOK', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error('Error en el servidor');
+        form.innerHTML = '<div class="text-center py-8"><p class="text-brand-gold font-display text-2xl italic">¡Gracias! Nos pondremos en contacto pronto.</p></div>';
+      } catch (err) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        let errDiv = form.querySelector('.form-error');
+        if (!errDiv) {
+          errDiv = document.createElement('p');
+          errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
+          form.appendChild(errDiv);
+        }
+        errDiv.textContent = 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+      }
+    });
+  </script>
+
   <!-- REPLACE: form backend / n8n webhook -->
   <section
     id="contacto"
@@ -678,11 +710,13 @@ import Layout from '../layouts/Layout.astro';
       <div class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12">
 
         <form
+          id="experiencias-form"
           method="POST"
           action="#"
           class="flex flex-col gap-6"
           aria-label="Formulario de reserva de experiencias"
         >
+          <input type="hidden" name="source" value="experiencias" />
 
           <!-- Row: Nombre + Email -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">

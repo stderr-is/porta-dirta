@@ -49,59 +49,21 @@ import Layout from '../layouts/Layout.astro';
         Tu refugio mediterráneo
       </h1>
 
-      <!-- REPLACE: Beds24 widget -->
-      <!-- Availability search bar — frosted glass -->
-      <div class="w-full max-w-3xl backdrop-blur-md bg-white/15 border border-white/30 rounded-2xl px-6 py-5 flex flex-col sm:flex-row items-center gap-4">
-
-        <div class="flex flex-1 flex-col sm:flex-row items-center gap-4 w-full">
-
-          <!-- Llegada -->
-          <div class="flex flex-col items-start w-full sm:w-auto flex-1">
-            <label class="text-white/70 font-body text-xs tracking-widest uppercase mb-1">Llegada</label>
-            <input
-              type="date"
-              class="w-full bg-transparent text-white font-body text-base border-b border-white/40 focus:border-brand-gold outline-none pb-1 placeholder-white/50"
-            />
-          </div>
-
-          <!-- Divider -->
-          <div class="hidden sm:block w-px h-10 bg-white/30"></div>
-
-          <!-- Salida -->
-          <div class="flex flex-col items-start w-full sm:w-auto flex-1">
-            <label class="text-white/70 font-body text-xs tracking-widest uppercase mb-1">Salida</label>
-            <input
-              type="date"
-              class="w-full bg-transparent text-white font-body text-base border-b border-white/40 focus:border-brand-gold outline-none pb-1"
-            />
-          </div>
-
-          <!-- Divider -->
-          <div class="hidden sm:block w-px h-10 bg-white/30"></div>
-
-          <!-- Huéspedes -->
-          <div class="flex flex-col items-start w-full sm:w-auto flex-1">
-            <label class="text-white/70 font-body text-xs tracking-widest uppercase mb-1">Huéspedes</label>
-            <select class="w-full bg-transparent text-white font-body text-base border-b border-white/40 focus:border-brand-gold outline-none pb-1 appearance-none cursor-pointer">
-              <option value="1" class="text-brand-blue">1 persona</option>
-              <option value="2" class="text-brand-blue" selected>2 personas</option>
-              <option value="3" class="text-brand-blue">3 personas</option>
-              <option value="4" class="text-brand-blue">4 personas</option>
-            </select>
-          </div>
-
-        </div>
-
-        <!-- Buscar CTA -->
-        <a
-          href="#reservar"
-          class="shrink-0 bg-brand-gold hover:bg-brand-stone text-white font-body font-medium tracking-widest uppercase text-sm px-8 py-3 rounded-xl transition-colors duration-200 w-full sm:w-auto text-center"
-        >
-          Buscar
-        </a>
-
+      <!-- Beds24 Booking Widget -->
+      <!-- REPLACE: set real propid in src attribute -->
+      <div class="w-full max-w-2xl mx-auto">
+        <iframe
+          src="https://beds24.com/booking2.php?propid=REPLACE_WITH_PROPERTY_ID&amp;style=2"
+          width="100%"
+          height="200"
+          frameborder="0"
+          scrolling="no"
+          class="rounded-xl"
+          title="Reservar habitación en Porta D'irta"
+        ></iframe>
+        <p class="text-white/50 text-xs text-center mt-2 font-body">Reserva segura · Confirmación inmediata</p>
       </div>
-      <!-- end Beds24 widget placeholder -->
+      <!-- end Beds24 booking widget -->
 
     </div>
 
@@ -579,79 +541,24 @@ import Layout from '../layouts/Layout.astro';
         <h2 class="font-display text-5xl text-white leading-tight">Comprueba disponibilidad</h2>
       </div>
 
-      <!-- REPLACE: Beds24 booking widget -->
-      <!-- Frosted glass form card -->
-      <div class="w-full backdrop-blur-md bg-white/10 border border-white/25 rounded-2xl p-8 md:p-10 flex flex-col gap-6">
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-          <!-- Llegada -->
-          <div class="flex flex-col gap-2">
-            <label class="font-body text-white/80 text-xs tracking-widest uppercase">Llegada</label>
-            <input
-              type="date"
-              class="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white font-body text-sm focus:border-brand-gold focus:outline-none placeholder-white/40 transition-colors"
-            />
-          </div>
-
-          <!-- Salida -->
-          <div class="flex flex-col gap-2">
-            <label class="font-body text-white/80 text-xs tracking-widest uppercase">Salida</label>
-            <input
-              type="date"
-              class="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white font-body text-sm focus:border-brand-gold focus:outline-none transition-colors"
-            />
-          </div>
-
-          <!-- Nº personas -->
-          <div class="flex flex-col gap-2">
-            <label class="font-body text-white/80 text-xs tracking-widest uppercase">Personas</label>
-            <select class="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white font-body text-sm focus:border-brand-gold focus:outline-none transition-colors appearance-none cursor-pointer">
-              <option value="1" class="text-brand-blue bg-white">1 persona</option>
-              <option value="2" class="text-brand-blue bg-white" selected>2 personas</option>
-              <option value="3" class="text-brand-blue bg-white">3 personas</option>
-              <option value="4" class="text-brand-blue bg-white">4 personas</option>
-            </select>
-          </div>
-
-          <!-- Habitación -->
-          <div class="flex flex-col gap-2">
-            <label class="font-body text-white/80 text-xs tracking-widest uppercase">Habitación</label>
-            <select class="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white font-body text-sm focus:border-brand-gold focus:outline-none transition-colors appearance-none cursor-pointer">
-              <option value="" class="text-brand-blue bg-white">Cualquier habitación</option>
-              <option value="mediterranea" class="text-brand-blue bg-white">Habitación Mediterránea</option>
-              <option value="junior" class="text-brand-blue bg-white">Suite Junior</option>
-              <option value="panoramica" class="text-brand-blue bg-white">Suite Panorámica</option>
-            </select>
-          </div>
-
+      <!-- Beds24 Booking Widget -->
+      <!-- Frosted glass card wrapper kept intentionally -->
+      <div class="w-full backdrop-blur-md bg-white/10 border border-white/25 rounded-2xl p-8 md:p-10">
+        <!-- REPLACE: set real propid in src attribute -->
+        <div class="w-full max-w-2xl mx-auto">
+          <iframe
+            src="https://beds24.com/booking2.php?propid=REPLACE_WITH_PROPERTY_ID&amp;style=2"
+            width="100%"
+            height="300"
+            frameborder="0"
+            scrolling="no"
+            class="rounded-xl"
+            title="Reservar habitación en Porta D'irta"
+          ></iframe>
+          <p class="text-white/50 text-xs text-center mt-2 font-body">Reserva segura · Confirmación inmediata</p>
         </div>
-
-        <!-- Notes -->
-        <div class="flex flex-col gap-2">
-          <label class="font-body text-white/80 text-xs tracking-widest uppercase">Notas o peticiones especiales</label>
-          <textarea
-            rows="3"
-            placeholder="Aniversario, alergias, preferencias de habitación..."
-            class="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white font-body text-sm focus:border-brand-gold focus:outline-none placeholder-white/40 resize-none transition-colors"
-          ></textarea>
-        </div>
-
-        <!-- CTA -->
-        <div class="flex flex-col items-center gap-3 mt-2">
-          <button
-            type="button"
-            class="w-full sm:w-auto bg-brand-gold hover:bg-brand-stone text-white font-body font-medium tracking-widest uppercase text-sm px-12 py-4 rounded-xl transition-colors duration-200"
-          >
-            Solicitar Reserva
-          </button>
-          <p class="font-body text-white/50 text-xs text-center">
-            Confirmaremos tu reserva en menos de 24h
-          </p>
-        </div>
-
       </div>
-      <!-- end Beds24 booking widget placeholder -->
+      <!-- end Beds24 booking widget -->
 
     </div>
   </section>

@@ -357,12 +357,14 @@ import Layout from '../layouts/Layout.astro';
       <!-- Frosted glass form card -->
       <div class="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8">
         <form
+          id="restaurant-form"
           method="POST"
           action="/api/reservas"
           novalidate
           class="flex flex-col gap-5"
           aria-label="Formulario de reserva de mesa"
         >
+          <input type="hidden" name="source" value="restaurante" />
 
           <!-- Row 1: Nombre + Email -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -510,6 +512,38 @@ import Layout from '../layouts/Layout.astro';
 
     </div>
   </section>
+
+  <script>
+    document.getElementById('restaurant-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+
+      try {
+        const data = Object.fromEntries(new FormData(form));
+        const res = await fetch('REPLACE_WITH_N8N_RESTAURANT_WEBHOOK', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error('Error en el servidor');
+        form.innerHTML = '<div class="text-center py-8"><p class="text-brand-gold font-display text-2xl italic">¡Gracias! Nos pondremos en contacto pronto.</p></div>';
+      } catch (err) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        let errDiv = form.querySelector('.form-error');
+        if (!errDiv) {
+          errDiv = document.createElement('p');
+          errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
+          form.appendChild(errDiv);
+        }
+        errDiv.textContent = 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+      }
+    });
+  </script>
 
   <!-- ================================================================
        SECTION 6 — HOURS & LOCATION

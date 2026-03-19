@@ -1,0 +1,302 @@
+/**
+ * beds24.ts — Beds24 API V2 client for Porta D'irta
+ *
+ * Base URL: https://beds24.com/api/v2
+ *
+ * RATE LIMIT WARNING: Beds24 API V2 allows only 1 concurrent request per token.
+ * Do NOT fire parallel requests. If you need to fetch multiple resources,
+ * chain them sequentially. On 429 responses, apply exponential backoff:
+ *   wait = Math.min(initialDelay * 2^attempt, maxDelay)
+ * Recommended initial delay: 500ms, max delay: 30s, max retries: 5.
+ */
+
+// REPLACE: add real token from Beds24 Account → Apps & Integrations → API
+export const BEDS24_API_TOKEN = 'BEDS24_API_TOKEN';
+export const BEDS24_PROPERTY_ID = 'BEDS24_PROPERTY_ID';
+
+const BASE_URL = 'https://beds24.com/api/v2';
+
+// ─── TypeScript interfaces ────────────────────────────────────────────────────
+
+/** A single room/unit as returned by the Beds24 API V2 */
+export interface Room {
+  /** Beds24 internal room ID */
+  id: string;
+  /** Display name of the room */
+  name: string;
+  /** Maximum number of guests the room can accommodate */
+  maxPersons: number;
+  /** Long-form room description */
+  description: string;
+  /** Array of image URLs associated with this room */
+  images: string[];
+  /** List of amenity labels (e.g. "WiFi", "Air conditioning") */
+  amenities: string[];
+  /** Property/unit type code from Beds24 */
+  unitType?: string;
+  /** Number of bedrooms */
+  bedrooms?: number;
+  /** Floor area in m² */
+  floorArea?: number;
+}
+
+/** Pricing details for a room over a specific date range */
+export interface Pricing {
+  /** Beds24 room ID this pricing applies to */
+  roomId: string;
+  /** ISO date string: check-in date */
+  checkIn: string;
+  /** ISO date string: check-out date */
+  checkOut: string;
+  /** Total price for the stay (all nights combined) */
+  totalPrice: number;
+  /** Price per night (average if rates vary) */
+  pricePerNight: number;
+  /** Currency code, e.g. "EUR" */
+  currency: string;
+  /** Whether the room is available for the requested dates */
+  available: boolean;
+  /** Minimum stay in nights (if applicable) */
+  minStay?: number;
+  /** Breakdown of nightly rates, keyed by ISO date string */
+  nightlyRates?: Record<string, number>;
+}
+
+/** Payload for creating a new booking inquiry */
+export interface BookingInquiry {
+  /** Beds24 room ID being requested */
+  roomId: string;
+  /** ISO date string: desired check-in date (YYYY-MM-DD) */
+  checkIn: string;
+  /** ISO date string: desired check-out date (YYYY-MM-DD) */
+  checkOut: string;
+  /** Number of adult guests */
+  numAdults: number;
+  /** Number of child guests */
+  numChildren?: number;
+  /** Guest's first name */
+  firstName: string;
+  /** Guest's last name */
+  lastName: string;
+  /** Guest's email address */
+  email: string;
+  /** Guest's phone number (optional) */
+  phone?: string;
+  /** Free-text notes or special requests */
+  notes?: string;
+}
+
+/** Property-level information returned by Beds24 */
+export interface PropertyInfo {
+  /** Beds24 property ID */
+  id: string;
+  /** Property display name */
+  name: string;
+  /** Street address */
+  address: string;
+  /** City */
+  city: string;
+  /** Country code (ISO 3166-1 alpha-2) */
+  country: string;
+  /** Property description */
+  description: string;
+  /** Primary contact email */
+  email?: string;
+  /** Primary contact phone */
+  phone?: string;
+  /** Latitude coordinate */
+  lat?: number;
+  /** Longitude coordinate */
+  lng?: number;
+  /** Array of property-level image URLs */
+  images: string[];
+}
+
+// ─── Internal helpers ─────────────────────────────────────────────────────────
+
+/**
+ * Build the standard Beds24 API V2 Authorization header.
+ */
+function authHeader(): HeadersInit {
+  return {
+    'Authorization': `Bearer ${BEDS24_API_TOKEN}`,
+    'Content-Type': 'application/json',
+  };
+}
+
+/**
+ * Generic fetch wrapper with basic error handling.
+ * Throws a descriptive Error on non-2xx responses.
+ *
+ * NOTE: This does NOT implement retry/backoff — callers that need resilience
+ * should wrap this with an exponential-backoff loop (see rate limit warning
+ * at the top of this file).
+ */
+async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const url = `${BASE_URL}${path}`;
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...authHeader(),
+      ...(options.headers ?? {}),
+    },
+  });
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw new Error(
+      `Beds24 API error ${response.status} on ${path}: ${body}`
+    );
+  }
+
+  return response.json() as Promise<T>;
+}
+
+// ─── Public API functions ─────────────────────────────────────────────────────
+
+/**
+ * Get room availability for a date range.
+ *
+ * Calls: GET /inventory/rooms/availability
+ * Query params: propertyId, checkIn, checkOut
+ *
+ * Returns only rooms that have at least one available unit for the full
+ * requested period.
+ *
+ * @param checkIn  - Check-in date in YYYY-MM-DD format
+ * @param checkOut - Check-out date in YYYY-MM-DD format
+ */
+export async function getRoomAvailability(
+  checkIn: string,
+  checkOut: string
+): Promise<Room[]> {
+  const params = new URLSearchParams({
+    propertyId: BEDS24_PROPERTY_ID,
+    checkIn,
+    checkOut,
+  });
+
+  const data = await apiFetch<{ rooms: Room[] }>(
+    `/inventory/rooms/availability?${params}`
+  );
+
+  return data.rooms ?? [];
+}
+
+/**
+ * Get all rooms for the property with their full details.
+ *
+ * Calls: GET /inventory/rooms
+ * Query params: propertyId
+ *
+ * Returns the complete room catalogue including descriptions, images,
+ * amenities, and capacity — regardless of availability.
+ */
+export async function getRooms(): Promise<Room[]> {
+  const params = new URLSearchParams({ propertyId: BEDS24_PROPERTY_ID });
+
+  const data = await apiFetch<{ rooms: Room[] }>(
+    `/inventory/rooms?${params}`
+  );
+
+  return data.rooms ?? [];
+}
+
+/**
+ * Get pricing for a specific room over a date range.
+ *
+ * Calls: GET /inventory/rooms/prices
+ * Query params: propertyId, roomId, checkIn, checkOut
+ *
+ * Returns a Pricing object with total cost, nightly breakdown, and
+ * availability status. Use this to show the user real-time rates before
+ * they complete a booking inquiry.
+ *
+ * @param roomId   - Beds24 internal room ID
+ * @param checkIn  - Check-in date in YYYY-MM-DD format
+ * @param checkOut - Check-out date in YYYY-MM-DD format
+ */
+export async function getRoomPricing(
+  roomId: string,
+  checkIn: string,
+  checkOut: string
+): Promise<Pricing> {
+  const params = new URLSearchParams({
+    propertyId: BEDS24_PROPERTY_ID,
+    roomId,
+    checkIn,
+    checkOut,
+  });
+
+  const data = await apiFetch<Pricing>(
+    `/inventory/rooms/prices?${params}`
+  );
+
+  return data;
+}
+
+/**
+ * Create a booking inquiry (NOT a confirmed booking).
+ *
+ * Calls: POST /bookings
+ *
+ * Submits the guest's details and preferred dates to Beds24 as an inquiry.
+ * The property team will manually review and confirm within 24 hours.
+ * This does NOT charge the guest or guarantee availability.
+ *
+ * On success, Beds24 returns a booking reference ID that can be shown to
+ * the guest as a confirmation number for their inquiry.
+ *
+ * @param inquiry - Guest details and requested stay
+ */
+export async function createBookingInquiry(
+  inquiry: BookingInquiry
+): Promise<{ success: boolean; bookingId?: string }> {
+  const payload = {
+    propertyId: BEDS24_PROPERTY_ID,
+    roomId: inquiry.roomId,
+    arrival: inquiry.checkIn,
+    departure: inquiry.checkOut,
+    numAdult: inquiry.numAdults,
+    numChild: inquiry.numChildren ?? 0,
+    firstName: inquiry.firstName,
+    lastName: inquiry.lastName,
+    email: inquiry.email,
+    phone: inquiry.phone ?? '',
+    notes: inquiry.notes ?? '',
+    // status 0 = inquiry (not confirmed) in Beds24 API V2
+    status: 0,
+  };
+
+  try {
+    const data = await apiFetch<{ bookingId?: string; id?: string }>(
+      '/bookings',
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const bookingId = data.bookingId ?? data.id;
+    return { success: true, bookingId };
+  } catch (err) {
+    console.error('[beds24] createBookingInquiry failed:', err);
+    return { success: false };
+  }
+}
+
+/**
+ * Get property-level information for Porta D'irta.
+ *
+ * Calls: GET /properties/{propertyId}
+ *
+ * Returns address, contact details, description, coordinates, and
+ * property-level images. Useful for the "About" section and SEO metadata.
+ */
+export async function getPropertyInfo(): Promise<PropertyInfo> {
+  const data = await apiFetch<PropertyInfo>(
+    `/properties/${BEDS24_PROPERTY_ID}`
+  );
+
+  return data;
+}

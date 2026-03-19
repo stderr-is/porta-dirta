@@ -1,0 +1,64 @@
+---
+/**
+ * FormHandler.astro — Reusable form wrapper that submits via fetch() to an n8n webhook.
+ *
+ * Props:
+ *   webhookUrl    — The n8n webhook URL to POST JSON to.
+ *   successMessage — Text displayed when the submission succeeds.
+ *   formId        — Unique HTML id applied to the <form> element.
+ */
+
+interface Props {
+  webhookUrl?: string;
+  successMessage?: string;
+  formId: string;
+}
+
+const {
+  webhookUrl = 'REPLACE_WITH_N8N_WEBHOOK_URL',
+  successMessage = '¡Gracias! Nos pondremos en contacto pronto.',
+  formId,
+} = Astro.props;
+---
+
+<form
+  id={formId}
+  method="POST"
+  action="#"
+  novalidate
+  class="flex flex-col gap-5"
+>
+  <slot />
+</form>
+
+<script define:vars={{ webhookUrl, successMessage, formId }}>
+  document.getElementById(formId).addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Error en el servidor');
+      form.innerHTML = `<div class="text-center py-8"><p class="text-brand-gold font-display text-2xl italic">${successMessage}</p></div>`;
+    } catch (err) {
+      btn.textContent = originalText;
+      btn.disabled = false;
+      let errDiv = form.querySelector('.form-error');
+      if (!errDiv) {
+        errDiv = document.createElement('p');
+        errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
+        form.appendChild(errDiv);
+      }
+      errDiv.textContent = 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+    }
+  });
+</script>
