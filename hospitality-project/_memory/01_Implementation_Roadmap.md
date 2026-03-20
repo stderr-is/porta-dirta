@@ -31,8 +31,10 @@ tags: [wbs, planning, execution]
 - [x] Build experience inquiry API endpoint (TastyIgniter `/api/public/contact`).
 - [x] Create 4 live experiences in Hi.Events (Sierra de Irta, Kayak, Cata de Vinos, Castillo Papal).
 - [x] Deploy Hi.Events full UI (all-in-one: nginx + PHP-FPM + React SSR).
-- [ ] **NEXT → Configure TastyIgniter: map restaurant floor plan, set opening hours, configure table combinations.**
-- [ ] **NEXT → Configure Hi.Events: create organizer account, link the 4 experiences, set up check-in lists.**
+- [x] TastyIgniter configured via DB: location, hours (Tue–Sun, lunch 13–16h + dinner 20–22h), 2 dining areas (Terraza + Interior), 30 tables.
+- [x] Hi.Events admin: info@portadirta.com / Portadirta2026! — log in at https://events.hobbitonranch.com to set up check-in lists.
+- [x] n8n: SMTP credential added, "Check-in Tomorrow" welcome email workflow created (Beds24 → guest email with restaurant + experiences links). Activate at https://n8n.hobbitonranch.com (stderr.is@gmail.com / Portadirta2026!)
+- [x] Uptime Kuma monitoring added → https://monitor.hobbitonranch.com (first-run setup required in browser).
 - [ ] Configure Beds24 "Auto Actions" to send "Book a Table" email upon room confirmation.
 - [ ] Append URL parameters to restaurant link to pre-fill guest details in TastyIgniter.
 - [ ] Build Astro content collections for local collaboration events.
