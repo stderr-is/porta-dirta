@@ -18,7 +18,7 @@ tags: [wbs, planning, execution]
 ## Phase 2: Planning (Prototyping & Database Prep)
 *Goal: Lock in the exact layout, container limits, and data flow.*
 - [x] Deploy TastyIgniter and Hi.Events Docker containers — running locally, exposed via Cloudflare Tunnel.
-- [ ] Map the physical restaurant floor plan digitally within TastyIgniter.
+- [x] Map the physical restaurant floor plan digitally within TastyIgniter — 2 areas (Terraza + Interior), 30 tables via DB.
 - [x] Generate Beds24 API V2 tokens and configure webhook endpoints.
 - [x] Prototype the Astro `/experiences` page — built and live, fetches real Hi.Events prices at build time.
 **Tech Stack:** Figma (UI), Docker Compose (Containers), Swagger UI (API Testing).

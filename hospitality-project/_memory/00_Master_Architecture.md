@@ -27,11 +27,12 @@ tags: [strategy, beds24, data-flow]
 - **Frontend:** Astro static site deployed to Cloudflare Pages at `https://porta-dirta.hobbitonranch.com`.
 
 ### Services & Public URLs (Testing)
-| Service | Container Port | Public URL | Purpose |
-|---------|---------------|------------|---------|
-| TastyIgniter | 8081 | https://restaurant.hobbitonranch.com | Restaurant admin + API |
-| Hi.Events | 8082 | https://events.hobbitonranch.com | Ticketing admin + booking UI + API |
-| n8n | 5678 | https://n8n.hobbitonranch.com | Workflow automation UI |
+| Service | Container Port | Public URL | Credentials | Purpose |
+|---------|---------------|------------|-------------|---------|
+| TastyIgniter | 8081 | https://restaurant.hobbitonranch.com | admin / (set on first login) | Restaurant admin + API |
+| Hi.Events | 8082 | https://events.hobbitonranch.com | info@portadirta.com / Portadirta2026! | Ticketing admin + booking UI + API |
+| n8n | 5678 | https://n8n.hobbitonranch.com | stderr.is@gmail.com / Portadirta2026! | Workflow automation UI |
+| Uptime Kuma | 3001 | https://monitor.hobbitonranch.com | (first-run setup in browser) | Service uptime monitoring + alerts |
 
 ### Cloudflare Tunnel
 - **Tunnel name:** `porta-dirta-backend`
