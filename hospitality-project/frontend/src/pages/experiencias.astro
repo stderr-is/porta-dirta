@@ -25,7 +25,7 @@ const tastyigniterUrl = import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://local
 
 let hiEvents: any[] = [];
 try {
-  const res = await fetch(`${hieventsUrl}/public/organizers/1/events`, {
+  const res = await fetch(`${hieventsUrl}/api/public/organizers/1/events`, {
     headers: { Accept: 'application/json' },
   });
   if (res.ok) {

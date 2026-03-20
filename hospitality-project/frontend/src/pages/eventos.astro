@@ -563,8 +563,9 @@ import Layout from '../layouts/Layout.astro';
       btn.disabled = true;
 
       try {
-        const data = Object.fromEntries(new FormData(form));
-        const res = await fetch('REPLACE_WITH_N8N_EVENTS_WEBHOOK', {
+        const raw = Object.fromEntries(new FormData(form));
+        const data = { ...raw, experiencia: raw['tipo-evento'], personas: raw.invitados };
+        const res = await fetch(`${import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081'}/api/public/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

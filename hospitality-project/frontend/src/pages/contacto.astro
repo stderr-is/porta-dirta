@@ -7,7 +7,7 @@
  *   2. Contact cards + form — bg-brand-cream, two-column desktop
  *   3. Location strip — bg-brand-blue, three items
  *
- * Form posts to REPLACE_WITH_N8N_CONTACT_WEBHOOK via fetch.
+ * Form posts to TastyIgniter /api/public/contact via fetch.
  * On success, the form is replaced with a thank-you message.
  * On error, an inline error message is shown below the submit button.
  */
@@ -426,11 +426,12 @@ import Layout from '../layouts/Layout.astro';
       submitBtn.textContent = 'Enviando…';
       errorMsg.classList.add('hidden');
 
-      // Collect form data
-      const data = Object.fromEntries(new FormData(form).entries());
+      // Collect form data — map asunto → experiencia for the API
+      const raw = Object.fromEntries(new FormData(form).entries());
+      const data = { ...raw, experiencia: raw.asunto };
 
       try {
-        const response = await fetch('REPLACE_WITH_N8N_CONTACT_WEBHOOK', {
+        const response = await fetch(`${import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081'}/api/public/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

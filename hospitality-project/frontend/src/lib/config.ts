@@ -21,6 +21,6 @@ export const CONFIG = {
     experienciasWebhook: 'REPLACE_WITH_N8N_WEBHOOK_URL',
   },
   hievents: {
-    baseUrl: 'REPLACE_WITH_HIEVENTS_URL',
+    baseUrl: import.meta.env.PUBLIC_HIEVENTS_URL ?? 'http://localhost:8082',
   },
 } as const;
