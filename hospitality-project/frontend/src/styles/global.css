@@ -2,20 +2,21 @@
 
 /* ==========================================================================
    Porta D'irta — Design Tokens (Tailwind v4 @theme)
-   These map directly to Tailwind utility classes:
-     color: brand-blue, brand-gold, etc.
-     font-family: font-display, font-body
+   Palette derived from official brand materials (business card, logo, property)
    ========================================================================== */
 @theme {
   /* --- Brand colours --- */
-  --color-brand-blue: #0D2B45;        /* Deep Mediterranean Blue — primary */
-  --color-brand-blue-light: #1A4A6E;  /* Lighter blue for hover states */
-  --color-brand-gold: #C9A84C;        /* CTA / primary action colour */
-  --color-brand-coral: #E07B5A;       /* Alternative CTA */
-  --color-brand-sand: #C4A882;        /* Sandy neutral accent */
-  --color-brand-stone: #8B7355;       /* Warm stone accent */
+  --color-brand-blue: #0D2B45;         /* Deep nav/overlay dark — kept for dark sections */
+  --color-brand-blue-light: #1A4A6E;   /* Hover state */
+  --color-brand-earth: #B8A490;        /* Warm sandy taupe — brand primary surface */
+  --color-brand-linen: #EDE8DF;        /* Light linen — card verso background */
+  --color-brand-cream: #F5F0E8;        /* Warm cream — page background */
+  --color-brand-gold: #C9A84C;         /* CTA / primary action colour */
+  --color-brand-terracotta: #C05A3A;   /* From property roof tiles — accent */
+  --color-brand-sand: #C4A882;         /* Sandy neutral accent */
+  --color-brand-stone: #8B7355;        /* Warm stone — body text on light */
+  --color-brand-charcoal: #2C2018;     /* Dark charcoal-brown — primary text */
   --color-brand-white: #FFFFFF;
-  --color-brand-cream: #FAF8F5;       /* Off-white page background */
 
   /* --- Typography --- */
   --font-family-display: 'Cormorant Garamond', serif;
@@ -30,12 +31,16 @@ html, body {
   min-height: 100%;
 }
 
+/* Default body text — warm charcoal on cream (matches brand card) */
+body {
+  background-color: #F5F0E8;
+  color: #2C2018;
+}
+
 /* ==========================================================================
    Beds24 booking widget — brand overrides
-   Target: #bookWidget-162526-318433-2-1773941182 (hero bar)
    ========================================================================== */
 
-/* Strip the widget's own table/wrapper backgrounds */
 .bw-hero table,
 .bw-hero td,
 .bw-hero tr,
@@ -45,7 +50,6 @@ html, body {
   border-color: rgba(255,255,255,0.2) !important;
 }
 
-/* Inputs and selects */
 .bw-hero input[type="text"],
 .bw-hero input[type="number"],
 .bw-hero select {
@@ -65,18 +69,15 @@ html, body {
   outline: none !important;
 }
 
-/* Placeholder text */
 .bw-hero input::placeholder {
   color: rgba(255,255,255,0.45) !important;
 }
 
-/* Select options — need a dark background so text is readable */
 .bw-hero select option {
   background: #0d2b45 !important;
   color: #ffffff !important;
 }
 
-/* Submit / search button */
 .bw-hero input[type="submit"],
 .bw-hero button[type="submit"],
 .bw-hero .bw-submit {
@@ -99,7 +100,6 @@ html, body {
   background: #8b7355 !important;
 }
 
-/* Labels */
 .bw-hero label,
 .bw-hero .bw-label {
   color: rgba(255,255,255,0.6) !important;
@@ -109,7 +109,7 @@ html, body {
   letter-spacing: 0.08em !important;
 }
 
-/* jQuery UI datepicker — keep brand colors */
+/* jQuery UI datepicker */
 .ui-datepicker {
   background: #0d2b45 !important;
   border: 1px solid rgba(201,168,76,0.4) !important;
