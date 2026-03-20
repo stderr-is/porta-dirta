@@ -88,6 +88,12 @@ const fullTitle = `${title} | Porta D'irta`;
     <!-- Global styles (Tailwind + design tokens) are imported in the
          frontmatter above via `import '../styles/global.css'` —
          Astro injects the compiled stylesheet automatically. -->
+
+    <!-- ── Beds24 booking widget dependencies ────────────────────── -->
+    <!-- jQuery must load before jQuery UI and bookWidget -->
+    <script is:inline src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script is:inline src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+    <script is:inline src="https://media.xmlcal.com/widget/1.01/js/bookWidget.min.js"></script>
   </head>
 
   <body class="bg-brand-cream font-body text-brand-blue antialiased">

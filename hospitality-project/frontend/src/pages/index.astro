@@ -22,7 +22,7 @@ import Layout from '../layouts/Layout.astro';
   <!-- ============================================================
        SECTION 1: HERO
        Full-viewport video background with dark overlay.
-       Centered brand name, subtitle, CTAs, and booking widget.
+       Centered brand name + CTAs. Booking bar pinned to bottom.
        ============================================================ -->
   <section
     class="relative flex flex-col items-center justify-center min-h-screen w-full overflow-hidden"
@@ -39,18 +39,15 @@ import Layout from '../layouts/Layout.astro';
       poster="https://picsum.photos/1920/1080?grayscale"
       aria-hidden="true"
     >
-      <!-- REPLACE: real photo -->
+      <!-- REPLACE: real video -->
       <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
     </video>
 
     <!-- Dark overlay -->
-    <div
-      class="absolute inset-0 bg-brand-blue/80 pointer-events-none"
-      aria-hidden="true"
-    ></div>
+    <div class="absolute inset-0 bg-brand-blue/75 pointer-events-none" aria-hidden="true"></div>
 
-    <!-- Hero content -->
-    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center pt-24 pb-16">
+    <!-- Hero content — centered, no widget -->
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center mb-32">
 
       <!-- Property name -->
       <h1 class="font-display font-light italic text-8xl md:text-9xl text-white leading-none tracking-tight">
@@ -67,15 +64,12 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- CTA buttons -->
       <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
-        <!-- Primary gold CTA -->
         <a
           href="/reservar"
           class="inline-flex items-center px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg"
         >
           Reservar Ahora
         </a>
-
-        <!-- Ghost button -->
         <a
           href="#hotel"
           class="inline-flex items-center px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
@@ -84,51 +78,68 @@ import Layout from '../layouts/Layout.astro';
         </a>
       </div>
 
-      <!-- ── Beds24 booking widget ──────────────────────────────────────────
-           Beds24 iframe embed. Keep the frosted glass card as the wrapper.
-           ──────────────────────────────────────────────────────────────── -->
-      <div
-        class="mt-8 w-full max-w-2xl backdrop-blur-md bg-white/10 border border-white/20 rounded-sm px-6 py-6"
-        aria-label="Widget de reserva"
-      >
-        <!-- Beds24 Booking Widget -->
-        <!-- REPLACE: set real propid in src attribute -->
-        <div class="w-full max-w-2xl mx-auto">
-          <iframe
-            src="https://beds24.com/booking2.php?propid=REPLACE_WITH_PROPERTY_ID&amp;style=2"
-            width="100%"
-            height="200"
-            frameborder="0"
-            scrolling="no"
-            class="rounded-xl"
-            title="Reservar habitación en Porta D'irta"
-          ></iframe>
-          <p class="text-white/50 text-xs text-center mt-2 font-body">Reserva segura · Confirmación inmediata</p>
-        </div>
-      </div>
-      <!-- End Beds24 booking widget -->
-
     </div>
 
-    <!-- Scroll hint chevron -->
+    <!-- Scroll hint chevron — above the booking bar -->
     <div
-      class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce"
+      class="absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 animate-bounce z-10"
       aria-hidden="true"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="white"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 12 15 18 9"/>
       </svg>
     </div>
+
+    <!-- ── Booking bar — pinned to bottom of hero ──────────────────────
+         BookingBar type: horizontal inline form, no popup calendar.
+         Glassmorphism strip matching the design language.
+         ──────────────────────────────────────────────────────────── -->
+    <div class="absolute bottom-0 left-0 right-0 z-20" aria-label="Reserva tu estancia">
+      <div class="backdrop-blur-md bg-brand-blue/60 border-t border-white/15">
+        <div class="max-w-6xl mx-auto px-6 py-5">
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+
+            <!-- Label — desktop only -->
+            <div class="hidden md:flex flex-col gap-0.5 pr-4 border-r border-white/20">
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Reservar</span>
+              <span class="font-body text-xs text-white/50">Disponibilidad inmediata</span>
+            </div>
+
+            <!-- Widget -->
+            <div id="bookWidget-162526-318433-2-1773941182" class="flex-1 w-full bw-hero"></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      jQuery(document).ready(function () {
+        jQuery('#bookWidget-162526-318433-2-1773941182').bookWidget({
+          propid: 318433,
+          availableBackgroundColor: '#c9a84c',
+          backgroundColor:          'transparent',
+          borderColor:              'rgba(255,255,255,0.25)',
+          buttonBackgroundColor:    '#c9a84c',
+          buttonColor:              '#0d2b45',
+          color:                    '#ffffff',
+          dateFormat:               'dd/mm/yy',
+          dateSelection:            3,
+          defaultNightsAdvance:     1,
+          defaultNumAdult:          2,
+          defaultNumNight:          2,
+          formAction:               '/reservar',
+          peopleSelection:          1,
+          unavailableBackgroundColor: '#8b7355',
+          weekFirstDay:             1,
+          widgetLang:               'es',
+          widgetType:               'BookingBar',
+          width:                    '100%',
+        });
+      });
+    </script>
+    <!-- End booking bar -->
 
   </section>
 

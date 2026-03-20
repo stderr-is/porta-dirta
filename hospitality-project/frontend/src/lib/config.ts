@@ -7,13 +7,12 @@
 
 export const CONFIG = {
   beds24: {
-    token: 'REPLACE_WITH_BEDS24_TOKEN',
-    propertyId: 'REPLACE_WITH_PROPERTY_ID',
-    widgetUrl: 'https://beds24.com/booking2.php?propid=REPLACE_WITH_PROPERTY_ID',
+    token: import.meta.env.BEDS24_API_KEY,
+    propertyId: import.meta.env.BEDS24_PROP_ID ?? '318433',
+    widgetUrl: 'https://media.xmlcal.com/widget/1.01/js/bookWidget.min.js',
   },
   tastyigniter: {
-    baseUrl: 'REPLACE_WITH_TASTYIGNITER_URL',
-    apiKey: 'REPLACE_WITH_TASTYIGNITER_API_KEY',
+    baseUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081',
   },
   n8n: {
     restaurantWebhook: 'REPLACE_WITH_N8N_WEBHOOK_URL',

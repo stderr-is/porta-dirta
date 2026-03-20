@@ -49,18 +49,34 @@ import Layout from '../layouts/Layout.astro';
         Tu refugio mediterráneo
       </h1>
 
-      <!-- Beds24 Booking Widget -->
-      <!-- REPLACE: set real propid in src attribute -->
+      <!-- Beds24 Booking Widget (hero instance) -->
       <div class="w-full max-w-2xl mx-auto">
-        <iframe
-          src="https://beds24.com/booking2.php?propid=REPLACE_WITH_PROPERTY_ID&amp;style=2"
-          width="100%"
-          height="200"
-          frameborder="0"
-          scrolling="no"
-          class="rounded-xl"
-          title="Reservar habitación en Porta D'irta"
-        ></iframe>
+        <div id="bookWidget-162526-318433-0-1773941182"></div>
+        <script is:inline>
+          jQuery(document).ready(function() {
+            jQuery('#bookWidget-162526-318433-0-1773941182').bookWidget({
+              propid: 318433,
+              availableBackgroundColor: '#c9a84c',
+              backgroundColor: '#0d2b45',
+              borderColor: '#c9a84c',
+              buttonBackgroundColor: '#c9a84c',
+              buttonColor: '#0d2b45',
+              color: '#ffffff',
+              dateFormat: 'dd/mm/yy',
+              dateSelection: 3,
+              defaultNightsAdvance: 1,
+              defaultNumAdult: 2,
+              defaultNumNight: 2,
+              formAction: '/reservar',
+              peopleSelection: 1,
+              unavailableBackgroundColor: '#8b7355',
+              weekFirstDay: 1,
+              widgetLang: 'es',
+              widgetType: 'BookingBox',
+              width: '100%'
+            });
+          });
+        </script>
         <p class="text-white/50 text-xs text-center mt-2 font-body">Reserva segura · Confirmación inmediata</p>
       </div>
       <!-- end Beds24 booking widget -->
@@ -541,20 +557,36 @@ import Layout from '../layouts/Layout.astro';
         <h2 class="font-display text-5xl text-white leading-tight">Comprueba disponibilidad</h2>
       </div>
 
-      <!-- Beds24 Booking Widget -->
+      <!-- Beds24 Booking Widget (booking anchor instance) -->
       <!-- Frosted glass card wrapper kept intentionally -->
       <div class="w-full backdrop-blur-md bg-white/10 border border-white/25 rounded-2xl p-8 md:p-10">
-        <!-- REPLACE: set real propid in src attribute -->
         <div class="w-full max-w-2xl mx-auto">
-          <iframe
-            src="https://beds24.com/booking2.php?propid=REPLACE_WITH_PROPERTY_ID&amp;style=2"
-            width="100%"
-            height="300"
-            frameborder="0"
-            scrolling="no"
-            class="rounded-xl"
-            title="Reservar habitación en Porta D'irta"
-          ></iframe>
+          <div id="bookWidget-162526-318433-1-1773941182"></div>
+          <script is:inline>
+            jQuery(document).ready(function() {
+              jQuery('#bookWidget-162526-318433-1-1773941182').bookWidget({
+                propid: 318433,
+                availableBackgroundColor: '#c9a84c',
+                backgroundColor: '#0d2b45',
+                borderColor: '#c9a84c',
+                buttonBackgroundColor: '#c9a84c',
+                buttonColor: '#0d2b45',
+                color: '#ffffff',
+                dateFormat: 'dd/mm/yy',
+                dateSelection: 3,
+                defaultNightsAdvance: 1,
+                defaultNumAdult: 2,
+                defaultNumNight: 2,
+                formAction: '/reservar',
+                peopleSelection: 1,
+                unavailableBackgroundColor: '#8b7355',
+                weekFirstDay: 1,
+                widgetLang: 'es',
+                widgetType: 'BookingBox',
+                width: '100%'
+              });
+            });
+          </script>
           <p class="text-white/50 text-xs text-center mt-2 font-body">Reserva segura · Confirmación inmediata</p>
         </div>
       </div>

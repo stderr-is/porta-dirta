@@ -26,7 +26,7 @@ tags: [wbs, planning, execution]
 
 ## Phase 3: Execution (The Build & Integration)
 *Goal: Wire systems together, focusing on layout stability and zero cross-system friction.*
-- [ ] Embed the Beds24 booking widget into the Astro frontend.
+- [x] Embed the Beds24 booking widget into the Astro frontend.
 - [ ] Configure Beds24 "Auto Actions" to send "Book a Table" email upon room confirmation.
 - [ ] Append URL parameters to restaurant link to pre-fill guest details in TastyIgniter.
 - [ ] Build Astro content collections for local collaboration events.

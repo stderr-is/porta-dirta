@@ -1,0 +1,86 @@
+---
+/**
+ * reservar.astro — Dedicated booking page for Porta D'irta
+ *
+ * Receives date/guest params from the Beds24 BookingBox widget
+ * (checkin, checkout, numadult, numchild) and passes them into
+ * the Beds24 full booking iframe so the flow stays on this site.
+ */
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Reservar Habitación"
+  description="Reserva tu estancia en Porta D'irta, villa boutique frente al Mediterráneo en Peñíscola. Confirmación inmediata y pago seguro."
+>
+
+  <!-- ── Page header ─────────────────────────────────────────────── -->
+  <section class="bg-brand-blue pt-28 pb-10 text-center">
+
+    <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-4">
+      Reservas
+    </p>
+
+    <h1 class="font-display italic text-5xl md:text-6xl text-white leading-tight mb-3">
+      Elige tu estancia
+    </h1>
+
+    <div class="w-12 h-px bg-brand-gold mx-auto mb-6"></div>
+
+    <p class="font-body text-white/60 text-sm max-w-md mx-auto">
+      Reserva segura &middot; Confirmación inmediata &middot; Mejor precio garantizado
+    </p>
+
+  </section>
+
+  <!-- ── Booking iframe ──────────────────────────────────────────── -->
+  <section class="bg-brand-cream min-h-screen">
+
+    <!-- Loading state shown until iframe fires load event -->
+    <div id="booking-loader" class="flex flex-col items-center justify-center py-24 gap-4">
+      <div class="w-8 h-8 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
+      <p class="font-body text-brand-stone text-sm">Cargando disponibilidad…</p>
+    </div>
+
+    <iframe
+      id="beds24-iframe"
+      src=""
+      width="100%"
+      style="min-height: 85vh; border: none; display: none;"
+      title="Reservar habitación en Porta D'irta"
+      loading="eager"
+    ></iframe>
+
+  </section>
+
+  <script is:inline>
+    (function () {
+      const PROP_ID = '318433';
+      const BASE    = 'https://beds24.com/booking2.php';
+
+      // Read whatever params the BookingBox submitted (checkin, checkout,
+      // numadult, numchild, etc.) and forward them all to Beds24.
+      const incoming = new URLSearchParams(window.location.search);
+      const out      = new URLSearchParams();
+
+      out.set('propid', PROP_ID);
+
+      // Forward recognised booking params
+      ['checkin', 'checkout', 'numadult', 'numchild', 'room'].forEach(function (key) {
+        if (incoming.has(key)) out.set(key, incoming.get(key));
+      });
+
+      const iframe  = document.getElementById('beds24-iframe');
+      const loader  = document.getElementById('booking-loader');
+
+      iframe.src = BASE + '?' + out.toString();
+
+      iframe.addEventListener('load', function () {
+        loader.style.display  = 'none';
+        iframe.style.display  = 'block';
+      });
+    })();
+  </script>
+
+</Layout>
