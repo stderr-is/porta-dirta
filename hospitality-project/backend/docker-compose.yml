@@ -8,6 +8,8 @@ services:
     depends_on:
       - restaurant-db
     restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
 
   restaurant-db:
     image: mysql:8.0
@@ -19,6 +21,8 @@ services:
     volumes:
       - ./data/mysql:/var/lib/mysql
     restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
 
   events:
     build:
@@ -35,6 +39,8 @@ services:
     depends_on:
       - events-db
     restart: always
+    mem_limit: 1g
+    mem_reservation: 512m
 
   events-db:
     image: postgres:16-alpine
@@ -45,6 +51,8 @@ services:
     volumes:
       - ./data/pgsql:/var/lib/postgresql/data
     restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
 
   n8n-db:
     image: postgres:16-alpine
@@ -55,6 +63,8 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     restart: always
+    mem_limit: 256m
+    mem_reservation: 128m
 
   n8n:
     image: n8nio/n8n:latest
@@ -66,9 +76,33 @@ services:
       - DB_POSTGRESDB_HOST=n8n-db
       - DB_POSTGRESDB_PASSWORD=n8n_pass
       - DB_POSTGRESDB_USER=n8n
+      # Stable encryption key — NEVER change this or all credentials become unreadable
+      - N8N_ENCRYPTION_KEY=44ad7c7792af3d44fdd16bc19747501c08765f53550576e18fecfb8e32a8f207
+      # Allow Code nodes to read $env variables (needed for Identity Router)
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      # Public URL so n8n can register Telegram webhooks correctly
+      - WEBHOOK_URL=https://n8n.hobbitonranch.com/
+      - N8N_EDITOR_BASE_URL=https://n8n.hobbitonranch.com/
+      # ── AI Automation Layer ────────────────────────────────────────
+      # Claude API key (Pro account) — replaces Gemini (free tier didn't work)
+      # Get key: https://console.anthropic.com/settings/keys
+      - ANTHROPIC_API_KEY=REPLACE_WITH_ANTHROPIC_API_KEY
+      # Create bot via @BotFather on Telegram → /newbot
+      - TELEGRAM_BOT_TOKEN=8348668157:AAEMAD_F37GNJJZxOd4C5krZg4OnPaZ_MD4
+      # Find your ID: message @userinfobot on Telegram
+      - TELEGRAM_ADMIN_ID=1330098629
+      # Collaborator ID (restaurant partner, read-only access)
+      - TELEGRAM_COLLAB_ID=REPLACE_WITH_COLLAB_TELEGRAM_ID
+      # Beds24 V2 long-lived token (from frontend/.env BEDS24_REFRESH_TOKEN flow)
+      - BEDS24_API_TOKEN=REPLACE_WITH_BEDS24_V2_TOKEN
+      - BEDS24_PROP_ID=318433
+      # Business email for SMTP replies
+      - BUSINESS_EMAIL=info@portadirta.com
     depends_on:
       - n8n-db
     restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
@@ -77,3 +111,5 @@ services:
     volumes:
       - ./data/uptime-kuma:/app/data
     restart: always
+    mem_limit: 256m
+    mem_reservation: 128m

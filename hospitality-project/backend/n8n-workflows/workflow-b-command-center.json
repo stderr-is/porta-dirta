@@ -1,0 +1,615 @@
+{
+  "name": "B: Mobile Command Center — Telegram to API",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "b1000001-0000-0000-0000-000000000001",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        250,
+        400
+      ],
+      "webhookId": "REPLACE_WEBHOOK_ID_B",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Identity Router: determine user tier before any processing.\n// Returns tier: 'admin' | 'collaborator' | 'unauthorized'\nconst update = items[0].json;\nconst adminId = $env.TELEGRAM_ADMIN_ID?.toString();\nconst collabId = $env.TELEGRAM_COLLAB_ID?.toString();\n\nconst fromId = (\n  update.message?.from?.id ||\n  update.callback_query?.from?.id\n)?.toString();\n\nconst chatId = (\n  update.message?.chat?.id ||\n  update.callback_query?.message?.chat?.id\n)?.toString();\n\nlet tier = 'unauthorized';\nif (fromId === adminId) tier = 'admin';\nelse if (collabId && fromId === collabId) tier = 'collaborator';\n\n// Extract callback data if this is a confirm/cancel for a pending action\nconst callbackData = update.callback_query?.data || '';\nconst isCallback = !!update.callback_query;\nconst isVoice = !!(update.message?.voice);\nconst voiceFileId = update.message?.voice?.file_id || null;\nconst text = update.message?.text || '';\n\nreturn [{ json: { tier, fromId, chatId, isCallback, callbackData, isVoice, voiceFileId, text } }];"
+      },
+      "id": "b1000002-0000-0000-0000-000000000002",
+      "name": "Identity Router",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.tier }}",
+              "operation": "notEqual",
+              "value2": "unauthorized"
+            }
+          ]
+        }
+      },
+      "id": "b1000003-0000-0000-0000-000000000003",
+      "name": "Authorized?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        690,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.isCallback }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b1000004-0000-0000-0000-000000000004",
+      "name": "Callback or Message?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        910,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle confirm/cancel callback for pending destructive action\nconst { callbackData, chatId, tier } = items[0].json;\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.pendingActions) staticData.pendingActions = {};\n\nconst parts = callbackData.split('_');\nconst cbAction = parts[0]; // 'confirm' | 'cancel'\nconst actionKey = parts.slice(1).join('_');\n\nconst pending = staticData.pendingActions[actionKey];\nif (!pending) {\n  return [{ json: { error: 'Action expired or not found', chatId } }];\n}\n\ndelete staticData.pendingActions[actionKey];\n\nif (cbAction === 'cancel') {\n  return [{ json: { cancelled: true, chatId, summary: pending.confirmationMessage } }];\n}\n\n// confirm — return the stored action for execution\nreturn [{ json: { ...pending, chatId, tier, confirmed: true } }];"
+      },
+      "id": "b1000005-0000-0000-0000-000000000005",
+      "name": "Handle Confirm/Cancel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1130,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.isVoice }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b1000006-0000-0000-0000-000000000006",
+      "name": "Voice or Text?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1130,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/getFile?file_id={{ $json.voiceFileId }}",
+        "options": {}
+      },
+      "id": "b1000007-0000-0000-0000-000000000007",
+      "name": "Get Voice File Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1350,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Download voice OGG and encode as base64 for Gemini multimodal\nconst fileInfo = items[0].json;\nconst filePath = fileInfo.result?.file_path;\nif (!filePath) throw new Error('Could not get voice file path from Telegram');\n\nconst fileUrl = `https://api.telegram.org/file/bot${$env.TELEGRAM_BOT_TOKEN}/${filePath}`;\nconst resp = await fetch(fileUrl);\nif (!resp.ok) throw new Error('Failed to download voice file');\nconst buffer = Buffer.from(await resp.arrayBuffer());\nconst base64Audio = buffer.toString('base64');\n\nconst { chatId, tier } = $('Identity Router').first().json;\nreturn [{ json: { base64Audio, mimeType: 'audio/ogg', chatId, tier } }];"
+      },
+      "id": "b1000008-0000-0000-0000-000000000008",
+      "name": "Download & Encode Voice",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1570,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\\n  \"chat_id\": {{ $('Identity Router').first().json.chatId }},\\n  \"text\": \"\\ud83c\\udfa4 Los mensajes de voz no est\\u00e1n disponibles a\\u00fan. Por favor escribe tu comando en texto.\"\\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "b1000009-0000-0000-0000-000000000009",
+      "name": "Voice — Not Supported Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1790,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $env.ANTHROPIC_API_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\\n  \"model\": \"claude-haiku-4-5-20251001\",\\n  \"max_tokens\": 512,\\n  \"messages\": [{\\n    \"role\": \"user\",\\n    \"content\": {{ JSON.stringify(\\n      ($('Identity Router').first().json.tier === 'admin'\\n        ? 'You are the backend logic engine for Porta D\\'irta hotel. Map commands to API calls. Output ONLY valid JSON with no markdown: {\\\"action\\\":\\\"\\\",\\\"endpoint\\\":\\\"\\\",\\\"method\\\":\\\"\\\",\\\"payload\\\":null,\\\"isDestructive\\\":false,\\\"confirmationMessage\\\":\\\"\\\",\\\"humanReadableSummary\\\":\\\"\\\"}. Allowed actions: beds24.getOccupancy, beds24.listBookings, beds24.blockRoom, beds24.updatePrice, beds24.cancelBooking, tastyigniter.listReservations, tastyigniter.checkAvailability, tastyigniter.deleteReservation, hievents.getTicketCounts. Beds24 base: https://beds24.com/api/v2 propId=318433. TastyIgniter base: https://restaurant.hobbitonranch.com/api/public. isDestructive=true for: blockRoom, updatePrice, cancelBooking, deleteReservation. Dates YYYY-MM-DD. Prices positive EUR.'\\n        : 'READ-ONLY access only. Output ONLY valid JSON with no markdown. Only allowed: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts. All other actions: action=\\\"unauthorized\\\".'\\n      ) + '\\n\\nCOMMAND: ' + $json.text\\n    ) }}\\n  }]\\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "b1000010-0000-0000-0000-000000000010",
+      "name": "Claude — Text Intent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1350,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Schema Validator: parse Gemini output and validate before any API call.\n// Merge voice/text paths — either node could have fired.\nconst geminiRaw = items[0].json;\nconst ctx = $('Identity Router').first().json;\n\nlet parsed;\ntry {\n  const rawText = geminiRaw.content?.[0]?.text || '{}';\n  parsed = JSON.parse(rawText);\n} catch(e) {\n  return [{ json: { validationError: 'Claude returned invalid JSON: ' + e.message, chatId: ctx.chatId } }];\n}\n\nconst allowed = {\n  admin: ['beds24.getOccupancy','beds24.listBookings','beds24.getRevenue','beds24.blockRoom','beds24.updatePrice','beds24.cancelBooking','tastyigniter.listReservations','tastyigniter.checkAvailability','tastyigniter.deleteReservation','hievents.getTicketCounts','hievents.listEvents','unknown'],\n  collaborator: ['beds24.getOccupancy','tastyigniter.listReservations','tastyigniter.checkAvailability','hievents.getTicketCounts','unknown']\n};\n\nif (parsed.action === 'unknown') {\n  return [{ json: { validationError: parsed.humanReadableSummary || 'Could not interpret command', chatId: ctx.chatId } }];\n}\n\nif (!allowed[ctx.tier]?.includes(parsed.action)) {\n  return [{ json: { validationError: `Action '${parsed.action}' not allowed for tier '${ctx.tier}'`, chatId: ctx.chatId } }];\n}\n\nif (!parsed.endpoint || !parsed.method) {\n  return [{ json: { validationError: 'Gemini missing endpoint or method', chatId: ctx.chatId } }];\n}\n\n// Validate payload numeric fields\nif (parsed.payload?.price !== undefined && (isNaN(parsed.payload.price) || parsed.payload.price <= 0)) {\n  return [{ json: { validationError: 'Invalid price value in payload', chatId: ctx.chatId } }];\n}\n\nreturn [{ json: { ...parsed, chatId: ctx.chatId, tier: ctx.tier, valid: true } }];"
+      },
+      "id": "b1000011-0000-0000-0000-000000000011",
+      "name": "Schema Validator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2010,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.validationError }}",
+              "operation": "notEmpty"
+            }
+          ]
+        }
+      },
+      "id": "b1000012-0000-0000-0000-000000000012",
+      "name": "Validation Error?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2230,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "=⚠️ No pude procesar ese comando.\n\n{{ $json.validationError }}\n\nIntenta reformular la petición.",
+        "additionalFields": {}
+      },
+      "id": "b1000013-0000-0000-0000-000000000013",
+      "name": "Telegram — Validation Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        2450,
+        340
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.isDestructive }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "b1000014-0000-0000-0000-000000000014",
+      "name": "Destructive Action?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2450,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store pending action and prepare confirmation message for Telegram\nconst action = items[0].json;\nconst actionKey = Date.now().toString(36);\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.pendingActions) staticData.pendingActions = {};\nstaticData.pendingActions[actionKey] = {\n  action: action.action,\n  endpoint: action.endpoint,\n  method: action.method,\n  payload: action.payload,\n  confirmationMessage: action.confirmationMessage,\n  humanReadableSummary: action.humanReadableSummary,\n  ts: Date.now()\n};\nreturn [{ json: { actionKey, chatId: action.chatId, confirmationMessage: action.confirmationMessage } }];"
+      },
+      "id": "b1000015-0000-0000-0000-000000000015",
+      "name": "Store Pending Action",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2670,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "=⚠️ *Acción que requiere confirmación*\n\n{{ $json.confirmationMessage }}\n\n¿Confirmas?",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "reply_markup": "={\"inline_keyboard\":[[{\"text\":\"✅ Confirmar\",\"callback_data\":\"confirm_{{ $json.actionKey }}\"},{\"text\":\"❌ Cancelar\",\"callback_data\":\"cancel_{{ $json.actionKey }}\"}]]}"
+        }
+      },
+      "id": "b1000016-0000-0000-0000-000000000016",
+      "name": "Telegram — Confirm Dialog",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        2890,
+        460
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "={{ $json.confirmed ? $json.method : $json.method }}",
+        "url": "={{ $json.endpoint }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.BEDS24_API_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.payload ? JSON.stringify($json.payload) : '{}' }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "b1000017-0000-0000-0000-000000000017",
+      "name": "Execute API Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2670,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Audit log: record every AI-triggered API mutation\nconst ctx = items[0].json;\nconst apiCtx = $('Schema Validator').first().json;\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.auditLog) staticData.auditLog = [];\nstaticData.auditLog.push({\n  ts: new Date().toISOString(),\n  user: apiCtx.tier,\n  action: apiCtx.action,\n  endpoint: apiCtx.endpoint,\n  payload: apiCtx.payload,\n  result: ctx.error ? 'error' : 'success',\n  n8nExecutionId: $execution.id\n});\n// Keep last 500 entries\nif (staticData.auditLog.length > 500) staticData.auditLog = staticData.auditLog.slice(-500);\nreturn [{ json: { ...ctx, auditLogged: true, chatId: apiCtx.chatId, summary: apiCtx.humanReadableSummary } }];"
+      },
+      "id": "b1000018-0000-0000-0000-000000000018",
+      "name": "Audit Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2890,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "=✅ {{ $json.summary }}",
+        "additionalFields": {}
+      },
+      "id": "b1000019-0000-0000-0000-000000000019",
+      "name": "Telegram — Result",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        3110,
+        580
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Identity Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Identity Router": {
+      "main": [
+        [
+          {
+            "node": "Authorized?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authorized?": {
+      "main": [
+        [
+          {
+            "node": "Callback or Message?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Callback or Message?": {
+      "main": [
+        [
+          {
+            "node": "Handle Confirm/Cancel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Voice or Text?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Confirm/Cancel": {
+      "main": [
+        [
+          {
+            "node": "Execute API Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voice or Text?": {
+      "main": [
+        [
+          {
+            "node": "Get Voice File Path",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gemini — Text Intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Voice File Path": {
+      "main": [
+        [
+          {
+            "node": "Download & Encode Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download & Encode Voice": {
+      "main": [
+        [
+          {
+            "node": "Gemini — Voice (transcribe + intent)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini — Voice (transcribe + intent)": {
+      "main": [
+        [
+          {
+            "node": "Schema Validator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini — Text Intent": {
+      "main": [
+        [
+          {
+            "node": "Schema Validator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schema Validator": {
+      "main": [
+        [
+          {
+            "node": "Validation Error?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Error?": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Destructive Action?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Destructive Action?": {
+      "main": [
+        [
+          {
+            "node": "Store Pending Action",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute API Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Pending Action": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Confirm Dialog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute API Call": {
+      "main": [
+        [
+          {
+            "node": "Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit Log": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b1000000-0000-0000-0000-000000000000",
+  "id": "workflow-b-command-center",
+  "tags": [
+    {
+      "name": "ai"
+    },
+    {
+      "name": "telegram"
+    }
+  ]
+}
