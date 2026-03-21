@@ -30,15 +30,25 @@ The digital presence must mirror the physical property: spacious, elegant, and p
 * **The Scroll Journey:** Pages are not endless dumps of text. They are curated journeys. The user scrolls through distinct, visually arresting sections (Rooms → Dining → Events → Local Collabs) that naturally funnel down to a final booking widget.
 
 ## 2. The Visual Language
-* **Color Palette (CORRECTED 2026-03-20 — warm earthy Mediterranean, not deep navy):**
-  * **Background:** `#F5F0E8` warm cream — page bg
-  * **Primary text:** `#2C2018` dark charcoal-brown
+* **Color Palette (UPDATED 2026-03-21 — nature redesign approved and merged to master):**
+  * **Background:** `#EEF4E6` sage-tinted cream — page bg (changed from warm cream #F5F0E8)
+  * **Primary text:** `#1C2818` forest-tinted charcoal (changed from #2C2018)
   * **Brand earth:** `#B8A490` sandy taupe — brand primary surface
   * **Linen:** `#EDE8DF` — card backgrounds
   * **Gold CTA:** `#C9A84C` — all primary CTAs and accent lines
   * **Terracotta:** `#C05A3A` — accent (from roof tiles in photos)
   * **Stone:** `#8B7355` — secondary text / hover state for CTAs
-  * **Deep navy:** `#0D2B45` — dark sections (footer, hero overlays) only — NOT primary brand colour
+  * **Deep navy:** `#0D2B45` — dark solid sections (bg-brand-blue) — kept as-is, do NOT replace with green
+  * **Sage-teal forest:** `#2C4A3C` (brand-forest) — hero/photo overlays only at ~50% opacity, gives green cast over photos without clashing with navy sections
+  * **Olive:** `#4A5E2A` (brand-olive) — GarlandDivider color on light backgrounds
+  * **Sage:** `#7A8F52` (brand-sage) — softer nature accent
+  * **Sage light:** `#c8deb0` (brand-sage-light) — accents on dark backgrounds
+* **Nature design decisions (2026-03-21 — user approved, merged to master):**
+  * Hero photo/video overlays use `bg-brand-forest/50-55` (muted sage-teal at ~50% opacity) instead of navy
+  * Solid dark sections remain `bg-brand-blue` (navy) — green+navy clash if both used as solid bg
+  * `GarlandDivider` component replaces all thin gold `h-px` lines — full-width SVG olive branch garland
+  * `BotanicalAccent` corner pieces REMOVED — were too repetitive and too subtle (opacity-8%)
+  * `OliveDivider` component superseded by `GarlandDivider` — keep file but don't use in new code
 * **Imagery Directive:** Hero = drone video (`hero.mp4`). Each page has real property photography. No more picsum placeholders.
 
 ## 3. The Conversion Architecture
