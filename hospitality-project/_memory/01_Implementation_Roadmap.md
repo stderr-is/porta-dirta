@@ -132,9 +132,17 @@ tags: [wbs, planning, execution]
 
 ## Pre-Launch Checklist (before going live)
 - [ ] **Remove beta disclaimer banners** from 3 pages — search `TODO: REMOVE BEFORE LAUNCH`:
-  - `frontend/src/pages/hotel.astro` — above Beds24 widget
+  - `frontend/src/pages/hotel.astro` — above Beds24 hero widget AND above booking anchor widget
   - `frontend/src/pages/restaurante.astro` — above reservation form
   - `frontend/src/pages/experiencias.astro` — above Nuestros Paquetes section
+- [ ] **Remove beta disclaimer from TastyIgniter email templates** — run in DB:
+  ```sql
+  UPDATE mail_templates SET body = '', plain_body = '', is_custom = 0
+  WHERE template_id IN (10, 12, 13);
+  ```
+  Templates affected: 10 (reservation confirmation), 12 (reservation update), 13 (reservation reminder)
+- [ ] **Remove beta disclaimer from Beds24 email templates** — done manually in Beds24 dashboard → Templates
+- [ ] **Remove beta disclaimer from n8n "Check-in Tomorrow" workflow** — edit the SMTP send node body
 - [ ] Set Cloudflare Pages env vars to production URLs (replace `hobbitonranch.com` → `portadirta.com` subdomains)
 
 ## Phase 5: Closing (Handover & Launch)
