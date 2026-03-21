@@ -61,6 +61,7 @@ tags: [wbs, planning, execution]
 - [ ] Import `workflow-c-yield-management.json` into n8n, wire Beds24 + Telegram + SMTP credentials
 - [ ] Activate all 4 workflows, test Workflow A with a real test email to info@portadirta.com
 - [x] Test Workflow B routing — FIXED (2026-03-20): n8n v2 IF node typeVersion 2 requires new condition format; all 5 IF nodes migrated. Bot now correctly routes text → Claude → API.
+- [x] Workflow B end-to-end price update — FIXED (2026-03-21): n8n HTTP Request v4 body encoding bug resolved. Root cause: `body.parameters` is silently ignored; must use `jsonBody` with `JSON.stringify(...)`. TastyIgniter PHP proxy at `/api/internal/beds24/calendar` bypasses the n8n body encoding entirely — accepts flat JSON, builds Beds24 nested array in PHP, forwards via curl. Bot command "Sube Torre Badum a 150€ hasta el final del mes" → `💰 Precio actualizado` confirmed working.
 - [ ] **Configure `BEDS24_API_TOKEN`**: replace `REPLACE_WITH_BEDS24_V2_TOKEN` in `docker-compose.yml` then `docker compose up -d n8n` — bot returns 401 until this is set
 - [ ] Test Workflow C: trigger manually, verify pricing recommendation appears in Telegram
 - [ ] Verify Identity Router blocks unauthorized Telegram IDs

@@ -29,6 +29,23 @@ All IF nodes in workflow JSONs must use the **new n8n v2 condition format** — 
 ```
 Boolean conditions use `"type": "boolean", "operation": "equals"`. All 5 IF nodes in Workflow B fixed on 2026-03-20.
 
+### Critical n8n v4 Bug — HTTP Request Node Body Encoding (fixed 2026-03-21)
+`body.parameters` is silently ignored when `specifyBody: "json"`. The correct parameter is `jsonBody`:
+```json
+{
+  "sendBody": true,
+  "specifyBody": "json",
+  "jsonBody": "={{ JSON.stringify({ key: $json.value }) }}"
+}
+```
+`specifyBody: "string"` also broken — URL-form-encodes the entire JSON string as a key with empty value.
+**Workaround for complex payloads:** TastyIgniter PHP proxy at `POST /api/internal/beds24/calendar` accepts flat JSON, builds nested Beds24 structure in real PHP, forwards via curl. Auth header: `X-Internal-Token: portadirta-n8n-2026`.
+
+### n8n REST API (for scripted workflow updates)
+- Login: `POST /rest/login` with `{"emailOrLdapLoginId":"...", "password":"..."}` + `browser-id` header → session cookie
+- Update workflow: `PATCH /rest/workflows/{id}` (PUT returns 404)
+- Workflow B ID: `i87KV1SQXuhTCYxt`
+
 Full blueprint: `_memory/05_AI_Automation.md`
 Workflow files: `backend/n8n-workflows/`
 

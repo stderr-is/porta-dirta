@@ -1,5 +1,11 @@
 {
-  "name": "B: Mobile Command Center — Telegram to API",
+  "updatedAt": "2026-03-21T18:24:54.110Z",
+  "createdAt": "2026-03-20T16:42:05.055Z",
+  "id": "i87KV1SQXuhTCYxt",
+  "name": "B: Mobile Command Center \u2014 Telegram to API",
+  "description": null,
+  "active": true,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -17,17 +23,17 @@
         250,
         400
       ],
-      "webhookId": "REPLACE_WEBHOOK_ID_B",
+      "webhookId": "475cd6ce-bb05-46ee-aea8-663b6e9d8433",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "// Identity Router: determine user tier before any processing.\n// Returns tier: 'admin' | 'collaborator' | 'unauthorized'\nconst update = items[0].json;\nconst adminId = $env.TELEGRAM_ADMIN_ID?.toString();\nconst collabId = $env.TELEGRAM_COLLAB_ID?.toString();\n\nconst fromId = (\n  update.message?.from?.id ||\n  update.callback_query?.from?.id\n)?.toString();\n\nconst chatId = (\n  update.message?.chat?.id ||\n  update.callback_query?.message?.chat?.id\n)?.toString();\n\nlet tier = 'unauthorized';\nif (fromId === adminId) tier = 'admin';\nelse if (collabId && fromId === collabId) tier = 'collaborator';\n\n// Extract callback data if this is a confirm/cancel for a pending action\nconst callbackData = update.callback_query?.data || '';\nconst isCallback = !!update.callback_query;\nconst isVoice = !!(update.message?.voice);\nconst voiceFileId = update.message?.voice?.file_id || null;\nconst text = update.message?.text || '';\n\nreturn [{ json: { tier, fromId, chatId, isCallback, callbackData, isVoice, voiceFileId, text } }];"
+        "jsCode": "// Identity Router: determine user tier before any processing.\n// Returns tier: 'admin' | 'collaborator' | 'unauthorized'\nconst update = items[0].json;\nconst adminId = $env.TELEGRAM_ADMIN_ID?.toString();\nconst collabId = $env.TELEGRAM_COLLAB_ID?.toString();\n\nconst fromId = (\n  update.message?.from?.id ||\n  update.callback_query?.from?.id\n)?.toString();\n\nconst chatId = (\n  update.message?.chat?.id ||\n  update.callback_query?.message?.chat?.id\n)?.toString();\n\nlet tier = 'unauthorized';\nif (fromId === adminId) tier = 'admin';\nelse if (collabId && fromId === collabId) tier = 'collaborator';\n\n// Extract callback data if this is a confirm/cancel for a pending action\nconst callbackData = update.callback_query?.data || '';\nconst isCallback = !!update.callback_query;\nconst isVoice = !!(update.message?.voice);\nconst voiceFileId = update.message?.voice?.file_id || null;\nconst text = update.message?.text || '';\n\nreturn [{ json: { tier, fromId, chatId, isCallback, isCallbackStr: isCallback ? 'yes' : 'no', callbackData, isVoice, voiceFileId, text } }];"
       },
       "id": "b1000002-0000-0000-0000-000000000002",
       "name": "Identity Router",
@@ -41,14 +47,26 @@
     {
       "parameters": {
         "conditions": {
-          "string": [
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
             {
-              "value1": "={{ $json.tier }}",
-              "operation": "notEqual",
-              "value2": "unauthorized"
+              "id": "c6852a62-1ce8-4eb0-8819-a2570a1d045a",
+              "leftValue": "={{ $json.tier }}",
+              "rightValue": "unauthorized",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals",
+                "singleValue": false
+              }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
       "id": "b1000003-0000-0000-0000-000000000003",
       "name": "Authorized?",
@@ -62,13 +80,26 @@
     {
       "parameters": {
         "conditions": {
-          "boolean": [
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
             {
-              "value1": "={{ $json.isCallback }}",
-              "value2": true
+              "id": "d184e937-4d72-41a8-8260-133e7c207744",
+              "leftValue": "={{ $json.isCallbackStr }}",
+              "rightValue": "no",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals",
+                "singleValue": false
+              }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
       "id": "b1000004-0000-0000-0000-000000000004",
       "name": "Callback or Message?",
@@ -81,7 +112,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Handle confirm/cancel callback for pending destructive action\nconst { callbackData, chatId, tier } = items[0].json;\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.pendingActions) staticData.pendingActions = {};\n\nconst parts = callbackData.split('_');\nconst cbAction = parts[0]; // 'confirm' | 'cancel'\nconst actionKey = parts.slice(1).join('_');\n\nconst pending = staticData.pendingActions[actionKey];\nif (!pending) {\n  return [{ json: { error: 'Action expired or not found', chatId } }];\n}\n\ndelete staticData.pendingActions[actionKey];\n\nif (cbAction === 'cancel') {\n  return [{ json: { cancelled: true, chatId, summary: pending.confirmationMessage } }];\n}\n\n// confirm — return the stored action for execution\nreturn [{ json: { ...pending, chatId, tier, confirmed: true } }];"
+        "jsCode": "\nconst update = items[0].json;\nconst { callbackData, chatId, tier } = update;\n\n// Not a confirm/cancel callback \u2014 drop silently\nif (!callbackData || (!callbackData.startsWith('confirm_') && !callbackData.startsWith('cancel_'))) {\n  return [[], []];\n}\n\nconst parts = callbackData.split('_');\nconst cbAction = parts[0];\nconst actionKey = parts.slice(1).join('_');\n\nconst sd = $getWorkflowStaticData('global');\nconst pending = sd.pendingActions?.[actionKey];\nif (!pending) {\n  // output 1 \u2192 Telegram Cancelled (expired)\n  return [[], [{ json: { message: '\u23f0 Acci\u00f3n expirada. Vuelve a enviar el comando.', chatId } }]];\n}\ndelete sd.pendingActions[actionKey];\n\nif (cbAction === 'cancel') {\n  // output 1 \u2192 Telegram Cancelled\n  return [[], [{ json: { message: '\u274c Acci\u00f3n cancelada.', chatId } }]];\n}\n\n// output 0 \u2192 Refresh Beds24 Token \u2192 execute\nreturn [[{ json: {\n  confirmed:     true,\n  action:        pending.action,\n  endpoint:      pending.endpoint,\n  method:        pending.method,\n  payload:       pending.payload,\n  beds24Payload: pending.beds24Payload || null,\n  chatId,\n} }], []];\n"
       },
       "id": "b1000005-0000-0000-0000-000000000005",
       "name": "Handle Confirm/Cancel",
@@ -95,13 +126,26 @@
     {
       "parameters": {
         "conditions": {
-          "boolean": [
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
             {
-              "value1": "={{ $json.isVoice }}",
-              "value2": true
+              "id": "9dd3293a-e364-46aa-80ee-9b9112e03d80",
+              "leftValue": "={{ $json.isVoice }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals",
+                "singleValue": false
+              }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
       "id": "b1000006-0000-0000-0000-000000000006",
       "name": "Voice or Text?",
@@ -155,13 +199,13 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\\n  \"chat_id\": {{ $('Identity Router').first().json.chatId }},\\n  \"text\": \"\\ud83c\\udfa4 Los mensajes de voz no est\\u00e1n disponibles a\\u00fan. Por favor escribe tu comando en texto.\"\\n}",
+        "jsonBody": "={\"chat_id\":{{ $('Identity Router').first().json.chatId }},\"text\":\"\ud83c\udfa4 Los mensajes de voz no est\u00e1n disponibles a\u00fan. Escribe tu comando en texto.\"}",
         "options": {
           "timeout": 10000
         }
       },
       "id": "b1000009-0000-0000-0000-000000000009",
-      "name": "Voice — Not Supported Reply",
+      "name": "Gemini \u2014 Voice (transcribe + intent)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
@@ -192,13 +236,14 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\\n  \"model\": \"claude-haiku-4-5-20251001\",\\n  \"max_tokens\": 512,\\n  \"messages\": [{\\n    \"role\": \"user\",\\n    \"content\": {{ JSON.stringify(\\n      ($('Identity Router').first().json.tier === 'admin'\\n        ? 'You are the backend logic engine for Porta D\\'irta hotel. Map commands to API calls. Output ONLY valid JSON with no markdown: {\\\"action\\\":\\\"\\\",\\\"endpoint\\\":\\\"\\\",\\\"method\\\":\\\"\\\",\\\"payload\\\":null,\\\"isDestructive\\\":false,\\\"confirmationMessage\\\":\\\"\\\",\\\"humanReadableSummary\\\":\\\"\\\"}. Allowed actions: beds24.getOccupancy, beds24.listBookings, beds24.blockRoom, beds24.updatePrice, beds24.cancelBooking, tastyigniter.listReservations, tastyigniter.checkAvailability, tastyigniter.deleteReservation, hievents.getTicketCounts. Beds24 base: https://beds24.com/api/v2 propId=318433. TastyIgniter base: https://restaurant.hobbitonranch.com/api/public. isDestructive=true for: blockRoom, updatePrice, cancelBooking, deleteReservation. Dates YYYY-MM-DD. Prices positive EUR.'\\n        : 'READ-ONLY access only. Output ONLY valid JSON with no markdown. Only allowed: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts. All other actions: action=\\\"unauthorized\\\".'\\n      ) + '\\n\\nCOMMAND: ' + $json.text\\n    ) }}\\n  }]\\n}",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings (copy exactly, no variations):\\n  beds24.getOccupancy\\n  beds24.getPrices\\n  beds24.listBookings\\n  beds24.blockRoom\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  tastyigniter.deleteReservation\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list above>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"price\":null,\"bookingId\":null,\"guests\":null},\"isDestructive\":false,\"confirmationMessage\":\"\",\"humanReadableSummary\":\"<one sentence in Spanish>\"}\\nRules: isDestructive=true for blockRoom/updatePrice/cancelBooking/deleteReservation. Dates use YYYY-MM-DD and current year. For weekly queries set startDate=Monday endDate=Sunday. If command is unclear use action=\"unknown\".'\n        : 'You are an API router. Output ONLY JSON, no markdown.\\nThe \"action\" field MUST be EXACTLY one of: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"isDestructive\":false,\"confirmationMessage\":\"\",\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}",
         "options": {
           "timeout": 30000
-        }
+        },
+        "body": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings:\\n  beds24.getOccupancy\\n  beds24.listBookings\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"roomName\":\"\",\"price\":null,\"bookingId\":null,\"guests\":null},\"humanReadableSummary\":\"<one sentence result confirmation in Spanish>\"}\\nRules: Dates use YYYY-MM-DD format current year. Weekly queries: startDate=Monday endDate=Sunday. Unknown commands use action=unknown. NEVER add isDestructive or confirmationMessage fields.'\n        : 'You are an API router. Output ONLY JSON.\\nActions: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}"
       },
       "id": "b1000010-0000-0000-0000-000000000010",
-      "name": "Claude — Text Intent",
+      "name": "Gemini \u2014 Text Intent",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
@@ -208,7 +253,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Schema Validator: parse Gemini output and validate before any API call.\n// Merge voice/text paths — either node could have fired.\nconst geminiRaw = items[0].json;\nconst ctx = $('Identity Router').first().json;\n\nlet parsed;\ntry {\n  const rawText = geminiRaw.content?.[0]?.text || '{}';\n  parsed = JSON.parse(rawText);\n} catch(e) {\n  return [{ json: { validationError: 'Claude returned invalid JSON: ' + e.message, chatId: ctx.chatId } }];\n}\n\nconst allowed = {\n  admin: ['beds24.getOccupancy','beds24.listBookings','beds24.getRevenue','beds24.blockRoom','beds24.updatePrice','beds24.cancelBooking','tastyigniter.listReservations','tastyigniter.checkAvailability','tastyigniter.deleteReservation','hievents.getTicketCounts','hievents.listEvents','unknown'],\n  collaborator: ['beds24.getOccupancy','tastyigniter.listReservations','tastyigniter.checkAvailability','hievents.getTicketCounts','unknown']\n};\n\nif (parsed.action === 'unknown') {\n  return [{ json: { validationError: parsed.humanReadableSummary || 'Could not interpret command', chatId: ctx.chatId } }];\n}\n\nif (!allowed[ctx.tier]?.includes(parsed.action)) {\n  return [{ json: { validationError: `Action '${parsed.action}' not allowed for tier '${ctx.tier}'`, chatId: ctx.chatId } }];\n}\n\nif (!parsed.endpoint || !parsed.method) {\n  return [{ json: { validationError: 'Gemini missing endpoint or method', chatId: ctx.chatId } }];\n}\n\n// Validate payload numeric fields\nif (parsed.payload?.price !== undefined && (isNaN(parsed.payload.price) || parsed.payload.price <= 0)) {\n  return [{ json: { validationError: 'Invalid price value in payload', chatId: ctx.chatId } }];\n}\n\nreturn [{ json: { ...parsed, chatId: ctx.chatId, tier: ctx.tier, valid: true } }];"
+        "jsCode": "// Schema Validator: parse Gemini output and validate before any API call.\n// Merge voice/text paths \u2014 either node could have fired.\nconst geminiRaw = items[0].json;\nconst ctx = $('Identity Router').first().json;\n\n\nlet parsed;\ntry {\n  let rawText = geminiRaw.content?.[0]?.text || '{}';\n  // Strip markdown code fences that Claude sometimes wraps JSON in\n  rawText = rawText.replace(/^```(?:json)?\\s*/i, '').replace(/\\s*```$/,'').trim();\n  parsed = JSON.parse(rawText);\n} catch(e) {\n  return [{ json: { validationError: 'Claude returned invalid JSON: ' + e.message, chatId: ctx.chatId } }];\n}\n\n// Normalize action names \u2014 Claude uses various formats (camelCase, snake_case, with/without prefix)\nconst actionMap = {\n  // camelCase variants\n  'getOccupancy': 'beds24.getOccupancy',\n  'getPrices': 'beds24.getPrices',\n  'get_prices': 'beds24.getPrices',\n  'getRates': 'beds24.getPrices',\n  'get_rates': 'beds24.getPrices',\n  'listBookings': 'beds24.listBookings',\n  'getRevenue': 'beds24.getRevenue',\n  'blockRoom': 'beds24.blockRoom',\n  'updatePrice': 'beds24.updatePrice',\n  'cancelBooking': 'beds24.cancelBooking',\n  'listReservations': 'tastyigniter.listReservations',\n  'checkAvailability': 'tastyigniter.checkAvailability',\n  'deleteReservation': 'tastyigniter.deleteReservation',\n  'getTicketCounts': 'hievents.getTicketCounts',\n  'listEvents': 'hievents.listEvents',\n  // snake_case variants\n  'get_occupancy': 'beds24.getOccupancy',\n  'list_bookings': 'beds24.listBookings',\n  'get_revenue': 'beds24.getRevenue',\n  'block_room': 'beds24.blockRoom',\n  'update_price': 'beds24.updatePrice',\n  'cancel_booking': 'beds24.cancelBooking',\n  'list_reservations': 'tastyigniter.listReservations',\n  'check_availability': 'tastyigniter.checkAvailability',\n  'delete_reservation': 'tastyigniter.deleteReservation',\n  'get_ticket_counts': 'hievents.getTicketCounts',\n  'list_events': 'hievents.listEvents',\n};\nconst rawAction = parsed.action || '';\nif (!rawAction.includes('.') && actionMap[rawAction]) {\n  parsed.action = actionMap[rawAction];\n}\n// Also normalize dotted variants with wrong service prefix or casing\nconst actionNorm = rawAction.split('.').pop();\nif (rawAction.includes('.') && actionMap[actionNorm]) {\n  parsed.action = actionMap[actionNorm];\n}\n// Fuzzy fallback: if action still not recognized, match by keyword\nconst knownActions = Object.values(actionMap).concat([\n  'beds24.getOccupancy','beds24.getPrices','beds24.listBookings','beds24.getRevenue',\n  'beds24.blockRoom','beds24.updatePrice','beds24.cancelBooking',\n  'tastyigniter.listReservations','tastyigniter.checkAvailability',\n  'tastyigniter.deleteReservation','hievents.getTicketCounts','hievents.listEvents','unknown'\n]);\nif (!knownActions.includes(parsed.action)) {\n  const a = parsed.action.toLowerCase();\n  if      (a.includes('occupan') || a.includes('ocupac'))      parsed.action = 'beds24.getOccupancy';\n  else if (a.includes('price') || a.includes('precio') || a.includes('rate') || a.includes('tarifa') || a.includes('coste') || a.includes('cuest')) parsed.action = 'beds24.getPrices';\n  else if (a.includes('booking') || a.includes('reserv') && a.includes('beds')) parsed.action = 'beds24.listBookings';\n  else if (a.includes('reserv'))   parsed.action = 'tastyigniter.listReservations';\n  else if (a.includes('availab') || a.includes('disponib'))    parsed.action = 'tastyigniter.checkAvailability';\n  else if (a.includes('ticket') || a.includes('event'))        parsed.action = 'hievents.getTicketCounts';\n  else if (a.includes('price') || a.includes('precio'))        parsed.action = 'beds24.updatePrice';\n  else if (a.includes('block') || a.includes('bloquea'))       parsed.action = 'beds24.blockRoom';\n  else if (a.includes('cancel'))   parsed.action = 'beds24.cancelBooking';\n  else    parsed.action = 'unknown';\n}\n\n\n// Hardcode correct Beds24 V2 endpoints \u2014 Claude doesn't know exact URLs\nconst endpointMap = {\n  'beds24.getOccupancy':   { endpoint: 'https://beds24.com/api/v2/inventory/rooms/availability?propId=318433', method: 'GET' },\n  'beds24.getPrices':     { endpoint: 'https://beds24.com/api/v2/inventory/rooms/availability?propId=318433', method: 'GET' },\n  'beds24.listBookings':   { endpoint: 'https://beds24.com/api/v2/bookings?propId=318433', method: 'GET' },\n  'beds24.getRevenue':     { endpoint: 'https://beds24.com/api/v2/bookings?propId=318433&status=confirmed', method: 'GET' },\n  'beds24.blockRoom':      { endpoint: 'https://beds24.com/api/v2/inventory/rooms/calendar', method: 'POST' },\n  'beds24.updatePrice':    { endpoint: 'https://beds24.com/api/v2/inventory/rooms/calendar', method: 'POST' },\n  'beds24.cancelBooking':  { endpoint: 'https://beds24.com/api/v2/bookings/' + (parsed.payload?.bookingId || ''), method: 'DELETE' },\n  'tastyigniter.listReservations':   { endpoint: 'https://restaurant.hobbitonranch.com/api/internal/reservations', method: 'GET' },\n  'tastyigniter.checkAvailability':  { endpoint: 'https://restaurant.hobbitonranch.com/api/internal/availability', method: 'GET' },\n  'tastyigniter.deleteReservation':  { endpoint: 'https://restaurant.hobbitonranch.com/api/internal/reservations/' + (parsed.payload?.reservationId || ''), method: 'DELETE' },\n  'hievents.getTicketCounts': { endpoint: 'https://events.hobbitonranch.com/api/v1/events', method: 'GET' },\n  'hievents.listEvents':      { endpoint: 'https://events.hobbitonranch.com/api/v1/events', method: 'GET' },\n};\nif (endpointMap[parsed.action]) {\n  parsed.endpoint = endpointMap[parsed.action].endpoint;\n  parsed.method   = endpointMap[parsed.action].method;\n}\n// Append date range to Beds24 availability endpoint if payload contains a date\nif ((parsed.action === 'beds24.getOccupancy' || parsed.action === 'beds24.getPrices') && parsed.payload) {\n  const p = parsed.payload;\n  const startDate = p.startDate || p.date || p.checkIn || null;\n  const endDate   = p.endDate   || p.date || p.checkOut || startDate;\n  if (startDate) {\n    parsed.endpoint += '&startDate=' + startDate + '&endDate=' + endDate;\n  }\n}\n// Same for listBookings\nif (parsed.action === 'beds24.listBookings' && parsed.payload) {\n  const p = parsed.payload;\n  if (p.startDate || p.date) parsed.endpoint += '&startDate=' + (p.startDate || p.date);\n  if (p.endDate)             parsed.endpoint += '&endDate=' + p.endDate;\n}\n// Append date params for TastyIgniter reservations\nif (parsed.action === 'tastyigniter.listReservations' && parsed.payload) {\n  const p = parsed.payload;\n  const sep = parsed.endpoint.includes('?') ? '&' : '?';\n  if (p.startDate) parsed.endpoint += sep + 'startDate=' + p.startDate + '&endDate=' + (p.endDate || p.startDate);\n  else if (p.date) parsed.endpoint += sep + 'date=' + p.date;\n}\nif (parsed.action === 'tastyigniter.checkAvailability' && parsed.payload) {\n  const p = parsed.payload;\n  const sep = parsed.endpoint.includes('?') ? '&' : '?';\n  if (p.date)   parsed.endpoint += sep + 'date=' + p.date;\n  if (p.guests) parsed.endpoint += '&guests=' + p.guests;\n}\n\n\nconst allowed = {\n  admin: ['beds24.getOccupancy','beds24.getPrices','beds24.listBookings','beds24.getRevenue','beds24.blockRoom','beds24.updatePrice','beds24.cancelBooking','tastyigniter.listReservations','tastyigniter.checkAvailability','tastyigniter.deleteReservation','hievents.getTicketCounts','hievents.listEvents','unknown'],\n  collaborator: ['beds24.getOccupancy','tastyigniter.listReservations','tastyigniter.checkAvailability','hievents.getTicketCounts','unknown']\n};\n\nconst nonCommands = ['unknown', 'greeting', 'chitchat', 'small_talk', 'help', 'none'];\nif (nonCommands.includes(parsed.action)) {\n  const menu = [\n    '\ud83d\udc4b *Porta D\\'irta \u2014 Comandos disponibles*',\n    '',\n    '\ud83c\udfe8 *Hotel (Beds24)*',\n    '\u2022 \"\u00bfCu\u00e1l es la ocupaci\u00f3n de hoy / esta semana?\"',\n    '\u2022 \"Lista las reservas de esta semana\"',\n    '\u2022 \"\u00bfCu\u00e1l es el precio de Torre Badum para el 15 de abril?\"',\n    '\u2022 \"Sube Cala Aljub a 160\u20ac del 1 al 15 de junio\"',\n    '\u2022 \"Bloquea Ermita Sant Antoni del 1 al 5 de mayo\"',\n    '',\n    '\ud83c\udf7d\ufe0f *Restaurante (TastyIgniter)*',\n    '\u2022 \"\u00bfHay reservas de restaurante esta semana?\"',\n    '\u2022 \"\u00bfHay disponibilidad para 4 personas ma\u00f1ana?\"',\n    '',\n    '\ud83c\udf9f\ufe0f *Eventos (Hi.Events)*',\n    '\u2022 \"\u00bfCu\u00e1ntas entradas se han vendido?\"',\n    '',\n    '\u26a0\ufe0f *Acciones destructivas* _(piden confirmaci\u00f3n)_',\n    '\u2022 Bloquear habitaci\u00f3n',\n    '\u2022 Actualizar precio',\n    '\u2022 Cancelar reserva',\n  ].join('\\n');\n  return [{ json: { validationError: menu, chatId: ctx.chatId } }];\n}\n\nif (!allowed[ctx.tier]?.includes(parsed.action)) {\n  return [{ json: { validationError: `Action '${parsed.action}' not allowed for tier '${ctx.tier}'`, chatId: ctx.chatId } }];\n}\n\nif (!parsed.endpoint || !parsed.method) {\n  return [{ json: { validationError: 'Gemini missing endpoint or method', chatId: ctx.chatId } }];\n}\n\n// Validate payload numeric fields\nif (parsed.payload?.price !== undefined && parsed.payload?.price !== null && (isNaN(parsed.payload.price) || parsed.payload.price <= 0)) {\n  return [{ json: { validationError: 'Invalid price value in payload', chatId: ctx.chatId } }];\n}\n\n\n\n// \u2500\u2500 Build beds24Payload for updatePrice / blockRoom \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nif ((parsed.action === 'beds24.updatePrice' || parsed.action === 'beds24.blockRoom') && parsed.payload) {\n  const p = parsed.payload;\n  const roomNameMap = {\n    'torre badum': 662792, 'torre': 662792,\n    'cala el pebret': 662793, 'pebret': 662793,\n    'cala aljub': 662794, 'aljub': 662794,\n    'ermita sant antoni': 662795, 'ermita': 662795, 'sant antoni': 662795,\n  };\n  // Claude may put the name in roomId or roomName \u2014 handle both\n  let numericRoomId = parseInt(p.roomId);\n  if (isNaN(numericRoomId)) {\n    const key = (p.roomId || p.roomName || '').toLowerCase().trim();\n    numericRoomId = roomNameMap[key] || null;\n    if (!numericRoomId) {\n      for (const [k, v] of Object.entries(roomNameMap)) {\n        if (key.includes(k) || k.includes(key)) { numericRoomId = v; break; }\n      }\n    }\n  }\n  // Also resolve roomName for display\n  const nameFromId = {662792:'Torre Badum',662793:'Cala El Pebret',662794:'Cala Aljub',662795:'Ermita Sant Antoni'};\n  parsed.payload.resolvedRoomName = nameFromId[numericRoomId] || p.roomId || p.roomName || 'habitaci\u00f3n';\n  const from = p.startDate || p.date || '';\n  const to   = p.endDate   || p.date || from;\n  if (numericRoomId && from) {\n    if (parsed.action === 'beds24.updatePrice') {\n      parsed.beds24Payload = JSON.stringify([{ roomId: numericRoomId, calendar: [{ from, to, price1: parseInt(p.price) }] }]);\n    } else {\n      parsed.beds24Payload = JSON.stringify([{ roomId: numericRoomId, calendar: [{ from, to, available: 0 }] }]);\n    }\n  } else {\n    return [{ json: { validationError: `No pude identificar la habitaci\u00f3n: \"${p.roomId || p.roomName}\". Usa el nombre completo (Torre Badum, Cala El Pebret, Cala Aljub, Ermita Sant Antoni).`, chatId: ctx.chatId } }];\n  }\n}\n// \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nreturn [{ json: { ...parsed, isDestructive: false, confirmationMessage: null, chatId: ctx.chatId, tier: ctx.tier, valid: true } }];"
       },
       "id": "b1000011-0000-0000-0000-000000000011",
       "name": "Schema Validator",
@@ -222,13 +267,26 @@
     {
       "parameters": {
         "conditions": {
-          "string": [
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
             {
-              "value1": "={{ $json.validationError }}",
-              "operation": "notEmpty"
+              "id": "7fde47ef-7c3b-4322-97bd-35e4fa0868ca",
+              "leftValue": "={{ $json.validationError }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals",
+                "singleValue": false
+              }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
       "id": "b1000012-0000-0000-0000-000000000012",
       "name": "Validation Error?",
@@ -244,11 +302,13 @@
         "resource": "message",
         "operation": "sendMessage",
         "chatId": "={{ $json.chatId }}",
-        "text": "=⚠️ No pude procesar ese comando.\n\n{{ $json.validationError }}\n\nIntenta reformular la petición.",
-        "additionalFields": {}
+        "text": "={{ $json.validationError.startsWith('\u00a1') ? $json.validationError : '\u26a0\ufe0f No pude procesar ese comando.\\n\\n' + $json.validationError + '\\n\\nIntenta reformular la petici\u00f3n.' }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
       },
       "id": "b1000013-0000-0000-0000-000000000013",
-      "name": "Telegram — Validation Error",
+      "name": "Telegram \u2014 Validation Error",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
@@ -257,106 +317,14 @@
       ],
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
         }
       }
     },
     {
       "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={{ $json.isDestructive }}",
-              "value2": true
-            }
-          ]
-        }
-      },
-      "id": "b1000014-0000-0000-0000-000000000014",
-      "name": "Destructive Action?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [
-        2450,
-        520
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Store pending action and prepare confirmation message for Telegram\nconst action = items[0].json;\nconst actionKey = Date.now().toString(36);\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.pendingActions) staticData.pendingActions = {};\nstaticData.pendingActions[actionKey] = {\n  action: action.action,\n  endpoint: action.endpoint,\n  method: action.method,\n  payload: action.payload,\n  confirmationMessage: action.confirmationMessage,\n  humanReadableSummary: action.humanReadableSummary,\n  ts: Date.now()\n};\nreturn [{ json: { actionKey, chatId: action.chatId, confirmationMessage: action.confirmationMessage } }];"
-      },
-      "id": "b1000015-0000-0000-0000-000000000015",
-      "name": "Store Pending Action",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2670,
-        460
-      ]
-    },
-    {
-      "parameters": {
-        "resource": "message",
-        "operation": "sendMessage",
-        "chatId": "={{ $json.chatId }}",
-        "text": "=⚠️ *Acción que requiere confirmación*\n\n{{ $json.confirmationMessage }}\n\n¿Confirmas?",
-        "additionalFields": {
-          "parse_mode": "Markdown",
-          "reply_markup": "={\"inline_keyboard\":[[{\"text\":\"✅ Confirmar\",\"callback_data\":\"confirm_{{ $json.actionKey }}\"},{\"text\":\"❌ Cancelar\",\"callback_data\":\"cancel_{{ $json.actionKey }}\"}]]}"
-        }
-      },
-      "id": "b1000016-0000-0000-0000-000000000016",
-      "name": "Telegram — Confirm Dialog",
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1,
-      "position": [
-        2890,
-        460
-      ],
-      "credentials": {
-        "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "={{ $json.confirmed ? $json.method : $json.method }}",
-        "url": "={{ $json.endpoint }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.BEDS24_API_TOKEN }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ $json.payload ? JSON.stringify($json.payload) : '{}' }}",
-        "options": {
-          "timeout": 15000
-        }
-      },
-      "id": "b1000017-0000-0000-0000-000000000017",
-      "name": "Execute API Call",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        2670,
-        580
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Audit log: record every AI-triggered API mutation\nconst ctx = items[0].json;\nconst apiCtx = $('Schema Validator').first().json;\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.auditLog) staticData.auditLog = [];\nstaticData.auditLog.push({\n  ts: new Date().toISOString(),\n  user: apiCtx.tier,\n  action: apiCtx.action,\n  endpoint: apiCtx.endpoint,\n  payload: apiCtx.payload,\n  result: ctx.error ? 'error' : 'success',\n  n8nExecutionId: $execution.id\n});\n// Keep last 500 entries\nif (staticData.auditLog.length > 500) staticData.auditLog = staticData.auditLog.slice(-500);\nreturn [{ json: { ...ctx, auditLogged: true, chatId: apiCtx.chatId, summary: apiCtx.humanReadableSummary } }];"
+        "jsCode": "// Audit log \u2014 non-fatal: a crash here must never kill the flow\nconst ctx = items[0].json;\nlet actionCtx = {};\ntry { actionCtx = $('Schema Validator').first().json || {}; } catch(e) {}\ntry {\n  const sd = $getWorkflowStaticData('global');\n  if (!sd.auditLog) sd.auditLog = [];\n  sd.auditLog.push({\n    ts: new Date().toISOString(),\n    user: actionCtx.tier || ctx.tier || '?',\n    action: actionCtx.action || ctx.action || '?',\n    result: ctx.error ? 'error' : 'success',\n    n8nExecutionId: $execution.id,\n  });\n  if (sd.auditLog.length > 500) sd.auditLog = sd.auditLog.slice(-500);\n} catch(e) {}\n// Pass through: use summary from Format Response or fall back to humanReadableSummary\nconst summary = ctx.summary || actionCtx.humanReadableSummary || '\u2705 Completado.';\nreturn [{ json: { ...ctx, summary, chatId: ctx.chatId || actionCtx.chatId } }];"
       },
       "id": "b1000018-0000-0000-0000-000000000018",
       "name": "Audit Log",
@@ -372,11 +340,11 @@
         "resource": "message",
         "operation": "sendMessage",
         "chatId": "={{ $json.chatId }}",
-        "text": "=✅ {{ $json.summary }}",
+        "text": "={{ $json.summary }}",
         "additionalFields": {}
       },
       "id": "b1000019-0000-0000-0000-000000000019",
-      "name": "Telegram — Result",
+      "name": "Telegram \u2014 Result",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
@@ -385,10 +353,135 @@
       ],
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
         }
       }
+    },
+    {
+      "id": "99391afd-1d4d-4ba5-a6fc-1587faa44295",
+      "name": "Refresh Beds24 Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2450,
+        580
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://beds24.com/api/v2/authentication/token",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "refreshToken",
+              "value": "83PTdVotzymkLJSxkc1qPAW3CzC+CKg4o/2XN4rA6b5sIuVi9mXtzq6FYM1tpDJXqI2mT7aNkFMzEXaEHvAB8bBvhc+H/N2ZQ4qtk96HcvZWVU4g0DNDKun7JDEgiSkdT/KFQSP+vf9yUGKRZLlFng=="
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      }
+    },
+    {
+      "id": "573c1fb0-b8e3-4ee2-ba77-6d80273833eb",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2890,
+        580
+      ],
+      "parameters": {
+        "jsCode": "\nconst apiResp = items[0].json;\nconst ctx = $('Schema Validator').first().json;\nconst action = ctx.action || '';\nconst today = new Date().toISOString().split('T')[0];\nconst requestedDate = ctx.payload?.date || ctx.payload?.startDate || today;\n\nlet summary = '';\n\nif (action === 'beds24.getOccupancy') {\n  const rooms = apiResp.data || [];\n  if (!rooms.length) {\n    summary = '\ud83d\udcca No se encontraron habitaciones.';\n  } else {\n    const lines = rooms.map(room => {\n      const avail = room.availability || {};\n      const todayStatus = avail[requestedDate] ?? avail[today];\n      const status = todayStatus === true ? '\ud83d\udfe2 Libre' : todayStatus === false ? '\ud83d\udd34 Ocupada' : '\u2753';\n      return `\u2022 ${room.name}: ${status}`;\n    });\n    summary = `\ud83d\udcca Ocupaci\u00f3n ${requestedDate === today ? 'hoy' : requestedDate} (${requestedDate}):\\n` + lines.join('\\n');\n  }\n\n} else if (action === 'beds24.getPrices') {\n  const rooms = apiResp.data || [];\n  const basePrices = {\"Torre Badum\": {\"base\": 90, \"peak\": 120}, \"Cala El Pebret\": {\"base\": 110, \"peak\": 150}, \"Cala Aljub\": {\"base\": 110, \"peak\": 150}, \"Ermita Sant Antoni\": {\"base\": 130, \"peak\": 180}};\n  const requestedDate = ctx.payload?.date || ctx.payload?.startDate || today;\n  const lines = rooms.map(room => {\n    const avail = room.availability || {};\n    const free = avail[requestedDate] !== false;\n    const p = basePrices[room.name] || {};\n    const status = free ? '\ud83d\udfe2 Libre' : '\ud83d\udd34 Ocupada';\n    const price = p.base ? `${p.base}\u2013${p.peak}\u20ac/noche` : 'consultar';\n    return `\u2022 ${room.name}: ${status} | ${price}`;\n  });\n  const dateLabel = requestedDate === today ? 'hoy' : requestedDate;\n  summary = `\ud83d\udcb0 Precios habitaciones (${dateLabel}):\\n` + lines.join('\\n') + `\\n\\n\u2139\ufe0f Precios orientativos temporada baja\u2013alta.`;\n\n} else if (action === 'beds24.listBookings') {\n  const bookings = apiResp.data || [];\n  if (!bookings.length) {\n    summary = '\ud83d\udccb No hay reservas.';\n  } else {\n    const roomNames = {662792:'Torre Badum',662793:'Cala El Pebret',662794:'Cala Aljub',662795:'Ermita Sant Antoni'};\n    const channelEmoji = (ch) => ch === 'bookingdotcom' ? '\ud83c\udf10 Booking' : ch === 'airbnb' ? '\ud83c\udfe0 Airbnb' : '\u2709\ufe0f Directo';\n    const lines = bookings.slice(0, 10).map(b => {\n      const name = [b.firstName, b.lastName].filter(Boolean).join(' ') || b.email || '(sin nombre)';\n      const room = roomNames[b.roomId] || `Hab.${b.roomId}`;\n      const price = b.price ? `${b.price}\u20ac` : '';\n      const ch = channelEmoji(b.channel || '');\n      return `\u2022 ${name} | ${room} | ${b.arrival} \u2192 ${b.departure} | ${b.numAdult}\ud83d\udc64 ${price ? '| '+price : ''} | ${ch}`;\n    });\n    summary = `\ud83d\udccb Reservas (${bookings.length} total):\\n` + lines.join('\\n');\n    if (bookings.length > 10) summary += `\\n... y ${bookings.length - 10} m\u00e1s`;\n  }\n\n} else if (action === 'tastyigniter.listReservations') {\n  const resos = apiResp.data || [];\n  if (!resos.length) {\n    summary = '\ud83c\udf7d\ufe0f No hay reservas de restaurante.';\n  } else {\n    const lines = resos.slice(0, 10).map(r => {\n      const name = [r.first_name, r.last_name].filter(Boolean).join(' ') || '(sin nombre)';\n      return `\u2022 ${name} | ${r.reserve_date} ${r.reserve_time} | ${r.guest_num} pers.`;\n    });\n    summary = `\ud83c\udf7d\ufe0f Reservas restaurante (${resos.length} total):\\n` + lines.join('\\n');\n  }\n\n\n} else if (action === 'beds24.blockRoom') {\n  const results = Array.isArray(apiResp) ? apiResp : [apiResp];\n  const ok = results.every(r => r.success === true);\n  const p = ctx.payload || {};\n  const from = p.startDate || p.date || '?';\n  const to   = p.endDate   || p.date || from;\n  const roomName = p.roomName || `Habitaci\u00f3n ${p.roomId || ''}`;\n  summary = ok\n    ? `\ud83d\udd12 *${roomName}* bloqueada del ${from} al ${to}.\\nNo se aceptar\u00e1n nuevas reservas en esas fechas.`\n    : `\u274c Error al bloquear fechas: ${JSON.stringify(results).slice(0,100)}`;\n\n} else if (action === 'beds24.updatePrice') {\n  const p = ctx.payload || {};\n  const from = p.startDate || p.date || '?';\n  const to   = p.endDate   || p.date || from;\n  let resolved = ''; try { resolved = $('Build Beds24 Payload v2').first().json.resolvedRoomName || ''; } catch(e) {}\n  const roomName = resolved || p.resolvedRoomName || p.roomName || p.roomId || 'habitaci\u00f3n';\n  const price = p.price || '?';\n  // Detect error: HTTP error object from continueOnFail, or explicit success:false\n  const hasError = apiResp.error || apiResp.httpCode >= 400 || \n                   (Array.isArray(apiResp) && apiResp.some(r => r.success === false)) ||\n                   (!Array.isArray(apiResp) && apiResp.success === false);\n  if (hasError) {\n    const rawErr = apiResp.message || apiResp.error || apiResp;\n    const errMsg = typeof rawErr === 'string' ? rawErr : JSON.stringify(rawErr);\n    summary = `\u274c Error al actualizar precio ${roomName}: ${errMsg.slice(0,200)}`;\n  } else {\n    summary = `\ud83d\udcb0 Precio actualizado: ${roomName} \u2192 ${price}\u20ac/noche (${from} al ${to})`;\n  }\n} else if (action === 'beds24.blockRoom') {\n  const p = ctx.payload || {};\n  const from = p.startDate || p.date || '?';\n  const to   = p.endDate   || p.date || from;\n  const roomName = p.resolvedRoomName || p.roomName || p.roomId || 'habitaci\u00f3n';\n  const hasError = apiResp.error || apiResp.httpCode >= 400 ||\n                   (Array.isArray(apiResp) && apiResp.some(r => r.success === false)) ||\n                   (!Array.isArray(apiResp) && apiResp.success === false);\n  if (hasError) {\n    const errMsg = apiResp.message || apiResp.error || JSON.stringify(apiResp);\n    summary = `\u274c Error al bloquear ${roomName}: ${String(errMsg).slice(0,120)}`;\n  } else {\n    summary = `\ud83d\udd12 *${roomName}* bloqueada del ${from} al ${to}.\\nNo se aceptar\u00e1n nuevas reservas en esas fechas.`;\n  }\n} else if (action === 'hievents.getTicketCounts' || action === 'hievents.listEvents') {\n  const events = apiResp.data || [];\n  if (!events.length) {\n    summary = '\ud83c\udf9f\ufe0f No hay eventos activos.';\n  } else {\n    const lines = events.slice(0, 5).map(ev =>\n      `\u2022 ${ev.title || ev.name}: ${ev.tickets_sold || 0} vendidos / ${ev.capacity || '?'} cap.`\n    );\n    summary = `\ud83c\udf9f\ufe0f Eventos:\\n` + lines.join('\\n');\n  }\n\n} else if (action === 'tastyigniter.checkAvailability') {\n  summary = apiResp.available\n    ? `\u2705 Hay disponibilidad para la fecha/hora solicitada.`\n    : `\u274c No hay disponibilidad para esa fecha/hora.`;\n\n} else {\n  // Generic fallback \u2014 show raw success/error\n  summary = apiResp.success === false\n    ? `\u274c Error: ${apiResp.error || JSON.stringify(apiResp).slice(0, 200)}`\n    : `\u2705 ${ctx.humanReadableSummary || 'Completado.'}\\n\\n${JSON.stringify(apiResp).slice(0, 300)}`;\n}\n\nreturn [{ json: { ...ctx, apiResponse: apiResp, summary, chatId: ctx.chatId } }];\n"
+      }
+    },
+    {
+      "id": "prepare-request",
+      "name": "Prepare Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2670,
+        580
+      ],
+      "parameters": {
+        "jsCode": "\nconst token = items[0].json.token;\n\nlet src;\ntry {\n  const sv = $('Schema Validator').first().json;\n  if (sv && sv.endpoint) src = sv;\n} catch(e) {}\n\nif (!src) {\n  \n// Override endpoint for Beds24 calendar actions \u2014 route through TastyIgniter PHP proxy\n// (n8n HTTP Request node cannot send raw JSON arrays; PHP proxy builds the correct structure)\nif (src.action === 'beds24.updatePrice' || src.action === 'beds24.blockRoom') {\n  src.endpoint = 'https://restaurant.hobbitonranch.com/api/internal/beds24/calendar';\n  src.method   = 'POST';\n}\n\nreturn [{ json: { error: 'No execution context found', chatId: items[0].json.chatId || '' } }];\n}\n\n// Build Beds24 calendar API payload here (Schema Validator can't reliably persist it)\nlet beds24Payload = src.beds24Payload || null;\n\nif (!beds24Payload && (src.action === 'beds24.updatePrice' || src.action === 'beds24.blockRoom') && src.payload) {\n  const p = src.payload;\n  const roomNameMap = {\n    'torre badum': 662792, 'torre': 662792,\n    'cala el pebret': 662793, 'pebret': 662793,\n    'cala aljub': 662794, 'aljub': 662794,\n    'ermita sant antoni': 662795, 'ermita': 662795, 'sant antoni': 662795,\n  };\n  let roomId = parseInt(p.roomId);\n  if (isNaN(roomId)) {\n    const key = String(p.roomId || p.roomName || '').toLowerCase().trim();\n    roomId = roomNameMap[key] || null;\n    if (!roomId) {\n      for (const k of Object.keys(roomNameMap)) {\n        if (key.includes(k) || k.includes(key)) { roomId = roomNameMap[k]; break; }\n      }\n    }\n  }\n  const nameFromId = {662792:'Torre Badum', 662793:'Cala El Pebret', 662794:'Cala Aljub', 662795:'Ermita Sant Antoni'};\n  const resolvedName = nameFromId[roomId] || String(p.roomId || p.roomName || 'habitaci\u00f3n');\n  const from = String(p.startDate || p.date || '');\n  const to   = String(p.endDate   || p.date || from);\n  if (roomId && from) {\n    if (src.action === 'beds24.updatePrice') {\n      beds24Payload = JSON.stringify([{ roomId: roomId, calendar: [{ from: from, to: to, price1: parseInt(p.price) }] }]);\n    } else {\n      beds24Payload = JSON.stringify([{ roomId: roomId, calendar: [{ from: from, to: to, available: 0 }] }]);\n    }\n    // Store resolved name back for Format Response\n    src.payload.resolvedRoomName = resolvedName;\n  }\n}\n\n\n// Override endpoint for Beds24 calendar actions \u2014 route through TastyIgniter PHP proxy\n// (n8n HTTP Request node cannot send raw JSON arrays; PHP proxy builds the correct structure)\nif (src.action === 'beds24.updatePrice' || src.action === 'beds24.blockRoom') {\n  src.endpoint = 'https://restaurant.hobbitonranch.com/api/internal/beds24/calendar';\n  src.method   = 'POST';\n}\n\nreturn [{ json: {\n  token,\n  action:        src.action,\n  endpoint:      src.endpoint,\n  method:        src.method,\n  payload:       src.payload,\n  beds24Payload: beds24Payload,\n  chatId:        src.chatId || $('Identity Router').first().json.chatId || '',\n} }];\n"
+      }
+    },
+    {
+      "id": "telegram-cancel",
+      "name": "Telegram \u2014 Cancelled",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1350,
+        350
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
+        }
+      }
+    },
+    {
+      "id": "cc111111-beef-cafe-dead-111111111111",
+      "name": "Build Beds24 Payload v2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3100,
+        580
+      ],
+      "parameters": {
+        "jsCode": "\nconst inp = items[0].json;\nconst action = inp.action || '';\n\n// Only transform Beds24 calendar actions\nif (action !== 'beds24.updatePrice' && action !== 'beds24.blockRoom') {\n  return [{ json: inp }];\n}\n\nconst p = inp.payload || {};\nconst roomMap = {\n  'torre badum': 662792, 'torre': 662792,\n  'cala el pebret': 662793, 'pebret': 662793,\n  'cala aljub': 662794, 'aljub': 662794,\n  'ermita sant antoni': 662795, 'ermita': 662795, 'sant antoni': 662795,\n};\n\nlet roomId = parseInt(p.roomId);\nif (isNaN(roomId)) {\n  const key = String(p.roomId || p.roomName || '').toLowerCase().trim();\n  roomId = roomMap[key] || null;\n  if (!roomId) {\n    for (const k of Object.keys(roomMap)) {\n      if (key.includes(k) || k.includes(key)) { roomId = roomMap[k]; break; }\n    }\n  }\n}\n\nconst nameMap = {662792:'Torre Badum', 662793:'Cala El Pebret', 662794:'Cala Aljub', 662795:'Ermita Sant Antoni'};\nconst resolvedName = nameMap[roomId] || String(p.roomId || p.roomName || 'habitaci\u00f3n');\n\nconst from = String(p.startDate || p.date || '');\nconst to   = String(p.endDate   || p.date || from);\n\nif (!roomId || !from) {\n  return [{ json: { ...inp, _buildError: 'Habitaci\u00f3n no reconocida: ' + String(p.roomId || p.roomName) } }];\n}\n\n// Return beds24Payload as a JAVASCRIPT ARRAY OBJECT \u2014 not a pre-stringified string.\n// Execute API Call uses JSON.stringify() in its body expression to serialize it.\nlet beds24Payload;\nif (action === 'beds24.updatePrice') {\n  beds24Payload = [{ roomId: roomId, calendar: [{ from: from, to: to, price1: parseInt(p.price) }] }];\n} else {\n  beds24Payload = [{ roomId: roomId, calendar: [{ from: from, to: to, available: 0 }] }];\n}\n\n// Serialize here in the Code node (real JS engine), not in n8n's expression sandbox\nconst beds24PayloadJSON = JSON.stringify(beds24Payload);\nreturn [{ json: { ...inp, beds24Payload: beds24Payload, beds24PayloadJSON: beds24PayloadJSON, resolvedRoomName: resolvedName, resolvedRoomId: roomId } }];\n"
+      }
+    },
+    {
+      "parameters": {
+        "method": "={{ $json.method }}",
+        "url": "={{ $json.endpoint }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{ $json.token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Internal-Token",
+              "value": "portadirta-n8n-2026"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({roomId: $json.resolvedRoomId, from: $json.payload.startDate || $json.payload.date, to: $json.payload.endDate || $json.payload.startDate || $json.payload.date, price1: $json.payload.price, token: $json.token}) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "dd222222-beef-cafe-dead-222222222222",
+      "name": "Execute API Call v2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2670,
+        580
+      ]
     }
   ],
   "connections": {
@@ -448,7 +541,14 @@
       "main": [
         [
           {
-            "node": "Execute API Call",
+            "node": "Refresh Beds24 Token",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram \u2014 Cancelled",
             "type": "main",
             "index": 0
           }
@@ -466,7 +566,7 @@
         ],
         [
           {
-            "node": "Gemini — Text Intent",
+            "node": "Gemini \u2014 Text Intent",
             "type": "main",
             "index": 0
           }
@@ -488,14 +588,14 @@
       "main": [
         [
           {
-            "node": "Gemini — Voice (transcribe + intent)",
+            "node": "Gemini \u2014 Voice (transcribe + intent)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Gemini — Voice (transcribe + intent)": {
+    "Gemini \u2014 Voice (transcribe + intent)": {
       "main": [
         [
           {
@@ -506,7 +606,7 @@
         ]
       ]
     },
-    "Gemini — Text Intent": {
+    "Gemini \u2014 Text Intent": {
       "main": [
         [
           {
@@ -532,54 +632,14 @@
       "main": [
         [
           {
-            "node": "Telegram — Validation Error",
+            "node": "Telegram \u2014 Validation Error",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Destructive Action?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Destructive Action?": {
-      "main": [
-        [
-          {
-            "node": "Store Pending Action",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Execute API Call",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Store Pending Action": {
-      "main": [
-        [
-          {
-            "node": "Telegram — Confirm Dialog",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Execute API Call": {
-      "main": [
-        [
-          {
-            "node": "Audit Log",
+            "node": "Refresh Beds24 Token",
             "type": "main",
             "index": 0
           }
@@ -590,7 +650,62 @@
       "main": [
         [
           {
-            "node": "Telegram — Result",
+            "node": "Telegram \u2014 Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refresh Beds24 Token": {
+      "main": [
+        [
+          {
+            "node": "Prepare Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Audit Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Request": {
+      "main": [
+        [
+          {
+            "node": "Build Beds24 Payload v2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Beds24 Payload v2": {
+      "main": [
+        [
+          {
+            "node": "Execute API Call v2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute API Call v2": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
             "type": "main",
             "index": 0
           }
@@ -598,18 +713,1070 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "b1000000-0000-0000-0000-000000000000",
-  "id": "workflow-b-command-center",
-  "tags": [
-    {
-      "name": "ai"
-    },
-    {
-      "name": "telegram"
+  "staticData": {
+    "global": {
+      "pendingActions": {
+        "mn06db2s": {
+          "action": "beds24.blockRoom",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/calendar",
+          "method": "POST",
+          "payload": {
+            "date": "2026-03-21",
+            "startDate": null,
+            "endDate": null,
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "confirmationMessage": "Se bloquear\u00e1n todas las habitaciones para hoy (2026-03-21). \u00bfDesea continuar?",
+          "humanReadableSummary": "Bloquear todas las habitaciones del hotel para el d\u00eda de hoy.",
+          "ts": 1774088302420
+        },
+        "mn06gpou": {
+          "action": "beds24.updatePrice",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/calendar",
+          "method": "POST",
+          "payload": {
+            "date": null,
+            "startDate": "2026-05-01",
+            "endDate": "2026-05-15",
+            "roomId": "Cala Aljub",
+            "price": 160,
+            "bookingId": null,
+            "guests": null
+          },
+          "confirmationMessage": "\u00bfDeseas actualizar el precio de Cala Aljub a 160\u20ac del 1 al 15 de mayo de 2026?",
+          "humanReadableSummary": "Actualizar el precio de la habitaci\u00f3n Cala Aljub a 160\u20ac desde el 1 al 15 de mayo de 2026.",
+          "ts": 1774088461326
+        },
+        "mn0b3qhd": {
+          "action": "beds24.updatePrice",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/calendar",
+          "method": "POST",
+          "payload": {
+            "date": null,
+            "startDate": "2026-05-01",
+            "endDate": "2026-05-15",
+            "roomId": "Cala Aljub",
+            "price": 220,
+            "bookingId": null,
+            "guests": null
+          },
+          "beds24Payload": null,
+          "confirmationMessage": "\u00bfConfirma el aumento de precio de Cala Aljub a 220\u20ac desde el 1 al 15 de mayo?",
+          "humanReadableSummary": "Aumentar el precio de la habitaci\u00f3n Cala Aljub a 220\u20ac del 1 al 15 de mayo de 2026.",
+          "ts": 1774096253905
+        },
+        "mn0b9ewf": {
+          "action": "beds24.updatePrice",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/calendar",
+          "method": "POST",
+          "payload": {
+            "date": null,
+            "startDate": "2026-05-01",
+            "endDate": "2026-05-15",
+            "roomId": "Cala Aljub",
+            "price": 220,
+            "bookingId": null,
+            "guests": null
+          },
+          "beds24Payload": null,
+          "confirmationMessage": "\u00bfConfirma actualizar el precio de Cala Aljub a 220\u20ac del 1 al 15 de mayo?",
+          "humanReadableSummary": "Aumentar tarifa de Cala Aljub a 220\u20ac del 1 al 15 de mayo de 2026.",
+          "ts": 1774096518831
+        },
+        "mn0bizqo": {
+          "action": "beds24.updatePrice",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/calendar",
+          "method": "POST",
+          "payload": {
+            "date": null,
+            "startDate": "2026-05-01",
+            "endDate": "2026-05-15",
+            "roomId": "Cala Aljub",
+            "price": 220,
+            "bookingId": null,
+            "guests": null
+          },
+          "beds24Payload": null,
+          "confirmationMessage": "\u00bfConfirma que desea actualizar el precio de Cala Aljub a 220\u20ac del 1 al 15 de mayo de 2026?",
+          "humanReadableSummary": "Actualizar precio de habitaci\u00f3n Cala Aljub a 220\u20ac para el per\u00edodo del 1 al 15 de mayo.",
+          "ts": 1774096965744
+        },
+        "mn0bt8fc": {
+          "action": "beds24.updatePrice",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/calendar",
+          "method": "POST",
+          "payload": {
+            "date": null,
+            "startDate": "2026-05-01",
+            "endDate": "2026-05-15",
+            "roomId": "Cala Aljub",
+            "price": 220,
+            "bookingId": null,
+            "guests": null
+          },
+          "beds24Payload": null,
+          "confirmationMessage": "\u00bfConfirmar actualizaci\u00f3n de precio a 220\u20ac para Cala Aljub del 1 al 15 de mayo?",
+          "humanReadableSummary": "Actualizar el precio de la habitaci\u00f3n Cala Aljub a 220\u20ac para el per\u00edodo del 1 al 15 de mayo de 2026.",
+          "ts": 1774097443560
+        }
+      },
+      "auditLog": [
+        {
+          "ts": "2026-03-21T06:36:42.281Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433",
+          "payload": null,
+          "result": "success",
+          "n8nExecutionId": "37"
+        },
+        {
+          "ts": "2026-03-21T06:38:08.326Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433",
+          "payload": null,
+          "result": "success",
+          "n8nExecutionId": "39"
+        },
+        {
+          "ts": "2026-03-21T06:41:14.360Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433",
+          "payload": null,
+          "result": "success",
+          "n8nExecutionId": "40"
+        },
+        {
+          "ts": "2026-03-21T06:52:13.455Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433",
+          "payload": {
+            "propId": 318433,
+            "date": "2024-01-15"
+          },
+          "result": "success",
+          "n8nExecutionId": "42"
+        },
+        {
+          "ts": "2026-03-21T06:52:33.297Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433",
+          "payload": null,
+          "result": "success",
+          "n8nExecutionId": "43"
+        },
+        {
+          "ts": "2026-03-21T06:53:16.149Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433",
+          "payload": {
+            "propId": 318433,
+            "date": "2024-03-24"
+          },
+          "result": "success",
+          "n8nExecutionId": "44"
+        },
+        {
+          "ts": "2026-03-21T06:54:56.591Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433&startDate=2026-03-24&endDate=2026-03-24",
+          "payload": {
+            "propId": 318433,
+            "date": "2026-03-24"
+          },
+          "result": "success",
+          "n8nExecutionId": "45"
+        },
+        {
+          "ts": "2026-03-21T07:01:06.078Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433&startDate=2026-03-24&endDate=2026-03-24",
+          "payload": {
+            "propId": 318433,
+            "date": "2026-03-24"
+          },
+          "result": "success",
+          "n8nExecutionId": "47"
+        },
+        {
+          "ts": "2026-03-21T07:04:20.800Z",
+          "user": "admin",
+          "action": "beds24.listBookings",
+          "endpoint": "https://beds24.com/api/v2/bookings?propId=318433&startDate=2026-03-16&endDate=2026-03-22",
+          "payload": {
+            "date": null,
+            "startDate": "2026-03-16",
+            "endDate": "2026-03-22",
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "result": "success",
+          "n8nExecutionId": "49"
+        },
+        {
+          "ts": "2026-03-21T07:09:08.114Z",
+          "user": "admin",
+          "action": "beds24.listBookings",
+          "endpoint": "https://beds24.com/api/v2/bookings?propId=318433&startDate=2026-03-16&endDate=2026-03-22",
+          "payload": {
+            "date": null,
+            "startDate": "2026-03-16",
+            "endDate": "2026-03-22",
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "result": "success",
+          "n8nExecutionId": "50"
+        },
+        {
+          "ts": "2026-03-21T07:10:36.188Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433&startDate=2026-03-21&endDate=2026-03-21",
+          "payload": {
+            "date": "2026-03-21",
+            "startDate": null,
+            "endDate": null,
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "result": "success",
+          "n8nExecutionId": "52"
+        },
+        {
+          "ts": "2026-03-21T07:27:29.495Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433&startDate=2026-03-21&endDate=2026-03-21",
+          "payload": {
+            "date": "2026-03-21",
+            "startDate": null,
+            "endDate": null,
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "result": "success",
+          "n8nExecutionId": "55"
+        },
+        {
+          "ts": "2026-03-21T07:27:41.224Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433&startDate=2026-03-22&endDate=2026-03-22",
+          "payload": {
+            "date": "2026-03-22",
+            "startDate": null,
+            "endDate": null,
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "result": "success",
+          "n8nExecutionId": "56"
+        },
+        {
+          "ts": "2026-03-21T07:28:15.642Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433&startDate=2026-03-16&endDate=2026-03-22",
+          "payload": {
+            "date": null,
+            "startDate": "2026-03-16",
+            "endDate": "2026-03-22",
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "result": "success",
+          "n8nExecutionId": "57"
+        },
+        {
+          "ts": "2026-03-21T10:15:45.789Z",
+          "user": "admin",
+          "action": "beds24.getOccupancy",
+          "endpoint": "https://beds24.com/api/v2/inventory/rooms/availability?propId=318433&startDate=2026-03-16&endDate=2026-03-22",
+          "payload": {
+            "date": null,
+            "startDate": "2026-03-16",
+            "endDate": "2026-03-22",
+            "roomId": null,
+            "price": null,
+            "bookingId": null,
+            "guests": null
+          },
+          "result": "success",
+          "n8nExecutionId": "59"
+        }
+      ]
     }
-  ]
+  },
+  "meta": null,
+  "pinData": null,
+  "versionId": "c20e7256-f5a1-41aa-bda3-c79f719ecb61",
+  "activeVersionId": "e9829db0-54d7-4296-8513-a65a6beeb051",
+  "versionCounter": 175,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-20T16:42:05.055Z",
+      "createdAt": "2026-03-20T16:42:05.055Z",
+      "role": "workflow:owner",
+      "workflowId": "i87KV1SQXuhTCYxt",
+      "projectId": "d1o7a6w1bnp9j5WG",
+      "project": {
+        "updatedAt": "2026-03-19T13:04:41.396Z",
+        "createdAt": "2026-03-19T13:02:35.184Z",
+        "id": "d1o7a6w1bnp9j5WG",
+        "name": "Ricardo Leite <stderr.is@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "6de9a6aa-03c2-4307-94b7-512655032e8e"
+      }
+    }
+  ],
+  "tags": [],
+  "parentFolder": null,
+  "activeVersion": {
+    "updatedAt": "2026-03-21T12:57:54.730Z",
+    "createdAt": "2026-03-21T12:56:41.557Z",
+    "versionId": "e9829db0-54d7-4296-8513-a65a6beeb051",
+    "workflowId": "i87KV1SQXuhTCYxt",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "message",
+            "callback_query"
+          ],
+          "additionalFields": {}
+        },
+        "id": "b1000001-0000-0000-0000-000000000001",
+        "name": "Telegram Trigger",
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1,
+        "position": [
+          250,
+          400
+        ],
+        "webhookId": "475cd6ce-bb05-46ee-aea8-663b6e9d8433",
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Identity Router: determine user tier before any processing.\n// Returns tier: 'admin' | 'collaborator' | 'unauthorized'\nconst update = items[0].json;\nconst adminId = $env.TELEGRAM_ADMIN_ID?.toString();\nconst collabId = $env.TELEGRAM_COLLAB_ID?.toString();\n\nconst fromId = (\n  update.message?.from?.id ||\n  update.callback_query?.from?.id\n)?.toString();\n\nconst chatId = (\n  update.message?.chat?.id ||\n  update.callback_query?.message?.chat?.id\n)?.toString();\n\nlet tier = 'unauthorized';\nif (fromId === adminId) tier = 'admin';\nelse if (collabId && fromId === collabId) tier = 'collaborator';\n\n// Extract callback data if this is a confirm/cancel for a pending action\nconst callbackData = update.callback_query?.data || '';\nconst isCallback = !!update.callback_query;\nconst isVoice = !!(update.message?.voice);\nconst voiceFileId = update.message?.voice?.file_id || null;\nconst text = update.message?.text || '';\n\nreturn [{ json: { tier, fromId, chatId, isCallback, isCallbackStr: isCallback ? 'yes' : 'no', callbackData, isVoice, voiceFileId, text } }];"
+        },
+        "id": "b1000002-0000-0000-0000-000000000002",
+        "name": "Identity Router",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          470,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "c6852a62-1ce8-4eb0-8819-a2570a1d045a",
+                "leftValue": "={{ $json.tier }}",
+                "rightValue": "unauthorized",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals",
+                  "singleValue": false
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "b1000003-0000-0000-0000-000000000003",
+        "name": "Authorized?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          690,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "d184e937-4d72-41a8-8260-133e7c207744",
+                "leftValue": "={{ $json.isCallbackStr }}",
+                "rightValue": "no",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals",
+                  "singleValue": false
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "b1000004-0000-0000-0000-000000000004",
+        "name": "Callback or Message?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          910,
+          300
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "\nconst update = items[0].json;\nconst { callbackData, chatId, tier } = update;\n\n// Not a confirm/cancel callback \u2014 drop silently\nif (!callbackData || (!callbackData.startsWith('confirm_') && !callbackData.startsWith('cancel_'))) {\n  return [[], []];\n}\n\nconst parts = callbackData.split('_');\nconst cbAction = parts[0];\nconst actionKey = parts.slice(1).join('_');\n\nconst sd = $getWorkflowStaticData('global');\nconst pending = sd.pendingActions?.[actionKey];\nif (!pending) {\n  // output 1 \u2192 Telegram Cancelled (expired)\n  return [[], [{ json: { message: '\u23f0 Acci\u00f3n expirada. Vuelve a enviar el comando.', chatId } }]];\n}\ndelete sd.pendingActions[actionKey];\n\nif (cbAction === 'cancel') {\n  // output 1 \u2192 Telegram Cancelled\n  return [[], [{ json: { message: '\u274c Acci\u00f3n cancelada.', chatId } }]];\n}\n\n// output 0 \u2192 Refresh Beds24 Token \u2192 execute\nreturn [[{ json: {\n  confirmed:     true,\n  action:        pending.action,\n  endpoint:      pending.endpoint,\n  method:        pending.method,\n  payload:       pending.payload,\n  beds24Payload: pending.beds24Payload || null,\n  chatId,\n} }], []];\n"
+        },
+        "id": "b1000005-0000-0000-0000-000000000005",
+        "name": "Handle Confirm/Cancel",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1130,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "9dd3293a-e364-46aa-80ee-9b9112e03d80",
+                "leftValue": "={{ $json.isVoice }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals",
+                  "singleValue": false
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "b1000006-0000-0000-0000-000000000006",
+        "name": "Voice or Text?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1130,
+          420
+        ]
+      },
+      {
+        "parameters": {
+          "method": "GET",
+          "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/getFile?file_id={{ $json.voiceFileId }}",
+          "options": {}
+        },
+        "id": "b1000007-0000-0000-0000-000000000007",
+        "name": "Get Voice File Path",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          1350,
+          340
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Download voice OGG and encode as base64 for Gemini multimodal\nconst fileInfo = items[0].json;\nconst filePath = fileInfo.result?.file_path;\nif (!filePath) throw new Error('Could not get voice file path from Telegram');\n\nconst fileUrl = `https://api.telegram.org/file/bot${$env.TELEGRAM_BOT_TOKEN}/${filePath}`;\nconst resp = await fetch(fileUrl);\nif (!resp.ok) throw new Error('Failed to download voice file');\nconst buffer = Buffer.from(await resp.arrayBuffer());\nconst base64Audio = buffer.toString('base64');\n\nconst { chatId, tier } = $('Identity Router').first().json;\nreturn [{ json: { base64Audio, mimeType: 'audio/ogg', chatId, tier } }];"
+        },
+        "id": "b1000008-0000-0000-0000-000000000008",
+        "name": "Download & Encode Voice",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1570,
+          340
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\"chat_id\":{{ $('Identity Router').first().json.chatId }},\"text\":\"\ud83c\udfa4 Los mensajes de voz no est\u00e1n disponibles a\u00fan. Escribe tu comando en texto.\"}",
+          "options": {
+            "timeout": 10000
+          }
+        },
+        "id": "b1000009-0000-0000-0000-000000000009",
+        "name": "Gemini \u2014 Voice (transcribe + intent)",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          1790,
+          340
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.anthropic.com/v1/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-api-key",
+                "value": "={{ $env.ANTHROPIC_API_KEY }}"
+              },
+              {
+                "name": "anthropic-version",
+                "value": "2023-06-01"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings (copy exactly, no variations):\\n  beds24.getOccupancy\\n  beds24.getPrices\\n  beds24.listBookings\\n  beds24.blockRoom\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  tastyigniter.deleteReservation\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list above>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"price\":null,\"bookingId\":null,\"guests\":null},\"isDestructive\":false,\"confirmationMessage\":\"\",\"humanReadableSummary\":\"<one sentence in Spanish>\"}\\nRules: isDestructive=true for blockRoom/updatePrice/cancelBooking/deleteReservation. Dates use YYYY-MM-DD and current year. For weekly queries set startDate=Monday endDate=Sunday. If command is unclear use action=\"unknown\".'\n        : 'You are an API router. Output ONLY JSON, no markdown.\\nThe \"action\" field MUST be EXACTLY one of: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"isDestructive\":false,\"confirmationMessage\":\"\",\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}",
+          "options": {
+            "timeout": 30000
+          },
+          "body": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings:\\n  beds24.getOccupancy\\n  beds24.listBookings\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"roomName\":\"\",\"price\":null,\"bookingId\":null,\"guests\":null},\"humanReadableSummary\":\"<one sentence result confirmation in Spanish>\"}\\nRules: Dates use YYYY-MM-DD format current year. Weekly queries: startDate=Monday endDate=Sunday. Unknown commands use action=unknown. NEVER add isDestructive or confirmationMessage fields.'\n        : 'You are an API router. Output ONLY JSON.\\nActions: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}"
+        },
+        "id": "b1000010-0000-0000-0000-000000000010",
+        "name": "Gemini \u2014 Text Intent",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          1350,
+          500
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Schema Validator: parse Gemini output and validate before any API call.\n// Merge voice/text paths \u2014 either node could have fired.\nconst geminiRaw = items[0].json;\nconst ctx = $('Identity Router').first().json;\n\n\nlet parsed;\ntry {\n  let rawText = geminiRaw.content?.[0]?.text || '{}';\n  // Strip markdown code fences that Claude sometimes wraps JSON in\n  rawText = rawText.replace(/^```(?:json)?\\s*/i, '').replace(/\\s*```$/,'').trim();\n  parsed = JSON.parse(rawText);\n} catch(e) {\n  return [{ json: { validationError: 'Claude returned invalid JSON: ' + e.message, chatId: ctx.chatId } }];\n}\n\n// Normalize action names \u2014 Claude uses various formats (camelCase, snake_case, with/without prefix)\nconst actionMap = {\n  // camelCase variants\n  'getOccupancy': 'beds24.getOccupancy',\n  'getPrices': 'beds24.getPrices',\n  'get_prices': 'beds24.getPrices',\n  'getRates': 'beds24.getPrices',\n  'get_rates': 'beds24.getPrices',\n  'listBookings': 'beds24.listBookings',\n  'getRevenue': 'beds24.getRevenue',\n  'blockRoom': 'beds24.blockRoom',\n  'updatePrice': 'beds24.updatePrice',\n  'cancelBooking': 'beds24.cancelBooking',\n  'listReservations': 'tastyigniter.listReservations',\n  'checkAvailability': 'tastyigniter.checkAvailability',\n  'deleteReservation': 'tastyigniter.deleteReservation',\n  'getTicketCounts': 'hievents.getTicketCounts',\n  'listEvents': 'hievents.listEvents',\n  // snake_case variants\n  'get_occupancy': 'beds24.getOccupancy',\n  'list_bookings': 'beds24.listBookings',\n  'get_revenue': 'beds24.getRevenue',\n  'block_room': 'beds24.blockRoom',\n  'update_price': 'beds24.updatePrice',\n  'cancel_booking': 'beds24.cancelBooking',\n  'list_reservations': 'tastyigniter.listReservations',\n  'check_availability': 'tastyigniter.checkAvailability',\n  'delete_reservation': 'tastyigniter.deleteReservation',\n  'get_ticket_counts': 'hievents.getTicketCounts',\n  'list_events': 'hievents.listEvents',\n};\nconst rawAction = parsed.action || '';\nif (!rawAction.includes('.') && actionMap[rawAction]) {\n  parsed.action = actionMap[rawAction];\n}\n// Also normalize dotted variants with wrong service prefix or casing\nconst actionNorm = rawAction.split('.').pop();\nif (rawAction.includes('.') && actionMap[actionNorm]) {\n  parsed.action = actionMap[actionNorm];\n}\n// Fuzzy fallback: if action still not recognized, match by keyword\nconst knownActions = Object.values(actionMap).concat([\n  'beds24.getOccupancy','beds24.getPrices','beds24.listBookings','beds24.getRevenue',\n  'beds24.blockRoom','beds24.updatePrice','beds24.cancelBooking',\n  'tastyigniter.listReservations','tastyigniter.checkAvailability',\n  'tastyigniter.deleteReservation','hievents.getTicketCounts','hievents.listEvents','unknown'\n]);\nif (!knownActions.includes(parsed.action)) {\n  const a = parsed.action.toLowerCase();\n  if      (a.includes('occupan') || a.includes('ocupac'))      parsed.action = 'beds24.getOccupancy';\n  else if (a.includes('price') || a.includes('precio') || a.includes('rate') || a.includes('tarifa') || a.includes('coste') || a.includes('cuest')) parsed.action = 'beds24.getPrices';\n  else if (a.includes('booking') || a.includes('reserv') && a.includes('beds')) parsed.action = 'beds24.listBookings';\n  else if (a.includes('reserv'))   parsed.action = 'tastyigniter.listReservations';\n  else if (a.includes('availab') || a.includes('disponib'))    parsed.action = 'tastyigniter.checkAvailability';\n  else if (a.includes('ticket') || a.includes('event'))        parsed.action = 'hievents.getTicketCounts';\n  else if (a.includes('price') || a.includes('precio'))        parsed.action = 'beds24.updatePrice';\n  else if (a.includes('block') || a.includes('bloquea'))       parsed.action = 'beds24.blockRoom';\n  else if (a.includes('cancel'))   parsed.action = 'beds24.cancelBooking';\n  else    parsed.action = 'unknown';\n}\n\n\n// Hardcode correct Beds24 V2 endpoints \u2014 Claude doesn't know exact URLs\nconst endpointMap = {\n  'beds24.getOccupancy':   { endpoint: 'https://beds24.com/api/v2/inventory/rooms/availability?propId=318433', method: 'GET' },\n  'beds24.getPrices':     { endpoint: 'https://beds24.com/api/v2/inventory/rooms/availability?propId=318433', method: 'GET' },\n  'beds24.listBookings':   { endpoint: 'https://beds24.com/api/v2/bookings?propId=318433', method: 'GET' },\n  'beds24.getRevenue':     { endpoint: 'https://beds24.com/api/v2/bookings?propId=318433&status=confirmed', method: 'GET' },\n  'beds24.blockRoom':      { endpoint: 'https://beds24.com/api/v2/inventory/rooms/calendar', method: 'POST' },\n  'beds24.updatePrice':    { endpoint: 'https://beds24.com/api/v2/inventory/rooms/calendar', method: 'POST' },\n  'beds24.cancelBooking':  { endpoint: 'https://beds24.com/api/v2/bookings/' + (parsed.payload?.bookingId || ''), method: 'DELETE' },\n  'tastyigniter.listReservations':   { endpoint: 'https://restaurant.hobbitonranch.com/api/internal/reservations', method: 'GET' },\n  'tastyigniter.checkAvailability':  { endpoint: 'https://restaurant.hobbitonranch.com/api/internal/availability', method: 'GET' },\n  'tastyigniter.deleteReservation':  { endpoint: 'https://restaurant.hobbitonranch.com/api/internal/reservations/' + (parsed.payload?.reservationId || ''), method: 'DELETE' },\n  'hievents.getTicketCounts': { endpoint: 'https://events.hobbitonranch.com/api/v1/events', method: 'GET' },\n  'hievents.listEvents':      { endpoint: 'https://events.hobbitonranch.com/api/v1/events', method: 'GET' },\n};\nif (endpointMap[parsed.action]) {\n  parsed.endpoint = endpointMap[parsed.action].endpoint;\n  parsed.method   = endpointMap[parsed.action].method;\n}\n// Append date range to Beds24 availability endpoint if payload contains a date\nif ((parsed.action === 'beds24.getOccupancy' || parsed.action === 'beds24.getPrices') && parsed.payload) {\n  const p = parsed.payload;\n  const startDate = p.startDate || p.date || p.checkIn || null;\n  const endDate   = p.endDate   || p.date || p.checkOut || startDate;\n  if (startDate) {\n    parsed.endpoint += '&startDate=' + startDate + '&endDate=' + endDate;\n  }\n}\n// Same for listBookings\nif (parsed.action === 'beds24.listBookings' && parsed.payload) {\n  const p = parsed.payload;\n  if (p.startDate || p.date) parsed.endpoint += '&startDate=' + (p.startDate || p.date);\n  if (p.endDate)             parsed.endpoint += '&endDate=' + p.endDate;\n}\n// Append date params for TastyIgniter reservations\nif (parsed.action === 'tastyigniter.listReservations' && parsed.payload) {\n  const p = parsed.payload;\n  const sep = parsed.endpoint.includes('?') ? '&' : '?';\n  if (p.startDate) parsed.endpoint += sep + 'startDate=' + p.startDate + '&endDate=' + (p.endDate || p.startDate);\n  else if (p.date) parsed.endpoint += sep + 'date=' + p.date;\n}\nif (parsed.action === 'tastyigniter.checkAvailability' && parsed.payload) {\n  const p = parsed.payload;\n  const sep = parsed.endpoint.includes('?') ? '&' : '?';\n  if (p.date)   parsed.endpoint += sep + 'date=' + p.date;\n  if (p.guests) parsed.endpoint += '&guests=' + p.guests;\n}\n\n\nconst allowed = {\n  admin: ['beds24.getOccupancy','beds24.getPrices','beds24.listBookings','beds24.getRevenue','beds24.blockRoom','beds24.updatePrice','beds24.cancelBooking','tastyigniter.listReservations','tastyigniter.checkAvailability','tastyigniter.deleteReservation','hievents.getTicketCounts','hievents.listEvents','unknown'],\n  collaborator: ['beds24.getOccupancy','tastyigniter.listReservations','tastyigniter.checkAvailability','hievents.getTicketCounts','unknown']\n};\n\nconst nonCommands = ['unknown', 'greeting', 'chitchat', 'small_talk', 'help', 'none'];\nif (nonCommands.includes(parsed.action)) {\n  const menu = [\n    '\ud83d\udc4b *Porta D\\'irta \u2014 Comandos disponibles*',\n    '',\n    '\ud83c\udfe8 *Hotel (Beds24)*',\n    '\u2022 \"\u00bfCu\u00e1l es la ocupaci\u00f3n de hoy / esta semana?\"',\n    '\u2022 \"Lista las reservas de esta semana\"',\n    '\u2022 \"\u00bfCu\u00e1l es el precio de Torre Badum para el 15 de abril?\"',\n    '\u2022 \"Sube Cala Aljub a 160\u20ac del 1 al 15 de junio\"',\n    '\u2022 \"Bloquea Ermita Sant Antoni del 1 al 5 de mayo\"',\n    '',\n    '\ud83c\udf7d\ufe0f *Restaurante (TastyIgniter)*',\n    '\u2022 \"\u00bfHay reservas de restaurante esta semana?\"',\n    '\u2022 \"\u00bfHay disponibilidad para 4 personas ma\u00f1ana?\"',\n    '',\n    '\ud83c\udf9f\ufe0f *Eventos (Hi.Events)*',\n    '\u2022 \"\u00bfCu\u00e1ntas entradas se han vendido?\"',\n    '',\n    '\u26a0\ufe0f *Acciones destructivas* _(piden confirmaci\u00f3n)_',\n    '\u2022 Bloquear habitaci\u00f3n',\n    '\u2022 Actualizar precio',\n    '\u2022 Cancelar reserva',\n  ].join('\\n');\n  return [{ json: { validationError: menu, chatId: ctx.chatId } }];\n}\n\nif (!allowed[ctx.tier]?.includes(parsed.action)) {\n  return [{ json: { validationError: `Action '${parsed.action}' not allowed for tier '${ctx.tier}'`, chatId: ctx.chatId } }];\n}\n\nif (!parsed.endpoint || !parsed.method) {\n  return [{ json: { validationError: 'Gemini missing endpoint or method', chatId: ctx.chatId } }];\n}\n\n// Validate payload numeric fields\nif (parsed.payload?.price !== undefined && parsed.payload?.price !== null && (isNaN(parsed.payload.price) || parsed.payload.price <= 0)) {\n  return [{ json: { validationError: 'Invalid price value in payload', chatId: ctx.chatId } }];\n}\n\nreturn [{ json: { ...parsed, isDestructive: false, confirmationMessage: null, chatId: ctx.chatId, tier: ctx.tier, valid: true } }];"
+        },
+        "id": "b1000011-0000-0000-0000-000000000011",
+        "name": "Schema Validator",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2010,
+          420
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "7fde47ef-7c3b-4322-97bd-35e4fa0868ca",
+                "leftValue": "={{ $json.validationError }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals",
+                  "singleValue": false
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "b1000012-0000-0000-0000-000000000012",
+        "name": "Validation Error?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2230,
+          420
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "message",
+          "operation": "sendMessage",
+          "chatId": "={{ $json.chatId }}",
+          "text": "={{ $json.validationError.startsWith('\u00a1') ? $json.validationError : '\u26a0\ufe0f No pude procesar ese comando.\\n\\n' + $json.validationError + '\\n\\nIntenta reformular la petici\u00f3n.' }}",
+          "additionalFields": {
+            "parse_mode": "Markdown"
+          }
+        },
+        "id": "b1000013-0000-0000-0000-000000000013",
+        "name": "Telegram \u2014 Validation Error",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1,
+        "position": [
+          2450,
+          340
+        ],
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "={{ $json.method }}",
+          "url": "={{ $json.endpoint }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "token",
+                "value": "={{ $json.token }}"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "X-Internal-Token",
+                "value": "portadirta-n8n-2026"
+              }
+            ]
+          },
+          "sendBody": "={{ $json.method !== 'GET' }}",
+          "specifyBody": "string",
+          "body": "={{ $json.beds24Payload || JSON.stringify($json.payload || {}) }}",
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "id": "b1000017-0000-0000-0000-000000000017",
+        "name": "Execute API Call",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          2670,
+          580
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Audit log: record every AI-triggered API mutation\nconst ctx = items[0].json;\nconst apiCtx = $('Schema Validator').first().json;\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.auditLog) staticData.auditLog = [];\nstaticData.auditLog.push({\n  ts: new Date().toISOString(),\n  user: apiCtx.tier,\n  action: apiCtx.action,\n  endpoint: apiCtx.endpoint,\n  payload: apiCtx.payload,\n  result: ctx.error ? 'error' : 'success',\n  n8nExecutionId: $execution.id\n});\n// Keep last 500 entries\nif (staticData.auditLog.length > 500) staticData.auditLog = staticData.auditLog.slice(-500);\nreturn [{ json: { ...ctx, auditLogged: true, chatId: apiCtx.chatId, summary: items[0].json.summary || apiCtx.humanReadableSummary } }];"
+        },
+        "id": "b1000018-0000-0000-0000-000000000018",
+        "name": "Audit Log",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2890,
+          580
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "message",
+          "operation": "sendMessage",
+          "chatId": "={{ $json.chatId }}",
+          "text": "=\u2705 {{ $json.summary }}",
+          "additionalFields": {}
+        },
+        "id": "b1000019-0000-0000-0000-000000000019",
+        "name": "Telegram \u2014 Result",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1,
+        "position": [
+          3110,
+          580
+        ],
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      },
+      {
+        "id": "99391afd-1d4d-4ba5-a6fc-1587faa44295",
+        "name": "Refresh Beds24 Token",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          2450,
+          580
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://beds24.com/api/v2/authentication/token",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "refreshToken",
+                "value": "83PTdVotzymkLJSxkc1qPAW3CzC+CKg4o/2XN4rA6b5sIuVi9mXtzq6FYM1tpDJXqI2mT7aNkFMzEXaEHvAB8bBvhc+H/N2ZQ4qtk96HcvZWVU4g0DNDKun7JDEgiSkdT/KFQSP+vf9yUGKRZLlFng=="
+              }
+            ]
+          },
+          "options": {
+            "timeout": 10000
+          }
+        }
+      },
+      {
+        "id": "573c1fb0-b8e3-4ee2-ba77-6d80273833eb",
+        "name": "Format Response",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2890,
+          580
+        ],
+        "parameters": {
+          "jsCode": "\nconst apiResp = items[0].json;\nconst ctx = $('Schema Validator').first().json;\nconst action = ctx.action || '';\nconst today = new Date().toISOString().split('T')[0];\nconst requestedDate = ctx.payload?.date || ctx.payload?.startDate || today;\n\nlet summary = '';\n\nif (action === 'beds24.getOccupancy') {\n  const rooms = apiResp.data || [];\n  if (!rooms.length) {\n    summary = '\ud83d\udcca No se encontraron habitaciones.';\n  } else {\n    const lines = rooms.map(room => {\n      const avail = room.availability || {};\n      const todayStatus = avail[requestedDate] ?? avail[today];\n      const status = todayStatus === true ? '\ud83d\udfe2 Libre' : todayStatus === false ? '\ud83d\udd34 Ocupada' : '\u2753';\n      return `\u2022 ${room.name}: ${status}`;\n    });\n    summary = `\ud83d\udcca Ocupaci\u00f3n ${requestedDate === today ? 'hoy' : requestedDate} (${requestedDate}):\\n` + lines.join('\\n');\n  }\n\n} else if (action === 'beds24.getPrices') {\n  const rooms = apiResp.data || [];\n  const basePrices = {\"Torre Badum\": {\"base\": 90, \"peak\": 120}, \"Cala El Pebret\": {\"base\": 110, \"peak\": 150}, \"Cala Aljub\": {\"base\": 110, \"peak\": 150}, \"Ermita Sant Antoni\": {\"base\": 130, \"peak\": 180}};\n  const requestedDate = ctx.payload?.date || ctx.payload?.startDate || today;\n  const lines = rooms.map(room => {\n    const avail = room.availability || {};\n    const free = avail[requestedDate] !== false;\n    const p = basePrices[room.name] || {};\n    const status = free ? '\ud83d\udfe2 Libre' : '\ud83d\udd34 Ocupada';\n    const price = p.base ? `${p.base}\u2013${p.peak}\u20ac/noche` : 'consultar';\n    return `\u2022 ${room.name}: ${status} | ${price}`;\n  });\n  const dateLabel = requestedDate === today ? 'hoy' : requestedDate;\n  summary = `\ud83d\udcb0 Precios habitaciones (${dateLabel}):\\n` + lines.join('\\n') + `\\n\\n\u2139\ufe0f Precios orientativos temporada baja\u2013alta.`;\n\n} else if (action === 'beds24.listBookings') {\n  const bookings = apiResp.data || [];\n  if (!bookings.length) {\n    summary = '\ud83d\udccb No hay reservas.';\n  } else {\n    const roomNames = {662792:'Torre Badum',662793:'Cala El Pebret',662794:'Cala Aljub',662795:'Ermita Sant Antoni'};\n    const channelEmoji = (ch) => ch === 'bookingdotcom' ? '\ud83c\udf10 Booking' : ch === 'airbnb' ? '\ud83c\udfe0 Airbnb' : '\u2709\ufe0f Directo';\n    const lines = bookings.slice(0, 10).map(b => {\n      const name = [b.firstName, b.lastName].filter(Boolean).join(' ') || b.email || '(sin nombre)';\n      const room = roomNames[b.roomId] || `Hab.${b.roomId}`;\n      const price = b.price ? `${b.price}\u20ac` : '';\n      const ch = channelEmoji(b.channel || '');\n      return `\u2022 ${name} | ${room} | ${b.arrival} \u2192 ${b.departure} | ${b.numAdult}\ud83d\udc64 ${price ? '| '+price : ''} | ${ch}`;\n    });\n    summary = `\ud83d\udccb Reservas (${bookings.length} total):\\n` + lines.join('\\n');\n    if (bookings.length > 10) summary += `\\n... y ${bookings.length - 10} m\u00e1s`;\n  }\n\n} else if (action === 'tastyigniter.listReservations') {\n  const resos = apiResp.data || [];\n  if (!resos.length) {\n    summary = '\ud83c\udf7d\ufe0f No hay reservas de restaurante.';\n  } else {\n    const lines = resos.slice(0, 10).map(r => {\n      const name = [r.first_name, r.last_name].filter(Boolean).join(' ') || '(sin nombre)';\n      return `\u2022 ${name} | ${r.reserve_date} ${r.reserve_time} | ${r.guest_num} pers.`;\n    });\n    summary = `\ud83c\udf7d\ufe0f Reservas restaurante (${resos.length} total):\\n` + lines.join('\\n');\n  }\n\n\n} else if (action === 'beds24.blockRoom') {\n  const results = Array.isArray(apiResp) ? apiResp : [apiResp];\n  const ok = results.every(r => r.success === true);\n  const p = ctx.payload || {};\n  const from = p.startDate || p.date || '?';\n  const to   = p.endDate   || p.date || from;\n  const roomName = p.roomName || `Habitaci\u00f3n ${p.roomId || ''}`;\n  summary = ok\n    ? `\ud83d\udd12 *${roomName}* bloqueada del ${from} al ${to}.\\nNo se aceptar\u00e1n nuevas reservas en esas fechas.`\n    : `\u274c Error al bloquear fechas: ${JSON.stringify(results).slice(0,100)}`;\n\n} else if (action === 'beds24.updatePrice') {\n  const results = Array.isArray(apiResp) ? apiResp : [apiResp];\n  const ok = results.every(r => r.success === true);\n  const p = ctx.payload || {};\n  const from = p.startDate || p.date || '?';\n  const to   = p.endDate   || p.date || from;\n  const roomName = p.roomName || `Habitaci\u00f3n ${p.roomId || ''}`;\n  const price = p.price || '?';\n  summary = ok\n    ? `\ud83d\udcb0 Precio actualizado: *${roomName}* \u2192 *${price}\u20ac/noche*\\nDel ${from} al ${to}.`\n    : `\u274c Error al actualizar precio: ${JSON.stringify(results).slice(0,100)}`;\n} else if (action === 'hievents.getTicketCounts' || action === 'hievents.listEvents') {\n  const events = apiResp.data || [];\n  if (!events.length) {\n    summary = '\ud83c\udf9f\ufe0f No hay eventos activos.';\n  } else {\n    const lines = events.slice(0, 5).map(ev =>\n      `\u2022 ${ev.title || ev.name}: ${ev.tickets_sold || 0} vendidos / ${ev.capacity || '?'} cap.`\n    );\n    summary = `\ud83c\udf9f\ufe0f Eventos:\\n` + lines.join('\\n');\n  }\n\n} else if (action === 'tastyigniter.checkAvailability') {\n  summary = apiResp.available\n    ? `\u2705 Hay disponibilidad para la fecha/hora solicitada.`\n    : `\u274c No hay disponibilidad para esa fecha/hora.`;\n\n} else {\n  // Generic fallback \u2014 show raw success/error\n  summary = apiResp.success === false\n    ? `\u274c Error: ${apiResp.error || JSON.stringify(apiResp).slice(0, 200)}`\n    : `\u2705 ${ctx.humanReadableSummary || 'Completado.'}\\n\\n${JSON.stringify(apiResp).slice(0, 300)}`;\n}\n\nreturn [{ json: { ...ctx, apiResponse: apiResp, summary, chatId: ctx.chatId } }];\n"
+        }
+      },
+      {
+        "id": "prepare-request",
+        "name": "Prepare Request",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2670,
+          580
+        ],
+        "parameters": {
+          "jsCode": "\n// Merge token (from Refresh node) with endpoint/method/payload\n// from either Schema Validator (direct command) or Handle Confirm/Cancel (button click)\nconst token = items[0].json.token;\n\nlet src;\ntry {\n  const sv = $('Schema Validator').first().json;\n  if (sv && sv.endpoint) src = sv;\n} catch(e) {}\n\nif (!src) {\n  try {\n    const hcc = $('Handle Confirm/Cancel').first().json;\n    if (hcc && hcc.endpoint) src = hcc;\n  } catch(e) {}\n}\n\nif (!src) {\n  return [{ json: { error: 'No execution context found', chatId: items[0].json.chatId || '' } }];\n}\n\nreturn [{ json: {\n  token,\n  action:        src.action,\n  endpoint:      src.endpoint,\n  method:        src.method,\n  payload:       src.payload,\n  beds24Payload: src.beds24Payload || null,\n  chatId:        src.chatId || $('Identity Router').first().json.chatId || '',\n} }];\n"
+        }
+      },
+      {
+        "id": "telegram-cancel",
+        "name": "Telegram \u2014 Cancelled",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1,
+        "position": [
+          1350,
+          350
+        ],
+        "parameters": {
+          "resource": "message",
+          "operation": "sendMessage",
+          "chatId": "={{ $json.chatId }}",
+          "text": "={{ $json.message }}",
+          "additionalFields": {}
+        },
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Telegram Trigger": {
+        "main": [
+          [
+            {
+              "node": "Identity Router",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Identity Router": {
+        "main": [
+          [
+            {
+              "node": "Authorized?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Authorized?": {
+        "main": [
+          [
+            {
+              "node": "Callback or Message?",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Callback or Message?": {
+        "main": [
+          [
+            {
+              "node": "Handle Confirm/Cancel",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Voice or Text?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Handle Confirm/Cancel": {
+        "main": [
+          [
+            {
+              "node": "Refresh Beds24 Token",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Telegram \u2014 Cancelled",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Voice or Text?": {
+        "main": [
+          [
+            {
+              "node": "Get Voice File Path",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Gemini \u2014 Text Intent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Voice File Path": {
+        "main": [
+          [
+            {
+              "node": "Download & Encode Voice",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download & Encode Voice": {
+        "main": [
+          [
+            {
+              "node": "Gemini \u2014 Voice (transcribe + intent)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gemini \u2014 Voice (transcribe + intent)": {
+        "main": [
+          [
+            {
+              "node": "Schema Validator",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gemini \u2014 Text Intent": {
+        "main": [
+          [
+            {
+              "node": "Schema Validator",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schema Validator": {
+        "main": [
+          [
+            {
+              "node": "Validation Error?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validation Error?": {
+        "main": [
+          [
+            {
+              "node": "Telegram \u2014 Validation Error",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Refresh Beds24 Token",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execute API Call": {
+        "main": [
+          [
+            {
+              "node": "Format Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Audit Log": {
+        "main": [
+          [
+            {
+              "node": "Telegram \u2014 Result",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Refresh Beds24 Token": {
+        "main": [
+          [
+            {
+              "node": "Prepare Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Format Response": {
+        "main": [
+          [
+            {
+              "node": "Audit Log",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prepare Request": {
+        "main": [
+          [
+            {
+              "node": "Execute API Call",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Ricardo Leite",
+    "name": "Version e9829db0",
+    "description": "",
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-03-21T12:57:54.728Z",
+        "id": 69,
+        "workflowId": "i87KV1SQXuhTCYxt",
+        "versionId": "e9829db0-54d7-4296-8513-a65a6beeb051",
+        "event": "activated",
+        "userId": "6de9a6aa-03c2-4307-94b7-512655032e8e"
+      }
+    ]
+  },
+  "scopes": [
+    "workflow:create",
+    "workflow:delete",
+    "workflow:execute",
+    "workflow:execute-chat",
+    "workflow:list",
+    "workflow:move",
+    "workflow:publish",
+    "workflow:read",
+    "workflow:share",
+    "workflow:unpublish",
+    "workflow:unshare",
+    "workflow:update",
+    "workflow:updateRedactionSetting"
+  ],
+  "checksum": "785cdaed8cd8f7b8ab6162ffcd35e4dfc741a58dd561fb850612d1422c8030f8"
 }

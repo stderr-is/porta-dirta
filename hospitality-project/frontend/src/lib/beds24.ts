@@ -125,31 +125,45 @@ function authHeader(): HeadersInit {
 }
 
 /**
- * Generic fetch wrapper with basic error handling.
- * Throws a descriptive Error on non-2xx responses.
+ * Generic fetch wrapper with exponential backoff on 429 (rate limit) responses.
+ * Beds24 API V2 allows only 1 concurrent request per token — this handles the
+ * case where a previous request is still in flight when we fire the next one.
  *
- * NOTE: This does NOT implement retry/backoff — callers that need resilience
- * should wrap this with an exponential-backoff loop (see rate limit warning
- * at the top of this file).
+ * Backoff: 500ms → 1s → 2s → 4s → 8s (max 30s cap, 5 retries).
  */
 async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const url = `${BASE_URL}${path}`;
-  const response = await fetch(url, {
+  const mergedOptions: RequestInit = {
     ...options,
     headers: {
       ...authHeader(),
       ...(options.headers ?? {}),
     },
-  });
+  };
 
-  if (!response.ok) {
-    const body = await response.text().catch(() => '');
-    throw new Error(
-      `Beds24 API error ${response.status} on ${path}: ${body}`
-    );
+  const MAX_RETRIES = 5;
+  const INITIAL_DELAY_MS = 500;
+  const MAX_DELAY_MS = 30_000;
+
+  let attempt = 0;
+  while (true) {
+    const response = await fetch(url, mergedOptions);
+
+    if (response.status === 429 && attempt < MAX_RETRIES) {
+      const delay = Math.min(INITIAL_DELAY_MS * Math.pow(2, attempt), MAX_DELAY_MS);
+      console.warn(`[beds24] Rate limited on ${path}. Retry ${attempt + 1}/${MAX_RETRIES} in ${delay}ms`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      attempt++;
+      continue;
+    }
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => '');
+      throw new Error(`Beds24 API error ${response.status} on ${path}: ${body}`);
+    }
+
+    return response.json() as Promise<T>;
   }
-
-  return response.json() as Promise<T>;
 }
 
 // ─── Public API functions ─────────────────────────────────────────────────────

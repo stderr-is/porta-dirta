@@ -1,5 +1,11 @@
 {
+  "updatedAt": "2026-03-21T09:55:40.439Z",
+  "createdAt": "2026-03-20T16:42:05.631Z",
+  "id": "6z1VaeH8tBiuS2BK",
   "name": "C: Yield Management & Cross-Sell",
+  "description": null,
+  "active": true,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -13,7 +19,7 @@
         }
       },
       "id": "c1000001-0000-0000-0000-000000000001",
-      "name": "Cron — Daily 02:00",
+      "name": "Cron \u2014 Daily 02:00",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1,
       "position": [
@@ -29,26 +35,38 @@
         "responseData": "firstEntryJson"
       },
       "id": "c1000002-0000-0000-0000-000000000002",
-      "name": "Webhook — Beds24 Booking Confirmed",
+      "name": "Webhook \u2014 Beds24 Booking Confirmed",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
         250,
         380
       ],
-      "webhookId": "REPLACE_WEBHOOK_ID_C"
+      "webhookId": "cc8745a0-096c-406b-952f-3af69445887a"
     },
     {
       "parameters": {
         "conditions": {
-          "string": [
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
             {
-              "value1": "={{ $json.trigger }}",
-              "operation": "equal",
-              "value2": "booking"
+              "id": "trigger-check",
+              "leftValue": "={{ $json.trigger }}",
+              "rightValue": "booking",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "singleValue": false
+              }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
       "id": "c1000003-0000-0000-0000-000000000003",
       "name": "Which Trigger?",
@@ -61,7 +79,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Cross-sell: extract guest data from Beds24 booking webhook payload\nconst booking = items[0].json;\nreturn [{\n  json: {\n    bookingId:  booking.bookId   || booking.id || '',\n    guestName:  booking.guestFirstName + ' ' + (booking.guestName || ''),\n    guestEmail: booking.guestEmail || '',\n    checkIn:    booking.firstNight || booking.arrival || '',\n    numAdults:  booking.numAdult || 2,\n    trigger:    'booking'\n  }\n}];"
+        "jsCode": "\nconst b = items[0].json;\nreturn [{json: {\n  bookingId:  b.id || '',\n  guestName:  [b.firstName, b.lastName].filter(Boolean).join(' ') || b.email || 'Estimado hu\u00e9sped',\n  guestEmail: b.email || '',\n  checkIn:    b.arrival || '',\n  numAdults:  b.numAdult || 2,\n  trigger:    'booking',\n}}];\n"
       },
       "id": "c1000004-0000-0000-0000-000000000004",
       "name": "Extract Booking Data",
@@ -88,7 +106,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Build cross-sell email with pre-filled restaurant URL\nconst b = items[0].json;\nconst restUrl = `https://porta-dirta.hobbitonranch.com/restaurante?fecha=${b.checkIn}&personas=${b.numAdults}&nombre=${encodeURIComponent(b.guestName)}&email=${encodeURIComponent(b.guestEmail)}`;\nconst expUrl  = 'https://events.hobbitonranch.com';\n\nconst body = `Estimado/a ${b.guestName},\\n\\n`\n  + `Estamos encantados de que hayas elegido Porta D'irta para tu estancia.\\n\\n`\n  + `Para hacer tu visita aún más especial, te invitamos a:\\n\\n`\n  + `🍽️  RESERVAR UNA MESA EN NUESTRO RESTAURANTE\\n`\n  + `Tu mesa para ${b.numAdults} personas está a un clic de distancia:\\n`\n  + `${restUrl}\\n\\n`\n  + `🌿  DESCUBRIR NUESTRAS EXPERIENCIAS LOCALES\\n`\n  + `Sierra de Irta, Kayak, Cata de Vinos y más:\\n`\n  + `${expUrl}\\n\\n`\n  + `Nuestro equipo está disponible para organizar todo por ti.\\n\\n`\n  + `Hasta pronto,\\nEl equipo de Porta D'irta\\n+34 644 026 066`;\n\nreturn [{ json: {\n  toEmail:  b.guestEmail,\n  subject:  `Tu estancia en Porta D'irta — todo listo para ti`,\n  body,\n  bookingId: b.bookingId\n} }];"
+        "jsCode": "\nconst b = items[0].json;\nconst base = 'https://porta-dirta.hobbitonranch.com';\nconst restUrl = `${base}/restaurante?fecha=${b.checkIn}&personas=${b.numAdults}&nombre=${encodeURIComponent(b.guestName)}&email=${encodeURIComponent(b.guestEmail)}`;\nconst expUrl  = 'https://events.hobbitonranch.com';\n\nconst htmlBody = `\n<div style=\"font-family:Georgia,serif;max-width:600px;margin:0 auto\">\n  <p>Estimado/a <strong>${b.guestName}</strong>,</p>\n  <p>Estamos encantados de recibirte en Porta D'irta. Para hacer tu estancia a\u00fan m\u00e1s especial:</p>\n  <p>\ud83c\udf7d\ufe0f <strong><a href=\"${restUrl}\">Reserva una mesa en el restaurante</a></strong><br>\n     Para ${b.numAdults} personas el d\u00eda de tu llegada \u2014 ya tenemos tus datos prellenados.</p>\n  <p>\ud83c\udf3f <strong><a href=\"${expUrl}\">Descubre nuestras experiencias</a></strong><br>\n     Sierra de Irta, Kayak, Cata de Vinos, Castillo Papal y m\u00e1s.</p>\n  <p>Nuestro equipo est\u00e1 disponible en <a href=\"tel:+34644026066\">+34 644 026 066</a>.</p>\n  <p>\u00a1Hasta pronto!<br>El equipo de Porta D'irta</p>\n</div>`;\n\nreturn [{json: {\n  toEmail:   b.guestEmail,\n  subject:   `Tu llegada a Porta D'irta \u2014 todo listo para ti`,\n  body:      htmlBody,\n  bookingId: b.bookingId,\n}}];\n"
       },
       "id": "c1000006-0000-0000-0000-000000000006",
       "name": "Build Cross-Sell Email",
@@ -104,12 +122,12 @@
         "fromEmail": "={{ $env.BUSINESS_EMAIL }}",
         "toEmail": "={{ $json.toEmail }}",
         "subject": "={{ $json.subject }}",
-        "text": "={{ $json.body }}",
-        "options": {}
+        "emailType": "html",
+        "message": ""
       },
       "id": "c1000007-0000-0000-0000-000000000007",
       "name": "Send Cross-Sell Email",
-      "type": "n8n-nodes-base.sendEmail",
+      "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2,
       "position": [
         1380,
@@ -117,21 +135,21 @@
       ],
       "credentials": {
         "smtp": {
-          "id": "REPLACE_SMTP_CRED_ID",
-          "name": "info@portadirta.com SMTP"
+          "id": "UBQjXekY4aJZ94v1",
+          "name": "Porta D'irta SMTP"
         }
       }
     },
     {
       "parameters": {
         "method": "GET",
-        "url": "=https://beds24.com/api/v2/inventory/rooms/availability?propertyId={{ $env.BEDS24_PROP_ID }}&checkIn={{ $now.plus({days:1}).toFormat('yyyy-MM-dd') }}&checkOut={{ $now.plus({days:31}).toFormat('yyyy-MM-dd') }}",
+        "url": "=https://beds24.com/api/v2/inventory/rooms/availability?propId={{ $env.BEDS24_PROP_ID }}&startDate={{ $now.toFormat('yyyy-MM-dd') }}&endDate={{ $now.plus({days:44}).toFormat('yyyy-MM-dd') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.BEDS24_API_TOKEN }}"
+              "name": "token",
+              "value": "={{ $node['Refresh Token \u2014 Yield'].json.token }}"
             }
           ]
         },
@@ -140,7 +158,7 @@
         }
       },
       "id": "c1000008-0000-0000-0000-000000000008",
-      "name": "Beds24 — Get 30-day Occupancy",
+      "name": "Beds24 \u2014 Get 30-day Occupancy",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
@@ -150,7 +168,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Load pricing rules and compute recommendations\nconst occupancyData = items[0].json;\nconst rules = {\n  rooms: {\n    'habitacion-mediterranea': { base: 120, floor: 90,  ceiling: 200 },\n    'suite-junior':            { base: 180, floor: 140, ceiling: 300 },\n    'suite-panoramica':        { base: 250, floor: 200, ceiling: 420 }\n  },\n  tiers: [\n    { occupancyMin: 0,  occupancyMax: 50, multiplier: 1.00 },\n    { occupancyMin: 51, occupancyMax: 70, multiplier: 1.10 },\n    { occupancyMin: 71, occupancyMax: 85, multiplier: 1.25 },\n    { occupancyMin: 86, occupancyMax: 100,multiplier: 1.40 }\n  ],\n  specialDates: [\n    { date: '2026-08-15', multiplier: 1.50 },\n    { date: '2026-08-14', multiplier: 1.40 },\n    { date: '2026-06-24', multiplier: 1.30 },\n    { date: '2026-07-25', multiplier: 1.30 }\n  ]\n};\n\nconst days = occupancyData.days || [];\nconst adjustments = [];\n\nfor (const day of days) {\n  const occ = day.occupancyPercent || 0;\n  const tier = rules.tiers.find(t => occ >= t.occupancyMin && occ <= t.occupancyMax) || rules.tiers[0];\n  const special = rules.specialDates.find(s => s.date === day.date);\n  const multiplier = special ? Math.max(special.multiplier, tier.multiplier) : tier.multiplier;\n\n  for (const [roomSlug, roomRules] of Object.entries(rules.rooms)) {\n    const recommended = Math.round((roomRules.base * multiplier) / 5) * 5;\n    const safePrice = Math.max(roomRules.floor, Math.min(roomRules.ceiling, recommended));\n    const currentPrice = day.prices?.[roomSlug] || roomRules.base;\n\n    if (Math.abs(safePrice - currentPrice) >= 10) {\n      adjustments.push({\n        date: day.date,\n        roomSlug,\n        currentPrice,\n        recommendedPrice: safePrice,\n        occupancy: occ,\n        reason: `${occ}% ocupación — ${tier.occupancyMax <= 50 ? 'baja demanda' : tier.occupancyMax <= 70 ? 'normal' : tier.occupancyMax <= 85 ? 'alta demanda' : 'pico máximo'}${ special ? ' + festivo' : ''}`\n      });\n    }\n  }\n}\n\nreturn [{ json: {\n  adjustments,\n  hasAdjustments: adjustments.length > 0,\n  analysisDate: new Date().toISOString()\n} }];"
+        "jsCode": "\n// \u2500\u2500 Compute Price Recommendations \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n// Reads Beds24 availability for 45 days, computes per-room yield prices,\n// groups into ranges, compares with last applied prices.\n\nconst availData = items[0].json;\nconst rooms = availData.data || [];\n\nconst rules = {\n  rooms: [\n    {roomId: 662792, name: 'Torre Badum',        base: 90,  floor: 70,  ceiling: 180},\n    {roomId: 662793, name: 'Cala El Pebret',     base: 100, floor: 80,  ceiling: 190},\n    {roomId: 662794, name: 'Cala Aljub',         base: 100, floor: 80,  ceiling: 190},\n    {roomId: 662795, name: 'Ermita Sant Antoni',  base: 120, floor: 95,  ceiling: 220},\n  ],\n  tiers: [\n    {occupancyMin: 0,  occupancyMax: 50,  multiplier: 1.00},\n    {occupancyMin: 51, occupancyMax: 70,  multiplier: 1.15},\n    {occupancyMin: 71, occupancyMax: 85,  multiplier: 1.30},\n    {occupancyMin: 86, occupancyMax: 100, multiplier: 1.50},\n  ],\n  specialDates: {\n    '2026-04-02': 1.35, '2026-04-03': 1.35, '2026-04-05': 1.35, '2026-04-06': 1.30,\n    '2026-06-24': 1.30, '2026-07-25': 1.30,\n    '2026-08-14': 1.40, '2026-08-15': 1.50,\n    '2026-12-06': 1.25, '2026-12-08': 1.25,\n  }\n};\n\n// Collect all dates\nconst allDates = new Set();\nfor (const room of rooms) Object.keys(room.availability || {}).forEach(d => allDates.add(d));\nconst sortedDates = [...allDates].sort();\nconst numRooms = rooms.length || 4;\n\n// Property-level occupancy per date\nconst dateOcc = {};\nfor (const date of sortedDates) {\n  let booked = 0;\n  for (const room of rooms) {\n    if (room.availability?.[date] === false) booked++;\n  }\n  dateOcc[date] = Math.round((booked / numRooms) * 100);\n}\n\n// Static data tracks last applied prices: { room_662792: { '2026-04-01': 90, ... } }\nconst sd = $getWorkflowStaticData('global');\nif (!sd.appliedPrices) sd.appliedPrices = {};\n\nconst allAdjustments = [];\n\nfor (const roomRule of rules.rooms) {\n  const roomData = rooms.find(r => r.roomId === roomRule.roomId);\n  if (!roomData) continue;\n\n  // Group consecutive dates with same recommended price into ranges\n  let curPrice = null, rangeStart = null, rangeEnd = null;\n  const ranges = [];\n\n  for (const date of sortedDates) {\n    const occ = dateOcc[date] || 0;\n    const tier = rules.tiers.find(t => occ >= t.occupancyMin && occ <= t.occupancyMax) || rules.tiers[0];\n    const specMul = rules.specialDates[date] || 0;\n    const mul = Math.max(tier.multiplier, specMul);\n    const price = Math.max(roomRule.floor,\n                    Math.min(roomRule.ceiling,\n                      Math.round((roomRule.base * mul) / 5) * 5));\n\n    if (price !== curPrice) {\n      if (rangeStart) ranges.push({from: rangeStart, to: rangeEnd, price1: curPrice});\n      curPrice = price;\n      rangeStart = date;\n    }\n    rangeEnd = date;\n  }\n  if (rangeStart) ranges.push({from: rangeStart, to: rangeEnd, price1: curPrice});\n\n  // Filter: only include ranges where price differs from last applied\n  const roomKey = 'room_' + roomRule.roomId;\n  const applied = sd.appliedPrices[roomKey] || {};\n\n  for (const rng of ranges) {\n    const prevPrice = applied[rng.from] ?? roomRule.base;\n    if (Math.abs(rng.price1 - prevPrice) >= 5) {\n      allAdjustments.push({\n        roomId:   roomRule.roomId,\n        roomName: roomRule.name,\n        from:     rng.from,\n        to:       rng.to,\n        price1:   rng.price1,\n        prevPrice,\n        occ:      dateOcc[rng.from] || 0,\n      });\n    }\n  }\n}\n\nallAdjustments.sort((a, b) => a.from.localeCompare(b.from));\n\nreturn [{json: {\n  adjustments: allAdjustments,\n  hasAdjustments: allAdjustments.length > 0,\n  numDates: sortedDates.length,\n  dateOcc,\n}}];\n"
       },
       "id": "c1000009-0000-0000-0000-000000000009",
       "name": "Compute Price Recommendations",
@@ -164,13 +182,25 @@
     {
       "parameters": {
         "conditions": {
-          "boolean": [
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
             {
-              "value1": "={{ $json.hasAdjustments }}",
-              "value2": true
+              "id": "has-adj-check",
+              "leftValue": "={{ $json.hasAdjustments }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
       "id": "c1000010-0000-0000-0000-000000000010",
       "name": "Any Adjustments?",
@@ -204,13 +234,13 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\\n  \"model\": \"claude-haiku-4-5-20251001\",\\n  \"max_tokens\": 256,\\n  \"messages\": [{\\n    \"role\": \"user\",\\n    \"content\": {{ JSON.stringify(\\n      'You are the yield management analyst for Porta D\\'irta hotel. Write a concise 2-sentence summary in Spanish for the hotel manager explaining the pricing recommendations. Be specific about dates and amounts. Output JSON ONLY with no markdown: {\\\"summary\\\":\\\"...\\\"}\\n\\nDATA:\\n' + JSON.stringify($json.adjustments)\\n    ) }}\\n  }]\\n}",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 256,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      'You are the yield management analyst for Porta D\\'irta hotel. Write a 2-sentence summary in Spanish for the hotel manager about the pricing recommendations. Be specific about dates and amounts. Output JSON ONLY, no markdown: {\"summary\":\"...\"}\\n\\nDATA:\\n' + JSON.stringify($json.adjustments)\n    ) }}\n  }]\n}",
         "options": {
           "timeout": 20000
         }
       },
       "id": "c1000011-0000-0000-0000-000000000011",
-      "name": "Claude — Generate Summary",
+      "name": "Gemini \u2014 Generate Summary",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
@@ -220,7 +250,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Parse Gemini summary and store pending yield action\nconst geminiRaw = items[0].json;\nconst adjustments = $('Compute Price Recommendations').first().json.adjustments;\n\nlet summary = `${adjustments.length} ajustes de precio recomendados para los próximos 30 días.`;\ntry {\n  const text = geminiRaw.content?.[0]?.text || '{}';\n  const parsed = JSON.parse(text);\n  if (parsed.summary) summary = parsed.summary;\n} catch(e) {}\n\nconst actionKey = 'yield_' + Date.now().toString(36);\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.pendingYield) staticData.pendingYield = {};\nstaticData.pendingYield[actionKey] = { adjustments, ts: Date.now() };\n\nreturn [{ json: { summary, actionKey, count: adjustments.length } }];"
+        "jsCode": "\nconst {adjustments} = items[0].json;\n\n// Build grouped summary by room\nconst byRoom = {};\nfor (const adj of adjustments) {\n  if (!byRoom[adj.roomName]) byRoom[adj.roomName] = [];\n  byRoom[adj.roomName].push(adj);\n}\n\nconst lines = [];\nfor (const [roomName, adjs] of Object.entries(byRoom)) {\n  lines.push(`\\n\ud83c\udfe0 *${roomName}*`);\n  for (const a of adjs) {\n    const arrow = a.price1 > a.prevPrice ? '\ud83d\udcc8' : '\ud83d\udcc9';\n    lines.push(`  ${arrow} ${a.from} \u2192 ${a.to}: ${a.prevPrice}\u20ac \u2192 *${a.price1}\u20ac* (${a.occ}% ocup.)`);\n  }\n}\n\nconst today = new Date().toISOString().split('T')[0];\nconst summary = `\ud83d\udcca *An\u00e1lisis de precios \u2014 ${today}*\\n${lines.join('\\n')}\\n\\n_${adjustments.length} rango(s) en ${Object.keys(byRoom).length} habitaci\u00f3n(es)_`;\n\n// Store pending in static data\nconst actionKey = 'yield_' + Date.now().toString(36);\nconst sd = $getWorkflowStaticData('global');\nif (!sd.pendingYield) sd.pendingYield = {};\nsd.pendingYield[actionKey] = {adjustments, ts: Date.now()};\n\nreturn [{json: {summary, actionKey, count: adjustments.length}}];\n"
       },
       "id": "c1000012-0000-0000-0000-000000000012",
       "name": "Prepare Yield Approval",
@@ -236,14 +266,14 @@
         "resource": "message",
         "operation": "sendMessage",
         "chatId": "={{ $env.TELEGRAM_ADMIN_ID }}",
-        "text": "=📊 *Análisis de precios — Porta D'irta*\n\n{{ $json.summary }}\n\n*{{ $json.count }} ajuste(s) recomendado(s)*\n\n¿Aplicamos los cambios de precio?",
+        "text": "=\ud83d\udcca *An\u00e1lisis de precios \u2014 Porta D'irta*\n\n{{ $json.summary }}\n\n*{{ $json.count }} ajuste(s) recomendado(s)*\n\n\u00bfAplicamos los cambios de precio?",
         "additionalFields": {
           "parse_mode": "Markdown",
-          "reply_markup": "={\"inline_keyboard\":[[{\"text\":\"✅ Aplicar ajustes\",\"callback_data\":\"yieldapply_{{ $json.actionKey }}\"},{\"text\":\"❌ Descartar\",\"callback_data\":\"yielddismiss_{{ $json.actionKey }}\"}]]}"
+          "reply_markup": "={\"inline_keyboard\":[[{\"text\":\"\u2705 Aplicar ajustes\",\"callback_data\":\"yieldapply_{{ $json.actionKey }}\"},{\"text\":\"\u274c Descartar\",\"callback_data\":\"yielddismiss_{{ $json.actionKey }}\"}]]}"
         }
       },
       "id": "c1000013-0000-0000-0000-000000000013",
-      "name": "Telegram — Yield Approval",
+      "name": "Telegram \u2014 Yield Approval",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
@@ -252,8 +282,8 @@
       ],
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
         }
       }
     },
@@ -265,24 +295,24 @@
         "additionalFields": {}
       },
       "id": "c1000014-0000-0000-0000-000000000014",
-      "name": "Telegram Trigger — Yield Callback",
+      "name": "Telegram Trigger \u2014 Yield Callback",
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1,
       "position": [
         250,
         560
       ],
-      "webhookId": "REPLACE_WEBHOOK_ID_C2",
+      "webhookId": "e0050f01-f70a-4908-977f-89a3ee5e4dc1",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "// Handle yield approval/dismiss callback\nconst update = items[0].json;\nconst callbackData = update.callback_query?.data || '';\nconst chatId = update.callback_query?.message?.chat?.id?.toString();\n\nif (!callbackData.startsWith('yield')) return [];\n\nconst parts = callbackData.split('_');\nconst cbAction = parts[0]; // yieldapply | yielddismiss\nconst actionKey = parts.slice(1).join('_');\n\nconst staticData = $getWorkflowStaticData('global');\nconst pending = staticData.pendingYield?.[actionKey];\nif (!pending) return [{ json: { error: 'Yield action expired', chatId } }];\n\ndelete staticData.pendingYield[actionKey];\n\nif (cbAction === 'yielddismiss') {\n  return [{ json: { dismissed: true, chatId, count: pending.adjustments.length } }];\n}\n\nreturn [{ json: { apply: true, chatId, adjustments: pending.adjustments } }];"
+        "jsCode": "\nconst update = items[0].json;\nconst cbData  = update.callback_query?.data || '';\nconst chatId  = update.callback_query?.message?.chat?.id?.toString() || '';\n\nif (!cbData.startsWith('yield')) return [{json: {skip: true, chatId}}];\n\nconst isApply = cbData.startsWith('yieldapply_');\nconst actionKey = cbData.replace(/^yield(apply|dismiss)_/, '');\n\nconst sd = $getWorkflowStaticData('global');\nconst pending = sd.pendingYield?.[actionKey];\nif (!pending) {\n  return [{json: {error: 'Acci\u00f3n expirada o ya procesada.', chatId, apply: false}}];\n}\n\ndelete sd.pendingYield[actionKey];\n\nif (!isApply) {\n  return [{json: {apply: false, chatId, count: pending.adjustments.length}}];\n}\nreturn [{json: {apply: true, chatId, adjustments: pending.adjustments}}];\n"
       },
       "id": "c1000015-0000-0000-0000-000000000015",
       "name": "Handle Yield Callback",
@@ -296,13 +326,25 @@
     {
       "parameters": {
         "conditions": {
-          "boolean": [
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
             {
-              "value1": "={{ $json.apply }}",
-              "value2": true
+              "id": "apply-check",
+              "leftValue": "={{ $json.apply }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
       "id": "c1000016-0000-0000-0000-000000000016",
       "name": "Apply or Dismiss?",
@@ -315,7 +357,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Apply price adjustments to Beds24 sequentially with delay to respect rate limit\nconst { adjustments, chatId } = items[0].json;\nconst results = [];\n\nfor (const adj of adjustments) {\n  try {\n    const resp = await fetch(\n      `https://beds24.com/api/v2/inventory/prices`,\n      {\n        method: 'POST',\n        headers: {\n          'Authorization': `Bearer ${$env.BEDS24_API_TOKEN}`,\n          'Content-Type': 'application/json'\n        },\n        body: JSON.stringify({\n          propertyId: $env.BEDS24_PROP_ID,\n          roomId: adj.roomSlug,\n          date: adj.date,\n          price: adj.recommendedPrice\n        })\n      }\n    );\n    results.push({ date: adj.date, room: adj.roomSlug, price: adj.recommendedPrice, ok: resp.ok });\n    // Respect Beds24 1-request-at-a-time rate limit\n    await new Promise(r => setTimeout(r, 700));\n  } catch(e) {\n    results.push({ date: adj.date, room: adj.roomSlug, error: e.message });\n  }\n}\n\nconst successCount = results.filter(r => r.ok).length;\nreturn [{ json: { results, successCount, total: adjustments.length, chatId } }];"
+        "jsCode": "\n// Apply Prices to Beds24 \u2014 uses POST /inventory/rooms/calendar with price1 format\nconst {adjustments, chatId} = $('Handle Yield Callback').first().json;\nconst token = items[0].json.token; // from Refresh Token \u2014 Apply\n\n// Group adjustments by roomId into Beds24 calendar format\nconst byRoom = {};\nfor (const adj of adjustments) {\n  const id = adj.roomId;\n  if (!byRoom[id]) byRoom[id] = [];\n  byRoom[id].push({from: adj.from, to: adj.to, price1: adj.price1});\n}\nconst payload = Object.entries(byRoom).map(([roomId, calendar]) => ({\n  roomId: parseInt(roomId), calendar\n}));\n\nlet success = false, errorMsg = '';\ntry {\n  const resp = await fetch('https://beds24.com/api/v2/inventory/rooms/calendar', {\n    method: 'POST',\n    headers: {'token': token, 'Content-Type': 'application/json'},\n    body: JSON.stringify(payload)\n  });\n  const result = await resp.json();\n  success = Array.isArray(result) && result.every(r => r.success === true);\n  if (!success) errorMsg = JSON.stringify(result).slice(0, 200);\n} catch(e) {\n  errorMsg = e.message;\n}\n\n// Update static data with applied prices\nif (success) {\n  const sd = $getWorkflowStaticData('global');\n  if (!sd.appliedPrices) sd.appliedPrices = {};\n  for (const adj of adjustments) {\n    const roomKey = 'room_' + adj.roomId;\n    if (!sd.appliedPrices[roomKey]) sd.appliedPrices[roomKey] = {};\n    // Mark every date in the range\n    const d = new Date(adj.from + 'T00:00:00Z');\n    const end = new Date(adj.to + 'T00:00:00Z');\n    while (d <= end) {\n      sd.appliedPrices[roomKey][d.toISOString().split('T')[0]] = adj.price1;\n      d.setUTCDate(d.getUTCDate() + 1);\n    }\n  }\n}\n\nreturn [{json: {success, errorMsg, count: adjustments.length, chatId}}];\n"
       },
       "id": "c1000017-0000-0000-0000-000000000017",
       "name": "Apply Prices to Beds24",
@@ -331,13 +373,13 @@
         "resource": "message",
         "operation": "sendMessage",
         "chatId": "={{ $json.chatId }}",
-        "text": "=✅ *Precios actualizados*\n\n{{ $json.successCount }} de {{ $json.total }} ajustes aplicados en Beds24.",
+        "text": "=\u2705 *Precios actualizados*\n\n{{ $json.successCount }} de {{ $json.total }} ajustes aplicados en Beds24.",
         "additionalFields": {
           "parse_mode": "Markdown"
         }
       },
       "id": "c1000018-0000-0000-0000-000000000018",
-      "name": "Telegram — Applied Confirmation",
+      "name": "Telegram \u2014 Applied Confirmation",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
@@ -346,8 +388,8 @@
       ],
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
         }
       }
     },
@@ -356,11 +398,11 @@
         "resource": "message",
         "operation": "sendMessage",
         "chatId": "={{ $json.chatId }}",
-        "text": "🗑️ Ajustes de precio descartados. Los precios actuales se mantienen.",
+        "text": "\ud83d\uddd1\ufe0f Ajustes de precio descartados. Los precios actuales se mantienen.",
         "additionalFields": {}
       },
       "id": "c1000019-0000-0000-0000-000000000019",
-      "name": "Telegram — Dismissed",
+      "name": "Telegram \u2014 Dismissed",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
@@ -369,14 +411,66 @@
       ],
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_TELEGRAM_CRED_ID",
-          "name": "Porta D'irta Bot"
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
+        }
+      }
+    },
+    {
+      "id": "refresh-token-yield",
+      "name": "Refresh Token \u2014 Yield",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        620,
+        460
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://beds24.com/api/v2/authentication/token",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "refreshToken",
+              "value": "={{ $env.BEDS24_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      }
+    },
+    {
+      "id": "refresh-before-apply",
+      "name": "Refresh Token \u2014 Apply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2200,
+        600
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://beds24.com/api/v2/authentication/token",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "refreshToken",
+              "value": "={{ $env.BEDS24_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
         }
       }
     }
   ],
   "connections": {
-    "Cron — Daily 02:00": {
+    "Cron \u2014 Daily 02:00": {
       "main": [
         [
           {
@@ -387,7 +481,7 @@
         ]
       ]
     },
-    "Webhook — Beds24 Booking Confirmed": {
+    "Webhook \u2014 Beds24 Booking Confirmed": {
       "main": [
         [
           {
@@ -409,7 +503,7 @@
         ],
         [
           {
-            "node": "Beds24 — Get 30-day Occupancy",
+            "node": "Refresh Token \u2014 Yield",
             "type": "main",
             "index": 0
           }
@@ -449,7 +543,7 @@
         ]
       ]
     },
-    "Beds24 — Get 30-day Occupancy": {
+    "Beds24 \u2014 Get 30-day Occupancy": {
       "main": [
         [
           {
@@ -475,7 +569,7 @@
       "main": [
         [
           {
-            "node": "Gemini — Generate Summary",
+            "node": "Prepare Yield Approval",
             "type": "main",
             "index": 0
           }
@@ -483,7 +577,7 @@
         []
       ]
     },
-    "Gemini — Generate Summary": {
+    "Gemini \u2014 Generate Summary": {
       "main": [
         [
           {
@@ -498,14 +592,14 @@
       "main": [
         [
           {
-            "node": "Telegram — Yield Approval",
+            "node": "Telegram \u2014 Yield Approval",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Telegram Trigger — Yield Callback": {
+    "Telegram Trigger \u2014 Yield Callback": {
       "main": [
         [
           {
@@ -531,14 +625,14 @@
       "main": [
         [
           {
-            "node": "Apply Prices to Beds24",
+            "node": "Refresh Token \u2014 Apply",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Telegram — Dismissed",
+            "node": "Telegram \u2014 Dismissed",
             "type": "main",
             "index": 0
           }
@@ -549,7 +643,29 @@
       "main": [
         [
           {
-            "node": "Telegram — Applied Confirmation",
+            "node": "Telegram \u2014 Applied Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refresh Token \u2014 Yield": {
+      "main": [
+        [
+          {
+            "node": "Beds24 \u2014 Get 30-day Occupancy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refresh Token \u2014 Apply": {
+      "main": [
+        [
+          {
+            "node": "Apply Prices to Beds24",
             "type": "main",
             "index": 0
           }
@@ -557,21 +673,742 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "c1000000-0000-0000-0000-000000000000",
-  "id": "workflow-c-yield-management",
-  "tags": [
-    {
-      "name": "ai"
-    },
-    {
-      "name": "yield"
-    },
-    {
-      "name": "email"
+  "staticData": {
+    "node:Cron \u2014 Daily 02:00": {
+      "recurrenceRules": []
     }
-  ]
+  },
+  "meta": null,
+  "pinData": null,
+  "versionId": "b450a7d1-5b03-4bf0-ba71-467b7e32299c",
+  "activeVersionId": "b450a7d1-5b03-4bf0-ba71-467b7e32299c",
+  "versionCounter": 20,
+  "triggerCount": 3,
+  "shared": [
+    {
+      "updatedAt": "2026-03-20T16:42:05.631Z",
+      "createdAt": "2026-03-20T16:42:05.631Z",
+      "role": "workflow:owner",
+      "workflowId": "6z1VaeH8tBiuS2BK",
+      "projectId": "d1o7a6w1bnp9j5WG",
+      "project": {
+        "updatedAt": "2026-03-19T13:04:41.396Z",
+        "createdAt": "2026-03-19T13:02:35.184Z",
+        "id": "d1o7a6w1bnp9j5WG",
+        "name": "Ricardo Leite <stderr.is@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "6de9a6aa-03c2-4307-94b7-512655032e8e"
+      }
+    }
+  ],
+  "tags": [],
+  "parentFolder": null,
+  "activeVersion": {
+    "updatedAt": "2026-03-21T09:55:40.440Z",
+    "createdAt": "2026-03-21T09:55:40.440Z",
+    "versionId": "b450a7d1-5b03-4bf0-ba71-467b7e32299c",
+    "workflowId": "6z1VaeH8tBiuS2BK",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 2 * * *"
+              }
+            ]
+          }
+        },
+        "id": "c1000001-0000-0000-0000-000000000001",
+        "name": "Cron \u2014 Daily 02:00",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1,
+        "position": [
+          250,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "beds24-booking-confirmed",
+          "responseMode": "onReceived",
+          "responseData": "firstEntryJson"
+        },
+        "id": "c1000002-0000-0000-0000-000000000002",
+        "name": "Webhook \u2014 Beds24 Booking Confirmed",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          250,
+          380
+        ],
+        "webhookId": "cc8745a0-096c-406b-952f-3af69445887a"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "trigger-check",
+                "leftValue": "={{ $json.trigger }}",
+                "rightValue": "booking",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "singleValue": false
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "c1000003-0000-0000-0000-000000000003",
+        "name": "Which Trigger?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          500,
+          290
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "\nconst b = items[0].json;\nreturn [{json: {\n  bookingId:  b.id || '',\n  guestName:  [b.firstName, b.lastName].filter(Boolean).join(' ') || b.email || 'Estimado hu\u00e9sped',\n  guestEmail: b.email || '',\n  checkIn:    b.arrival || '',\n  numAdults:  b.numAdult || 2,\n  trigger:    'booking',\n}}];\n"
+        },
+        "id": "c1000004-0000-0000-0000-000000000004",
+        "name": "Extract Booking Data",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          720,
+          380
+        ]
+      },
+      {
+        "parameters": {
+          "amount": 24,
+          "unit": "hours"
+        },
+        "id": "c1000005-0000-0000-0000-000000000005",
+        "name": "Wait 24h",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1,
+        "position": [
+          940,
+          380
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "\nconst b = items[0].json;\nconst base = 'https://porta-dirta.hobbitonranch.com';\nconst restUrl = `${base}/restaurante?fecha=${b.checkIn}&personas=${b.numAdults}&nombre=${encodeURIComponent(b.guestName)}&email=${encodeURIComponent(b.guestEmail)}`;\nconst expUrl  = 'https://events.hobbitonranch.com';\n\nconst htmlBody = `\n<div style=\"font-family:Georgia,serif;max-width:600px;margin:0 auto\">\n  <p>Estimado/a <strong>${b.guestName}</strong>,</p>\n  <p>Estamos encantados de recibirte en Porta D'irta. Para hacer tu estancia a\u00fan m\u00e1s especial:</p>\n  <p>\ud83c\udf7d\ufe0f <strong><a href=\"${restUrl}\">Reserva una mesa en el restaurante</a></strong><br>\n     Para ${b.numAdults} personas el d\u00eda de tu llegada \u2014 ya tenemos tus datos prellenados.</p>\n  <p>\ud83c\udf3f <strong><a href=\"${expUrl}\">Descubre nuestras experiencias</a></strong><br>\n     Sierra de Irta, Kayak, Cata de Vinos, Castillo Papal y m\u00e1s.</p>\n  <p>Nuestro equipo est\u00e1 disponible en <a href=\"tel:+34644026066\">+34 644 026 066</a>.</p>\n  <p>\u00a1Hasta pronto!<br>El equipo de Porta D'irta</p>\n</div>`;\n\nreturn [{json: {\n  toEmail:   b.guestEmail,\n  subject:   `Tu llegada a Porta D'irta \u2014 todo listo para ti`,\n  body:      htmlBody,\n  bookingId: b.bookingId,\n}}];\n"
+        },
+        "id": "c1000006-0000-0000-0000-000000000006",
+        "name": "Build Cross-Sell Email",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1160,
+          380
+        ]
+      },
+      {
+        "parameters": {
+          "fromEmail": "={{ $env.BUSINESS_EMAIL }}",
+          "toEmail": "={{ $json.toEmail }}",
+          "subject": "={{ $json.subject }}",
+          "emailType": "html",
+          "message": ""
+        },
+        "id": "c1000007-0000-0000-0000-000000000007",
+        "name": "Send Cross-Sell Email",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2,
+        "position": [
+          1380,
+          380
+        ],
+        "credentials": {
+          "smtp": {
+            "id": "UBQjXekY4aJZ94v1",
+            "name": "Porta D'irta SMTP"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "GET",
+          "url": "=https://beds24.com/api/v2/inventory/rooms/availability?propId={{ $env.BEDS24_PROP_ID }}&startDate={{ $now.toFormat('yyyy-MM-dd') }}&endDate={{ $now.plus({days:44}).toFormat('yyyy-MM-dd') }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "token",
+                "value": "={{ $node['Refresh Token \u2014 Yield'].json.token }}"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "id": "c1000008-0000-0000-0000-000000000008",
+        "name": "Beds24 \u2014 Get 30-day Occupancy",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          720,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "\n// \u2500\u2500 Compute Price Recommendations \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n// Reads Beds24 availability for 45 days, computes per-room yield prices,\n// groups into ranges, compares with last applied prices.\n\nconst availData = items[0].json;\nconst rooms = availData.data || [];\n\nconst rules = {\n  rooms: [\n    {roomId: 662792, name: 'Torre Badum',        base: 90,  floor: 70,  ceiling: 180},\n    {roomId: 662793, name: 'Cala El Pebret',     base: 100, floor: 80,  ceiling: 190},\n    {roomId: 662794, name: 'Cala Aljub',         base: 100, floor: 80,  ceiling: 190},\n    {roomId: 662795, name: 'Ermita Sant Antoni',  base: 120, floor: 95,  ceiling: 220},\n  ],\n  tiers: [\n    {occupancyMin: 0,  occupancyMax: 50,  multiplier: 1.00},\n    {occupancyMin: 51, occupancyMax: 70,  multiplier: 1.15},\n    {occupancyMin: 71, occupancyMax: 85,  multiplier: 1.30},\n    {occupancyMin: 86, occupancyMax: 100, multiplier: 1.50},\n  ],\n  specialDates: {\n    '2026-04-02': 1.35, '2026-04-03': 1.35, '2026-04-05': 1.35, '2026-04-06': 1.30,\n    '2026-06-24': 1.30, '2026-07-25': 1.30,\n    '2026-08-14': 1.40, '2026-08-15': 1.50,\n    '2026-12-06': 1.25, '2026-12-08': 1.25,\n  }\n};\n\n// Collect all dates\nconst allDates = new Set();\nfor (const room of rooms) Object.keys(room.availability || {}).forEach(d => allDates.add(d));\nconst sortedDates = [...allDates].sort();\nconst numRooms = rooms.length || 4;\n\n// Property-level occupancy per date\nconst dateOcc = {};\nfor (const date of sortedDates) {\n  let booked = 0;\n  for (const room of rooms) {\n    if (room.availability?.[date] === false) booked++;\n  }\n  dateOcc[date] = Math.round((booked / numRooms) * 100);\n}\n\n// Static data tracks last applied prices: { room_662792: { '2026-04-01': 90, ... } }\nconst sd = $getWorkflowStaticData('global');\nif (!sd.appliedPrices) sd.appliedPrices = {};\n\nconst allAdjustments = [];\n\nfor (const roomRule of rules.rooms) {\n  const roomData = rooms.find(r => r.roomId === roomRule.roomId);\n  if (!roomData) continue;\n\n  // Group consecutive dates with same recommended price into ranges\n  let curPrice = null, rangeStart = null, rangeEnd = null;\n  const ranges = [];\n\n  for (const date of sortedDates) {\n    const occ = dateOcc[date] || 0;\n    const tier = rules.tiers.find(t => occ >= t.occupancyMin && occ <= t.occupancyMax) || rules.tiers[0];\n    const specMul = rules.specialDates[date] || 0;\n    const mul = Math.max(tier.multiplier, specMul);\n    const price = Math.max(roomRule.floor,\n                    Math.min(roomRule.ceiling,\n                      Math.round((roomRule.base * mul) / 5) * 5));\n\n    if (price !== curPrice) {\n      if (rangeStart) ranges.push({from: rangeStart, to: rangeEnd, price1: curPrice});\n      curPrice = price;\n      rangeStart = date;\n    }\n    rangeEnd = date;\n  }\n  if (rangeStart) ranges.push({from: rangeStart, to: rangeEnd, price1: curPrice});\n\n  // Filter: only include ranges where price differs from last applied\n  const roomKey = 'room_' + roomRule.roomId;\n  const applied = sd.appliedPrices[roomKey] || {};\n\n  for (const rng of ranges) {\n    const prevPrice = applied[rng.from] ?? roomRule.base;\n    if (Math.abs(rng.price1 - prevPrice) >= 5) {\n      allAdjustments.push({\n        roomId:   roomRule.roomId,\n        roomName: roomRule.name,\n        from:     rng.from,\n        to:       rng.to,\n        price1:   rng.price1,\n        prevPrice,\n        occ:      dateOcc[rng.from] || 0,\n      });\n    }\n  }\n}\n\nallAdjustments.sort((a, b) => a.from.localeCompare(b.from));\n\nreturn [{json: {\n  adjustments: allAdjustments,\n  hasAdjustments: allAdjustments.length > 0,\n  numDates: sortedDates.length,\n  dateOcc,\n}}];\n"
+        },
+        "id": "c1000009-0000-0000-0000-000000000009",
+        "name": "Compute Price Recommendations",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          940,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "has-adj-check",
+                "leftValue": "={{ $json.hasAdjustments }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "c1000010-0000-0000-0000-000000000010",
+        "name": "Any Adjustments?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1160,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.anthropic.com/v1/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-api-key",
+                "value": "={{ $env.ANTHROPIC_API_KEY }}"
+              },
+              {
+                "name": "anthropic-version",
+                "value": "2023-06-01"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 256,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      'You are the yield management analyst for Porta D\\'irta hotel. Write a 2-sentence summary in Spanish for the hotel manager about the pricing recommendations. Be specific about dates and amounts. Output JSON ONLY, no markdown: {\"summary\":\"...\"}\\n\\nDATA:\\n' + JSON.stringify($json.adjustments)\n    ) }}\n  }]\n}",
+          "options": {
+            "timeout": 20000
+          }
+        },
+        "id": "c1000011-0000-0000-0000-000000000011",
+        "name": "Gemini \u2014 Generate Summary",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          1380,
+          160
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "\nconst {adjustments} = items[0].json;\n\n// Build grouped summary by room\nconst byRoom = {};\nfor (const adj of adjustments) {\n  if (!byRoom[adj.roomName]) byRoom[adj.roomName] = [];\n  byRoom[adj.roomName].push(adj);\n}\n\nconst lines = [];\nfor (const [roomName, adjs] of Object.entries(byRoom)) {\n  lines.push(`\\n\ud83c\udfe0 *${roomName}*`);\n  for (const a of adjs) {\n    const arrow = a.price1 > a.prevPrice ? '\ud83d\udcc8' : '\ud83d\udcc9';\n    lines.push(`  ${arrow} ${a.from} \u2192 ${a.to}: ${a.prevPrice}\u20ac \u2192 *${a.price1}\u20ac* (${a.occ}% ocup.)`);\n  }\n}\n\nconst today = new Date().toISOString().split('T')[0];\nconst summary = `\ud83d\udcca *An\u00e1lisis de precios \u2014 ${today}*\\n${lines.join('\\n')}\\n\\n_${adjustments.length} rango(s) en ${Object.keys(byRoom).length} habitaci\u00f3n(es)_`;\n\n// Store pending in static data\nconst actionKey = 'yield_' + Date.now().toString(36);\nconst sd = $getWorkflowStaticData('global');\nif (!sd.pendingYield) sd.pendingYield = {};\nsd.pendingYield[actionKey] = {adjustments, ts: Date.now()};\n\nreturn [{json: {summary, actionKey, count: adjustments.length}}];\n"
+        },
+        "id": "c1000012-0000-0000-0000-000000000012",
+        "name": "Prepare Yield Approval",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1600,
+          160
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "message",
+          "operation": "sendMessage",
+          "chatId": "={{ $env.TELEGRAM_ADMIN_ID }}",
+          "text": "=\ud83d\udcca *An\u00e1lisis de precios \u2014 Porta D'irta*\n\n{{ $json.summary }}\n\n*{{ $json.count }} ajuste(s) recomendado(s)*\n\n\u00bfAplicamos los cambios de precio?",
+          "additionalFields": {
+            "parse_mode": "Markdown",
+            "reply_markup": "={\"inline_keyboard\":[[{\"text\":\"\u2705 Aplicar ajustes\",\"callback_data\":\"yieldapply_{{ $json.actionKey }}\"},{\"text\":\"\u274c Descartar\",\"callback_data\":\"yielddismiss_{{ $json.actionKey }}\"}]]}"
+          }
+        },
+        "id": "c1000013-0000-0000-0000-000000000013",
+        "name": "Telegram \u2014 Yield Approval",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1,
+        "position": [
+          1820,
+          160
+        ],
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "updates": [
+            "callback_query"
+          ],
+          "additionalFields": {}
+        },
+        "id": "c1000014-0000-0000-0000-000000000014",
+        "name": "Telegram Trigger \u2014 Yield Callback",
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1,
+        "position": [
+          250,
+          560
+        ],
+        "webhookId": "e0050f01-f70a-4908-977f-89a3ee5e4dc1",
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "\nconst update = items[0].json;\nconst cbData  = update.callback_query?.data || '';\nconst chatId  = update.callback_query?.message?.chat?.id?.toString() || '';\n\nif (!cbData.startsWith('yield')) return [{json: {skip: true, chatId}}];\n\nconst isApply = cbData.startsWith('yieldapply_');\nconst actionKey = cbData.replace(/^yield(apply|dismiss)_/, '');\n\nconst sd = $getWorkflowStaticData('global');\nconst pending = sd.pendingYield?.[actionKey];\nif (!pending) {\n  return [{json: {error: 'Acci\u00f3n expirada o ya procesada.', chatId, apply: false}}];\n}\n\ndelete sd.pendingYield[actionKey];\n\nif (!isApply) {\n  return [{json: {apply: false, chatId, count: pending.adjustments.length}}];\n}\nreturn [{json: {apply: true, chatId, adjustments: pending.adjustments}}];\n"
+        },
+        "id": "c1000015-0000-0000-0000-000000000015",
+        "name": "Handle Yield Callback",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          470,
+          560
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "apply-check",
+                "leftValue": "={{ $json.apply }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "c1000016-0000-0000-0000-000000000016",
+        "name": "Apply or Dismiss?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          690,
+          560
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "\n// Apply Prices to Beds24 \u2014 uses POST /inventory/rooms/calendar with price1 format\nconst {adjustments, chatId} = $('Handle Yield Callback').first().json;\nconst token = items[0].json.token; // from Refresh Token \u2014 Apply\n\n// Group adjustments by roomId into Beds24 calendar format\nconst byRoom = {};\nfor (const adj of adjustments) {\n  const id = adj.roomId;\n  if (!byRoom[id]) byRoom[id] = [];\n  byRoom[id].push({from: adj.from, to: adj.to, price1: adj.price1});\n}\nconst payload = Object.entries(byRoom).map(([roomId, calendar]) => ({\n  roomId: parseInt(roomId), calendar\n}));\n\nlet success = false, errorMsg = '';\ntry {\n  const resp = await fetch('https://beds24.com/api/v2/inventory/rooms/calendar', {\n    method: 'POST',\n    headers: {'token': token, 'Content-Type': 'application/json'},\n    body: JSON.stringify(payload)\n  });\n  const result = await resp.json();\n  success = Array.isArray(result) && result.every(r => r.success === true);\n  if (!success) errorMsg = JSON.stringify(result).slice(0, 200);\n} catch(e) {\n  errorMsg = e.message;\n}\n\n// Update static data with applied prices\nif (success) {\n  const sd = $getWorkflowStaticData('global');\n  if (!sd.appliedPrices) sd.appliedPrices = {};\n  for (const adj of adjustments) {\n    const roomKey = 'room_' + adj.roomId;\n    if (!sd.appliedPrices[roomKey]) sd.appliedPrices[roomKey] = {};\n    // Mark every date in the range\n    const d = new Date(adj.from + 'T00:00:00Z');\n    const end = new Date(adj.to + 'T00:00:00Z');\n    while (d <= end) {\n      sd.appliedPrices[roomKey][d.toISOString().split('T')[0]] = adj.price1;\n      d.setUTCDate(d.getUTCDate() + 1);\n    }\n  }\n}\n\nreturn [{json: {success, errorMsg, count: adjustments.length, chatId}}];\n"
+        },
+        "id": "c1000017-0000-0000-0000-000000000017",
+        "name": "Apply Prices to Beds24",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          910,
+          500
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "message",
+          "operation": "sendMessage",
+          "chatId": "={{ $json.chatId }}",
+          "text": "=\u2705 *Precios actualizados*\n\n{{ $json.successCount }} de {{ $json.total }} ajustes aplicados en Beds24.",
+          "additionalFields": {
+            "parse_mode": "Markdown"
+          }
+        },
+        "id": "c1000018-0000-0000-0000-000000000018",
+        "name": "Telegram \u2014 Applied Confirmation",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1,
+        "position": [
+          1130,
+          500
+        ],
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "message",
+          "operation": "sendMessage",
+          "chatId": "={{ $json.chatId }}",
+          "text": "\ud83d\uddd1\ufe0f Ajustes de precio descartados. Los precios actuales se mantienen.",
+          "additionalFields": {}
+        },
+        "id": "c1000019-0000-0000-0000-000000000019",
+        "name": "Telegram \u2014 Dismissed",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1,
+        "position": [
+          910,
+          620
+        ],
+        "credentials": {
+          "telegramApi": {
+            "id": "CAysEtjkeAcp4qSC",
+            "name": "Porta D'irta Telegram Bot"
+          }
+        }
+      },
+      {
+        "id": "refresh-token-yield",
+        "name": "Refresh Token \u2014 Yield",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          620,
+          460
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://beds24.com/api/v2/authentication/token",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "refreshToken",
+                "value": "={{ $env.BEDS24_API_TOKEN }}"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 10000
+          }
+        }
+      },
+      {
+        "id": "refresh-before-apply",
+        "name": "Refresh Token \u2014 Apply",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          2200,
+          600
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://beds24.com/api/v2/authentication/token",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "refreshToken",
+                "value": "={{ $env.BEDS24_API_TOKEN }}"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 10000
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Cron \u2014 Daily 02:00": {
+        "main": [
+          [
+            {
+              "node": "Which Trigger?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook \u2014 Beds24 Booking Confirmed": {
+        "main": [
+          [
+            {
+              "node": "Which Trigger?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Which Trigger?": {
+        "main": [
+          [
+            {
+              "node": "Extract Booking Data",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Refresh Token \u2014 Yield",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract Booking Data": {
+        "main": [
+          [
+            {
+              "node": "Wait 24h",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 24h": {
+        "main": [
+          [
+            {
+              "node": "Build Cross-Sell Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build Cross-Sell Email": {
+        "main": [
+          [
+            {
+              "node": "Send Cross-Sell Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Beds24 \u2014 Get 30-day Occupancy": {
+        "main": [
+          [
+            {
+              "node": "Compute Price Recommendations",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compute Price Recommendations": {
+        "main": [
+          [
+            {
+              "node": "Any Adjustments?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Any Adjustments?": {
+        "main": [
+          [
+            {
+              "node": "Prepare Yield Approval",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Gemini \u2014 Generate Summary": {
+        "main": [
+          [
+            {
+              "node": "Prepare Yield Approval",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prepare Yield Approval": {
+        "main": [
+          [
+            {
+              "node": "Telegram \u2014 Yield Approval",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Telegram Trigger \u2014 Yield Callback": {
+        "main": [
+          [
+            {
+              "node": "Handle Yield Callback",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Handle Yield Callback": {
+        "main": [
+          [
+            {
+              "node": "Apply or Dismiss?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Apply or Dismiss?": {
+        "main": [
+          [
+            {
+              "node": "Refresh Token \u2014 Apply",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Telegram \u2014 Dismissed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Apply Prices to Beds24": {
+        "main": [
+          [
+            {
+              "node": "Telegram \u2014 Applied Confirmation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Refresh Token \u2014 Yield": {
+        "main": [
+          [
+            {
+              "node": "Beds24 \u2014 Get 30-day Occupancy",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Refresh Token \u2014 Apply": {
+        "main": [
+          [
+            {
+              "node": "Apply Prices to Beds24",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Ricardo Leite",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-03-21T09:55:42.044Z",
+        "id": 59,
+        "workflowId": "6z1VaeH8tBiuS2BK",
+        "versionId": "b450a7d1-5b03-4bf0-ba71-467b7e32299c",
+        "event": "activated",
+        "userId": "6de9a6aa-03c2-4307-94b7-512655032e8e"
+      }
+    ]
+  },
+  "scopes": [
+    "workflow:create",
+    "workflow:delete",
+    "workflow:execute",
+    "workflow:execute-chat",
+    "workflow:list",
+    "workflow:move",
+    "workflow:publish",
+    "workflow:read",
+    "workflow:share",
+    "workflow:unpublish",
+    "workflow:unshare",
+    "workflow:update",
+    "workflow:updateRedactionSetting"
+  ],
+  "checksum": "6bd57fd62db338b2c8a914134a0ac1c4c84f96f314e29ee0cb97de6a865333b0"
 }
