@@ -11,6 +11,7 @@
  */
 
 import Layout from '../layouts/Layout.astro';
+import GarlandDivider from '../components/GarlandDivider.astro';
 ---
 
 <Layout
@@ -42,8 +43,8 @@ import Layout from '../layouts/Layout.astro';
       <source src="/assets/video/hero.mp4" type="video/mp4" />
     </video>
 
-    <!-- Dark overlay -->
-    <div class="absolute inset-0 bg-brand-blue/75 pointer-events-none" aria-hidden="true"></div>
+    <!-- Forest green overlay -->
+    <div class="absolute inset-0 bg-brand-forest/55 pointer-events-none" aria-hidden="true"></div>
 
     <!-- Hero content — centered, no widget -->
     <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center mb-32">
@@ -58,8 +59,8 @@ import Layout from '../layouts/Layout.astro';
         Peñíscola &middot; Costa del Azahar
       </p>
 
-      <!-- Thin gold divider -->
-      <div class="w-16 h-px bg-brand-gold opacity-60" aria-hidden="true"></div>
+      <!-- Garland divider -->
+      <GarlandDivider light />
 
       <!-- CTA buttons -->
       <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
@@ -95,7 +96,7 @@ import Layout from '../layouts/Layout.astro';
          Glassmorphism strip matching the design language.
          ──────────────────────────────────────────────────────────── -->
     <div class="absolute bottom-0 left-0 right-0 z-20" aria-label="Reserva tu estancia">
-      <div class="backdrop-blur-md bg-brand-blue/60 border-t border-white/15">
+      <div class="backdrop-blur-md bg-brand-forest/55 border-t border-white/15">
         <div class="max-w-6xl mx-auto px-6 py-5">
           <div class="flex flex-col md:flex-row md:items-center gap-4">
 
@@ -172,8 +173,8 @@ import Layout from '../layouts/Layout.astro';
             Despierta frente al<br />Mediterráneo
           </h2>
 
-          <!-- Gold rule -->
-          <div class="w-12 h-px bg-brand-gold"></div>
+          <!-- Garland rule -->
+          <GarlandDivider />
 
           <!-- Body paragraph -->
           <p class="font-body text-brand-stone text-lg leading-relaxed max-w-md">
@@ -286,7 +287,7 @@ import Layout from '../layouts/Layout.astro';
         decoding="async"
       />
       <!-- Extra gradient for depth -->
-      <div class="absolute inset-0 bg-gradient-to-t from-brand-blue via-brand-blue/60 to-brand-blue/40"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/80 via-brand-forest/45 to-brand-forest/20"></div>
     </div>
 
     <!-- Content -->
@@ -305,8 +306,8 @@ import Layout from '../layouts/Layout.astro';
         Sabores del Mediterráneo
       </h2>
 
-      <!-- Gold rule -->
-      <div class="w-12 h-px bg-brand-gold"></div>
+      <!-- Garland rule -->
+      <GarlandDivider light />
 
       <!-- Body paragraph -->
       <p class="font-body text-white/75 text-lg leading-relaxed max-w-xl">
@@ -381,7 +382,7 @@ import Layout from '../layouts/Layout.astro';
         >
           Más allá del alojamiento
         </h2>
-        <div class="w-12 h-px bg-brand-gold"></div>
+        <GarlandDivider />
         <p class="font-body text-brand-stone text-lg leading-relaxed max-w-lg">
           Peñíscola y sus alrededores ofrecen experiencias únicas que
           complementan tu estancia en Porta D'irta.
@@ -483,8 +484,8 @@ import Layout from '../layouts/Layout.astro';
         ¿Listo para escapar?
       </h2>
 
-      <!-- Gold rule -->
-      <div class="w-12 h-px bg-brand-gold"></div>
+      <!-- Garland rule -->
+      <GarlandDivider light />
 
       <!-- Subtitle -->
       <p class="font-body text-white/70 text-lg leading-relaxed max-w-lg">

@@ -17,6 +17,7 @@
  */
 
 import Layout from '../layouts/Layout.astro';
+import GarlandDivider from '../components/GarlandDivider.astro';
 import { getCollection } from 'astro:content';
 
 const today = new Date();
@@ -60,7 +61,7 @@ function fmtFecha(d: Date) {
 
     <!-- Brand-blue overlay -->
     <div
-      class="absolute inset-0 bg-brand-blue/70"
+      class="absolute inset-0 bg-brand-forest/52"
       aria-hidden="true"
     ></div>
 
@@ -78,7 +79,7 @@ function fmtFecha(d: Date) {
       </h1>
 
       <!-- Thin gold divider -->
-      <div class="w-16 h-px bg-brand-gold opacity-60" aria-hidden="true"></div>
+      <GarlandDivider light />
 
       <!-- Badge pills -->
       <div class="flex flex-wrap justify-center gap-3 mt-2">
@@ -138,7 +139,7 @@ function fmtFecha(d: Date) {
           </h2>
 
           <!-- Thin gold rule -->
-          <div class="w-12 h-px bg-brand-gold"></div>
+          <GarlandDivider />
 
           <!-- Paragraphs -->
           <p class="font-body text-brand-stone text-lg leading-relaxed">
@@ -281,7 +282,7 @@ function fmtFecha(d: Date) {
               loading="lazy"
               decoding="async"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/45 to-transparent"></div>
           </div>
 
           <!-- Content -->
@@ -318,7 +319,7 @@ function fmtFecha(d: Date) {
               loading="lazy"
               decoding="async"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/45 to-transparent"></div>
           </div>
 
           <!-- Content -->
@@ -355,7 +356,7 @@ function fmtFecha(d: Date) {
               loading="lazy"
               decoding="async"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/45 to-transparent"></div>
           </div>
 
           <!-- Content -->

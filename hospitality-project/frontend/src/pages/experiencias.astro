@@ -18,6 +18,7 @@
  */
 
 import Layout from '../layouts/Layout.astro';
+import GarlandDivider from '../components/GarlandDivider.astro';
 import { getCollection } from 'astro:content';
 
 // ── Content collections ───────────────────────────────────────────────────────
@@ -91,7 +92,7 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
 
     <!-- Brand-blue overlay -->
     <div
-      class="absolute inset-0 bg-brand-blue/65"
+      class="absolute inset-0 bg-brand-forest/50"
       aria-hidden="true"
     ></div>
 
@@ -109,7 +110,7 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
       </h1>
 
       <!-- Thin gold divider -->
-      <div class="w-16 h-px bg-brand-gold opacity-60" aria-hidden="true"></div>
+      <GarlandDivider light />
 
       <!-- Subtitle -->
       <p class="font-body text-white/80 text-lg leading-relaxed max-w-xl">
@@ -177,7 +178,7 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
           </h2>
 
           <!-- Thin gold rule -->
-          <div class="w-12 h-px bg-brand-gold"></div>
+          <GarlandDivider />
 
           <!-- Paragraphs -->
           <p class="font-body text-brand-stone text-lg leading-relaxed">
@@ -286,7 +287,7 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
         </h2>
 
         <!-- Thin gold rule -->
-        <div class="w-12 h-px bg-brand-gold"></div>
+        <GarlandDivider />
 
         <!-- Paragraphs -->
         <p class="font-body text-white/80 text-base leading-relaxed">
@@ -554,7 +555,7 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
               loading="lazy"
               decoding="async"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/70 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/50 to-transparent"></div>
             {castle.price && (
               <div class="absolute top-4 right-4">
                 <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
@@ -597,7 +598,7 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
               loading="lazy"
               decoding="async"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-blue/70 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/50 to-transparent"></div>
             {vinos.price && (
               <div class="absolute top-4 right-4">
                 <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">

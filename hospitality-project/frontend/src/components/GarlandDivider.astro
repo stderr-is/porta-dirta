@@ -1,0 +1,82 @@
+---
+/**
+ * GarlandDivider.astro
+ * Bold full-width olive-branch garland — replaces thin dividers.
+ * Visible botanical section separator with alternating leaf clusters.
+ *
+ * Props:
+ *   light — true renders in white (for dark/forest bg), default is olive/sage on light bg
+ */
+interface Props {
+  light?: boolean;
+}
+const { light = false } = Astro.props;
+---
+
+<div
+  class={`w-full flex justify-center items-center py-8 md:py-10 px-4 overflow-hidden ${light ? 'opacity-25' : 'opacity-70'}`}
+  aria-hidden="true"
+>
+  <svg
+    viewBox="0 0 1200 80"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class={`w-full max-w-5xl h-14 md:h-20 ${light ? 'text-white' : 'text-brand-olive'}`}
+    aria-hidden="true"
+  >
+    <!-- main horizontal stem — gentle wave -->
+    <path
+      d="M0,40 C200,34 400,46 600,40 C800,34 1000,46 1200,40"
+      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"
+    />
+
+    <!-- ── Cluster 1: UP at x=120 ── -->
+    <path d="M120,40 C113,28 107,18 100,10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="94"  cy="8"  rx="19" ry="6"   transform="rotate(-35 94 8)"   fill="currentColor"/>
+    <ellipse cx="108" cy="6"  rx="15" ry="5"   transform="rotate(-8 108 6)"   fill="currentColor"/>
+    <ellipse cx="82"  cy="14" rx="13" ry="4.5" transform="rotate(-56 82 14)"  fill="currentColor"/>
+    <circle  cx="93"  cy="6"  r="4.5" fill="currentColor"/>
+
+    <!-- ── Cluster 2: DOWN at x=280 ── -->
+    <path d="M280,40 C287,52 294,62 300,71" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="306" cy="73" rx="20" ry="6.5" transform="rotate(33 306 73)"  fill="currentColor"/>
+    <ellipse cx="293" cy="75" rx="15" ry="5"   transform="rotate(8 293 75)"   fill="currentColor"/>
+    <ellipse cx="318" cy="68" rx="13" ry="4.5" transform="rotate(54 318 68)"  fill="currentColor"/>
+    <circle  cx="307" cy="75" r="4.5" fill="currentColor"/>
+
+    <!-- ── Cluster 3: UP at x=460 — wider spread ── -->
+    <path d="M460,40 C453,26 447,15 440,7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="434" cy="5"  rx="21" ry="6.5" transform="rotate(-28 434 5)"  fill="currentColor"/>
+    <ellipse cx="448" cy="4"  rx="14" ry="4.5" transform="rotate(2 448 4)"    fill="currentColor"/>
+    <ellipse cx="422" cy="11" rx="16" ry="5"   transform="rotate(-50 422 11)" fill="currentColor"/>
+    <circle  cx="435" cy="4"  r="4"   fill="currentColor"/>
+
+    <!-- ── Cluster 4: DOWN at x=620 ── -->
+    <path d="M620,40 C627,53 634,64 641,73" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="647" cy="75" rx="21" ry="6.5" transform="rotate(28 647 75)"  fill="currentColor"/>
+    <ellipse cx="634" cy="76" rx="14" ry="4.5" transform="rotate(-2 634 76)"  fill="currentColor"/>
+    <ellipse cx="659" cy="69" rx="16" ry="5"   transform="rotate(50 659 69)"  fill="currentColor"/>
+    <circle  cx="648" cy="76" r="4"   fill="currentColor"/>
+
+    <!-- ── Cluster 5: UP at x=800 ── -->
+    <path d="M800,40 C793,28 787,18 781,10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="775" cy="8"  rx="18" ry="6"   transform="rotate(-32 775 8)"  fill="currentColor"/>
+    <ellipse cx="789" cy="7"  rx="14" ry="4.5" transform="rotate(-6 789 7)"   fill="currentColor"/>
+    <ellipse cx="763" cy="14" rx="12" ry="4"   transform="rotate(-54 763 14)" fill="currentColor"/>
+    <circle  cx="774" cy="7"  r="4"   fill="currentColor"/>
+
+    <!-- ── Cluster 6: DOWN at x=960 ── -->
+    <path d="M960,40 C967,52 973,62 979,70" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="985" cy="72" rx="18" ry="6"   transform="rotate(32 985 72)"  fill="currentColor"/>
+    <ellipse cx="972" cy="74" rx="14" ry="4.5" transform="rotate(6 972 74)"   fill="currentColor"/>
+    <ellipse cx="996" cy="67" rx="12" ry="4"   transform="rotate(54 996 67)"  fill="currentColor"/>
+    <circle  cx="986" cy="74" r="4"   fill="currentColor"/>
+
+    <!-- ── Cluster 7: UP at x=1100 — slightly smaller ── -->
+    <path d="M1100,40 C1094,28 1088,18 1083,10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="1077" cy="8"  rx="17" ry="5.5" transform="rotate(-30 1077 8)"  fill="currentColor"/>
+    <ellipse cx="1090" cy="7"  rx="13" ry="4"   transform="rotate(-4 1090 7)"   fill="currentColor"/>
+    <ellipse cx="1066" cy="13" rx="12" ry="4"   transform="rotate(-52 1066 13)" fill="currentColor"/>
+    <circle  cx="1076" cy="7"  r="3.5" fill="currentColor"/>
+  </svg>
+</div>

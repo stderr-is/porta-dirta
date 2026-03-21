@@ -17,6 +17,10 @@
   --color-brand-stone: #8B7355;        /* Warm stone — body text on light */
   --color-brand-charcoal: #2C2018;     /* Dark charcoal-brown — primary text */
   --color-brand-white: #FFFFFF;
+  --color-brand-olive: #4A5E2A;        /* Deep olive — nature accent */
+  --color-brand-sage:  #7A8F52;        /* Sage green — softer nature accent */
+  --color-brand-forest: #2C4A3C;       /* Muted sage-teal — bridges navy & green, dark section bg */
+  --color-brand-sage-light: #c8deb0;   /* Light sage — accents on dark/forest bg */
 
   /* --- Typography --- */
   --font-family-display: 'Cormorant Garamond', serif;
@@ -33,8 +37,8 @@ html, body {
 
 /* Default body text — warm charcoal on cream (matches brand card) */
 body {
-  background-color: #F5F0E8;
-  color: #2C2018;
+  background-color: #EEF4E6;
+  color: #1C2818;
 }
 
 /* ==========================================================================
