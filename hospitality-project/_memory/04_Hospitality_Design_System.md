@@ -13,7 +13,7 @@ tags: [ui, ux, cro, astro, events]
   * `frontend/public/assets/logos/logo-negativo.png` — white on transparent, used on dark/blurred backgrounds (nav, footer, hero)
   * `frontend/public/assets/logos/logo-positivo.png` — dark on light background (print, email templates)
   * Public paths: `/assets/logos/logo-negativo.png` and `/assets/logos/logo-positivo.png`
-* **Contact (from business card):** Camí del Pebret, s/n · 12598 Peñíscola · +34 644 026 066 · +34 632 460 981 · info@portadirta.com
+* **Contact:** Camí del Pebret, s/n · 12598 Peñíscola · **+34 644 026 066** (only phone number) · info@portadirta.com
 
 ## 0b. Real Media Assets (2026-03-20 session)
 All assets in `frontend/public/assets/`:

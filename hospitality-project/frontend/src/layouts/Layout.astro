@@ -46,9 +46,10 @@ const fullTitle = `${title} | Porta D'irta`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Favicon — Wave 2: replace with real favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
 
     <!-- Astro generator tag -->
     <meta name="generator" content={Astro.generator} />
@@ -88,6 +89,9 @@ const fullTitle = `${title} | Porta D'irta`;
     <!-- Global styles (Tailwind + design tokens) are imported in the
          frontmatter above via `import '../styles/global.css'` —
          Astro injects the compiled stylesheet automatically. -->
+
+    <!-- Per-page <head> injections (JSON-LD, canonical, etc.) -->
+    <slot name="head" />
 
     <!-- ── Beds24 booking widget dependencies ────────────────────── -->
     <!-- jQuery must load before jQuery UI and bookWidget -->

@@ -63,6 +63,19 @@ Cron 02:00 → n8n → Beds24 occupancy → Gemini yield analysis → Telegram a
 - SSR Astro container runs alongside other Docker services on the same VPS.
 - Cloudflare sits in front for caching and SSL — no need for Cloudflare Pages at production.
 
+### Astro Build Modes (configured 2026-03-21)
+- `npm run build` → static SSG output (Cloudflare Pages, current)
+- `npm run build:hostinger` → SSR server output (Hostinger VPS, `BUILD_TARGET=node`)
+- Controlled by `BUILD_TARGET` env var in `astro.config.mjs` — no code changes needed to switch
+- SSR entry point: `dist/server/entry.mjs` (standalone node server on port 4321)
+- Frontend Docker files: `frontend/Dockerfile` + `frontend/docker-compose.yml` + `frontend/.env.example`
+
+### Transitional Hosting Phase (frontend on Hostinger, backends still local)
+- Hostinger VPS runs ONLY the Astro SSR container (`portadirta.com`)
+- Backends (TastyIgniter, Hi.Events, n8n) stay on local machine via Cloudflare Tunnel
+- Astro calls backends via `hobbitonranch.com` tunnel URLs (set in `frontend/.env`)
+- When backends migrate to Hostinger: update 2 env vars + `docker compose up -d --build` — done
+
 ### Services & Public URLs (Testing)
 | Service | Container Port | Public URL | Credentials | Purpose |
 |---------|---------------|------------|-------------|---------|
@@ -81,6 +94,10 @@ Cron 02:00 → n8n → Beds24 occupancy → Gemini yield analysis → Telegram a
 ### Hi.Events Container
 - Uses `Dockerfile.all-in-one` (nginx + PHP-FPM + Node.js SSR + queue workers in one container)
 - The simple `Dockerfile` only served the backend API ("Congratulations" page). The all-in-one includes the full React frontend UI.
+- **API route prefix:** `/api/` (NOT `/api/v1/`). Auth routes under `/api/auth/`. Authenticated admin routes directly under `/api/`. Public routes under `/api/public/`.
+- **Image upload (admin):** `POST /api/events/{id}/images` — multipart form, fields: `image` (file) + `type=EVENT_COVER`. Requires `Authorization: Bearer <JWT>`.
+- **Image URL pattern:** `https://events.hobbitonranch.com/storage/event_cover/{filename}`
+- **Public events feed:** `GET /api/public/organizers/1/events` — returns all LIVE events with images array, product_categories (for pricing), lifecycle_status (UPCOMING/PAST).
 
 ### Uptime Kuma (configured 2026-03-21)
 - **URL:** https://monitor.hobbitonranch.com

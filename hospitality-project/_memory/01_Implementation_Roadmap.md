@@ -87,25 +87,39 @@ tags: [wbs, planning, execution]
 - [x] Confirmed 4 demo events exist: ruta-guiada-sierra-de-irta, kayak-y-snorkel-en-la-costa, cata-de-vinos-y-gastronomia, visita-guiada-al-castillo-papal — all LIVE/UPCOMING, 0 images
 - [x] FLAG DECISION: Use Hi.Events `status` field as flag — LIVE=appears on site, DRAFT=hidden. No custom category needed since instance is Porta D'irta exclusive.
 - [x] LIFECYCLE: Use `lifecycle_status` field — UPCOMING=full card+CTA, PAST=faded+Finalizado badge
-- [ ] **RESUME HERE: Upload cover images to 4 demo events via Hi.Events API**
-  - Correct image upload route NOT YET FOUND — tried /api/auth/events/{id}/images (404)
-  - Need to find correct route: check inside Docker container routes or Hi.Events docs
-  - Image mapping: event 1 (sierra) → sierra-tower-wide.jpg, event 2 (kayak) → sierra-tower-sea.jpg, event 3 (vinos) → food-paella-wine.jpg, event 4 (castle) → food-paella-close.jpg
-  - All images at: /home/stderr/hospitality-project/frontend/public/assets/images/
-  - Hi.Events admin JWT (expires ~7 days from 2026-03-21): obtain fresh one with POST /api/auth/login {"email":"info@portadirta.com","password":"Portadirta2026!"}
-- [ ] Add `"Nuestros Paquetes"` dynamic section to `experiencias.astro` (between Intro and Sierra de Irta sections)
-  - Fetch from: GET /api/public/organizers/1/events (no auth needed)
-  - Filter: only status=LIVE events
-  - Card states: UPCOMING → full card + "Reservar" → https://events.hobbitonranch.com/e/{slug}, PAST → greyed + "Finalizado" badge
-  - Empty state: "Próximamente nuevas experiencias"
-  - Cover image: first item in event.images array, fallback to placeholder
-- [ ] JSON-LD Event structured data in `<head>` for upcoming events (Google rich results)
-- [ ] n8n workflow: Hi.Events webhook → Cloudflare Pages deploy hook (rebuild trigger)
+- [x] Upload cover images to 4 demo events via Hi.Events API (2026-03-21)
+  - Correct route: POST /api/events/{event_id}/images (multipart, field `image` + `type=EVENT_COVER`)
+  - NOT /api/v1/ — Hi.Events uses /api/ (no version prefix) for authenticated routes
+  - Images uploaded: sierra-tower-wide.jpg → event 1, sierra-tower-sea.jpg → event 2, food-paella-wine.jpg → event 3, food-paella-close.jpg → event 4
+  - Images served from: https://events.hobbitonranch.com/storage/event_cover/
+- [x] Add `"Nuestros Paquetes"` dynamic section to `experiencias.astro` (2026-03-21)
+  - Section id="paquetes", inserted between Intro section and Sierra de Irta section
+  - Fetches from /api/public/organizers/1/events at build time (no auth)
+  - Filters: status=LIVE only; sorts UPCOMING first
+  - Card states: UPCOMING → full card + cover image + price badge + "Reservar" CTA → Hi.Events booking page, PAST → greyed + grayscale + "Finalizado" badge overlay
+  - Empty state: "Próximamente nuevas experiencias" with contact link
+  - Cover image from event.images[0].url, SVG placeholder fallback
+  - GarlandDivider inserted between paquetes section and Sierra de Irta
+- [x] JSON-LD Event structured data in `<head>` for upcoming events (2026-03-21)
+  - Layout.astro got `<slot name="head" />` for per-page head injections
+  - experiencias.astro fills that slot with `<script type="application/ld+json" set:html={...} />`
+  - Emits one `schema.org/Event` object per UPCOMING package: name, description, startDate, location (Porta D'irta, Peñíscola), organizer, Offer (price+currency+bookingUrl), image URL
+- [~] n8n workflow: Hi.Events webhook → Cloudflare Pages deploy hook (rebuild trigger)
+  - **INTERIM ONLY** — only needed while hosted on Cloudflare Pages (SSG)
+  - On Hostinger VPS with `@astrojs/node` SSR, every request re-fetches live → no rebuild needed
+  - If Cloudflare Pages interim phase breaks (stale events showing), implement this as a stopgap
   - Cloudflare Pages deploy hook URL must be created manually in dashboard first
 
 ### Hosting note
 - Current: Cloudflare Pages SSG (build-time fetch) — working now
 - Production: Hostinger VPS Docker — switch to `@astrojs/node` adapter + SSR for `/experiencias`
+
+## Phase 3.7: /eventos Page — Final Polish
+*Blocked on input from brother-in-law (content owner) before proceeding.*
+- [ ] Wire inquiry form to TastyIgniter contact API or n8n webhook — **awaiting decision on form fields / destination email**
+- [ ] Replace venue mosaic placeholder photos with real event/garden photography
+- [ ] Replace `property-aerial-pool.jpg` in Mercado Artesanal content with a proper image
+- [ ] Confirm final event lineup for summer 2026 (Jazz, Cena Maridaje, Mercado — are these real or demo?)
 
 ## Phase 4: Monitoring (Testing & QA)
 *Goal: Break the system now so staff won't face catastrophic failure during a shift.*
@@ -115,6 +129,13 @@ tags: [wbs, planning, execution]
 - [ ] Verify idempotency (prevent double-charging on multiple "Pay" clicks).
 **Tech Stack:** Uptime Kuma (Monitoring), Playwright (E2E Testing).
 **Automation:** Cron job for nightly encrypted PostgreSQL dumps of TastyIgniter/Hi.Events to a separate drive.
+
+## Pre-Launch Checklist (before going live)
+- [ ] **Remove beta disclaimer banners** from 3 pages — search `TODO: REMOVE BEFORE LAUNCH`:
+  - `frontend/src/pages/hotel.astro` — above Beds24 widget
+  - `frontend/src/pages/restaurante.astro` — above reservation form
+  - `frontend/src/pages/experiencias.astro` — above Nuestros Paquetes section
+- [ ] Set Cloudflare Pages env vars to production URLs (replace `hobbitonranch.com` → `portadirta.com` subdomains)
 
 ## Phase 5: Closing (Handover & Launch)
 *Goal: Prepare the human operators for the technical system.*

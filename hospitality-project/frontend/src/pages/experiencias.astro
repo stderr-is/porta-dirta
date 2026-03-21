@@ -61,6 +61,46 @@ const sierra = getExp('ruta-guiada-sierra-de-irta');   // €35
 const kayak  = getExp('kayak-y-snorkel-en-la-costa');  // €45
 const vinos  = getExp('cata-de-vinos-y-gastronomia');  // €28
 const castle = getExp('visita-guiada-al-castillo-papal'); // €15
+
+// ── Nuestros Paquetes: structured data for the dynamic grid ───────────────────
+interface HiPackage {
+  id: number;
+  title: string;
+  slug: string;
+  description_preview: string;
+  start_date: string;
+  lifecycle_status: 'UPCOMING' | 'PAST' | 'ENDED';
+  cover_url: string | null;
+  price: number | null; // whole euros
+  booking_url: string;
+}
+
+const hiEventsBaseUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'https://events.hobbitonranch.com';
+
+const livePackages: HiPackage[] = hiEvents
+  .filter((e: any) => e.status === 'LIVE')
+  .sort((a: any, b: any) => {
+    // UPCOMING first, PAST/ENDED last
+    if (a.lifecycle_status === 'UPCOMING' && b.lifecycle_status !== 'UPCOMING') return -1;
+    if (a.lifecycle_status !== 'UPCOMING' && b.lifecycle_status === 'UPCOMING') return 1;
+    return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+  })
+  .map((e: any) => {
+    const rawPrice = e.product_categories
+      ?.flatMap((c: any) => c.products ?? [])
+      ?.find((p: any) => p.price != null)?.price ?? null;
+    return {
+      id: e.id,
+      title: e.title,
+      slug: e.slug,
+      description_preview: e.description_preview ?? '',
+      start_date: e.start_date,
+      lifecycle_status: e.lifecycle_status ?? 'UPCOMING',
+      cover_url: e.images?.[0]?.url ?? null,
+      price: rawPrice != null ? Math.round(rawPrice / 100) : null,
+      booking_url: `${hiEventsBaseUrl}/e/${e.slug}`,
+    };
+  });
 ---
 
 <Layout
@@ -69,6 +109,46 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
   lang="es"
   ogImage="/assets/images/sierra-tower-wide.jpg"
 >
+
+  <!-- JSON-LD: Event structured data for upcoming packages (Google rich results) -->
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(
+    livePackages
+      .filter(pkg => pkg.lifecycle_status === 'UPCOMING')
+      .map(pkg => ({
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": pkg.title,
+        "description": pkg.description_preview,
+        "startDate": pkg.start_date,
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": {
+          "@type": "Place",
+          "name": "Porta D'irta",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Camí del Pebret, s/n",
+            "addressLocality": "Peñíscola",
+            "postalCode": "12598",
+            "addressCountry": "ES"
+          }
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "Porta D'irta",
+          "url": "https://portadirta.com"
+        },
+        "offers": pkg.price != null ? {
+          "@type": "Offer",
+          "price": pkg.price,
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock",
+          "url": pkg.booking_url
+        } : undefined,
+        "image": pkg.cover_url ?? undefined,
+        "url": pkg.booking_url,
+      }))
+  )} />
 
   <!-- ============================================================
        SECTION 1: HERO
@@ -250,6 +330,151 @@ const castle = getExp('visita-guiada-al-castillo-papal'); // €15
     </div>
   </section>
 
+
+  <!-- ============================================================
+       SECTION 2b: NUESTROS PAQUETES (dynamic — Hi.Events)
+       3-column card grid. UPCOMING → full card + Reservar CTA.
+       PAST/ENDED → desaturated + "Finalizado" badge, no CTA.
+       Empty state → elegant placeholder copy.
+       ============================================================ -->
+  <section
+    id="paquetes"
+    class="bg-[#EEF4E6] py-24 md:py-32 px-4"
+    aria-label="Nuestros paquetes de experiencias"
+  >
+    <div class="max-w-7xl mx-auto">
+
+      <!-- TODO: REMOVE BEFORE LAUNCH — beta disclaimer -->
+      <div class="mb-10 bg-amber-50/90 border border-amber-300 text-amber-900 font-body text-sm px-4 py-3 rounded-lg text-center">
+        ⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente por teléfono:
+        <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
+      </div>
+
+      <!-- Section header -->
+      <div class="flex flex-col items-center gap-4 text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+          RESERVA TU EXPERIENCIA
+        </p>
+        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
+          Nuestros Paquetes
+        </h2>
+        <GarlandDivider />
+        <p class="font-body text-brand-stone text-lg leading-relaxed max-w-2xl">
+          Plazas limitadas. Reserva con antelación para garantizar tu experiencia.
+        </p>
+      </div>
+
+      {livePackages.length === 0 ? (
+        <!-- Empty state -->
+        <div class="flex flex-col items-center gap-6 py-20 text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-brand-gold/60" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+          </svg>
+          <p class="font-display italic text-2xl text-brand-blue/60">
+            Próximamente nuevas experiencias
+          </p>
+          <p class="font-body text-brand-stone/70 text-base max-w-md">
+            Estamos preparando nuevos paquetes para la próxima temporada. Contacta con nosotros para más información.
+          </p>
+          <a
+            href="#contacto"
+            class="inline-flex items-center gap-2 border border-brand-gold text-brand-gold font-body text-sm uppercase tracking-widest px-8 py-3 hover:bg-brand-gold hover:text-white transition-colors duration-300"
+          >
+            Contactar
+          </a>
+        </div>
+      ) : (
+        <!-- Packages grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {livePackages.map((pkg) => {
+            const isPast = pkg.lifecycle_status !== 'UPCOMING';
+            const dateObj = new Date(pkg.start_date);
+            const dateStr = dateObj.toLocaleDateString('es-ES', {
+              day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid'
+            });
+            return (
+              <article
+                class={`group relative flex flex-col bg-brand-linen rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ${isPast ? 'opacity-60 grayscale' : ''}`}
+                aria-label={pkg.title}
+              >
+                <!-- Cover image -->
+                <div class="relative overflow-hidden h-56 flex-shrink-0 bg-brand-earth/20">
+                  {pkg.cover_url ? (
+                    <img
+                      src={pkg.cover_url}
+                      alt={pkg.title}
+                      class={`w-full h-full object-cover transition-transform duration-500 ${isPast ? '' : 'group-hover:scale-105'}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center bg-brand-earth/10">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-brand-earth/40" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                      </svg>
+                    </div>
+                  )}
+                  <!-- PAST badge overlay -->
+                  {isPast && (
+                    <div class="absolute inset-0 flex items-center justify-center bg-brand-blue/40">
+                      <span class="bg-brand-blue text-white font-body text-xs uppercase tracking-widest px-4 py-2 rounded-full">
+                        Finalizado
+                      </span>
+                    </div>
+                  )}
+                  <!-- Price badge (upcoming only) -->
+                  {!isPast && pkg.price != null && (
+                    <div class="absolute top-4 right-4 bg-brand-gold text-white font-body font-semibold text-sm px-3 py-1.5 rounded-full shadow-md">
+                      Desde {pkg.price}€
+                    </div>
+                  )}
+                </div>
+
+                <!-- Card body -->
+                <div class="flex flex-col flex-1 gap-4 p-6">
+
+                  <!-- Date -->
+                  <p class="font-body text-brand-gold text-xs uppercase tracking-widest">
+                    {dateStr}
+                  </p>
+
+                  <!-- Title -->
+                  <h3 class="font-display font-light text-xl text-brand-blue leading-snug">
+                    {pkg.title}
+                  </h3>
+
+                  <!-- Description preview -->
+                  <p class="font-body text-brand-stone text-sm leading-relaxed line-clamp-3 flex-1">
+                    {pkg.description_preview}
+                  </p>
+
+                  <!-- CTA -->
+                  {!isPast && (
+                    <a
+                      href={pkg.booking_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="mt-auto inline-flex items-center justify-center gap-2 bg-brand-gold text-white font-body text-sm uppercase tracking-widest px-6 py-3 hover:bg-brand-stone transition-colors duration-300"
+                      aria-label={`Reservar ${pkg.title}`}
+                    >
+                      Reservar
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                    </a>
+                  )}
+                </div>
+
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <GarlandDivider />
 
   <!-- ============================================================
        SECTION 3: SIERRA DE IRTA
