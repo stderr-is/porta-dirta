@@ -17,6 +17,18 @@
  */
 
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const eventosLocales = (await getCollection('eventos-locales'))
+  .filter((e) => e.data.fecha >= today)
+  .sort((a, b) => a.data.fecha.getTime() - b.data.fecha.getTime());
+
+function fmtFecha(d: Date) {
+  return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+}
 ---
 
 <Layout
@@ -61,8 +73,8 @@ import Layout from '../layouts/Layout.astro';
       </p>
 
       <!-- Main heading -->
-      <h1 class="font-display italic text-7xl text-white leading-tight">
-        Momentos que duran<br />para siempre
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+        Momentos que duran para siempre
       </h1>
 
       <!-- Thin gold divider -->
@@ -121,7 +133,7 @@ import Layout from '../layouts/Layout.astro';
           </p>
 
           <!-- Heading -->
-          <h2 class="font-display font-light text-5xl text-brand-blue leading-tight">
+          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
             Un entorno único
           </h2>
 
@@ -248,7 +260,7 @@ import Layout from '../layouts/Layout.astro';
         <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
           CELEBRACIONES
         </p>
-        <h2 class="font-display font-light italic text-5xl text-white">
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white">
           ¿Qué estás celebrando?
         </h2>
       </div>
@@ -374,178 +386,98 @@ import Layout from '../layouts/Layout.astro';
 
 
   <!-- ============================================================
-       SECTION 4: UPCOMING EVENTS (Hi.Events)
-       3 event cards with image, title, date badge, price, CTA.
-       REPLACE: Hi.Events API feed
+       SECTION 4: UPCOMING EVENTS
+       Rendered from src/content/eventos-locales/ — add a new .md
+       file there to publish an event without touching this template.
        ============================================================ -->
-  <!-- REPLACE: Hi.Events API feed -->
-  <section
-    class="bg-brand-cream py-24 md:py-32 px-4"
-    aria-label="Próximos eventos"
-  >
-    <div class="max-w-7xl mx-auto">
+  {eventosLocales.length > 0 && (
+    <section
+      class="bg-brand-cream py-24 md:py-32 px-4"
+      aria-label="Próximos eventos"
+    >
+      <div class="max-w-7xl mx-auto">
 
-      <!-- Section heading -->
-      <div class="text-center mb-16">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
-          AGENDA
-        </p>
-        <h2 class="font-display font-light text-5xl text-brand-blue">
-          Próximos Eventos en Porta D'irta
-        </h2>
-      </div>
+        <div class="text-center mb-16">
+          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+            AGENDA
+          </p>
+          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">
+            Próximos Eventos en Porta D'irta
+          </h2>
+        </div>
 
-      <!-- Event cards row -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {eventosLocales.map((ev) => (
+            <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
 
-        <!-- Event Card 1: Jazz -->
-        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+              <div class="relative">
+                <img
+                  src={ev.data.imagen ?? '/assets/images/property-aerial-pool.jpg'}
+                  alt={ev.data.titulo}
+                  class="w-full h-48 object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute top-4 left-4">
+                  <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                    {fmtFecha(ev.data.fecha)}
+                    {ev.data.fechaFin && ` – ${fmtFecha(ev.data.fechaFin)}`}
+                  </span>
+                </div>
+              </div>
 
-          <!-- Image -->
-          <!-- REPLACE: real event photos -->
-          <div class="relative">
-            <img
-              src="/assets/images/terrace-breakfast.jpg"
-              alt="Noche de Jazz en la Terraza"
-              class="w-full h-48 object-cover"
-              loading="lazy"
-              decoding="async"
-            />
-            <!-- Date badge -->
-            <div class="absolute top-4 left-4">
-              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                15 Jul 2026
-              </span>
-            </div>
-          </div>
+              <div class="flex flex-col gap-3 p-6 flex-1">
+                <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
+                  {ev.data.titulo}
+                </h3>
+                <p class="font-body text-brand-stone text-sm leading-relaxed">
+                  {ev.data.descripcion}
+                </p>
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
+                  {ev.data.precio ? (
+                    <span class="font-display text-xl text-brand-blue">
+                      €{ev.data.precio}
+                      <span class="font-body text-sm text-brand-stone font-normal"> / persona</span>
+                    </span>
+                  ) : (
+                    <span class="font-body text-sm text-brand-stone italic">Entrada libre</span>
+                  )}
+                  {ev.data.ticketsUrl ? (
+                    <a
+                      href={ev.data.ticketsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                      aria-label={`Comprar entradas para ${ev.data.titulo}`}
+                    >
+                      Comprar Entradas
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                      </svg>
+                    </a>
+                  ) : (
+                    <a
+                      href="#contacto"
+                      class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
+                    >
+                      Más información
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              </div>
 
-          <!-- Content -->
-          <div class="flex flex-col gap-3 p-6 flex-1">
-            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
-              Noche de Jazz en la Terraza
-            </h3>
-            <p class="font-body text-brand-stone text-sm leading-relaxed">
-              Una velada mágica bajo las estrellas con los mejores músicos de jazz del mediterráneo.
-              Copas, brisa marina y música en vivo.
-            </p>
-            <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
-              <span class="font-display text-xl text-brand-blue">€25 <span class="font-body text-sm text-brand-stone font-normal">/ persona</span></span>
-              <a
-                href="#"
-                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
-                aria-label="Comprar entradas para Noche de Jazz"
-              >
-                Comprar Entradas
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <line x1="5" y1="12" x2="19" y2="12"/>
-                  <polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-        </article>
-
-        <!-- Event Card 2: Wine pairing -->
-        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
-
-          <!-- Image -->
-          <!-- REPLACE: real event photos -->
-          <div class="relative">
-            <img
-              src="/assets/images/property-aerial-pool.jpg"
-              alt="Cena Maridaje — Vinos de la Terra Alta"
-              class="w-full h-48 object-cover"
-              loading="lazy"
-              decoding="async"
-            />
-            <!-- Date badge -->
-            <div class="absolute top-4 left-4">
-              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                22 Jul 2026
-              </span>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="flex flex-col gap-3 p-6 flex-1">
-            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
-              Cena Maridaje — Vinos de la Terra Alta
-            </h3>
-            <p class="font-body text-brand-stone text-sm leading-relaxed">
-              Nuestro chef y sumiller te guían por un recorrido sensorial de platos mediterráneos
-              acompañados de los mejores vinos de la Terra Alta.
-            </p>
-            <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
-              <span class="font-display text-xl text-brand-blue">€65 <span class="font-body text-sm text-brand-stone font-normal">/ persona</span></span>
-              <a
-                href="#"
-                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
-                aria-label="Comprar entradas para Cena Maridaje"
-              >
-                Comprar Entradas
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <line x1="5" y1="12" x2="19" y2="12"/>
-                  <polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-        </article>
-
-        <!-- Event Card 3: Yoga & Brunch -->
-        <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
-
-          <!-- Image -->
-          <!-- REPLACE: real event photos -->
-          <div class="relative">
-            <img
-              src="/assets/images/property-aerial-dusk.jpg"
-              alt="Yoga & Brunch de Verano"
-              class="w-full h-48 object-cover"
-              loading="lazy"
-              decoding="async"
-            />
-            <!-- Date badge -->
-            <div class="absolute top-4 left-4">
-              <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                3 Ago 2026
-              </span>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="flex flex-col gap-3 p-6 flex-1">
-            <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">
-              Yoga &amp; Brunch de Verano
-            </h3>
-            <p class="font-body text-brand-stone text-sm leading-relaxed">
-              Empieza el domingo con una sesión de yoga al amanecer junto al mar, seguida de un
-              brunch saludable con productos locales y zumos naturales en nuestra terraza.
-            </p>
-            <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
-              <span class="font-display text-xl text-brand-blue">€30 <span class="font-body text-sm text-brand-stone font-normal">/ persona</span></span>
-              <a
-                href="#"
-                class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
-                aria-label="Comprar entradas para Yoga & Brunch"
-              >
-                Comprar Entradas
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <line x1="5" y1="12" x2="19" y2="12"/>
-                  <polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-        </article>
+            </article>
+          ))}
+        </div>
 
       </div>
-
-    </div>
-  </section>
+    </section>
+  )}
 
 
   <!-- ============================================================
@@ -599,7 +531,7 @@ import Layout from '../layouts/Layout.astro';
         <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
           CONTACTO
         </p>
-        <h2 class="font-display font-light italic text-5xl text-white leading-tight">
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
           Cuéntanos tu evento
         </h2>
         <p class="font-body text-white/60 text-base mt-4 leading-relaxed">

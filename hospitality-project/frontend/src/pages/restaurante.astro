@@ -48,13 +48,13 @@ import Layout from '../layouts/Layout.astro';
       </span>
 
       <!-- Main heading -->
-      <h1 class="font-display italic text-7xl text-white leading-tight max-w-3xl">
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight max-w-3xl">
         Sabores del Mediterráneo
       </h1>
 
       <!-- Tagline -->
-      <p class="font-body text-lg text-white/80 max-w-xl leading-relaxed">
-        Cocina de temporada, producto local y el mar como horizonte.<br />
+      <p class="font-body text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
+        Cocina de temporada, producto local y el mar como horizonte.
         Una experiencia gastronómica única en Peñíscola.
       </p>
     </div>
@@ -98,7 +98,7 @@ import Layout from '../layouts/Layout.astro';
           <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
             Nuestra Filosofía
           </span>
-          <h2 class="font-display text-5xl text-brand-blue leading-tight">
+          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
             El sabor auténtico de la Costa del Azahar
           </h2>
           <p class="font-body text-base text-brand-stone leading-relaxed">
@@ -150,7 +150,7 @@ import Layout from '../layouts/Layout.astro';
         <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
           Gastronomía
         </span>
-        <h2 class="font-display text-5xl text-white mt-3">
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
           Nuestra Carta
         </h2>
       </div>
@@ -348,7 +348,7 @@ import Layout from '../layouts/Layout.astro';
         <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
           Reservas
         </span>
-        <h2 class="font-display text-5xl text-white mt-3">
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
           Reserva tu Mesa
         </h2>
       </div>
@@ -513,6 +513,30 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
+  <!-- Pre-fill form from URL params sent by Beds24 confirmation emails.
+       Supported params: fecha (YYYY-MM-DD), personas, nombre, email, telefono
+       Example: /restaurante?fecha=2026-07-15&personas=2&nombre=John+Doe&email=john@example.com -->
+  <script is:inline>
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var map = {
+        fecha:    'fecha',
+        personas: 'personas',
+        nombre:   'nombre',
+        email:    'email',
+        telefono: 'telefono',
+      };
+      Object.entries(map).forEach(function(entry) {
+        var param = entry[0], fieldId = entry[1];
+        var val = p.get(param);
+        if (val) {
+          var el = document.getElementById(fieldId);
+          if (el) el.value = val;
+        }
+      });
+    })();
+  </script>
+
   <script is:inline define:vars={{ tastyigniterUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081' }}>
     document.getElementById('restaurant-form').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -573,7 +597,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
               Horarios
             </span>
-            <h2 class="font-display text-4xl text-brand-blue mt-3">
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3">
               Cuándo nos puedes visitar
             </h2>
           </div>
@@ -613,12 +637,12 @@ import Layout from '../layouts/Layout.astro';
             <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
               Ubicación
             </span>
-            <h2 class="font-display text-4xl text-brand-blue mt-3">
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3">
               Cómo llegar
             </h2>
           </div>
 
-          <div class="rounded-xl overflow-hidden h-64 border border-brand-stone/10">
+          <div class="rounded-xl overflow-hidden h-48 sm:h-64 border border-brand-stone/10">
             <iframe
               src="https://maps.google.com/maps?q=40.335276,0.374050&hl=es&z=15&output=embed"
               width="100%"
