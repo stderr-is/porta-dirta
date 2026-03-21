@@ -57,6 +57,22 @@ import Layout from '../layouts/Layout.astro';
         Cocina de temporada, producto local y el mar como horizonte.
         Una experiencia gastronómica única en Peñíscola.
       </p>
+
+      <!-- CTA buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
+        <a
+          href="#reservar"
+          class="inline-flex items-center px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg"
+        >
+          Reservar Mesa
+        </a>
+        <a
+          href="#filosofia"
+          class="inline-flex items-center px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+        >
+          Descubrir
+        </a>
+      </div>
     </div>
 
     <!-- Scroll chevron -->
@@ -338,6 +354,7 @@ import Layout from '../layouts/Layout.astro';
        SECTION 5 — TABLE BOOKING
        ================================================================ -->
   <section
+    id="reservar"
     class="bg-brand-blue py-24 md:py-32"
     aria-label="Reserva tu mesa"
   >
