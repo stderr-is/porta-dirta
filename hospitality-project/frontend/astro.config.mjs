@@ -13,6 +13,13 @@ export default defineConfig({
   output: isNode ? 'server' : 'static',
   trailingSlash: 'never',
 
+  // Output flat .html files (hotel.html) instead of directories (hotel/index.html).
+  // This prevents Cloudflare Pages from auto-redirecting /hotel → /hotel/ (308 loop).
+  // SSR (Hostinger) ignores this — the node adapter handles routing itself.
+  build: {
+    format: 'file',
+  },
+
   ...(isNode && {
     adapter: node({ mode: 'standalone' }),
   }),
