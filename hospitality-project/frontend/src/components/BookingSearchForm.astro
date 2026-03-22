@@ -1,17 +1,17 @@
 ---
 /**
- * BookingSearchForm.astro — Custom glassmorphism booking search form
+ * BookingSearchForm.astro — Compact glassmorphism booking search form
  *
- * Uses a fully custom calendar dropdown (no native <input type="date">).
- * Native date pickers have inconsistent month-navigation bugs across
- * browsers. This component owns the full calendar rendering in JS.
+ * Layout:
+ *   Mobile  → Row 1: [Llegada | Salida] full width
+ *             Row 2: [− Adultos + | − Niños +]  [Reservar]
+ *   Desktop → [Llegada | Salida]  [− Ad + | − Ni +]  [Reservar]  (single row)
  *
- * Behaviour:
- *   - Selecting check-in auto-advances checkout to next day and opens
- *     checkout calendar immediately
- *   - Calendar auto-opens upward if there is not enough space below
- *   - Adults min 1, Children min 0; +/− counters
- *   - Submit → /reservar?checkin=YYYY-MM-DD&checkout=...&numadult=N&numchild=N
+ * Calendar panels are appended to <body> with position:fixed so they
+ * are never clipped by overflow:hidden on ancestor elements (hero section).
+ *
+ * Picking check-in auto-sets checkout = checkin+1 and opens checkout.
+ * Submit → /reservar?checkin=YYYY-MM-DD&checkout=...&numadult=N&numchild=N
  *
  * Props:
  *   formId — unique string; must be different per instance on the same page
@@ -20,7 +20,6 @@
 interface Props {
   formId: string;
 }
-
 const { formId } = Astro.props;
 ---
 
@@ -30,236 +29,211 @@ const { formId } = Astro.props;
   class="w-full"
   aria-label="Formulario de búsqueda de disponibilidad"
 >
+  <div class="flex flex-wrap gap-2 items-stretch">
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+    <!-- ── Date group ─────────────────────────────────────────── -->
+    <div class="flex w-full sm:flex-1 sm:w-auto min-w-0
+                rounded-xl bg-white/15 border border-white/30 divide-x divide-white/20">
 
-    <!-- ── Check-in ──────────────────────────────────────────── -->
-    <div class="flex flex-col gap-1.5">
-      <label class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90">
-        Llegada
-      </label>
-      <div class="relative">
-        <button
-          type="button"
-          id={`checkin-btn-${formId}`}
-          aria-haspopup="true"
-          aria-expanded="false"
-          class="w-full flex items-center gap-2.5 bg-white/15 border border-white/30 rounded-xl px-4 py-3
-                 text-left transition-colors duration-200 hover:bg-white/20 hover:border-white/50
-                 focus:outline-none focus:border-brand-gold/60"
-        >
-          <svg class="w-4 h-4 text-brand-gold flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-          <span id={`checkin-display-${formId}`} class="font-body text-sm text-white/50">Seleccionar</span>
-        </button>
-        <input type="hidden" id={`checkin-val-${formId}`} name="checkin" />
-        <!-- Calendar panel -->
-        <div
-          id={`checkin-cal-${formId}`}
-          data-cal-panel
-          class="hidden absolute left-0 z-50 w-64 bg-white rounded-2xl shadow-2xl border border-stone-100 overflow-hidden"
-        ></div>
-      </div>
-    </div>
-
-    <!-- ── Check-out ─────────────────────────────────────────── -->
-    <div class="flex flex-col gap-1.5">
-      <label class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90">
-        Salida
-      </label>
-      <div class="relative">
-        <button
-          type="button"
-          id={`checkout-btn-${formId}`}
-          aria-haspopup="true"
-          aria-expanded="false"
-          class="w-full flex items-center gap-2.5 bg-white/15 border border-white/30 rounded-xl px-4 py-3
-                 text-left transition-colors duration-200 hover:bg-white/20 hover:border-white/50
-                 focus:outline-none focus:border-brand-gold/60"
-        >
-          <svg class="w-4 h-4 text-brand-gold flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-          <span id={`checkout-display-${formId}`} class="font-body text-sm text-white/50">Seleccionar</span>
-        </button>
-        <input type="hidden" id={`checkout-val-${formId}`} name="checkout" />
-        <!-- Calendar panel -->
-        <div
-          id={`checkout-cal-${formId}`}
-          data-cal-panel
-          class="hidden absolute left-0 z-50 w-64 bg-white rounded-2xl shadow-2xl border border-stone-100 overflow-hidden"
-        ></div>
-      </div>
-    </div>
-
-    <!-- ── Adults ────────────────────────────────────────────── -->
-    <div class="flex flex-col gap-1.5">
-      <label
-        for={`adults-${formId}`}
-        class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90"
+      <!-- Check-in trigger -->
+      <button
+        type="button"
+        id={`checkin-btn-${formId}`}
+        class="flex-1 min-w-0 px-4 py-2.5 flex flex-col text-left rounded-l-xl
+               hover:bg-white/10 transition-colors duration-200 focus:outline-none"
       >
-        Adultos
-      </label>
-      <div class="flex items-center bg-white/15 border border-white/30 rounded-xl overflow-hidden h-[46px]">
-        <button type="button" data-action="dec" data-target={`adults-${formId}`} aria-label="Reducir adultos"
-          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
-                 text-xl leading-none transition-colors duration-200 h-full select-none">−</button>
-        <input type="number" id={`adults-${formId}`} value="2" min="1" max="10" readonly
-          class="flex-1 min-w-0 bg-transparent text-white text-center font-body text-sm focus:outline-none" />
-        <button type="button" data-action="inc" data-target={`adults-${formId}`} aria-label="Aumentar adultos"
-          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
-                 text-xl leading-none transition-colors duration-200 h-full select-none">+</button>
+        <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80 leading-none mb-1">
+          Llegada
+        </span>
+        <span
+          id={`checkin-display-${formId}`}
+          class="font-body text-sm text-white/55 leading-none truncate"
+        >Seleccionar</span>
+      </button>
+      <input type="hidden" id={`checkin-val-${formId}`} name="checkin" />
+
+      <!-- Divider arrow -->
+      <div class="flex items-center px-2 text-white/25 flex-shrink-0 pointer-events-none" aria-hidden="true">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
       </div>
+
+      <!-- Check-out trigger -->
+      <button
+        type="button"
+        id={`checkout-btn-${formId}`}
+        class="flex-1 min-w-0 px-4 py-2.5 flex flex-col text-left rounded-r-xl
+               hover:bg-white/10 transition-colors duration-200 focus:outline-none"
+      >
+        <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80 leading-none mb-1">
+          Salida
+        </span>
+        <span
+          id={`checkout-display-${formId}`}
+          class="font-body text-sm text-white/55 leading-none truncate"
+        >Seleccionar</span>
+      </button>
+      <input type="hidden" id={`checkout-val-${formId}`} name="checkout" />
+
     </div>
 
-    <!-- ── Children ──────────────────────────────────────────── -->
-    <div class="flex flex-col gap-1.5">
-      <label
-        for={`children-${formId}`}
-        class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90"
-      >
-        Niños
-      </label>
-      <div class="flex items-center bg-white/15 border border-white/30 rounded-xl overflow-hidden h-[46px]">
-        <button type="button" data-action="dec" data-target={`children-${formId}`} aria-label="Reducir niños"
-          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
-                 text-xl leading-none transition-colors duration-200 h-full select-none">−</button>
-        <input type="number" id={`children-${formId}`} value="0" min="0" max="6" readonly
-          class="flex-1 min-w-0 bg-transparent text-white text-center font-body text-sm focus:outline-none" />
-        <button type="button" data-action="inc" data-target={`children-${formId}`} aria-label="Aumentar niños"
-          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
-                 text-xl leading-none transition-colors duration-200 h-full select-none">+</button>
+    <!-- ── Guests group + submit (share second row on mobile) ─── -->
+    <div class="flex flex-1 sm:flex-none gap-2 items-stretch min-w-0">
+
+      <!-- Guests pill -->
+      <div class="flex flex-1 sm:flex-none rounded-xl bg-white/15 border border-white/30 divide-x divide-white/20">
+
+        <!-- Adults -->
+        <div class="flex items-center gap-1.5 px-3">
+          <button type="button" data-action="dec" data-target={`adults-${formId}`}
+            aria-label="Reducir adultos"
+            class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">−</button>
+          <div class="flex flex-col items-center w-10">
+            <span class="font-body text-[10px] uppercase tracking-[0.15em] text-brand-gold/80 leading-none mb-0.5">Ad</span>
+            <input type="number" id={`adults-${formId}`} value="2" min="1" max="10" readonly
+              class="w-full bg-transparent text-white text-center font-body text-sm leading-none focus:outline-none" />
+          </div>
+          <button type="button" data-action="inc" data-target={`adults-${formId}`}
+            aria-label="Aumentar adultos"
+            class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">+</button>
+        </div>
+
+        <!-- Children -->
+        <div class="flex items-center gap-1.5 px-3">
+          <button type="button" data-action="dec" data-target={`children-${formId}`}
+            aria-label="Reducir niños"
+            class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">−</button>
+          <div class="flex flex-col items-center w-10">
+            <span class="font-body text-[10px] uppercase tracking-[0.15em] text-brand-gold/80 leading-none mb-0.5">Ni</span>
+            <input type="number" id={`children-${formId}`} value="0" min="0" max="6" readonly
+              class="w-full bg-transparent text-white text-center font-body text-sm leading-none focus:outline-none" />
+          </div>
+          <button type="button" data-action="inc" data-target={`children-${formId}`}
+            aria-label="Aumentar niños"
+            class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">+</button>
+        </div>
+
       </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="flex-shrink-0 bg-brand-gold text-brand-blue font-body text-sm uppercase
+               tracking-[0.15em] font-medium rounded-xl px-5 py-2.5
+               hover:bg-brand-stone transition-colors duration-200 whitespace-nowrap"
+      >
+        Reservar
+      </button>
+
     </div>
 
   </div>
-
-  <!-- ── Submit ────────────────────────────────────────────────── -->
-  <button
-    type="submit"
-    class="w-full bg-brand-gold text-brand-blue font-body text-sm uppercase tracking-[0.2em] font-medium
-           rounded-xl px-8 py-4 hover:bg-brand-stone transition-colors duration-200"
-  >
-    Comprobar disponibilidad
-  </button>
-
-  <p class="text-white/40 text-xs text-center mt-3 font-body">
-    Reserva segura &middot; Confirmación inmediata &middot; Sin cargos por cancelación anticipada
-  </p>
-
 </form>
 
 <script is:inline define:vars={{ formId }}>
 (function () {
 
-  /* ── Helpers ─────────────────────────────────────────────────── */
+  /* ── Helpers ───────────────────────────────────────────────── */
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
-  function toISO(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function toISO(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
   function fromISO(s) { return new Date(s + 'T00:00:00'); }
-  function addDays(d, n) { var r = new Date(d); r.setDate(r.getDate() + n); return r; }
+  function addDays(d, n) { var r = new Date(d); r.setDate(r.getDate()+n); return r; }
   function fmtShort(d) {
-    return new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short' }).format(d);
+    return new Intl.DateTimeFormat('es-ES', { day:'numeric', month:'short' }).format(d);
   }
 
-  var TODAY = new Date(); TODAY.setHours(0, 0, 0, 0);
+  var TODAY = new Date(); TODAY.setHours(0,0,0,0);
+  var MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  var DAYS   = ['L','M','X','J','V','S','D'];
 
-  var MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-                     'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  var DAY_ABBR    = ['L','M','X','J','V','S','D'];
+  /* ── Create calendar panel in <body> (avoids overflow:hidden clipping) ── */
+  function makePanel(id) {
+    var old = document.getElementById(id);
+    if (old) old.remove();
+    var el = document.createElement('div');
+    el.id = id;
+    el.setAttribute('data-cal-panel', '');
+    el.className = 'hidden bg-white rounded-2xl shadow-2xl border border-stone-100 overflow-hidden';
+    el.style.cssText = 'position:fixed;z-index:9999;width:272px';
+    document.body.appendChild(el);
+    return el;
+  }
 
-  /* ── Calendar factory ────────────────────────────────────────── */
+  /* ── Position panel relative to its trigger button ─────────── */
+  function positionPanel(panel, btn) {
+    var r   = btn.getBoundingClientRect();
+    var w   = 272;
+    var left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8));
+    if (window.innerHeight - r.bottom > 290) {
+      panel.style.top    = (r.bottom + 6) + 'px';
+      panel.style.bottom = 'auto';
+    } else {
+      panel.style.bottom = (window.innerHeight - r.top + 6) + 'px';
+      panel.style.top    = 'auto';
+    }
+    panel.style.left = left + 'px';
+  }
+
+  /* ── Calendar factory ───────────────────────────────────────── */
   function Calendar(cfg) {
-    // cfg: { btnId, displayId, valId, panelId, getMin, onPick }
-    var selected  = null;   // ISO string or null
-    var viewYear  = TODAY.getFullYear();
-    var viewMonth = TODAY.getMonth();
-
+    var selected = null;
+    var viewY = TODAY.getFullYear();
+    var viewM = TODAY.getMonth();
     var btn   = document.getElementById(cfg.btnId);
-    var panel = document.getElementById(cfg.panelId);
+    var panel = makePanel(cfg.panelId);
 
-    /* render the month grid into the panel */
     function render() {
       var minISO = cfg.getMin();
       var min    = minISO ? fromISO(minISO) : TODAY;
+      /* jump view forward if entirely before min */
+      if (new Date(viewY, viewM+1, 0) < min) { viewY = min.getFullYear(); viewM = min.getMonth(); }
 
-      // If current view is entirely before min, jump forward
-      var lastOfView = new Date(viewYear, viewMonth + 1, 0);
-      if (lastOfView < min) {
-        viewYear  = min.getFullYear();
-        viewMonth = min.getMonth();
-      }
-
-      var firstDay    = new Date(viewYear, viewMonth, 1);
-      var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-      var startDow    = (firstDay.getDay() + 6) % 7; // Mon = 0
+      var first   = new Date(viewY, viewM, 1);
+      var total   = new Date(viewY, viewM+1, 0).getDate();
+      var startDow= (first.getDay()+6) % 7;
+      var todayISO= toISO(TODAY);
 
       var h = '<div class="p-3 select-none">';
-
-      /* month navigation */
       h += '<div class="flex items-center justify-between mb-3">';
-      h += '<button type="button" data-nav="-1" class="w-7 h-7 flex items-center justify-center rounded-lg'
-         + ' text-stone-400 hover:text-brand-blue hover:bg-stone-100 transition-colors text-base font-light">‹</button>';
-      h += '<span class="font-body text-sm font-semibold text-stone-800">'
-         + MONTH_NAMES[viewMonth] + ' ' + viewYear + '</span>';
-      h += '<button type="button" data-nav="1" class="w-7 h-7 flex items-center justify-center rounded-lg'
-         + ' text-stone-400 hover:text-brand-blue hover:bg-stone-100 transition-colors text-base font-light">›</button>';
+      h += '<button type="button" data-nav="-1" class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-[#0d2b45] hover:bg-stone-100 transition-colors">‹</button>';
+      h += '<span class="font-sans text-sm font-semibold text-stone-800">' + MONTHS[viewM] + ' ' + viewY + '</span>';
+      h += '<button type="button" data-nav="1"  class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-[#0d2b45] hover:bg-stone-100 transition-colors">›</button>';
       h += '</div>';
 
-      /* weekday headers */
       h += '<div class="grid grid-cols-7 mb-1">';
-      DAY_ABBR.forEach(function (d) {
-        h += '<div class="text-center text-xs text-stone-400 font-medium pb-1">' + d + '</div>';
-      });
+      DAYS.forEach(function(d){ h += '<div class="text-center text-xs text-stone-400 font-medium py-1">'+d+'</div>'; });
       h += '</div>';
 
-      /* day grid */
       h += '<div class="grid grid-cols-7 gap-y-0.5">';
-      for (var i = 0; i < startDow; i++) h += '<div></div>';
-
-      for (var day = 1; day <= daysInMonth; day++) {
-        var date   = new Date(viewYear, viewMonth, day);
-        var iso    = toISO(date);
-        var isPast = date < min;
-        var isSel  = iso === selected;
-        var isTdy  = iso === toISO(TODAY);
-
-        var cls = 'text-center text-sm rounded-lg py-1.5 ';
-        if (isPast) {
-          cls += 'text-stone-300 cursor-not-allowed';
-        } else if (isSel) {
-          cls += 'bg-[#c9a84c] text-[#0d2b45] font-semibold cursor-pointer';
-        } else if (isTdy) {
-          cls += 'text-[#0d2b45] border border-[#c9a84c]/60 cursor-pointer hover:bg-[#c9a84c]/10';
-        } else {
-          cls += 'text-stone-700 cursor-pointer hover:bg-stone-100 hover:text-[#0d2b45]';
-        }
-
-        h += '<div class="' + cls + '"'
-           + (isPast ? '' : ' data-pick="' + iso + '"')
-           + '>' + day + '</div>';
+      for (var i=0; i<startDow; i++) h += '<div></div>';
+      for (var day=1; day<=total; day++) {
+        var date = new Date(viewY, viewM, day);
+        var iso  = toISO(date);
+        var past = date < min;
+        var sel  = iso === selected;
+        var tdy  = iso === todayISO;
+        var cls  = 'text-center text-sm rounded-lg py-1.5 ';
+        if (past)    cls += 'text-stone-300 cursor-not-allowed';
+        else if (sel)cls += 'bg-[#c9a84c] text-[#0d2b45] font-semibold cursor-pointer';
+        else if (tdy)cls += 'text-[#0d2b45] ring-1 ring-[#c9a84c]/60 cursor-pointer hover:bg-[#c9a84c]/10';
+        else         cls += 'text-stone-700 cursor-pointer hover:bg-stone-100';
+        h += '<div class="'+cls+'"'+(past?'':' data-pick="'+iso+'"')+'>'+day+'</div>';
       }
-
       h += '</div></div>';
       panel.innerHTML = h;
 
-      /* nav buttons */
-      panel.querySelectorAll('[data-nav]').forEach(function (navBtn) {
-        navBtn.addEventListener('click', function (e) {
+      panel.querySelectorAll('[data-nav]').forEach(function(b){
+        b.addEventListener('click', function(e){
           e.stopPropagation();
-          viewMonth += parseInt(navBtn.dataset.nav);
-          if (viewMonth > 11) { viewMonth = 0; viewYear++; }
-          if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+          viewM += parseInt(b.dataset.nav);
+          if (viewM>11){viewM=0;viewY++;} if (viewM<0){viewM=11;viewY--;}
           render();
         });
       });
-
-      /* day pick */
-      panel.querySelectorAll('[data-pick]').forEach(function (el) {
-        el.addEventListener('click', function (e) {
-          e.stopPropagation();
-          pick(el.dataset.pick);
-        });
+      panel.querySelectorAll('[data-pick]').forEach(function(el){
+        el.addEventListener('click', function(e){ e.stopPropagation(); pick(el.dataset.pick); });
       });
     }
 
@@ -268,123 +242,89 @@ const { formId } = Astro.props;
       document.getElementById(cfg.valId).value = iso;
       var disp = document.getElementById(cfg.displayId);
       disp.textContent = fmtShort(fromISO(iso));
-      disp.classList.remove('text-white/50');
-      disp.classList.add('text-white');
+      disp.classList.remove('text-white/55'); disp.classList.add('text-white');
       close();
       if (cfg.onPick) cfg.onPick(iso);
     }
 
     function open() {
-      /* close any other open calendar on this page */
-      document.querySelectorAll('[data-cal-panel]').forEach(function (p) {
-        if (p !== panel) p.classList.add('hidden');
-      });
-
+      document.querySelectorAll('[data-cal-panel]').forEach(function(p){ if(p!==panel) p.classList.add('hidden'); });
       render();
+      positionPanel(panel, btn);
       panel.classList.remove('hidden');
-      btn.setAttribute('aria-expanded', 'true');
-
-      /* position: open upward if less than 280px below button */
-      var rect       = btn.getBoundingClientRect();
-      var spaceBelow = window.innerHeight - rect.bottom;
-      if (spaceBelow < 280) {
-        panel.style.bottom = '100%';
-        panel.style.top    = 'auto';
-        panel.style.marginBottom = '6px';
-        panel.style.marginTop    = '0';
-      } else {
-        panel.style.top    = '100%';
-        panel.style.bottom = 'auto';
-        panel.style.marginTop    = '6px';
-        panel.style.marginBottom = '0';
-      }
     }
-
-    function close() {
-      panel.classList.add('hidden');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-
+    function close() { panel.classList.add('hidden'); }
     function getSelected() { return selected; }
 
-    /* toggle on button click */
-    btn.addEventListener('click', function (e) {
+    btn.addEventListener('click', function(e){
       e.stopPropagation();
       panel.classList.contains('hidden') ? open() : close();
     });
+    panel.addEventListener('click', function(e){ e.stopPropagation(); });
 
-    /* stop clicks inside panel from bubbling to document */
-    panel.addEventListener('click', function (e) { e.stopPropagation(); });
-
-    return { open: open, close: close, pick: pick, getSelected: getSelected };
+    return { open:open, close:close, pick:pick, getSelected:getSelected };
   }
 
-  /* ── Initialise both calendars ───────────────────────────────── */
+  /* ── Wire up ────────────────────────────────────────────────── */
   var ciCal, coCal;
 
   ciCal = Calendar({
-    btnId:    'checkin-btn-'     + formId,
-    displayId:'checkin-display-' + formId,
-    valId:    'checkin-val-'     + formId,
-    panelId:  'checkin-cal-'     + formId,
-    getMin: function () { return toISO(TODAY); },
-    onPick: function (iso) {
-      /* auto-set checkout to next day if not already later */
-      var nextDay   = toISO(addDays(fromISO(iso), 1));
-      var coSel     = coCal.getSelected();
-      if (!coSel || coSel <= iso) coCal.pick(nextDay);
-      /* open checkout calendar so user can adjust */
+    btnId:'checkin-btn-'+formId, displayId:'checkin-display-'+formId,
+    valId:'checkin-val-'+formId, panelId:'checkin-cal-'+formId,
+    getMin: function(){ return toISO(TODAY); },
+    onPick: function(iso){
+      var next = toISO(addDays(fromISO(iso), 1));
+      if (!coCal.getSelected() || coCal.getSelected() <= iso) coCal.pick(next);
       coCal.open();
     }
   });
 
   coCal = Calendar({
-    btnId:    'checkout-btn-'     + formId,
-    displayId:'checkout-display-' + formId,
-    valId:    'checkout-val-'     + formId,
-    panelId:  'checkout-cal-'     + formId,
-    getMin: function () {
+    btnId:'checkout-btn-'+formId, displayId:'checkout-display-'+formId,
+    valId:'checkout-val-'+formId, panelId:'checkout-cal-'+formId,
+    getMin: function(){
       var ci = ciCal.getSelected();
-      return ci ? toISO(addDays(fromISO(ci), 1)) : toISO(addDays(TODAY, 1));
+      return ci ? toISO(addDays(fromISO(ci),1)) : toISO(addDays(TODAY,1));
     }
   });
 
-  /* ── Close on outside click ──────────────────────────────────── */
-  document.addEventListener('click', function () {
-    document.querySelectorAll('[data-cal-panel]').forEach(function (p) {
-      p.classList.add('hidden');
+  /* close on outside click */
+  document.addEventListener('click', function(){
+    document.querySelectorAll('[data-cal-panel]').forEach(function(p){ p.classList.add('hidden'); });
+  });
+
+  /* reposition on scroll/resize so panel tracks button */
+  ['scroll','resize'].forEach(function(ev){
+    window.addEventListener(ev, function(){
+      ['checkin-cal-'+formId,'checkout-cal-'+formId].forEach(function(id){
+        var p = document.getElementById(id);
+        var b = document.getElementById(p.id.replace('-cal-','checkout-cal-'===id?'checkout-btn-':'checkin-btn-').replace('-cal-'+formId, '-btn-'+formId));
+        if (p && b && !p.classList.contains('hidden')) positionPanel(p, b);
+      });
+    }, {passive:true});
+  });
+
+  /* +/− counters */
+  var form = document.getElementById('booking-form-'+formId);
+  form.querySelectorAll('[data-action]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var inp = document.getElementById(btn.dataset.target);
+      if (!inp) return;
+      var v = parseInt(inp.value)||0;
+      inp.value = btn.dataset.action==='inc' ? Math.min(v+1,parseInt(inp.max)||99) : Math.max(v-1,parseInt(inp.min)||0);
     });
   });
 
-  /* ── +/− counters ────────────────────────────────────────────── */
-  var form = document.getElementById('booking-form-' + formId);
-  form.querySelectorAll('[data-action]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var input = document.getElementById(btn.dataset.target);
-      if (!input) return;
-      var val = parseInt(input.value) || 0;
-      input.value = btn.dataset.action === 'inc'
-        ? Math.min(val + 1, parseInt(input.max) || 99)
-        : Math.max(val - 1, parseInt(input.min) || 0);
-    });
-  });
-
-  /* ── Submit ──────────────────────────────────────────────────── */
-  form.addEventListener('submit', function (e) {
+  /* submit */
+  form.addEventListener('submit', function(e){
     e.preventDefault();
-    var checkIn  = document.getElementById('checkin-val-'  + formId).value;
-    var checkOut = document.getElementById('checkout-val-' + formId).value;
-    var adults   = document.getElementById('adults-'       + formId).value;
-    var children = document.getElementById('children-'     + formId).value;
-
-    if (!checkIn)  { ciCal.open(); return; }
-    if (!checkOut) { coCal.open(); return; }
-
-    window.location.href = '/reservar'
-      + '?checkin='  + checkIn
-      + '&checkout=' + checkOut
-      + '&numadult=' + adults
-      + '&numchild=' + children;
+    var ci = document.getElementById('checkin-val-'+formId).value;
+    var co = document.getElementById('checkout-val-'+formId).value;
+    var ad = document.getElementById('adults-'+formId).value;
+    var ch = document.getElementById('children-'+formId).value;
+    if (!ci){ ciCal.open(); return; }
+    if (!co){ coCal.open(); return; }
+    window.location.href = '/reservar?checkin='+ci+'&checkout='+co+'&numadult='+ad+'&numchild='+ch;
   });
 
 })();
