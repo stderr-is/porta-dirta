@@ -87,10 +87,16 @@ import GarlandDivider from '../components/GarlandDivider.astro';
 
       out.set('propid', PROP_ID);
 
-      // Forward params — Beds24 booking2.php uses checkin/checkout/numadult/numchild
-      ['checkin', 'checkout', 'numadult', 'numchild', 'room'].forEach(function (key) {
+      // Forward params — Beds24 booking2.php uses checkin/checkout/numadult/numchild/lang
+      ['checkin', 'checkout', 'numadult', 'numchild', 'room', 'lang'].forEach(function (key) {
         if (incoming.has(key)) out.set(key, incoming.get(key));
       });
+
+      // Fallback: if no lang param, use the page's HTML lang attribute
+      if (!incoming.has('lang')) {
+        var pageLang = document.documentElement.lang;
+        if (pageLang) out.set('lang', pageLang);
+      }
 
       // ── Booking summary strip ──────────────────────────────────
       var checkin  = incoming.get('checkin');
