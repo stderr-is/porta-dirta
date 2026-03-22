@@ -2,9 +2,10 @@
 /**
  * reservar.astro — Dedicated booking page for Porta D'irta
  *
- * Receives date/guest params from the Beds24 BookingBox widget
- * (checkin, checkout, numadult, numchild) and passes them into
- * the Beds24 full booking iframe so the flow stays on this site.
+ * Receives date/guest params from BookingSearchForm:
+ *   arrival, departure, numadult, numchild
+ * Embeds the full Beds24 booking flow in an iframe so the user
+ * stays on portadirta.com throughout the entire booking.
  */
 
 import Layout from '../layouts/Layout.astro';
@@ -68,7 +69,8 @@ import GarlandDivider from '../components/GarlandDivider.astro';
       out.set('propid', PROP_ID);
 
       // Forward recognised booking params
-      ['checkin', 'checkout', 'numadult', 'numchild', 'room'].forEach(function (key) {
+      // Our form sends: arrival, departure, numadult, numchild
+      ['arrival', 'departure', 'numadult', 'numchild', 'room'].forEach(function (key) {
         if (incoming.has(key)) out.set(key, incoming.get(key));
       });
 

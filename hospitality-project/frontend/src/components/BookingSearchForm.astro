@@ -1,0 +1,244 @@
+---
+/**
+ * BookingSearchForm.astro — Custom glassmorphism booking search form
+ *
+ * Replaces the Beds24 jQuery widget. Collects check-in / check-out /
+ * adults / children, then redirects to the Beds24 booking page with
+ * the parameters pre-filled in the URL. Beds24 handles availability
+ * display, room selection, and payment from that point.
+ *
+ * Redirect URL format:
+ *   https://beds24.com/booking2.php?propid=318433
+ *     &arrival=YYYY-MM-DD&departure=YYYY-MM-DD
+ *     &numadult=N&numchild=N
+ *
+ * Props:
+ *   formId   — unique string ID; must be different for each instance
+ *              on the same page (hero uses "hero", section uses "sec")
+ */
+
+interface Props {
+  formId: string;
+}
+
+const { formId } = Astro.props;
+
+const PROP_ID = 318433;
+---
+
+<form
+  id={`booking-form-${formId}`}
+  novalidate
+  class="w-full"
+  aria-label="Formulario de búsqueda de disponibilidad"
+>
+
+  <!-- ── Fields grid ───────────────────────────────────────── -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+
+    <!-- Check-in -->
+    <div class="flex flex-col gap-1.5">
+      <label
+        for={`checkin-${formId}`}
+        class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90"
+      >
+        Llegada
+      </label>
+      <div class="relative">
+        <input
+          type="date"
+          id={`checkin-${formId}`}
+          name="checkin"
+          required
+          class="w-full bg-white/15 border border-white/30 text-white rounded-xl px-4 py-3 font-body text-sm
+                 focus:outline-none focus:border-brand-gold/70 focus:bg-white/20 transition-colors duration-200
+                 [color-scheme:dark] cursor-pointer"
+        />
+      </div>
+    </div>
+
+    <!-- Check-out -->
+    <div class="flex flex-col gap-1.5">
+      <label
+        for={`checkout-${formId}`}
+        class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90"
+      >
+        Salida
+      </label>
+      <input
+        type="date"
+        id={`checkout-${formId}`}
+        name="checkout"
+        required
+        class="w-full bg-white/15 border border-white/30 text-white rounded-xl px-4 py-3 font-body text-sm
+               focus:outline-none focus:border-brand-gold/70 focus:bg-white/20 transition-colors duration-200
+               [color-scheme:dark] cursor-pointer"
+      />
+    </div>
+
+    <!-- Adults counter -->
+    <div class="flex flex-col gap-1.5">
+      <label
+        for={`adults-${formId}`}
+        class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90"
+      >
+        Adultos
+      </label>
+      <div class="flex items-center bg-white/15 border border-white/30 rounded-xl overflow-hidden h-[46px]">
+        <button
+          type="button"
+          data-action="dec"
+          data-target={`adults-${formId}`}
+          aria-label="Reducir adultos"
+          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
+                 text-xl leading-none transition-colors duration-200 h-full select-none"
+        >−</button>
+        <input
+          type="number"
+          id={`adults-${formId}`}
+          name="adults"
+          value="2"
+          min="1"
+          max="10"
+          readonly
+          class="flex-1 min-w-0 bg-transparent text-white text-center font-body text-sm focus:outline-none"
+        />
+        <button
+          type="button"
+          data-action="inc"
+          data-target={`adults-${formId}`}
+          aria-label="Aumentar adultos"
+          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
+                 text-xl leading-none transition-colors duration-200 h-full select-none"
+        >+</button>
+      </div>
+    </div>
+
+    <!-- Children counter -->
+    <div class="flex flex-col gap-1.5">
+      <label
+        for={`children-${formId}`}
+        class="font-body text-xs uppercase tracking-[0.2em] text-brand-gold/90"
+      >
+        Niños
+      </label>
+      <div class="flex items-center bg-white/15 border border-white/30 rounded-xl overflow-hidden h-[46px]">
+        <button
+          type="button"
+          data-action="dec"
+          data-target={`children-${formId}`}
+          aria-label="Reducir niños"
+          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
+                 text-xl leading-none transition-colors duration-200 h-full select-none"
+        >−</button>
+        <input
+          type="number"
+          id={`children-${formId}`}
+          name="children"
+          value="0"
+          min="0"
+          max="6"
+          readonly
+          class="flex-1 min-w-0 bg-transparent text-white text-center font-body text-sm focus:outline-none"
+        />
+        <button
+          type="button"
+          data-action="inc"
+          data-target={`children-${formId}`}
+          aria-label="Aumentar niños"
+          class="w-11 flex-shrink-0 flex items-center justify-center text-white/70 hover:text-brand-gold
+                 text-xl leading-none transition-colors duration-200 h-full select-none"
+        >+</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Submit ────────────────────────────────────────────── -->
+  <button
+    type="submit"
+    class="w-full bg-brand-gold text-brand-blue font-body text-sm uppercase tracking-[0.2em] font-medium
+           rounded-xl px-8 py-4 hover:bg-brand-stone transition-colors duration-200 mt-1"
+  >
+    Comprobar disponibilidad
+  </button>
+
+  <!-- ── Reassurance ──────────────────────────────────────── -->
+  <p class="text-white/40 text-xs text-center mt-3 font-body">
+    Reserva segura &middot; Confirmación inmediata &middot; Sin cargos por cancelación anticipada
+  </p>
+
+</form>
+
+<!-- ── Inline script (scoped to this form instance) ─────── -->
+<script is:inline define:vars={{ formId, PROP_ID }}>
+(function () {
+  function toISO(d) {
+    return d.toISOString().split('T')[0];
+  }
+
+  // Default dates: tomorrow (check-in) and 3 days out (check-out, 2 nights)
+  var tomorrow  = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+  var plusTwo   = new Date(); plusTwo.setDate(plusTwo.getDate() + 3);
+
+  var ciEl = document.getElementById('checkin-'  + formId);
+  var coEl = document.getElementById('checkout-' + formId);
+
+  if (ciEl) { ciEl.min = toISO(tomorrow); ciEl.value = toISO(tomorrow); }
+  if (coEl) { coEl.min = toISO(tomorrow); coEl.value = toISO(plusTwo);  }
+
+  // Keep checkout min in sync when checkin changes
+  if (ciEl && coEl) {
+    ciEl.addEventListener('change', function () {
+      var ci = new Date(ciEl.value + 'T00:00:00');
+      var nextDay = new Date(ci); nextDay.setDate(ci.getDate() + 1);
+      coEl.min = toISO(nextDay);
+      if (coEl.value <= ciEl.value) coEl.value = toISO(nextDay);
+    });
+  }
+
+  // +/- counter buttons
+  var form = document.getElementById('booking-form-' + formId);
+  if (!form) return;
+
+  form.querySelectorAll('[data-action]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var input = document.getElementById(btn.dataset.target);
+      if (!input) return;
+      var val = parseInt(input.value) || 0;
+      var min = parseInt(input.min)   || 0;
+      var max = parseInt(input.max)   || 99;
+      if (btn.dataset.action === 'inc') input.value = Math.min(val + 1, max);
+      if (btn.dataset.action === 'dec') input.value = Math.max(val - 1, min);
+    });
+  });
+
+  // Submit → redirect to Beds24 booking page with params
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var checkIn  = document.getElementById('checkin-'   + formId).value;
+    var checkOut = document.getElementById('checkout-'  + formId).value;
+    var adults   = document.getElementById('adults-'    + formId).value;
+    var children = document.getElementById('children-'  + formId).value;
+
+    if (!checkIn || !checkOut) {
+      // Highlight empty date fields
+      [document.getElementById('checkin-' + formId), document.getElementById('checkout-' + formId)]
+        .forEach(function (el) {
+          if (el && !el.value) el.classList.add('border-red-400');
+        });
+      return;
+    }
+
+    // Redirect to /reservar — our branded page that embeds
+    // the full Beds24 booking flow in an iframe (user stays on site)
+    var url = '/reservar'
+      + '?arrival='  + checkIn
+      + '&departure='+ checkOut
+      + '&numadult=' + adults
+      + '&numchild=' + children;
+
+    window.location.href = url;
+  });
+})();
+</script>
