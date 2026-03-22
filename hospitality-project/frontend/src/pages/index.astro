@@ -63,8 +63,14 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
       <!-- Garland divider -->
       <GarlandDivider light />
 
+      <!-- TODO: REMOVE BEFORE LAUNCH — beta disclaimer -->
+      <div class="w-full bg-amber-400/90 border border-amber-300 text-amber-950 font-body text-xs px-4 py-2 rounded-lg text-center">
+        ⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente:
+        <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
+      </div>
+
       <!-- Booking form — frosted glass pill -->
-      <div class="w-full mt-2 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl px-5 py-4 shadow-lg">
+      <div class="w-full backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl px-5 py-4 shadow-lg">
         <BookingSearchForm formId="home" />
       </div>
 
