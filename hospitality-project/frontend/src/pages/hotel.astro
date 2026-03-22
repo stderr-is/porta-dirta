@@ -38,8 +38,8 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
     <!-- Brand-blue overlay -->
     <div class="absolute inset-0 bg-brand-forest/50"></div>
 
-    <!-- Hero content -->
-    <div class="relative z-10 flex flex-col items-center text-center px-6 py-24 md:py-32 max-w-5xl mx-auto">
+    <!-- Hero content — centred, above the booking bar -->
+    <div class="relative z-10 flex flex-col items-center text-center px-6 pb-36 pt-24 md:pt-32 max-w-5xl mx-auto">
 
       <!-- Label -->
       <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-6">
@@ -47,29 +47,43 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
       </p>
 
       <!-- Main heading -->
-      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight mb-10">
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
         Tu refugio mediterráneo
       </h1>
 
-      <!-- TODO: REMOVE BEFORE LAUNCH — beta disclaimer -->
-      <div class="w-full max-w-2xl mx-auto mb-4 bg-amber-400/90 border border-amber-300 text-amber-950 font-body text-sm px-4 py-3 rounded-lg text-center">
-        ⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente por teléfono:
-        <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
-      </div>
-
-      <!-- Custom booking search form -->
-      <div class="w-full max-w-2xl mx-auto backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 md:p-8">
-        <BookingSearchForm formId="hero" />
-      </div>
-
     </div>
 
-    <!-- Scroll cue -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-70">
+    <!-- Scroll cue — sits above the booking bar -->
+    <div class="absolute bottom-28 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-70">
       <span class="text-white font-body text-xs tracking-widest uppercase">Descubrir</span>
       <svg class="w-5 h-5 text-brand-gold animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
       </svg>
+    </div>
+
+    <!-- Booking bar — pinned to bottom of hero, same style as homepage -->
+    <div class="absolute bottom-0 left-0 right-0 z-20" aria-label="Reserva tu estancia">
+      <div class="backdrop-blur-md bg-brand-forest/55 border-t border-white/15">
+
+        <!-- TODO: REMOVE BEFORE LAUNCH — beta disclaimer -->
+        <div class="bg-amber-400/90 border-b border-amber-300 text-amber-950 font-body text-xs px-4 py-2 text-center">
+          ⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente por teléfono:
+          <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-6 py-5">
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <div class="hidden md:flex flex-col gap-0.5 pr-6 border-r border-white/20 flex-shrink-0">
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Reservar</span>
+              <span class="font-body text-xs text-white/50">Disponibilidad inmediata</span>
+            </div>
+            <div class="flex-1 w-full [&_p.text-white\/40]:hidden">
+              <BookingSearchForm formId="hero" />
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
   </section>
