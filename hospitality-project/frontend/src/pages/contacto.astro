@@ -287,6 +287,22 @@ import Layout from '../layouts/Layout.astro';
                 ></textarea>
               </div>
 
+              <!-- RGPD: Consentimiento (Art. 6.1.a RGPD) -->
+              <div class="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="rgpd"
+                  name="rgpd"
+                  required
+                  class="mt-1 h-4 w-4 flex-shrink-0 rounded border-brand-stone/40 text-brand-blue focus:ring-brand-blue"
+                />
+                <label for="rgpd" class="font-body text-xs text-brand-stone/80 leading-relaxed">
+                  He leído y acepto la
+                  <a href="/privacidad" target="_blank" class="underline hover:text-brand-blue">Política de Privacidad</a>.
+                  Consiento el tratamiento de mis datos para atender mi consulta. *
+                </label>
+              </div>
+
               <!-- Inline error message (hidden by default) -->
               <p
                 id="form-error"

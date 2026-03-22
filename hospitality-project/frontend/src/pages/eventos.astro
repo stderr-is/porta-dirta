@@ -668,6 +668,22 @@ function fmtFecha(d: Date) {
             ></textarea>
           </div>
 
+          <!-- RGPD: Consentimiento (Art. 6.1.a RGPD) -->
+          <div class="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="rgpd"
+              name="rgpd"
+              required
+              class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold"
+            />
+            <label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">
+              He leído y acepto la
+              <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold">Política de Privacidad</a>.
+              Consiento el tratamiento de mis datos para atender mi consulta de evento. *
+            </label>
+          </div>
+
           <!-- Submit button -->
           <div class="flex flex-col items-center gap-4 pt-2">
             <button

@@ -132,6 +132,7 @@ tags: [wbs, planning, execution]
 **Automation:** Cron job for nightly encrypted PostgreSQL dumps of TastyIgniter/Hi.Events to a separate drive.
 
 ## Pre-Launch Checklist (before going live)
+- [ ] **Fill legal page placeholders** — edit `legal.astro` and `privacidad.astro`: replace `[NOMBRE COMPLETO DEL TITULAR O RAZÓN SOCIAL]`, `[NIF/CIF]`, and `[Registro Mercantil...]` with real data. These show as bold red on the live page until filled.
 - [ ] **Remove beta disclaimer banners** from 3 pages — search `TODO: REMOVE BEFORE LAUNCH`:
   - `frontend/src/pages/hotel.astro` — above Beds24 hero widget AND above booking anchor widget
   - `frontend/src/pages/restaurante.astro` — above reservation form
@@ -145,6 +146,9 @@ tags: [wbs, planning, execution]
 - [ ] **Remove beta disclaimer from Beds24 email templates** — done manually in Beds24 dashboard → Templates
 - [ ] **Remove beta disclaimer from n8n "Check-in Tomorrow" workflow** — edit the SMTP send node body
 - [ ] Set Cloudflare Pages env vars to production URLs (replace `hobbitonranch.com` → `portadirta.com` subdomains)
+- [x] **Legal pages created** — `/legal` (Aviso Legal LSSI-CE), `/privacidad` (GDPR privacy policy), `/cookies` (EU Cookie Directive). All 3 footer links now resolve. Placeholders [NOMBRE TITULAR] and [NIF/CIF] must be filled before launch.
+- [x] **GDPR consent checkboxes** — added to all 4 forms: contacto, restaurante, eventos, experiencias. Each links to /privacidad. Required field (HTML5 `required`).
+- [x] **CSP fixed** — added Google Maps to `frame-src` and `connect-src` (was blocked, causing broken map embed in contacto page).
 
 ## Phase 5: Closing (Handover & Launch)
 *Goal: Prepare the human operators for the technical system.*
