@@ -10,6 +10,7 @@ const isNode = process.env.BUILD_TARGET === 'node';
 // https://astro.build/config
 export default defineConfig({
   output: isNode ? 'server' : 'static',
+  trailingSlash: 'never',
 
   ...(isNode && {
     adapter: node({ mode: 'standalone' }),
