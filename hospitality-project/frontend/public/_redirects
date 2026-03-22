@@ -1,0 +1,7 @@
+# Remove trailing slashes
+/hotel/         /hotel          301
+/restaurante/   /restaurante    301
+/experiencias/  /experiencias   301
+/eventos/       /eventos        301
+/contacto/      /contacto       301
+/reservar/      /reservar       301
