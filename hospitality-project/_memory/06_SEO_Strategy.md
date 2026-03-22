@@ -49,11 +49,14 @@ tags: [seo, marketing, content, local, ai-crawlers]
 - [ ] Add Google Site Verification meta tag slot in `Layout.astro`
 - [ ] Update `robots.txt` with AI crawler rules (see section below)
 - [ ] Add indexable HTML room content to `/hotel` **outside the iframe** (name, description, price, amenities per room)
+  - **Future improvement (blocked on Beds24 token):** Once `BEDS24_API_KEY` is set in Cloudflare Pages env vars, replace manual HTML with a build-time SSG fetch via `src/lib/beds24.ts` in `hotel.astro` frontmatter. This keeps room names/descriptions/prices automatically in sync with the booking engine with no manual double-entry.
 - [ ] Add HTML menu content to `/restaurante` (section headings + representative dishes — not a PDF)
 - [ ] Expand `LodgingBusiness` JSON-LD: add `numberOfRooms: 3`, `checkinTime`, `checkoutTime`, `acceptsReservations`, `currenciesAccepted`, `hasMap`
 - [ ] Expand `Restaurant` JSON-LD: add `acceptsReservations: true`, `menu` URL, `servesCuisine` array, `currenciesAccepted`
+- [ ] **Dual-entity schema linking** — add `containsPlace` to `LodgingBusiness` pointing at the Restaurant entity, and `isContainedInPlace` on the Restaurant pointing back at the Hotel. Google treats these as separate local entities — this helps the restaurant rank independently in "restaurants near me" searches without being diluted by the hotel profile.
 - [ ] Add `BreadcrumbList` JSON-LD to all interior pages
 - [ ] Add `FAQPage` JSON-LD to `/hotel` with common guest questions
+- [ ] **`prefers-reduced-motion` for video hero** — if user has this accessibility setting enabled, skip the `<video>` element entirely and display only the poster image. Implement via CSS media query on the `<video>` tag (`@media (prefers-reduced-motion: reduce) { video { display: none; } }`) combined with ensuring the poster `<img>` is always rendered in the DOM (not just as a video attribute).
 
 ### Manual actions (no code)
 - [ ] **Create Google Business Profile** — business.google.com — START NOW (postcard verification takes 2 weeks)

@@ -83,6 +83,13 @@ Beds24 webhook / Email IMAP / Telegram voice+text / Cron
 - Store `{messageKey, forceReplyMsgId}` in static data
 - When Ricardo replies (detected by `reply_to_message.message_id` match) → update draft body → re-present with `[✅ Approve & Send]`
 
+### Regenerate flow (Workflow A2)
+- `[🔄 Regenerate]` button added alongside `[✅ Approve & Send]` and `[✏️ Edit]`
+- callback_data: `regenerate_{messageKey}`
+- Re-calls Claude with the same input but `temperature: 0.9` (vs. 0.3 default) for a varied tone
+- Overwrites the stored draft, re-presents the three buttons
+- Use case: first draft is too formal, too short, or missed the guest's tone
+
 ### Idempotency
 - `messageKey` derived from email `Message-ID` header (base64, first 20 chars)
 - Processed keys stored in static data with timestamp; ignored on re-trigger
@@ -112,6 +119,10 @@ Beds24 webhook / Email IMAP / Telegram voice+text / Cron
 8. **API Executor** HTTP node calls Beds24 / TastyIgniter / Hi.Events
 9. **Audit Log** Code node records entry
 10. Telegram sends `humanReadableSummary` back to user
+11. **API Executor error branch:** if HTTP node fails (Beds24 down, 401 expired token, 5xx) →
+    - Immediate high-priority Telegram alert to Admin: "🔴 API ERROR: {endpoint} failed — {status}. Check Beds24 token or service status."
+    - Write to Audit Log with `result: "error"`
+    - Do NOT silently fail — booking-path failures are critical
 
 ### Destructive actions (require confirmation)
 - Beds24: block room, update price, cancel booking
@@ -131,11 +142,22 @@ Beds24 webhook / Email IMAP / Telegram voice+text / Cron
 
 ### C1 — Cross-sell (Beds24 booking confirmed webhook)
 1. Beds24 webhook → extract guest name, email, check-in date, adult count
-2. **24h wait** (guests settle before upsell hits)
+2. **Last-minute logic** (IF node on time delta):
+   - Check-in < 48h away → **1h wait** (guest is in active planning mode right now)
+   - Check-in ≥ 48h away → **24h wait** (standard — guest settles before upsell hits)
 3. Compose personalized email:
    - Restaurant link pre-filled: `/restaurante?fecha={checkin}&personas={adults}&nombre={name}&email={email}`
    - Hi.Events link for experiences
-4. Send via SMTP — no Gemini needed, pure rule-based
+4. Send via SMTP — no Claude needed, pure rule-based
+
+### C3 — Flash Sale Anomaly Detector (daily cron 16:00)
+1. Beds24 API → check occupancy for **tonight** only
+2. IF any room is still unbooked → calculate flash sale price (floor price from `pricing-rules.json`)
+3. Telegram to Ricardo:
+   > "🚨 *Suite Panorámica* sigue vacía esta noche. Precio flash sugerido: **€200**. ¿Aplicar?"
+   > `[💰 Aplicar precio flash]` `[🙈 Ignorar]`
+4. `[Aplicar]` callback → Beds24 price update → confirmation sent
+5. No action needed if all rooms are booked (workflow exits silently)
 
 ### C2 — Yield analysis (daily cron 02:00)
 1. Beds24 API → forward occupancy for next 30 days
@@ -187,6 +209,20 @@ Body:
 Response text extracted in Code node: `geminiRaw.content?.[0]?.text || '{}'`
 Models used: `claude-haiku-4-5-20251001` for all workflows. Email concierge uses `max_tokens: 2048`.
 Voice transcription not supported — voice messages get a "please use text" Telegram reply.
+
+## Beds24 Rate Limit Mitigation
+
+Beds24 API V2 allows only 1 concurrent request per token. If multiple n8n workflows trigger simultaneously (e.g. booking webhook + yield cron), 429 errors occur.
+
+**Mitigation (simple approach — no global queue needed):**
+- Add a **2-second Wait node** at the start of every workflow that calls Beds24
+- Exponential backoff already exists in `beds24.ts` for the frontend side
+- Workflow C (yield cron) runs at 02:00 — low collision risk with webhooks
+- If 429 is received in any n8n HTTP node → retry after 5s, max 3 retries → if still failing, send Telegram alert (same error branch as above)
+
+**Note:** n8n does not have a native global queue. A full queue implementation would require Redis + n8n Queue Mode — not justified at current scale (3 rooms). Revisit if volume increases significantly.
+
+---
 
 ## Audit Log Format
 
