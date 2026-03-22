@@ -52,7 +52,7 @@ const PROP_ID = 318433;
           required
           class="w-full bg-white/15 border border-white/30 text-white rounded-xl px-4 py-3 font-body text-sm
                  focus:outline-none focus:border-brand-gold/70 focus:bg-white/20 transition-colors duration-200
-                 [color-scheme:dark] cursor-pointer"
+                 cursor-pointer"
         />
       </div>
     </div>
@@ -72,7 +72,7 @@ const PROP_ID = 318433;
         required
         class="w-full bg-white/15 border border-white/30 text-white rounded-xl px-4 py-3 font-body text-sm
                focus:outline-none focus:border-brand-gold/70 focus:bg-white/20 transition-colors duration-200
-               [color-scheme:dark] cursor-pointer"
+               cursor-pointer"
       />
     </div>
 
@@ -231,10 +231,11 @@ const PROP_ID = 318433;
     }
 
     // Redirect to /reservar — our branded page that embeds
-    // the full Beds24 booking flow in an iframe (user stays on site)
+    // the full Beds24 booking flow in an iframe (user stays on site).
+    // Param names match what Beds24's booking2.php expects.
     var url = '/reservar'
-      + '?arrival='  + checkIn
-      + '&departure='+ checkOut
+      + '?checkin='  + checkIn
+      + '&checkout=' + checkOut
       + '&numadult=' + adults
       + '&numchild=' + children;
 
