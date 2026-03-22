@@ -473,7 +473,6 @@ import Layout from '../layouts/Layout.astro';
 
       } catch (err) {
         // Error — show inline error, re-enable button
-        console.error('Contact form error:', err);
         errorMsg.classList.remove('hidden');
         submitBtn.removeAttribute('disabled');
         submitBtn.textContent = 'Enviar Mensaje';

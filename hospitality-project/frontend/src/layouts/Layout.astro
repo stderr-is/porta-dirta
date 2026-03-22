@@ -38,6 +38,9 @@ const {
 
 // Construct full page title with brand suffix
 const fullTitle = `${title} | Porta D'irta`;
+
+// Canonical URL — always points to www.portadirta.com regardless of how the page was requested
+const canonicalUrl = new URL(Astro.url.pathname, 'https://www.portadirta.com').href;
 ---
 
 <!doctype html>
@@ -57,6 +60,7 @@ const fullTitle = `${title} | Porta D'irta`;
     <!-- ── SEO ────────────────────────────────────────────────── -->
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

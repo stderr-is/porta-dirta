@@ -21,6 +21,41 @@ import GarlandDivider from '../components/GarlandDivider.astro';
   ogImage="/assets/images/food-paella-wine.jpg"
 >
 
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Restaurante Porta D'irta",
+    "description": "Cocina mediterránea de temporada con producto local y vistas al mar en Peñíscola.",
+    "url": "https://www.portadirta.com/restaurante",
+    "telephone": "+34644026066",
+    "servesCuisine": "Mediterránea",
+    "priceRange": "€€€",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Camí del Pebret, s/n",
+      "addressLocality": "Peñíscola",
+      "addressRegion": "Castellón",
+      "postalCode": "12598",
+      "addressCountry": "ES"
+    },
+    "image": "https://www.portadirta.com/assets/images/food-paella-wine.jpg",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "13:00",
+        "closes": "16:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "20:00",
+        "closes": "22:00"
+      }
+    ],
+    "hasMap": "https://maps.google.com/?q=Porta+D%27irta+Pe%C3%B1%C3%ADscola"
+  })} />
+
   <!-- ================================================================
        SECTION 1 — HERO
        ================================================================ -->
@@ -142,6 +177,7 @@ import GarlandDivider from '../components/GarlandDivider.astro';
           <img
             src="/assets/images/food-paella-serving.jpg"
             alt="Chef preparando un plato mediterráneo en la cocina"
+            width="800" height="600"
             class="w-full h-auto rounded-sm shadow-xl object-cover"
             loading="lazy"
             decoding="async"

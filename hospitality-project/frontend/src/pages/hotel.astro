@@ -22,6 +22,37 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
   ogImage="/assets/images/property-aerial-twilight.jpg"
 >
 
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "name": "Porta D'irta",
+    "description": "Villa boutique frente al Mediterráneo en Peñíscola. Habitaciones y suites con vistas al mar, restaurante y experiencias únicas.",
+    "url": "https://www.portadirta.com/hotel",
+    "telephone": "+34644026066",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Camí del Pebret, s/n",
+      "addressLocality": "Peñíscola",
+      "addressRegion": "Castellón",
+      "postalCode": "12598",
+      "addressCountry": "ES"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 40.3600,
+      "longitude": 0.4087
+    },
+    "image": "https://www.portadirta.com/assets/images/property-aerial-twilight.jpg",
+    "priceRange": "€€€",
+    "starRating": { "@type": "Rating", "ratingValue": "4" },
+    "amenityFeature": [
+      { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Piscina", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Restaurante", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Aire acondicionado", "value": true }
+    ]
+  })} />
+
   <!-- ═══════════════════════════════════════════════════════════════════
        SECTION 1 · HERO
        Full-viewport background with availability search bar
@@ -169,12 +200,14 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
         <img
           src="/assets/images/room-1.jpg"
           alt="Interior de la villa Porta D'irta"
+          width="600" height="400"
           class="w-full rounded-xl object-cover shadow-lg"
         />
         <!-- REPLACE: real photo -->
         <img
           src="/assets/images/terrace-breakfast.jpg"
           alt="Terraza y jardín de Porta D'irta"
+          width="600" height="400"
           class="w-full rounded-xl object-cover shadow-lg"
         />
       </div>
@@ -206,6 +239,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
             <img
               src="/assets/images/room-2.jpg"
               alt="Habitación Mediterránea en Porta D'irta"
+              width="600" height="400"
               class="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
             />
             <!-- Price badge -->
@@ -249,6 +283,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
             <img
               src="/assets/images/room-3.jpg"
               alt="Suite Junior en Porta D'irta"
+              width="600" height="400"
               class="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
             />
             <div class="absolute top-4 right-4 bg-brand-blue/90 backdrop-blur-sm text-white font-body text-xs px-3 py-1.5 rounded-full">
@@ -295,6 +330,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
             <img
               src="/assets/images/room-4.jpg"
               alt="Suite Panorámica con vistas al mar en Porta D'irta"
+              width="600" height="400"
               class="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
             />
             <div class="absolute top-4 right-4 bg-brand-blue/90 backdrop-blur-sm text-white font-body text-xs px-3 py-1.5 rounded-full">

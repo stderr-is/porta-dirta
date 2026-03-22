@@ -10,9 +10,10 @@
  * Recommended initial delay: 500ms, max delay: 30s, max retries: 5.
  */
 
-// REPLACE: add real token from Beds24 Account → Apps & Integrations → API
-export const BEDS24_API_TOKEN = 'BEDS24_API_TOKEN';
-export const BEDS24_PROPERTY_ID = 'BEDS24_PROPERTY_ID';
+// Reserved for future SSR use — not imported by any page in SSG mode.
+// Token comes from env var set in docker-compose.yml (Hostinger) or Cloudflare Pages env vars.
+export const BEDS24_API_TOKEN = import.meta.env.BEDS24_API_KEY ?? '';
+export const BEDS24_PROPERTY_ID = import.meta.env.BEDS24_PROP_ID ?? '318433';
 
 const BASE_URL = 'https://beds24.com/api/v2';
 

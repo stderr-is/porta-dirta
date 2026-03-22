@@ -9,6 +9,7 @@ const isNode = process.env.BUILD_TARGET === 'node';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://www.portadirta.com',
   output: isNode ? 'server' : 'static',
   trailingSlash: 'never',
 
