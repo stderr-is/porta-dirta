@@ -39,6 +39,25 @@ function fmtFecha(d: Date) {
   ogImage="/assets/images/property-aerial-pool.jpg"
 >
 
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://www.portadirta.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Eventos",
+        "item": "https://www.portadirta.com/eventos"
+      }
+    ]
+  })} />
+
   <!-- ============================================================
        SECTION 1: HERO
        Full-viewport, photo background with brand-blue overlay.
@@ -498,7 +517,7 @@ function fmtFecha(d: Date) {
       try {
         const raw = Object.fromEntries(new FormData(form));
         const data = { ...raw, experiencia: raw['tipo-evento'], personas: raw.invitados };
-        const res = await fetch(`${import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081'}/api/public/contact`, {
+        const res = await fetch(`${import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'https://restaurant.portadirta.com'}/api/public/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -541,7 +560,7 @@ function fmtFecha(d: Date) {
       </div>
 
       <!-- Frosted glass form card -->
-      <div class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12">
+      <div class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-4 sm:p-8 md:p-12">
 
         <form
           id="eventos-form"

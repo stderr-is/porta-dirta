@@ -13,6 +13,7 @@
 
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
+import SustainabilityStatus from '../components/SustainabilityStatus.astro';
 import BookingSearchForm from '../components/BookingSearchForm.astro';
 ---
 
@@ -22,36 +23,95 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
   ogImage="/assets/images/property-aerial-twilight.jpg"
 >
 
-  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "LodgingBusiness",
-    "name": "Porta D'irta",
-    "description": "Villa boutique frente al Mediterráneo en Peñíscola. Habitaciones y suites con vistas al mar, restaurante y experiencias únicas.",
-    "url": "https://www.portadirta.com/hotel",
-    "telephone": "+34644026066",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Camí del Pebret, s/n",
-      "addressLocality": "Peñíscola",
-      "addressRegion": "Castellón",
-      "postalCode": "12598",
-      "addressCountry": "ES"
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify([
+    {
+      "@context": "https://schema.org",
+      "@type": "LodgingBusiness",
+      "name": "Porta D'irta",
+      "description": "Porta D'irta is a 3-room boutique hotel in Peñíscola, on the Costa del Azahar (Castellón, Spain), with rooms from €120/night. It features sea view suites, a private pool, and Mediterranean gardens.",
+      "url": "https://www.portadirta.com/hotel",
+      "telephone": "+34644026066",
+      "numberOfRooms": "3",
+      "checkinTime": "15:00",
+      "checkoutTime": "11:00",
+      "currenciesAccepted": "EUR",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Camí del Pebret, s/n",
+        "addressLocality": "Peñíscola",
+        "addressRegion": "Castellón",
+        "postalCode": "12598",
+        "addressCountry": "ES"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 40.3600,
+        "longitude": 0.4087
+      },
+      "image": "https://www.portadirta.com/assets/images/property-aerial-twilight.jpg",
+      "priceRange": "€€€",
+      "starRating": { "@type": "Rating", "ratingValue": "4" },
+      "containsPlace": {
+        "@type": "Restaurant",
+        "name": "Restaurante Porta D'irta",
+        "url": "https://www.portadirta.com/restaurante"
+      },
+      "amenityFeature": [
+        { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Piscina", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Restaurante", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Aire acondicionado", "value": true }
+      ]
     },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 40.3600,
-      "longitude": 0.4087
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://www.portadirta.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Hotel",
+          "item": "https://www.portadirta.com/hotel"
+        }
+      ]
     },
-    "image": "https://www.portadirta.com/assets/images/property-aerial-twilight.jpg",
-    "priceRange": "€€€",
-    "starRating": { "@type": "Rating", "ratingValue": "4" },
-    "amenityFeature": [
-      { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true },
-      { "@type": "LocationFeatureSpecification", "name": "Piscina", "value": true },
-      { "@type": "LocationFeatureSpecification", "name": "Restaurante", "value": true },
-      { "@type": "LocationFeatureSpecification", "name": "Aire acondicionado", "value": true }
-    ]
-  })} />
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿A qué hora es el check-in y check-out en Porta D'irta?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El horario de entrada (check-in) es a partir de las 15:00 y el de salida (check-out) es hasta las 11:00."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Porta D'irta tiene vistas al mar?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, todas nuestras habitaciones y suites tienen vistas directas al mar Mediterráneo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Hay parking disponible en el hotel?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, ofrecemos parking gratuito para todos nuestros huéspedes dentro de la propiedad."
+          }
+        }
+      ]
+    }
+  ])} />
 
   <!-- ═══════════════════════════════════════════════════════════════════
        SECTION 1 · HERO
@@ -111,7 +171,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
        Two-column villa introduction
        ═══════════════════════════════════════════════════════════════════ -->
   <section class="bg-brand-cream py-24 md:py-32">
-    <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
       <!-- Left: text content -->
       <div class="flex flex-col gap-8">
@@ -133,6 +193,8 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
         <p class="font-body text-brand-stone leading-relaxed text-base">
           Nuestras habitaciones y suites conjugan el lujo contemporáneo con la calidez de la arquitectura levantina. Despierta con vistas al horizonte azul, disfruta del desayuno en nuestra terraza y deja que la brisa mediterránea dicte el ritmo de tus días. Aquí, el bienestar no es un servicio, es una forma de vida.
         </p>
+
+        <SustainabilityStatus />
 
         <!-- Feature icons row -->
         <div class="flex flex-wrap gap-6 md:gap-8 mt-4">
@@ -221,7 +283,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
        Three room cards on brand-blue background
        ═══════════════════════════════════════════════════════════════════ -->
   <section class="bg-brand-blue py-24 md:py-32">
-    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
 
       <!-- Section heading -->
       <div class="text-center mb-16">
@@ -249,6 +311,9 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
           </div>
           <div class="flex flex-col flex-1 p-6 gap-4">
             <h3 class="font-display text-2xl text-brand-blue">Habitación Mediterránea</h3>
+            <p class="font-body text-sm text-brand-stone leading-relaxed">
+              Disfruta de la esencia del Mediterráneo en nuestra habitación estándar superior. Con una decoración inspirada en los tonos de la costa, ofrece el equilibrio perfecto entre confort y estilo.
+            </p>
             <ul class="flex flex-col gap-2 font-body text-sm text-brand-stone flex-1">
               <li class="flex items-center gap-2">
                 <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
@@ -292,6 +357,9 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
           </div>
           <div class="flex flex-col flex-1 p-6 gap-4">
             <h3 class="font-display text-2xl text-brand-blue">Suite Junior</h3>
+            <p class="font-body text-sm text-brand-stone leading-relaxed">
+              Espacio y elegancia se unen en nuestra Suite Junior. Ideal para estancias más largas, cuenta con una acogedora zona de estar y una terraza donde disfrutar de la calma de Peñíscola.
+            </p>
             <ul class="flex flex-col gap-2 font-body text-sm text-brand-stone flex-1">
               <li class="flex items-center gap-2">
                 <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
@@ -339,6 +407,9 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
           </div>
           <div class="flex flex-col flex-1 p-6 gap-4">
             <h3 class="font-display text-2xl text-brand-blue">Suite Panorámica</h3>
+            <p class="font-body text-sm text-brand-stone leading-relaxed">
+              Nuestra joya de la corona. La Suite Panorámica ofrece vistas inigualables al mar desde todos sus ángulos, junto con servicios exclusivos para una experiencia de máximo lujo.
+            </p>
             <ul class="flex flex-col gap-2 font-body text-sm text-brand-stone flex-1">
               <li class="flex items-center gap-2">
                 <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
@@ -386,7 +457,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
        12-icon grid of hotel amenities
        ═══════════════════════════════════════════════════════════════════ -->
   <section class="bg-brand-cream py-24 md:py-32">
-    <div class="max-w-5xl mx-auto px-6 lg:px-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-12">
 
       <!-- Heading -->
       <div class="text-center mb-16">
@@ -566,7 +637,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
        Beds24 placeholder booking form
        ═══════════════════════════════════════════════════════════════════ -->
   <section id="reservar" class="bg-brand-blue py-24 md:py-32">
-    <div class="max-w-3xl mx-auto px-6 lg:px-12 flex flex-col items-center gap-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col items-center gap-12">
 
       <!-- Heading -->
       <div class="text-center">
@@ -594,14 +665,14 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
        Links to Restaurant, Events, Experiences
        ═══════════════════════════════════════════════════════════════════ -->
   <section class="bg-brand-cream py-24 md:py-32">
-    <div class="max-w-5xl mx-auto px-6 lg:px-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-12">
 
       <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-brand-sand/40">
 
         <!-- Restaurante -->
         <a
           href="/restaurante"
-          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
+          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-4 sm:px-6 md:px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
         >
           <div class="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-brand-blue/20 group-hover:border-brand-gold transition-colors duration-200">
             <svg class="w-5 h-5 text-brand-blue group-hover:text-brand-gold transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -620,7 +691,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
         <!-- Eventos & Celebraciones -->
         <a
           href="/eventos"
-          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
+          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-4 sm:px-6 md:px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
         >
           <div class="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-brand-blue/20 group-hover:border-brand-gold transition-colors duration-200">
             <svg class="w-5 h-5 text-brand-blue group-hover:text-brand-gold transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -640,7 +711,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
         <!-- Experiencias Locales -->
         <a
           href="/experiencias"
-          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
+          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-4 sm:px-6 md:px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
         >
           <div class="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-brand-blue/20 group-hover:border-brand-gold transition-colors duration-200">
             <svg class="w-5 h-5 text-brand-blue group-hover:text-brand-gold transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">

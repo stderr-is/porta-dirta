@@ -20,6 +20,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
   description="Porta D'irta — Villa boutique y restaurante de cocina mediterránea frente al mar en Peñíscola, Costa del Azahar."
   lang="es"
 >
+  <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" slot="head" />
 
   <!-- ============================================================
        SECTION 1: HERO
@@ -33,7 +34,7 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
 
     <!-- Background video — drone aerial of the property -->
     <video
-      class="absolute inset-0 w-full h-full object-cover"
+      class="absolute inset-0 w-full h-full object-cover motion-reduce:hidden"
       autoplay
       muted
       loop
@@ -44,6 +45,14 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
       <source src="/assets/video/hero.mp4" type="video/mp4" />
     </video>
 
+    <!-- Poster image for prefers-reduced-motion -->
+    <img
+      src="/assets/video/hero-poster.jpg"
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover hidden motion-reduce:block"
+      aria-hidden="true"
+    />
+
     <!-- Forest green overlay -->
     <div class="absolute inset-0 bg-brand-forest/55 pointer-events-none" aria-hidden="true"></div>
 
@@ -51,12 +60,12 @@ import BookingSearchForm from '../components/BookingSearchForm.astro';
     <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center w-full max-w-3xl mx-auto">
 
       <!-- Property name -->
-      <h1 class="font-display font-light italic text-8xl md:text-9xl text-white leading-none tracking-tight">
+      <h1 class="font-display font-light italic text-5xl sm:text-8xl md:text-9xl text-white leading-none tracking-tight">
         Porta D'irta
       </h1>
 
       <!-- Location subtitle -->
-      <p class="font-body uppercase tracking-[0.4em] text-brand-sand text-sm">
+      <p class="font-body uppercase tracking-[0.2em] sm:tracking-[0.4em] text-brand-sand text-sm">
         Peñíscola &middot; Costa del Azahar
       </p>
 

@@ -32,7 +32,7 @@ const { formId } = Astro.props;
   <div class="flex flex-wrap gap-2 items-stretch">
 
     <!-- ── Date group ─────────────────────────────────────────── -->
-    <div class="flex w-full sm:flex-1 sm:w-auto min-w-0
+    <div class="flex w-full min-[700px]:flex-1 min-[700px]:w-auto min-w-0
                 rounded-xl bg-white/15 border border-white/30 divide-x divide-white/20">
 
       <!-- Check-in trigger -->
@@ -78,11 +78,8 @@ const { formId } = Astro.props;
 
     </div>
 
-    <!-- ── Guests group + submit (share second row on mobile) ─── -->
-    <div class="flex flex-1 sm:flex-none gap-2 items-stretch min-w-0">
-
-      <!-- Guests pill -->
-      <div class="flex flex-1 sm:flex-none rounded-xl bg-white/15 border border-white/30 divide-x divide-white/20">
+    <!-- ── Guests pill ────────────────────────────────────────── -->
+    <div class="flex w-full min-[450px]:flex-1 min-[700px]:flex-none min-[700px]:w-auto rounded-xl bg-white/15 border border-white/30 divide-x divide-white/20 justify-around min-[450px]:justify-start">
 
         <!-- Adults -->
         <div class="flex items-center gap-1.5 px-3">
@@ -114,19 +111,17 @@ const { formId } = Astro.props;
             class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">+</button>
         </div>
 
-      </div>
-
-      <!-- Submit -->
-      <button
-        type="submit"
-        class="flex-shrink-0 bg-brand-gold text-brand-blue font-body text-sm uppercase
-               tracking-[0.15em] font-medium rounded-xl px-5 py-2.5
-               hover:bg-brand-stone transition-colors duration-200 whitespace-nowrap"
-      >
-        Reservar
-      </button>
-
     </div>
+
+    <!-- ── Submit ─────────────────────────────────────────────── -->
+    <button
+      type="submit"
+      class="w-full min-[450px]:flex-shrink-0 min-[450px]:w-auto bg-brand-gold text-brand-blue font-body text-sm uppercase
+             tracking-[0.15em] font-medium rounded-xl px-5 py-2.5
+             hover:bg-brand-stone transition-colors duration-200 whitespace-nowrap"
+    >
+      Reservar
+    </button>
 
   </div>
 </form>
