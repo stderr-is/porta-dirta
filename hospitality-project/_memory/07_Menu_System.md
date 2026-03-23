@@ -252,16 +252,33 @@ A legend is shown at the bottom of each menu page.
 ## Build Order
 
 - [x] Write plan to `_memory/07_Menu_System.md`
-- [x] Build `src/pages/carta.astro` — allergen icons, mobile-first
-- [x] Build `src/pages/menu.astro` — fixed-price, course sections
+- [x] Build `src/pages/carta.astro` — allergen full-name coloured pills, mobile-first
+- [x] Build `src/pages/menu.astro` — fixed-price, course sections, allergen pills
 - [x] Build `src/pages/bebidas.astro` — mockup data
-- [x] Build `src/pages/mesa.astro` — QR landing page
+- [x] Build `src/pages/mesa.astro` — QR landing page (noindex, live price from menu.json)
 - [x] Update `restaurante.astro` — editorial photo cards → /carta and /menu
-- [x] Write `src/data/carta.json` — real data from Google Doc
-- [x] Write `src/data/menu.json` — real Menú Especial data
+- [x] Write `src/data/carta.json` — real data from Google Doc (with allergens)
+- [x] Write `src/data/menu.json` — real Menú Especial data (with allergens)
 - [x] Write `src/data/bebidas.json` — ⚠️ MOCKUP, needs real data
-- [ ] PHP proxy: `save_carta.php` + `save_menu.php` + `save_bebidas.php`
-- [ ] n8n: `/carta` branch on Workflow B
-- [ ] n8n: `/menu` branch on Workflow B
-- [ ] n8n: `/bebidas` branch on Workflow B (when real list ready)
+- [x] PHP proxy: `POST /api/internal/menu/carta|menu|bebidas` in `routes/api.php` — validates JSON, writes to shared Docker volume
+- [x] n8n Workflow B: `/carta`, `/menu`, `/bebidas` command pipeline (10 new nodes — see Architecture section)
+- [x] Astro pages: SSR file-system reading from `MENU_DATA_PATH` with static fallback for Cloudflare
+- [x] Docker: `menu-data` named volume + commented `frontend` service in `docker-compose.yml`
+- [ ] **ACTIVATE**: fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in n8n env vars (VPS `docker-compose.yml`)
+- [ ] **ACTIVATE**: share each Google Doc as "anyone with the link can view"
+- [ ] **ACTIVATE**: reimport `workflow-b-command-center.json` into n8n (or update in-place via n8n UI)
+- [ ] **ACTIVATE**: uncomment `frontend` service in `docker-compose.yml` when deploying Astro on VPS
+- [ ] Real bebidas list from owner → update `bebidas.json`, then fill `MENU_BEBIDAS_DOC_ID`
 - [ ] Generate single QR code for `portadirta.com/mesa` + print for tables
+
+---
+
+## Activation Checklist (what still needs to happen on the VPS)
+
+1. Open `docker-compose.yml` on the VPS
+2. Set `MENU_CARTA_DOC_ID=` the ID from `docs.google.com/document/d/**THIS_PART**/edit`
+3. Set `MENU_MENU_DOC_ID=` same for the menú doc
+4. Share both Google Docs → Share → "Anyone with the link" → Viewer
+5. `docker compose up -d n8n` to pick up new env vars
+6. In n8n UI: delete old Workflow B, import `workflow-b-command-center.json`
+7. Test: send `/carta` to the Telegram bot → should reply `✅ Carta actualizada`

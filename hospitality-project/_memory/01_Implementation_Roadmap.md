@@ -125,6 +125,27 @@ tags: [wbs, planning, execution]
 - Current: Cloudflare Pages SSG (build-time fetch) — working now
 - Production: Hostinger VPS Docker — switch to `@astrojs/node` adapter + SSR for `/experiencias`
 
+## Phase 3.8: Menu Automation Pipeline
+*Goal: Staff update menus by editing a Google Doc and sending one Telegram message — site updates instantly, no rebuild, no developer needed.*
+
+### What's built (2026-03-23)
+- [x] **Frontend pages**: `/carta`, `/menu`, `/bebidas`, `/mesa` — mobile-first, allergen pills, QR-ready
+- [x] **Astro SSR reading**: all 4 pages read from `MENU_DATA_PATH` volume at request time; fall back to bundled JSON on Cloudflare Pages build
+- [x] **PHP proxy** (`routes/api.php`): `POST /api/internal/menu/carta|menu|bebidas` — validates + writes JSON to shared Docker volume
+- [x] **Docker**: `menu-data` named volume in `docker-compose.yml`; commented frontend service template ready
+- [x] **n8n Workflow B**: 10 new nodes intercept `/carta` `/menu` `/bebidas` commands → Google Doc → Claude Haiku → PHP proxy → Telegram confirmation
+
+### Still needed to go live
+- [ ] Fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in VPS `docker-compose.yml`
+- [ ] Share Google Docs as "anyone with the link can view"
+- [ ] Reimport `workflow-b-command-center.json` into n8n
+- [ ] Uncomment `frontend` service in `docker-compose.yml` (VPS deployment)
+- [ ] Real bebidas list from owner → `MENU_BEBIDAS_DOC_ID`
+- [ ] Generate + print QR code for `portadirta.com/mesa`
+
+### Full details
+See `_memory/07_Menu_System.md` — includes activation checklist, JSON schemas, Claude prompts.
+
 ## Phase 3.7: /eventos Page — Final Polish
 *Blocked on input from brother-in-law (content owner) before proceeding.*
 - [ ] Wire inquiry form to TastyIgniter contact API or n8n webhook — **awaiting decision on form fields / destination email**
