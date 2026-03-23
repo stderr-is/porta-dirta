@@ -95,11 +95,9 @@ const menuSchema = {
                         const info = ALLERGENS[a.toLowerCase()] ?? { code: a.slice(0,2).toUpperCase(), label: a, bg: 'bg-gray-100', text: 'text-gray-700' };
                         return (
                           <span
-                            title={info.label}
-                            aria-label={info.label}
-                            class={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold leading-none ${info.bg} ${info.text}`}
+                            class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold leading-none ${info.bg} ${info.text}`}
                           >
-                            {info.code}
+                            {info.label}
                           </span>
                         );
                       })}
@@ -120,10 +118,7 @@ const menuSchema = {
         <p class="font-body text-[11px] uppercase tracking-widest text-brand-stone/60">Alérgenos</p>
         <div class="flex flex-wrap gap-2">
           {Object.values(ALLERGENS).map(a => (
-            <div class="flex items-center gap-1.5">
-              <span class={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold ${a.bg} ${a.text}`}>{a.code}</span>
-              <span class="font-body text-[11px] text-brand-stone/70">{a.label}</span>
-            </div>
+            <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${a.bg} ${a.text}`}>{a.label}</span>
           ))}
         </div>
         <p class="font-body text-[11px] text-brand-stone/50 italic mt-1">

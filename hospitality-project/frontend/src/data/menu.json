@@ -8,15 +8,15 @@
     {
       "name": "Aperitivos",
       "items": [
-        { "name": "Aceitunas aliñadas y tostada con boquerones y all-i-oli casero", "description": "" }
+        { "name": "Aceitunas aliñadas y tostada con boquerones y all-i-oli casero", "description": "", "allergens": ["gluten", "pescado", "huevo"] }
       ]
     },
     {
       "name": "Entrantes a elegir",
       "choose": true,
       "items": [
-        { "name": "Crema de guisante con panceta curada y picatostes", "description": "" },
-        { "name": "Tostada de crema de foie con cebolla y manzana caramelizada", "description": "" }
+        { "name": "Crema de guisante con panceta curada y picatostes", "description": "", "allergens": ["gluten"] },
+        { "name": "Tostada de crema de foie con cebolla y manzana caramelizada", "description": "", "allergens": ["gluten"] }
       ]
     },
     {
@@ -24,19 +24,19 @@
       "choose": true,
       "note": "Mín. 2 personas para los arroces",
       "items": [
-        { "name": "Paella o fideuá marinera", "description": "Mín. 2 personas", "supplement": null },
-        { "name": "Paella valenciana", "description": "Mín. 2 personas", "supplement": null },
-        { "name": "Arroz de gatet y langostino", "description": "Mín. 2 personas", "supplement": 3.00 },
-        { "name": "Codillo con salsa de chalota al Oporto", "description": "", "supplement": null },
-        { "name": "Caldereta Peñiscolana", "description": "", "supplement": null }
+        { "name": "Paella o fideuá marinera", "description": "Mín. 2 personas", "supplement": null, "allergens": ["moluscos", "crustáceos", "gluten"] },
+        { "name": "Paella valenciana", "description": "Mín. 2 personas", "supplement": null, "allergens": [] },
+        { "name": "Arroz de gatet y langostino", "description": "Mín. 2 personas", "supplement": 3.00, "allergens": ["crustáceos"] },
+        { "name": "Codillo con salsa de chalota al Oporto", "description": "", "supplement": null, "allergens": ["lácteos"] },
+        { "name": "Caldereta Peñiscolana", "description": "", "supplement": null, "allergens": ["pescado", "moluscos", "crustáceos"] }
       ]
     },
     {
       "name": "Postres caseros a elegir",
       "choose": true,
       "items": [
-        { "name": "Tarta de queso con arándanos", "description": "" },
-        { "name": "Brownie de chocolate", "description": "" }
+        { "name": "Tarta de queso con arándanos", "description": "", "allergens": ["lácteos", "gluten", "huevo"] },
+        { "name": "Brownie de chocolate", "description": "", "allergens": ["gluten", "lácteos", "huevo"] }
       ]
     }
   ]

@@ -13,6 +13,24 @@ import menuData from '../data/menu.json';
 
 const menu = menuData;
 
+// EU 14 major allergens — label, colour
+const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
+  'gluten':       { label: 'Gluten',       bg: 'bg-amber-100',   text: 'text-amber-800'  },
+  'lácteos':      { label: 'Lácteos',      bg: 'bg-sky-100',     text: 'text-sky-800'    },
+  'huevo':        { label: 'Huevo',        bg: 'bg-yellow-100',  text: 'text-yellow-800' },
+  'pescado':      { label: 'Pescado',      bg: 'bg-blue-100',    text: 'text-blue-800'   },
+  'crustáceos':   { label: 'Crustáceos',   bg: 'bg-orange-100',  text: 'text-orange-800' },
+  'moluscos':     { label: 'Moluscos',     bg: 'bg-violet-100',  text: 'text-violet-800' },
+  'frutos secos': { label: 'Frutos secos', bg: 'bg-green-100',   text: 'text-green-800'  },
+  'cacahuetes':   { label: 'Cacahuetes',   bg: 'bg-lime-100',    text: 'text-lime-800'   },
+  'soja':         { label: 'Soja',         bg: 'bg-emerald-100', text: 'text-emerald-800'},
+  'sulfitos':     { label: 'Sulfitos',     bg: 'bg-rose-100',    text: 'text-rose-800'   },
+  'mostaza':      { label: 'Mostaza',      bg: 'bg-yellow-50',   text: 'text-yellow-700' },
+  'sésamo':       { label: 'Sésamo',       bg: 'bg-stone-100',   text: 'text-stone-700'  },
+  'apio':         { label: 'Apio',         bg: 'bg-teal-100',    text: 'text-teal-800'   },
+  'altramuces':   { label: 'Altramuces',   bg: 'bg-pink-100',    text: 'text-pink-800'   },
+};
+
 const menuSchema = {
   "@context": "https://schema.org",
   "@type": "Menu",
@@ -111,12 +129,24 @@ const menuSchema = {
                   {section.choose && (
                     <span class="mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full bg-brand-gold/60"></span>
                   )}
-                  <div class="flex flex-col gap-0.5">
+                  <div class="flex flex-col gap-1">
                     <span class="font-body text-brand-blue text-base leading-snug">
                       {item.name}
                     </span>
                     {item.description && (
                       <span class="font-body text-brand-stone text-sm">{item.description}</span>
+                    )}
+                    {item.allergens && item.allergens.length > 0 && (
+                      <div class="flex flex-wrap gap-1 mt-0.5">
+                        {item.allergens.map((a: string) => {
+                          const info = ALLERGENS[a.toLowerCase()] ?? { label: a, bg: 'bg-gray-100', text: 'text-gray-700' };
+                          return (
+                            <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold leading-none ${info.bg} ${info.text}`}>
+                              {info.label}
+                            </span>
+                          );
+                        })}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -138,10 +168,18 @@ const menuSchema = {
         </div>
       ))}
 
-      <!-- Allergen note -->
-      <p class="font-body text-xs text-brand-stone/60 text-center border-t border-brand-sand/40 pt-6">
-        Si tienes alguna alergia o intolerancia alimentaria, por favor indícalo a nuestro personal.
-      </p>
+      <!-- Allergen legend -->
+      <div class="border-t border-brand-sand/40 pt-6 flex flex-col gap-3">
+        <p class="font-body text-[11px] uppercase tracking-widest text-brand-stone/60">Alérgenos</p>
+        <div class="flex flex-wrap gap-2">
+          {Object.values(ALLERGENS).map(a => (
+            <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${a.bg} ${a.text}`}>{a.label}</span>
+          ))}
+        </div>
+        <p class="font-body text-[11px] text-brand-stone/50 italic mt-1">
+          Intolerancia o alergia grave? Indícalo a nuestro equipo y lo gestionamos con todo el cuidado.
+        </p>
+      </div>
 
     </div>
   </section>
