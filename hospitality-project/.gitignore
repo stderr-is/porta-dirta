@@ -20,6 +20,8 @@ backend/tastyigniter/vendor/
 .env.local
 .env.*.local
 **/.env
+.claude/
+**/.claude/
 
 # OS
 .DS_Store

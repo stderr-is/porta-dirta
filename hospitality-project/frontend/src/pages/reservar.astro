@@ -15,7 +15,27 @@ import GarlandDivider from '../components/GarlandDivider.astro';
 <Layout
   title="Reservar Habitación"
   description="Reserva tu estancia en Porta D'irta, villa boutique frente al Mediterráneo en Peñíscola. Confirmación inmediata y pago seguro."
+  noindex={true}
 >
+
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://www.portadirta.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Reservar",
+        "item": "https://www.portadirta.com/reservar"
+      }
+    ]
+  })} />
 
   <!-- ── Page header ─────────────────────────────────────────────── -->
   <section class="bg-brand-blue pt-28 pb-10 text-center">

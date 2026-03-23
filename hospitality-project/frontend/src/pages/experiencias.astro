@@ -111,8 +111,8 @@ const livePackages: HiPackage[] = hiEvents
 >
 
   <!-- JSON-LD: Event structured data for upcoming packages (Google rich results) -->
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(
-    livePackages
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify([
+    ...livePackages
       .filter(pkg => pkg.lifecycle_status === 'UPCOMING')
       .map(pkg => ({
         "@context": "https://schema.org",
@@ -147,8 +147,26 @@ const livePackages: HiPackage[] = hiEvents
         } : undefined,
         "image": pkg.cover_url ?? undefined,
         "url": pkg.booking_url,
-      }))
-  )} />
+      })),
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://www.portadirta.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Experiencias",
+          "item": "https://www.portadirta.com/experiencias"
+        }
+      ]
+    }
+  ])} />
 
   <!-- ============================================================
        SECTION 1: HERO
@@ -1183,7 +1201,7 @@ const livePackages: HiPackage[] = hiEvents
 </Layout>
 
 <!-- ── Client scripts ──────────────────────────────────────────────────────── -->
-<script is:inline define:vars={{ tastyigniterUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081' }}>
+<script is:inline define:vars={{ tastyigniterUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'https://restaurant.portadirta.com' }}>
 
   // 1. CTA links with data-exp auto-select the experience type in the form
   document.querySelectorAll('a.exp-cta[data-exp]').forEach(function(link) {

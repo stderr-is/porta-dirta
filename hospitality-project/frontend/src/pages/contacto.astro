@@ -20,6 +20,25 @@ import Layout from '../layouts/Layout.astro';
   description="Contacta con Porta D'irta para reservas de hotel, restaurante, eventos y celebraciones en Peñíscola, Costa del Azahar."
 >
 
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://www.portadirta.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Contacto",
+        "item": "https://www.portadirta.com/contacto"
+      }
+    ]
+  })} />
+
   <!-- ============================================================
        SECTION 1 — HERO
        Half-viewport, brand-blue, centered label + heading + subtitle

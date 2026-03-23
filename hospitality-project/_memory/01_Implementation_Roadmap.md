@@ -65,6 +65,16 @@ tags: [wbs, planning, execution]
 - [ ] **Configure `BEDS24_API_TOKEN`**: replace `REPLACE_WITH_BEDS24_V2_TOKEN` in `docker-compose.yml` then `docker compose up -d n8n` — bot returns 401 until this is set
 - [ ] Test Workflow C: trigger manually, verify pricing recommendation appears in Telegram
 - [ ] Verify Identity Router blocks unauthorized Telegram IDs
+- [x] Workflow B — Full command suite (2026-03-22): 10 new bot commands added + tested:
+  - `beds24.getArrivals` / `beds24.getDepartures` / `beds24.getDailySummary` — via `/api/internal/daily-summary` PHP proxy
+  - `beds24.getGuestInfo` — via `/api/internal/guest-info` PHP proxy (who is in room X)
+  - `beds24.getRevenue` — sum confirmed bookings for a period
+  - `beds24.getOccupancyRate` — occupancy % over a date range
+  - `tastyigniter.createReservation` — create restaurant booking from natural language
+  - `tastyigniter.cancelReservation` — cancel by guest name via `/api/internal/reservations/cancel`
+  - `maintenance.addNote` / `maintenance.listNotes` — persistent static data notes (no API call path: Has API Call? → Direct Action Handler)
+  - Updated help menu in Schema Validator
+  - `Prepare Claude Prompt` updated with all new action rules + extended payload schema (nombre, email, telefono, hora, name, note)
 **Tech Stack:** Claude Haiku 4.5 API, Telegram Bot API, n8n (running at n8n.hobbitonranch.com).
 **Reference:** `_memory/05_AI_Automation.md` — full blueprint with gap analysis.
 
@@ -122,7 +132,54 @@ tags: [wbs, planning, execution]
 - [ ] Replace `property-aerial-pool.jpg` in Mercado Artesanal content with a proper image
 - [ ] Confirm final event lineup for summer 2026 (Jazz, Cena Maridaje, Mercado — are these real or demo?)
 
-## Phase 4: Monitoring (Testing & QA)
+## Phase 4: Optimization (SEO & Conversion)
+*Goal: Ensure the site is found by the right guests and converts visitors into bookings.*
+*Full plan in `_memory/06_SEO_Strategy.md`. Items below are the actionable checklist.*
+- [x] **SEO Priority 1:** Implement OG tags, robots.txt, and indexable HTML room content (Done 2026-03-20).
+- [x] **Mobile UX:** Add sticky "Book Now" bar and WhatsApp FAB for CRO.
+- [x] **Transparency:** Add live sustainability status component (mocked).
+- [x] **Fix Language Switcher:** Add placeholders for EN/FR/DE to prevent 404s.
+- [x] **AI Crawler directives** — GPTBot/ClaudeBot/PerplexityBot allowed; CCBot/omgili blocked in robots.txt.
+- [x] **JSON-LD structured data** — LodgingBusiness, Restaurant, BreadcrumbList, FAQPage, Event on key pages.
+
+### SEO Wave 0 — Critical (Before Go-Live)
+- [ ] Fix `hobbitonranch.com` hardcoded in `eventos-locales/*.md` ticketsUrl + `experiencias.astro:78` fallback
+- [ ] Add `og:url`, `og:image:width`, `og:image:height` to `Layout.astro`
+- [ ] Create branded `og-default.jpg` (1200×630) and replace picsum.photos default in `Layout.astro`
+- [ ] Add Google Site Verification meta slot to `Layout.astro`
+- [ ] Migrate static `public/sitemap.xml` → `@astrojs/sitemap` integration
+- [ ] Add hreflang tags to `Layout.astro` (es + x-default for now; full 4-locale when translations ready)
+- [ ] **Create Google Business Profile** — START NOW (postcard verification = 2 weeks)
+- [ ] **Google Search Console** — verify portadirta.com, submit sitemap
+
+### SEO Wave 1 — High Priority (First 2 Weeks After Launch)
+- [ ] Remove `noindex={true}` from `reservar.astro` (canonical URL already prevents duplicate issues)
+- [ ] Add indexable HTML room content to `/hotel` outside the Beds24 iframe (name, description, price, amenities)
+- [ ] Add indexable menu section to `/restaurante` (section headings + representative dishes)
+- [ ] Rewrite H1 on en/fr/de placeholder pages to name the property (not the "coming soon" status)
+- [ ] Rewrite JSON-LD `description` fields to 200+ chars factual text (for AI citation)
+- [ ] Expand LodgingBusiness JSON-LD: numberOfRooms, checkinTime, checkoutTime, amenities, containsPlace
+- [ ] Expand Restaurant JSON-LD: acceptsReservations, menu URL, servesCuisine, isContainedInPlace
+- [ ] Install Google Analytics 4 (production-only, gated by `import.meta.env.PROD`)
+- [ ] Improve title/description for `/experiencias` and `/reservar` (see `06_SEO_Strategy.md` §2 Wave 1)
+- [ ] TripAdvisor + El Tenedor + Booking.com + Bing Webmaster + Apple Maps listings
+
+### SEO Wave 2 — Month 1
+- [ ] Self-host Google Fonts (WOFF2 in `/public/assets/fonts/`) — eliminates render-blocking 3rd-party request
+- [ ] Add Event JSON-LD to `/eventos` (once brother-in-law confirms real event lineup + dates)
+- [ ] Add FAQ schema to `/experiencias`
+- [ ] n8n review request workflow (24h post-checkout → Google review link)
+- [ ] Physical QR review cards for restaurant tables → `portadirta.com/opiniones`
+- [ ] Regional directory listings: turismecv.com, Ayuntamiento Peñíscola, Patronat Castelló, Guía Repsol
+
+### SEO Wave 3 — Month 3+
+- [ ] Launch `/en/` full multilingual routes with translations
+- [ ] Blog content section (Astro Content Collections MDX)
+- [ ] Wikidata entity for Porta D'irta
+- [ ] Press trip pitches (UK/FR/DE travel media)
+- [ ] Spanish travel blogger outreach (comped stays)
+
+## Phase 5: Monitoring (Testing & QA)
 *Goal: Break the system now so staff won't face catastrophic failure during a shift.*
 - [ ] Execute simulated double-booking attempt across Booking.com and local site.
 - [ ] Verify credit card hold releases for "no-show" restaurant bookings.

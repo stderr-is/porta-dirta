@@ -117,10 +117,11 @@ export interface PropertyInfo {
 
 /**
  * Build the standard Beds24 API V2 Authorization header.
+ * NOTE: Beds24 API V2 uses a custom 'token' header, NOT 'Authorization: Bearer'.
  */
 function authHeader(): HeadersInit {
   return {
-    'Authorization': `Bearer ${BEDS24_API_TOKEN}`,
+    'token': BEDS24_API_TOKEN,
     'Content-Type': 'application/json',
   };
 }
