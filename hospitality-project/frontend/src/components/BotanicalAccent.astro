@@ -1,0 +1,73 @@
+---
+/**
+ * BotanicalAccent.astro
+ * Large semi-transparent olive branch silhouette for hero section corners.
+ * Position: absolute, bottom-right by default. Pass `position` to override.
+ */
+interface Props {
+  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
+}
+const { position = 'bottom-right' } = Astro.props;
+
+const posClass = {
+  'bottom-right': 'bottom-0 right-0',
+  'bottom-left':  'bottom-0 left-0 scale-x-[-1]',
+  'top-right':    'top-0 right-0 rotate-180',
+  'top-left':     'top-0 left-0 rotate-180 scale-x-[-1]',
+}[position];
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 220 340"
+  fill="none"
+  class={`absolute ${posClass} w-44 sm:w-56 md:w-72 opacity-[0.08] pointer-events-none select-none`}
+  aria-hidden="true"
+>
+  <!-- main stem -->
+  <path d="M190 330 C170 270 140 210 110 160 C80 110 65 60 80 10"
+    stroke="white" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- branch left -->
+  <path d="M110 160 C85 145 52 140 18 155"
+    stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- branch right -->
+  <path d="M130 195 C155 178 175 158 198 148"
+    stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- branch upper left -->
+  <path d="M90 120 C65 105 38 100 8 112"
+    stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- branch upper right -->
+  <path d="M105 85 C128 72 152 60 178 52"
+    stroke="white" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- leaves on left branch -->
+  <ellipse cx="48" cy="148" rx="22" ry="7"
+    transform="rotate(-20 48 148)" fill="white"/>
+  <ellipse cx="22" cy="152" rx="18" ry="6"
+    transform="rotate(-10 22 152)" fill="white"/>
+
+  <!-- leaves on right branch -->
+  <ellipse cx="162" cy="163" rx="22" ry="7"
+    transform="rotate(28 162 163)" fill="white"/>
+  <ellipse cx="196" cy="150" rx="16" ry="5.5"
+    transform="rotate(35 196 150)" fill="white"/>
+
+  <!-- leaves on upper-left branch -->
+  <ellipse cx="38" cy="107" rx="20" ry="6.5"
+    transform="rotate(-25 38 107)" fill="white"/>
+  <ellipse cx="10" cy="112" rx="16" ry="5"
+    transform="rotate(-12 10 112)" fill="white"/>
+
+  <!-- leaves on upper-right branch -->
+  <ellipse cx="148" cy="65" rx="20" ry="6.5"
+    transform="rotate(30 148 65)" fill="white"/>
+  <ellipse cx="176" cy="54" rx="16" ry="5"
+    transform="rotate(38 176 54)" fill="white"/>
+
+  <!-- olives (small circles) -->
+  <circle cx="44"  cy="143" r="5" fill="white" opacity="0.9"/>
+  <circle cx="158" cy="157" r="5" fill="white" opacity="0.9"/>
+  <circle cx="34"  cy="102" r="4.5" fill="white" opacity="0.9"/>
+  <circle cx="144" cy="60"  r="4.5" fill="white" opacity="0.9"/>
+</svg>

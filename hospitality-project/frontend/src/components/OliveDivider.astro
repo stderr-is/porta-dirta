@@ -1,0 +1,50 @@
+---
+/**
+ * OliveDivider.astro
+ * Replaces the plain gold `w-16 h-px bg-brand-gold` divider lines.
+ * Accepts an optional `light` prop to render in white (for dark backgrounds).
+ */
+interface Props {
+  light?: boolean;
+}
+const { light = false } = Astro.props;
+const stemColor  = light ? 'rgba(255,255,255,0.55)' : '#4A5E2A';
+const leafColor  = light ? 'rgba(255,255,255,0.70)' : '#7A8F52';
+---
+
+<div class="flex items-center justify-center" aria-hidden="true">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="96"
+    height="28"
+    viewBox="0 0 96 28"
+    fill="none"
+  >
+    <!-- stem -->
+    <path
+      d="M6 22 C24 12 48 16 90 5"
+      stroke={stemColor}
+      stroke-width="1.2"
+      stroke-linecap="round"
+    />
+    <!-- leaf 1 -->
+    <ellipse cx="22" cy="15" rx="8" ry="3.2"
+      transform="rotate(-28 22 15)"
+      fill={leafColor} />
+    <!-- leaf 2 -->
+    <ellipse cx="40" cy="12" rx="8" ry="3.2"
+      transform="rotate(-18 40 12)"
+      fill={leafColor} />
+    <!-- leaf 3 -->
+    <ellipse cx="58" cy="10" rx="8" ry="3.2"
+      transform="rotate(-12 58 10)"
+      fill={leafColor} />
+    <!-- leaf 4 -->
+    <ellipse cx="76" cy="7.5" rx="7" ry="2.8"
+      transform="rotate(-8 76 7.5)"
+      fill={leafColor} />
+    <!-- two tiny olives -->
+    <circle cx="30" cy="13" r="2.2" fill={leafColor} opacity="0.85" />
+    <circle cx="66" cy="9"  r="2.2" fill={leafColor} opacity="0.85" />
+  </svg>
+</div>
