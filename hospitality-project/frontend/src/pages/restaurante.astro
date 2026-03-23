@@ -32,7 +32,7 @@ import GarlandDivider from '../components/GarlandDivider.astro';
       "servesCuisine": ["Mediterránea", "Española", "Arroces"],
       "priceRange": "€€€",
       "acceptsReservations": "true",
-      "menu": "https://www.portadirta.com/restaurante#carta",
+      "menu": "https://www.portadirta.com/carta",
       "currenciesAccepted": "EUR",
       "address": {
         "@type": "PostalAddress",
@@ -224,7 +224,7 @@ import GarlandDivider from '../components/GarlandDivider.astro';
     class="bg-brand-blue py-24 md:py-32"
     aria-label="Nuestra carta"
   >
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Section heading -->
       <div id="carta" class="text-center mb-16">
@@ -235,111 +235,65 @@ import GarlandDivider from '../components/GarlandDivider.astro';
           Nuestra Carta
         </h2>
         <p class="font-body text-sm text-white/60 mt-4 max-w-2xl mx-auto">
-          Descubre una propuesta culinaria que rinde homenaje al producto local de Castellón, desde los pescados de la lonja hasta las verduras de nuestra propia huerta.
+          Descubre una propuesta culinaria que rinde homenaje al producto local de Castellón,
+          desde los pescados de la lonja hasta los arroces de la huerta valenciana.
         </p>
       </div>
 
-      <!-- REPLACE: real menu data -->
-      <!-- 3 cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Two CTA cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-        <!-- Card 1: Menú del Día -->
-        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl p-8 flex flex-col gap-6">
-          <div>
-            <h3 class="font-display text-2xl text-white">Menú del Día</h3>
-            <p class="font-body text-xs uppercase tracking-widest text-brand-sand mt-1">
-              De lunes a viernes al mediodía
-            </p>
+        <!-- Card: La Carta -->
+        <a
+          href="/carta"
+          class="group backdrop-blur-sm bg-white/10 hover:bg-white/15 border border-white/20 hover:border-brand-gold/40 rounded-xl p-8 flex flex-col gap-5 transition-all duration-300"
+        >
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-2xl text-white group-hover:text-brand-gold transition-colors duration-200">
+                La Carta
+              </h3>
+              <p class="font-body text-xs uppercase tracking-widest text-brand-sand/70 mt-1">
+                Tapas · Arroces · Platos · Postres
+              </p>
+            </div>
+            <span class="text-brand-gold/60 group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-200 text-xl mt-1">→</span>
           </div>
-          <p class="font-display italic text-4xl text-brand-gold">€15</p>
-          <p class="font-body text-sm text-white/70 leading-relaxed">
-            El menú del día reúne lo mejor de la temporada en tres pasos, con
-            bebida incluida. Cambia cada semana según el mercado local.
+          <p class="font-body text-sm text-white/65 leading-relaxed">
+            Nuestra carta completa à la carte. Desde tapas para compartir
+            hasta arroces valencianos y platos principales con producto de temporada.
           </p>
-          <ul class="flex flex-col gap-3 list-none m-0 p-0">
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">
-                <strong class="font-medium text-white">Primer plato</strong> — Ensalada de tomate de temporada con aceite de oliva virgen extra
-              </span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">
-                <strong class="font-medium text-white">Segundo plato</strong> — Arroz a banda con alioli casero y gambas de la lonja
-              </span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">
-                <strong class="font-medium text-white">Postre</strong> — Flan de huevo con caramelo o fruta del tiempo
-              </span>
-            </li>
-          </ul>
-        </article>
+          <span class="font-body text-xs uppercase tracking-widest text-brand-gold mt-auto">
+            Ver carta completa →
+          </span>
+        </a>
 
-        <!-- Card 2: Carta de Temporada -->
-        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl p-8 flex flex-col gap-6">
-          <div>
-            <h3 class="font-display text-2xl text-white">Carta de Temporada</h3>
-            <p class="font-body text-xs uppercase tracking-widest text-brand-sand mt-1">
-              Producto local y km 0
-            </p>
+        <!-- Card: Menú Especial -->
+        <a
+          href="/menu"
+          class="group backdrop-blur-sm bg-white/10 hover:bg-white/15 border border-white/20 hover:border-brand-gold/40 rounded-xl p-8 flex flex-col gap-5 transition-all duration-300"
+        >
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-2xl text-white group-hover:text-brand-gold transition-colors duration-200">
+                Menú Especial
+              </h3>
+              <p class="font-body text-xs uppercase tracking-widest text-brand-sand/70 mt-1">
+                Precio fijo · Todo incluido
+              </p>
+            </div>
+            <span class="text-brand-gold/60 group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-200 text-xl mt-1">→</span>
           </div>
-          <p class="font-display italic text-2xl text-brand-gold">Bajo petición</p>
-          <p class="font-body text-sm text-white/70 leading-relaxed">
-            Una selección de platos elaborados con ingredientes de proximidad,
-            renovada según la estación. Perfecta para compartir y descubrir
-            los sabores más auténticos de la costa.
+          <p class="font-body text-sm text-white/65 leading-relaxed">
+            Un menú cerrado a precio fijo con entrantes, plato principal a elegir
+            y postre casero. Pan y agua incluidos.
           </p>
-          <ul class="flex flex-col gap-3 list-none m-0 p-0">
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">Croquetas de bacallà con romesco suave</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">Pulpo a la brasa con parmentier de patata ahumada</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">Lubina salvaje al horno con hinojo y cítricos</span>
-            </li>
-          </ul>
-        </article>
-
-        <!-- Card 3: Menú de Degustación -->
-        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl p-8 flex flex-col gap-6">
-          <div>
-            <h3 class="font-display text-2xl text-white">Menú de Degustación</h3>
-            <p class="font-body text-xs uppercase tracking-widest text-brand-sand mt-1">
-              Experiencia gastronómica premium
-            </p>
-          </div>
-          <p class="font-display italic text-4xl text-brand-gold">€45<span class="text-xl font-body font-light text-white/60">/persona</span></p>
-          <p class="font-body text-sm text-white/70 leading-relaxed">
-            Un recorrido por nuestra cocina en siete tiempos, con maridaje de
-            vinos valencianos disponible a precio adicional. Reserva previa
-            obligatoria con 24 horas de antelación.
-          </p>
-          <ul class="flex flex-col gap-3 list-none m-0 p-0">
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">Snacks de bienvenida y aperitivo de la casa</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">Cinco pases de temporada con producto de la lonja</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
-              <span class="font-body text-sm text-white/80">Petit fours y selección de postres de autor</span>
-            </li>
-          </ul>
-        </article>
+          <span class="font-body text-xs uppercase tracking-widest text-brand-gold mt-auto">
+            Ver menú especial →
+          </span>
+        </a>
 
       </div>
-      <!-- REPLACE: real menu data -->
 
     </div>
   </section>

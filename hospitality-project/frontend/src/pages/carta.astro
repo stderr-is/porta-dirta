@@ -1,0 +1,139 @@
+---
+/**
+ * carta.astro — À la carte menu page
+ *
+ * SSR: reads carta.json from src/data at request time (VPS/Node adapter).
+ * Mobile-first: no hero, content immediately visible — designed for QR table use.
+ * JSON-LD: Schema.org Menu + MenuItem for SEO and AI crawlability.
+ */
+
+import Layout from '../layouts/Layout.astro';
+import GarlandDivider from '../components/GarlandDivider.astro';
+import cartaData from '../data/carta.json';
+
+const carta = cartaData;
+
+// Build JSON-LD Menu schema from live data
+const menuSchema = {
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  "name": "La Carta — Restaurante Porta D'irta",
+  "description": "Carta completa del restaurante Porta D'irta en Peñíscola. Tapas, arroces, platos principales y postres caseros.",
+  "url": "https://www.portadirta.com/carta",
+  "inLanguage": "es",
+  "hasMenuSection": carta.sections.map(section => ({
+    "@type": "MenuSection",
+    "name": section.name,
+    "hasMenuItem": section.items.map(item => ({
+      "@type": "MenuItem",
+      "name": item.name,
+      "description": item.description || undefined,
+      "offers": {
+        "@type": "Offer",
+        "price": item.price.toFixed(2),
+        "priceCurrency": "EUR"
+      }
+    }))
+  }))
+};
+---
+
+<Layout
+  title="La Carta — Restaurante"
+  description="Carta completa del restaurante Porta D'irta en Peñíscola. Tapas, arroces valencianos, platos principales y postres caseros de temporada."
+  ogImage="/assets/images/food-paella-wine.jpg"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(menuSchema)} />
+
+  <!-- ── Page header ─────────────────────────────────────────────── -->
+  <section class="bg-brand-blue pt-28 pb-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-4">
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Restaurante Porta D'irta</p>
+      <h1 class="font-display font-light italic text-5xl sm:text-6xl text-white leading-tight">
+        La Carta
+      </h1>
+      <GarlandDivider light />
+      <p class="font-body text-white/60 text-sm">
+        Actualizada el {new Date(carta.updated).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Menu sections ───────────────────────────────────────────── -->
+  <section class="bg-brand-cream py-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-12">
+
+      {carta.sections.map(section => (
+        <div>
+
+          <!-- Section heading -->
+          <div class="flex items-center gap-4 mb-6">
+            <h2 class="font-display text-2xl sm:text-3xl text-brand-blue shrink-0">
+              {section.name}
+            </h2>
+            <div class="flex-1 h-px bg-brand-blue/15"></div>
+          </div>
+
+          {section.note && (
+            <p class="font-body text-xs text-brand-stone uppercase tracking-widest mb-4 -mt-2">
+              {section.note}
+            </p>
+          )}
+
+          <!-- Items -->
+          <ul class="flex flex-col divide-y divide-brand-sand/40">
+            {section.items.map(item => (
+              <li class="flex items-baseline justify-between gap-4 py-4">
+                <div class="flex flex-col gap-1 min-w-0">
+                  <span class="font-body font-medium text-brand-blue text-base leading-snug">
+                    {item.name}
+                  </span>
+                  {item.description && (
+                    <span class="font-body text-brand-stone text-sm leading-relaxed">
+                      {item.description}
+                    </span>
+                  )}
+                  {item.allergens && item.allergens.length > 0 && (
+                    <span class="font-body text-xs text-brand-stone/60 italic">
+                      {item.allergens.join(', ')}
+                    </span>
+                  )}
+                </div>
+                <span class="font-body font-medium text-brand-gold text-base shrink-0 tabular-nums">
+                  {item.price.toFixed(2)} €
+                </span>
+              </li>
+            ))}
+          </ul>
+
+        </div>
+      ))}
+
+      <!-- Allergen note -->
+      <p class="font-body text-xs text-brand-stone/60 text-center border-t border-brand-sand/40 pt-6">
+        Si tienes alguna alergia o intolerancia alimentaria, por favor indícalo a nuestro personal.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────────────── -->
+  <section class="bg-brand-blue py-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+      <a
+        href="/menu"
+        class="font-body text-sm uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200"
+      >
+        Ver Menú Especial →
+      </a>
+      <span class="hidden sm:block text-white/20">|</span>
+      <a
+        href="/restaurante#reservar"
+        class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200"
+      >
+        Reservar mesa
+      </a>
+    </div>
+  </section>
+
+</Layout>

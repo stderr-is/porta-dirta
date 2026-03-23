@@ -1,0 +1,39 @@
+{
+  "updated": "2025-03-23",
+  "sections": [
+    {
+      "name": "Tapas",
+      "items": [
+        { "name": "Aceitunas aliñadas", "description": "", "price": 3.50, "allergens": [] },
+        { "name": "Patatas bravas", "description": "Con salsa brava casera", "price": 5.50, "allergens": [] },
+        { "name": "Croquetas caseras", "description": "De jamón ibérico", "price": 7.00, "allergens": ["gluten", "lácteos", "huevo"] },
+        { "name": "Fondue de camembert", "description": "Con mermelada de frutos rojos y pan tostado", "price": 9.50, "allergens": ["lácteos", "gluten"] },
+        { "name": "Gambones a la plancha", "description": "Con alioli de limón", "price": 15.00, "allergens": ["crustáceos"] }
+      ]
+    },
+    {
+      "name": "Arroces",
+      "note": "Mínimo 2 personas",
+      "items": [
+        { "name": "Paella valenciana", "description": "Pollo, conejo, garrofón y verduras de temporada", "price": 21.00, "allergens": [] },
+        { "name": "Arroz negro", "description": "Con sepia, gambón y alioli", "price": 22.00, "allergens": ["moluscos", "crustáceos", "huevo"] },
+        { "name": "Arroz con gatet y gambón", "description": "Arroz meloso con cangrejo de roca y gambón", "price": 22.00, "allergens": ["crustáceos"] }
+      ]
+    },
+    {
+      "name": "Platos principales",
+      "items": [
+        { "name": "Hamburguesa gourmet", "description": "Ternera, queso curado, cebolla caramelizada, rúcula y patatas fritas", "price": 15.50, "allergens": ["gluten", "lácteos"] },
+        { "name": "Codillo al horno", "description": "Con salsa de chalota al Oporto y puré de patata", "price": 19.00, "allergens": ["lácteos"] },
+        { "name": "Lubina a la sal", "description": "Con verduras asadas y aceite de oliva virgen extra", "price": 23.00, "allergens": ["pescado"] }
+      ]
+    },
+    {
+      "name": "Postres caseros",
+      "items": [
+        { "name": "Cheese cake", "description": "Con coulis de frutos rojos", "price": 6.50, "allergens": ["lácteos", "gluten", "huevo"] },
+        { "name": "Brownie de chocolate", "description": "Con helado de vainilla", "price": 6.50, "allergens": ["gluten", "lácteos", "huevo"] }
+      ]
+    }
+  ]
+}
