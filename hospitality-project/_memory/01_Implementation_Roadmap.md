@@ -136,8 +136,8 @@ tags: [wbs, planning, execution]
 - [x] **n8n Workflow B**: 10 new nodes intercept `/carta` `/menu` `/bebidas` commands → Google Doc → Claude Haiku → PHP proxy → Telegram confirmation
 
 ### Still needed to go live
-- [ ] Fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in VPS `docker-compose.yml`
-- [ ] Share Google Docs as "anyone with the link can view"
+- [x] Fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in VPS `docker-compose.yml` (done 2026-03-23)
+- [x] Share Google Docs as "anyone with the link can view" (confirmed by owner)
 - [ ] Reimport `workflow-b-command-center.json` into n8n
 - [ ] Uncomment `frontend` service in `docker-compose.yml` (VPS deployment)
 - [ ] Real bebidas list from owner → `MENU_BEBIDAS_DOC_ID`

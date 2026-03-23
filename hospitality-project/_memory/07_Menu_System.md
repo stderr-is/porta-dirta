@@ -264,8 +264,10 @@ A legend is shown at the bottom of each menu page.
 - [x] n8n Workflow B: `/carta`, `/menu`, `/bebidas` command pipeline (10 new nodes — see Architecture section)
 - [x] Astro pages: SSR file-system reading from `MENU_DATA_PATH` with static fallback for Cloudflare
 - [x] Docker: `menu-data` named volume + commented `frontend` service in `docker-compose.yml`
-- [ ] **ACTIVATE**: fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in n8n env vars (VPS `docker-compose.yml`)
-- [ ] **ACTIVATE**: share each Google Doc as "anyone with the link can view"
+- [x] **ACTIVATE**: fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in n8n env vars — done 2026-03-23
+  - Carta: `12tEHjkxxktMUzgj1Wq006gL56Qor9xButJ9JR-VKXeE`
+  - Menú: `1WYJCS8m5wN7XIL17Wpl9hfSKvBkdTVElszs12cCdV0Q`
+- [x] **ACTIVATE**: Google Docs shared as "anyone with the link can view" — confirmed by user
 - [ ] **ACTIVATE**: reimport `workflow-b-command-center.json` into n8n (or update in-place via n8n UI)
 - [ ] **ACTIVATE**: uncomment `frontend` service in `docker-compose.yml` when deploying Astro on VPS
 - [ ] Real bebidas list from owner → update `bebidas.json`, then fill `MENU_BEBIDAS_DOC_ID`
