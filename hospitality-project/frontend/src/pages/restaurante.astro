@@ -224,7 +224,7 @@ import GarlandDivider from '../components/GarlandDivider.astro';
     class="bg-brand-blue py-24 md:py-32"
     aria-label="Nuestra carta"
   >
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Section heading -->
       <div id="carta" class="text-center mb-16">
@@ -232,69 +232,116 @@ import GarlandDivider from '../components/GarlandDivider.astro';
           Gastronomía
         </span>
         <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
-          Nuestra Carta
+          Nuestra Propuesta
         </h2>
-        <p class="font-body text-sm text-white/60 mt-4 max-w-2xl mx-auto">
-          Descubre una propuesta culinaria que rinde homenaje al producto local de Castellón,
-          desde los pescados de la lonja hasta los arroces de la huerta valenciana.
+        <p class="font-body text-sm text-white/60 mt-4 max-w-xl mx-auto leading-relaxed">
+          Dos formas de vivir la mesa. Elige la tuya.
         </p>
       </div>
 
-      <!-- Two CTA cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Two editorial cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 
         <!-- Card: La Carta -->
         <a
           href="/carta"
-          class="group backdrop-blur-sm bg-white/10 hover:bg-white/15 border border-white/20 hover:border-brand-gold/40 rounded-xl p-8 flex flex-col gap-5 transition-all duration-300"
+          class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
+          aria-label="Ver La Carta à la carte"
         >
-          <div class="flex items-start justify-between">
+          <!-- Photo -->
+          <img
+            src="/assets/images/food-paella-close.jpg"
+            alt="Paella valenciana — La Carta de Porta D'irta"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            width="800" height="520"
+            loading="lazy"
+          />
+          <!-- Gradient overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-blue via-brand-blue/60 to-transparent"></div>
+
+          <!-- Content -->
+          <div class="relative mt-auto p-8 flex flex-col gap-4">
             <div>
-              <h3 class="font-display text-2xl text-white group-hover:text-brand-gold transition-colors duration-200">
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+                À la carte
+              </span>
+              <h3 class="font-display text-3xl sm:text-4xl text-white mt-1 leading-tight">
                 La Carta
               </h3>
-              <p class="font-body text-xs uppercase tracking-widest text-brand-sand/70 mt-1">
-                Tapas · Arroces · Platos · Postres
-              </p>
             </div>
-            <span class="text-brand-gold/60 group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-200 text-xl mt-1">→</span>
+
+            <p class="font-body text-sm text-white/75 leading-relaxed max-w-sm">
+              Aceitunas recién aliñadas, arroces que huelen a mar, un brownie que cierra
+              el círculo. Producto de la lonja y la huerta en platos que cambian con la
+              estación y el mercado.
+            </p>
+
+            <ul class="flex flex-wrap gap-x-4 gap-y-1">
+              {['Tapas', 'Arroces', 'Platos', 'Postres'].map(tag => (
+                <li class="font-body text-xs uppercase tracking-widest text-brand-sand/60">{tag}</li>
+              ))}
+            </ul>
+
+            <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
+              Ver carta completa
+              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+            </span>
           </div>
-          <p class="font-body text-sm text-white/65 leading-relaxed">
-            Nuestra carta completa à la carte. Desde tapas para compartir
-            hasta arroces valencianos y platos principales con producto de temporada.
-          </p>
-          <span class="font-body text-xs uppercase tracking-widest text-brand-gold mt-auto">
-            Ver carta completa →
-          </span>
         </a>
 
         <!-- Card: Menú Especial -->
         <a
           href="/menu"
-          class="group backdrop-blur-sm bg-white/10 hover:bg-white/15 border border-white/20 hover:border-brand-gold/40 rounded-xl p-8 flex flex-col gap-5 transition-all duration-300"
+          class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
+          aria-label="Ver el Menú Especial"
         >
-          <div class="flex items-start justify-between">
+          <!-- Photo -->
+          <img
+            src="/assets/images/food-paella-serving.jpg"
+            alt="Servicio de paella — Menú Especial de Porta D'irta"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            width="800" height="520"
+            loading="lazy"
+          />
+          <!-- Gradient overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-blue via-brand-blue/60 to-transparent"></div>
+
+          <!-- Price badge -->
+          <div class="relative self-end m-6 px-4 py-2 rounded-full bg-brand-gold/90 backdrop-blur-sm">
+            <span class="font-display text-brand-blue font-medium text-lg leading-none">35€ <span class="font-body text-xs font-normal">/pers.</span></span>
+          </div>
+
+          <!-- Content -->
+          <div class="relative mt-auto p-8 flex flex-col gap-4">
             <div>
-              <h3 class="font-display text-2xl text-white group-hover:text-brand-gold transition-colors duration-200">
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+                Precio fijo · Sábados y domingos
+              </span>
+              <h3 class="font-display text-3xl sm:text-4xl text-white mt-1 leading-tight">
                 Menú Especial
               </h3>
-              <p class="font-body text-xs uppercase tracking-widest text-brand-sand/70 mt-1">
-                Precio fijo · Todo incluido
-              </p>
             </div>
-            <span class="text-brand-gold/60 group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-200 text-xl mt-1">→</span>
+
+            <p class="font-body text-sm text-white/75 leading-relaxed max-w-sm">
+              Cuatro tiempos alrededor de la mesa: aperitivo de bienvenida, entrante,
+              plato principal —con paella para los que no se resisten— y postre casero.
+              Pan y agua incluidos.
+            </p>
+
+            <ul class="flex flex-wrap gap-x-4 gap-y-1">
+              {['Aperitivos', 'Entrantes', 'Arroces & Platos', 'Postres'].map(tag => (
+                <li class="font-body text-xs uppercase tracking-widest text-brand-sand/60">{tag}</li>
+              ))}
+            </ul>
+
+            <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
+              Ver menú especial
+              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+            </span>
           </div>
-          <p class="font-body text-sm text-white/65 leading-relaxed">
-            Un menú cerrado a precio fijo con entrantes, plato principal a elegir
-            y postre casero. Pan y agua incluidos.
-          </p>
-          <span class="font-body text-xs uppercase tracking-widest text-brand-gold mt-auto">
-            Ver menú especial →
-          </span>
         </a>
 
       </div>
-
     </div>
   </section>
 
