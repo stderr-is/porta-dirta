@@ -5,11 +5,17 @@
  * Allergens displayed as compact icon badges, not text.
  */
 
+import fs from 'node:fs';
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
-import cartaData from '../data/carta.json';
+import cartaFallback from '../data/carta.json';
 
-const carta = cartaData;
+// On VPS (SSR), read the live file written by n8n. Fall back to bundled data on Cloudflare.
+let carta: typeof cartaFallback = cartaFallback;
+const menuDataPath = import.meta.env.MENU_DATA_PATH;
+if (menuDataPath) {
+  try { carta = JSON.parse(fs.readFileSync(`${menuDataPath}/carta.json`, 'utf-8')); } catch {}
+}
 
 // EU 14 major allergens — code, label, colour
 const ALLERGENS: Record<string, { code: string; label: string; bg: string; text: string }> = {

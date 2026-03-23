@@ -8,10 +8,15 @@
  * noindex: not meant to rank, just for in-restaurant use.
  */
 
+import fs from 'node:fs';
 import Layout from '../layouts/Layout.astro';
-import menuData from '../data/menu.json';
+import menuFallback from '../data/menu.json';
 
-const menu = menuData;
+let menu: typeof menuFallback = menuFallback;
+const menuDataPath = import.meta.env.MENU_DATA_PATH;
+if (menuDataPath) {
+  try { menu = JSON.parse(fs.readFileSync(`${menuDataPath}/menu.json`, 'utf-8')); } catch {}
+}
 ---
 
 <Layout

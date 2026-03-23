@@ -5,8 +5,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:80"
+    environment:
+      # Path where menu JSON files are written (shared with frontend container)
+      MENU_DATA_PATH: /var/www/data
     depends_on:
       - restaurant-db
+    volumes:
+      - menu-data:/var/www/data
     restart: always
     mem_limit: 512m
     mem_reservation: 256m
@@ -23,6 +28,25 @@ services:
     restart: always
     mem_limit: 512m
     mem_reservation: 256m
+
+  # ── Astro SSR Frontend ────────────────────────────────────────────────────
+  # Reads menu JSON files at request time from the shared menu-data volume.
+  # Uncomment and configure when deploying to VPS (Hostinger/Coolify).
+  #
+  # frontend:
+  #   build:
+  #     context: ../frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4321:4321"
+  #   environment:
+  #     # Where Astro reads live menu JSON files (written by TastyIgniter/n8n)
+  #     MENU_DATA_PATH: /app/data
+  #   volumes:
+  #     - menu-data:/app/data
+  #   restart: always
+  #   mem_limit: 256m
+  #   mem_reservation: 128m
 
   events:
     build:
@@ -98,6 +122,12 @@ services:
       - BEDS24_PROP_ID=318433
       # Business email for SMTP replies
       - BUSINESS_EMAIL=info@portadirta.com
+      # ── Menu System ───────────────────────────────────────────────
+      # Google Doc IDs — share each doc as "anyone with link can view"
+      # then paste the ID from the URL: docs.google.com/document/d/<ID>/edit
+      - MENU_CARTA_DOC_ID=REPLACE_WITH_CARTA_DOC_ID
+      - MENU_MENU_DOC_ID=REPLACE_WITH_MENU_DOC_ID
+      - MENU_BEBIDAS_DOC_ID=REPLACE_WITH_BEBIDAS_DOC_ID
     depends_on:
       - n8n-db
     restart: always
@@ -113,3 +143,9 @@ services:
     restart: always
     mem_limit: 256m
     mem_reservation: 128m
+
+volumes:
+  # Shared between restaurant (writer) and frontend (reader).
+  # TastyIgniter writes carta.json / menu.json / bebidas.json here after n8n pipeline.
+  # Astro SSR reads them on each request — no rebuild needed.
+  menu-data:

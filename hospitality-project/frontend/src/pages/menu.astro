@@ -7,11 +7,17 @@
  * JSON-LD: Schema.org Menu with fixed-price Offer for SEO and AI crawlability.
  */
 
+import fs from 'node:fs';
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
-import menuData from '../data/menu.json';
+import menuFallback from '../data/menu.json';
 
-const menu = menuData;
+// On VPS (SSR), read the live file written by n8n. Fall back to bundled data on Cloudflare.
+let menu: typeof menuFallback = menuFallback;
+const menuDataPath = import.meta.env.MENU_DATA_PATH;
+if (menuDataPath) {
+  try { menu = JSON.parse(fs.readFileSync(`${menuDataPath}/menu.json`, 'utf-8')); } catch {}
+}
 
 // EU 14 major allergens — label, colour
 const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {

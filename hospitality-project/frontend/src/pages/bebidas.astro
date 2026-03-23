@@ -5,11 +5,17 @@
  * NOTE: currently using mockup data — replace bebidas.json when real list is ready.
  */
 
+import fs from 'node:fs';
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
-import bebidasData from '../data/bebidas.json';
+import bebidasFallback from '../data/bebidas.json';
 
-const bebidas = bebidasData;
+// On VPS (SSR), read the live file written by n8n. Fall back to bundled data on Cloudflare.
+let bebidas: typeof bebidasFallback = bebidasFallback;
+const menuDataPath = import.meta.env.MENU_DATA_PATH;
+if (menuDataPath) {
+  try { bebidas = JSON.parse(fs.readFileSync(`${menuDataPath}/bebidas.json`, 'utf-8')); } catch {}
+}
 
 const menuSchema = {
   "@context": "https://schema.org",
