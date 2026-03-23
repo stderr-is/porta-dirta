@@ -193,20 +193,57 @@ Rules:
 
 ---
 
+## Pages
+
+| Page | Purpose | noindex |
+|---|---|---|
+| `/mesa` | QR code table landing — links to all 3 menus + reservar | yes |
+| `/carta` | Full à la carte with allergen icons | no |
+| `/menu` | Fixed-price set menu | no |
+| `/bebidas` | Drinks & wine list | no |
+
+Single QR per table → `portadirta.com/mesa`
+
+---
+
+## ⚠️ Pending: Real Drinks List
+
+`src/data/bebidas.json` is currently a **mockup**.
+Need from owner:
+- Full wine list (whites, reds, rosés) with real names, origins, prices per glass/bottle
+- Beer selection
+- Spirits / cocktails (if any)
+- Soft drinks and water prices
+- Coffee menu
+
+Once received, update `bebidas.json` and send `/bebidas` to the Telegram bot (when n8n pipeline is built).
+
+---
+
+## Allergen Icon System
+
+Allergens shown as small circular badges (not text) on `/carta` and `/bebidas`.
+Defined in `carta.astro` as `ALLERGENS` map — 14 EU major allergens, each with:
+- Short code (G, L, H, CR, MO…)
+- Label for tooltip / `aria-label`
+- Colour pair (bg + text)
+A legend is shown at the bottom of each menu page.
+
+---
+
 ## SEO Targets
 
 | Page | Primary keyword (ES) | Secondary |
 |---|---|---|
 | `/carta` | carta restaurante Peñíscola | menú à la carte Costa Azahar |
-| `/menu` | menú especial Peñíscola | menú degustación Peñíscola |
+| `/menu` | menú especial Peñíscola | menú fin de semana Peñíscola |
+| `/bebidas` | carta vinos restaurante Peñíscola | vinos Costa del Azahar |
 
 ---
 
 ## QR Codes
 
-- Generate two QR codes pointing to:
-  - `https://www.portadirta.com/carta`
-  - `https://www.portadirta.com/menu`
+- **One QR per table** pointing to `https://www.portadirta.com/mesa`
 - Style to match brand (gold on dark blue, with logo)
 - Print and laminate for tables
 
@@ -215,14 +252,16 @@ Rules:
 ## Build Order
 
 - [x] Write plan to `_memory/07_Menu_System.md`
-- [ ] Build `src/pages/carta.astro` (static placeholder data)
-- [ ] Build `src/pages/menu.astro` (static placeholder data)
-- [ ] Build `CartaSection.astro` component
-- [ ] Build `MenuEspecial.astro` component
-- [ ] Update `restaurante.astro` — replace menu section with CTA cards
-- [ ] Write `src/data/carta.json` placeholder
-- [ ] Write `src/data/menu.json` placeholder
-- [ ] PHP proxy: `save_carta.php` + `save_menu.php`
+- [x] Build `src/pages/carta.astro` — allergen icons, mobile-first
+- [x] Build `src/pages/menu.astro` — fixed-price, course sections
+- [x] Build `src/pages/bebidas.astro` — mockup data
+- [x] Build `src/pages/mesa.astro` — QR landing page
+- [x] Update `restaurante.astro` — editorial photo cards → /carta and /menu
+- [x] Write `src/data/carta.json` — real data from Google Doc
+- [x] Write `src/data/menu.json` — real Menú Especial data
+- [x] Write `src/data/bebidas.json` — ⚠️ MOCKUP, needs real data
+- [ ] PHP proxy: `save_carta.php` + `save_menu.php` + `save_bebidas.php`
 - [ ] n8n: `/carta` branch on Workflow B
 - [ ] n8n: `/menu` branch on Workflow B
-- [ ] Generate and print QR codes
+- [ ] n8n: `/bebidas` branch on Workflow B (when real list ready)
+- [ ] Generate single QR code for `portadirta.com/mesa` + print for tables

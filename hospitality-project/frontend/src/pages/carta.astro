@@ -1,10 +1,8 @@
 ---
 /**
  * carta.astro — À la carte menu page
- *
- * SSR: reads carta.json from src/data at request time (VPS/Node adapter).
- * Mobile-first: no hero, content immediately visible — designed for QR table use.
- * JSON-LD: Schema.org Menu + MenuItem for SEO and AI crawlability.
+ * SSR · Mobile-first · QR table destination
+ * Allergens displayed as compact icon badges, not text.
  */
 
 import Layout from '../layouts/Layout.astro';
@@ -13,7 +11,24 @@ import cartaData from '../data/carta.json';
 
 const carta = cartaData;
 
-// Build JSON-LD Menu schema from live data
+// EU 14 major allergens — code, label, colour
+const ALLERGENS: Record<string, { code: string; label: string; bg: string; text: string }> = {
+  'gluten':        { code: 'G',  label: 'Gluten',        bg: 'bg-amber-100',  text: 'text-amber-800' },
+  'lácteos':       { code: 'L',  label: 'Lácteos',       bg: 'bg-sky-100',    text: 'text-sky-800'   },
+  'huevo':         { code: 'H',  label: 'Huevo',         bg: 'bg-yellow-100', text: 'text-yellow-800'},
+  'pescado':       { code: 'P',  label: 'Pescado',       bg: 'bg-blue-100',   text: 'text-blue-800'  },
+  'crustáceos':    { code: 'CR', label: 'Crustáceos',    bg: 'bg-orange-100', text: 'text-orange-800'},
+  'moluscos':      { code: 'MO', label: 'Moluscos',      bg: 'bg-violet-100', text: 'text-violet-800'},
+  'frutos secos':  { code: 'FS', label: 'Frutos secos',  bg: 'bg-green-100',  text: 'text-green-800' },
+  'cacahuetes':    { code: 'CA', label: 'Cacahuetes',    bg: 'bg-lime-100',   text: 'text-lime-800'  },
+  'soja':          { code: 'S',  label: 'Soja',          bg: 'bg-emerald-100',text: 'text-emerald-800'},
+  'sulfitos':      { code: 'SU', label: 'Sulfitos',      bg: 'bg-rose-100',   text: 'text-rose-800'  },
+  'mostaza':       { code: 'M',  label: 'Mostaza',       bg: 'bg-yellow-50',  text: 'text-yellow-700'},
+  'sésamo':        { code: 'SE', label: 'Sésamo',        bg: 'bg-stone-100',  text: 'text-stone-700' },
+  'apio':          { code: 'AP', label: 'Apio',          bg: 'bg-teal-100',   text: 'text-teal-800'  },
+  'altramuces':    { code: 'AL', label: 'Altramuces',    bg: 'bg-pink-100',   text: 'text-pink-800'  },
+};
+
 const menuSchema = {
   "@context": "https://schema.org",
   "@type": "Menu",
@@ -28,11 +43,7 @@ const menuSchema = {
       "@type": "MenuItem",
       "name": item.name,
       "description": item.description || undefined,
-      "offers": {
-        "@type": "Offer",
-        "price": item.price.toFixed(2),
-        "priceCurrency": "EUR"
-      }
+      "offers": { "@type": "Offer", "price": item.price.toFixed(2), "priceCurrency": "EUR" }
     }))
   }))
 };
@@ -45,92 +56,92 @@ const menuSchema = {
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(menuSchema)} />
 
-  <!-- ── Page header ─────────────────────────────────────────────── -->
-  <section class="bg-brand-blue pt-28 pb-12">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-4">
+  <!-- ── Header ───────────────────────────────────────────────────── -->
+  <section class="bg-brand-blue pt-28 pb-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-3">
       <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Restaurante Porta D'irta</p>
-      <h1 class="font-display font-light italic text-5xl sm:text-6xl text-white leading-tight">
-        La Carta
-      </h1>
+      <h1 class="font-display font-light italic text-5xl sm:text-6xl text-white leading-tight">La Carta</h1>
       <GarlandDivider light />
-      <p class="font-body text-white/60 text-sm">
+      <p class="font-body text-white/50 text-xs">
         Actualizada el {new Date(carta.updated).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
       </p>
     </div>
   </section>
 
-  <!-- ── Menu sections ───────────────────────────────────────────── -->
-  <section class="bg-brand-cream py-12">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-12">
+  <!-- ── Sections ─────────────────────────────────────────────────── -->
+  <section class="bg-brand-cream py-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
 
       {carta.sections.map(section => (
         <div>
-
-          <!-- Section heading -->
-          <div class="flex items-center gap-4 mb-6">
-            <h2 class="font-display text-2xl sm:text-3xl text-brand-blue shrink-0">
-              {section.name}
-            </h2>
+          <div class="flex items-center gap-3 mb-1">
+            <h2 class="font-display text-2xl sm:text-3xl text-brand-blue shrink-0">{section.name}</h2>
             <div class="flex-1 h-px bg-brand-blue/15"></div>
           </div>
-
           {section.note && (
-            <p class="font-body text-xs text-brand-stone uppercase tracking-widest mb-4 -mt-2">
-              {section.note}
-            </p>
+            <p class="font-body text-[11px] text-brand-stone/70 uppercase tracking-widest mb-3">{section.note}</p>
           )}
-
-          <!-- Items -->
           <ul class="flex flex-col divide-y divide-brand-sand/40">
             {section.items.map(item => (
-              <li class="flex items-baseline justify-between gap-4 py-4">
-                <div class="flex flex-col gap-1 min-w-0">
-                  <span class="font-body font-medium text-brand-blue text-base leading-snug">
-                    {item.name}
-                  </span>
+              <li class="py-3.5 flex items-start justify-between gap-3">
+                <div class="flex flex-col gap-1.5 min-w-0">
+                  <span class="font-body font-medium text-brand-blue text-[15px] leading-snug">{item.name}</span>
                   {item.description && (
-                    <span class="font-body text-brand-stone text-sm leading-relaxed">
-                      {item.description}
-                    </span>
+                    <span class="font-body text-brand-stone text-[13px] leading-relaxed">{item.description}</span>
                   )}
                   {item.allergens && item.allergens.length > 0 && (
-                    <span class="font-body text-xs text-brand-stone/60 italic">
-                      {item.allergens.join(', ')}
-                    </span>
+                    <div class="flex flex-wrap gap-1 mt-0.5">
+                      {item.allergens.map(a => {
+                        const info = ALLERGENS[a.toLowerCase()] ?? { code: a.slice(0,2).toUpperCase(), label: a, bg: 'bg-gray-100', text: 'text-gray-700' };
+                        return (
+                          <span
+                            title={info.label}
+                            aria-label={info.label}
+                            class={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold leading-none ${info.bg} ${info.text}`}
+                          >
+                            {info.code}
+                          </span>
+                        );
+                      })}
+                    </div>
                   )}
                 </div>
-                <span class="font-body font-medium text-brand-gold text-base shrink-0 tabular-nums">
+                <span class="font-body font-medium text-brand-gold text-[15px] shrink-0 tabular-nums pt-0.5">
                   {item.price.toFixed(2)} €
                 </span>
               </li>
             ))}
           </ul>
-
         </div>
       ))}
 
-      <!-- Allergen note -->
-      <p class="font-body text-xs text-brand-stone/60 text-center border-t border-brand-sand/40 pt-6">
-        Si tienes alguna alergia o intolerancia alimentaria, por favor indícalo a nuestro personal.
-      </p>
+      <!-- Allergen legend -->
+      <div class="border-t border-brand-sand/40 pt-6 flex flex-col gap-3">
+        <p class="font-body text-[11px] uppercase tracking-widest text-brand-stone/60">Alérgenos</p>
+        <div class="flex flex-wrap gap-2">
+          {Object.values(ALLERGENS).map(a => (
+            <div class="flex items-center gap-1.5">
+              <span class={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold ${a.bg} ${a.text}`}>{a.code}</span>
+              <span class="font-body text-[11px] text-brand-stone/70">{a.label}</span>
+            </div>
+          ))}
+        </div>
+        <p class="font-body text-[11px] text-brand-stone/50 italic mt-1">
+          Intolerancia o alergia grave? Indícalo a nuestro equipo y lo gestionamos con todo el cuidado.
+        </p>
+      </div>
 
     </div>
   </section>
 
-  <!-- ── CTA ─────────────────────────────────────────────────────── -->
-  <section class="bg-brand-blue py-12">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-      <a
-        href="/menu"
-        class="font-body text-sm uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200"
-      >
-        Ver Menú Especial →
-      </a>
+  <!-- ── Bottom nav ────────────────────────────────────────────────── -->
+  <section class="bg-brand-blue py-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href="/mesa" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">← Todos los menús</a>
       <span class="hidden sm:block text-white/20">|</span>
-      <a
-        href="/restaurante#reservar"
-        class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200"
-      >
+      <a href="/bebidas" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">Bebidas →</a>
+      <span class="hidden sm:block text-white/20">|</span>
+      <a href="/reservar" class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
         Reservar mesa
       </a>
     </div>

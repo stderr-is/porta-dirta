@@ -1,0 +1,52 @@
+{
+  "_note": "MOCKUP — Replace with real drinks list. See _memory/07_Menu_System.md",
+  "updated": "2025-03-23",
+  "sections": [
+    {
+      "name": "Vinos Blancos",
+      "items": [
+        { "name": "Verdejo Rueda D.O.", "description": "Afrutado, fresco, notas cítricas", "price": 3.50, "unit": "copa" },
+        { "name": "Albariño Rías Baixas D.O.", "description": "Atlántico, floral, persistente", "price": 4.00, "unit": "copa" },
+        { "name": "Chardonnay Valencia D.O.", "description": "Elegante, con crianza ligera", "price": 18.00, "unit": "botella" }
+      ]
+    },
+    {
+      "name": "Vinos Tintos",
+      "items": [
+        { "name": "Tempranillo Utiel-Requena D.O.", "description": "Robusto, taninos suaves, frutos rojos", "price": 3.50, "unit": "copa" },
+        { "name": "Monastrell Jumilla D.O.", "description": "Intenso, especiado, largo en boca", "price": 4.00, "unit": "copa" },
+        { "name": "Crianza Ribera del Duero D.O.", "description": "12 meses en barrica, complejo", "price": 22.00, "unit": "botella" }
+      ]
+    },
+    {
+      "name": "Vinos Rosados",
+      "items": [
+        { "name": "Rosado de Bobal", "description": "Ligero, frutoso, color salmón", "price": 3.00, "unit": "copa" }
+      ]
+    },
+    {
+      "name": "Cervezas",
+      "items": [
+        { "name": "Cerveza nacional", "description": "Botellín 33 cl", "price": 2.50, "unit": null },
+        { "name": "Cerveza artesana", "description": "Elaboración local, rubia o tostada", "price": 3.50, "unit": null },
+        { "name": "Sin alcohol", "description": "Botellín 33 cl", "price": 2.00, "unit": null }
+      ]
+    },
+    {
+      "name": "Refrescos & Agua",
+      "items": [
+        { "name": "Agua mineral", "description": "50 cl · con o sin gas", "price": 1.50, "unit": null },
+        { "name": "Refresco", "description": "Cola, naranja, limón", "price": 2.50, "unit": null },
+        { "name": "Zumo natural", "description": "Naranja exprimida del momento", "price": 3.00, "unit": null }
+      ]
+    },
+    {
+      "name": "Cafés & Infusiones",
+      "items": [
+        { "name": "Café solo / cortado / con leche", "description": "", "price": 1.80, "unit": null },
+        { "name": "Café americano", "description": "", "price": 2.00, "unit": null },
+        { "name": "Infusión", "description": "Selección de hierbas", "price": 1.80, "unit": null }
+      ]
+    }
+  ]
+}
