@@ -35,43 +35,53 @@ The following nodes were originally Code type and caused `$helpers is not define
 
 ---
 
-## 2. "Publish" in the n8n UI overwrites DB patches
+## 2. ⚠️ n8n executes from `workflow_history`, NOT `workflow_entity.nodes`
 
 ### The problem
-When Claude patches a workflow by writing directly to the PostgreSQL `workflow_entity` table, those patches are **lost** the next time someone clicks "Save" or "Publish" in the n8n UI. The UI saves its cached (old) state back to the DB.
+n8n stores the live execution code in the **`workflow_history`** table, keyed by `versionId`. The `workflow_entity.nodes` column is NOT what n8n actually runs — it is only a convenience/display copy. Patching `workflow_entity` alone has zero effect on what executes.
+
+Additionally:
+- `deactivate/activate` does NOT reload code from the DB — it just toggles active state
+- `PUT /api/v1/workflows/{id}` updates DB but n8n's runtime still uses its in-memory copy until restart
+- The only way to make n8n use new code is: **patch `workflow_history` + restart n8n**
 
 ### The fix
-After patching the DB, use the n8n API `PUT` endpoint to flush n8n's internal runtime state. **`deactivate/activate` alone is NOT enough** — it only toggles the active flag and re-registers webhooks, it does NOT reload the workflow code from the DB.
 
 ```bash
-# Step 1: fetch (reads from DB — has your patch)
-curl -s "http://localhost:5678/api/v1/workflows/WORKFLOW_ID" \
-  -H "X-N8N-API-KEY: n8n_api_activation_key_portadirta_2026" > /tmp/wf.json
+# Step 1: get the active versionId
+VERID=$(docker exec backend-n8n-db-1 psql -U n8n -d n8n -t -A -c \
+  "SELECT \"versionId\" FROM workflow_entity WHERE id='WORKFLOW_ID';")
 
-# Step 2: PUT back (flushes n8n's internal state)
-# IMPORTANT: settings must only contain 'executionOrder' — other keys cause 400 error
-python3 -c "
-import json
-with open('/tmp/wf.json') as f: wf = json.load(f)
-body = {'name': wf['name'], 'nodes': wf['nodes'], 'connections': wf['connections'],
-        'settings': {'executionOrder': wf['settings'].get('executionOrder','v1')},
-        'staticData': wf.get('staticData')}
-print(json.dumps(body))
-" | curl -s -X PUT "http://localhost:5678/api/v1/workflows/WORKFLOW_ID" \
-  -H "X-N8N-API-KEY: n8n_api_activation_key_portadirta_2026" \
-  -H "Content-Type: application/json" -d @-
+# Step 2: extract nodes from workflow_history
+docker exec backend-n8n-db-1 psql -U n8n -d n8n -t -A -c \
+  "SELECT nodes FROM workflow_history WHERE \"versionId\"='$VERID';" > /tmp/wh_nodes.json
 
-# Step 3: re-activate (PUT deactivates it)
-curl -s -X POST "http://localhost:5678/api/v1/workflows/WORKFLOW_ID/activate" \
-  -H "X-N8N-API-KEY: n8n_api_activation_key_portadirta_2026"
+# Step 3: patch /tmp/wh_nodes.json with python, save to /tmp/wh_patched.json
+
+# Step 4: write back to BOTH tables
+docker cp /tmp/wh_patched.json backend-n8n-db-1:/tmp/wh_patched.json
+docker exec backend-n8n-db-1 psql -U n8n -d n8n -c "
+  UPDATE workflow_history SET nodes = (SELECT nodes::jsonb FROM (SELECT pg_read_file('/tmp/wh_patched.json') AS nodes) t) WHERE \"versionId\"='$VERID';
+  UPDATE workflow_entity SET nodes = (SELECT nodes::jsonb FROM (SELECT pg_read_file('/tmp/wh_patched.json') AS nodes) t) WHERE id='WORKFLOW_ID';"
+
+# Step 5: restart n8n (required to reload from DB)
+cd /home/stderr/hospitality-project/backend && docker compose restart n8n
+sleep 8
+
+# Step 6: re-register Telegram webhook (always needed after n8n restart)
+BOT=$(docker exec backend-n8n-1 sh -c 'echo $TELEGRAM_BOT_TOKEN')
+curl -s "https://api.telegram.org/bot${BOT}/setWebhook" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://n8n.hobbitonranch.com/webhook/475cd6ce-bb05-46ee-aea8-663b6e9d8433/webhook","allowed_updates":["message","callback_query"]}'
 ```
 
 The API key `n8n_api_activation_key_portadirta_2026` is stored in the `user_api_keys` table.
 
 ### Consequences
-- Never tell the user to "click Publish" after a DB patch
-- `deactivate/activate` is insufficient — must use `PUT` to actually flush runtime state
-- If the user clicks Publish, patches disappear — re-apply the patch and use PUT to reload
+- Never patch only `workflow_entity` — always patch `workflow_history` too
+- Never tell the user to "click Publish" — that overwrites both tables with the browser's stale cache
+- `deactivate/activate` and `PUT` API calls do NOT reload code — only restart works
+- If Publish was clicked: re-apply all patches to both tables, then restart
 
 ---
 
