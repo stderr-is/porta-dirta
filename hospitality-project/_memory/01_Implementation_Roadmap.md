@@ -128,23 +128,30 @@ tags: [wbs, planning, execution]
 ## Phase 3.8: Menu Automation Pipeline
 *Goal: Staff update menus by editing a Google Doc and sending one Telegram message — site updates instantly, no rebuild, no developer needed.*
 
-### What's built (2026-03-23)
+### ✅ FULLY OPERATIONAL (2026-03-24)
 - [x] **Frontend pages**: `/carta`, `/menu`, `/bebidas`, `/mesa` — mobile-first, allergen pills, QR-ready
 - [x] **Astro SSR reading**: all 4 pages read from `MENU_DATA_PATH` volume at request time; fall back to bundled JSON on Cloudflare Pages build
 - [x] **PHP proxy** (`routes/api.php`): `POST /api/internal/menu/carta|menu|bebidas` — validates + writes JSON to shared Docker volume
-- [x] **Docker**: `menu-data` named volume in `docker-compose.yml`; commented frontend service template ready
-- [x] **n8n Workflow B**: 10 new nodes intercept `/carta` `/menu` `/bebidas` commands → Google Doc → Claude Haiku → PHP proxy → Telegram confirmation
-
-### Still needed to go live
-- [x] Fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in VPS `docker-compose.yml` (done 2026-03-23)
+- [x] **Docker**: `menu-data` named volume + custom entrypoint `chown www-data` on startup (volume initialises as root — see n8n troubleshooting notes)
+- [x] **Dockerfile fix**: replaced broken `printf '%{CORS_ORIGIN}e'` with `COPY cors.conf` (printf interprets `%{` as format directive in modern sh/dash)
+- [x] **n8n Workflow B**: menu pipeline LIVE in production webhook mode — full error handling on every step:
+  - Route OK? IF gate (env var missing → Telegram error)
+  - Fetch Google Doc (DNS/network failure → Telegram error)
+  - Claude — Parse Menu (Anthropic API failure → Telegram error)
+  - Extract Menu JSON (bad JSON from Claude → Telegram error)
+  - Save Menu to Proxy (proxy down → Telegram error)
+  - Telegram — Menu Updated (success confirmation)
+- [x] Fill `MENU_CARTA_DOC_ID` + `MENU_MENU_DOC_ID` in `docker-compose.yml` (done 2026-03-23)
 - [x] Share Google Docs as "anyone with the link can view" (confirmed by owner)
-- [ ] Reimport `workflow-b-command-center.json` into n8n
-- [ ] Uncomment `frontend` service in `docker-compose.yml` (VPS deployment)
+
+### Still needed to go live on portadirta.com
+- [ ] Uncomment `frontend` service in `docker-compose.yml` (VPS deployment — currently Cloudflare Pages serves static fallback)
 - [ ] Real bebidas list from owner → `MENU_BEBIDAS_DOC_ID`
 - [ ] Generate + print QR code for `portadirta.com/mesa`
 
-### Full details
-See `_memory/07_Menu_System.md` — includes activation checklist, JSON schemas, Claude prompts.
+### Full details + troubleshooting
+See `_memory/07_Menu_System.md` — activation checklist, JSON schemas, Claude prompts.
+See `_memory/08_N8N_Troubleshooting.md` — **CRITICAL: read before touching n8n workflows**.
 
 ## Phase 3.7: /eventos Page — Final Polish
 *Blocked on input from brother-in-law (content owner) before proceeding.*
