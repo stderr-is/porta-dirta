@@ -4,6 +4,96 @@
 
 ---
 
+## 0. THE ONLY CORRECT WAY TO PATCH AN n8n WORKFLOW
+
+> This is the single most important section. Every other approach we tried first failed. Follow this exactly every time.
+
+### Why everything else fails
+
+| What you might try | Why it doesn't work |
+|---|---|
+| Patch `workflow_entity.nodes` in SQL | n8n does NOT execute from this table |
+| `deactivate` then `activate` via API | Does not reload code from DB |
+| `PUT /api/v1/workflows/{id}` via API | Updates DB but runtime keeps old in-memory code |
+| Tell user to click "Publish" in UI | UI sends browser-cached (old) state back to DB, erasing all patches |
+| Manual "Execute Workflow" in UI | Runs inline (not task runner) — works differently than real webhooks |
+
+**n8n executes from `workflow_history` (keyed by `versionId`), not `workflow_entity.nodes`.**
+**The only way to make n8n use new code after a DB patch is: patch `workflow_history` + `docker compose restart n8n`.**
+
+### The correct procedure
+
+```bash
+# ── STEP 1: get the active versionId ────────────────────────────────────────
+VERID=$(docker exec backend-n8n-db-1 psql -U n8n -d n8n -t -A -c \
+  "SELECT \"versionId\" FROM workflow_entity WHERE id='WORKFLOW_ID';")
+echo "Active version: $VERID"
+
+# ── STEP 2: extract nodes from workflow_history ──────────────────────────────
+docker exec backend-n8n-db-1 psql -U n8n -d n8n -t -A -c \
+  "SELECT nodes FROM workflow_history WHERE \"versionId\"='$VERID';" > /tmp/wh_nodes.json
+
+# ── STEP 3: apply your patch in Python ───────────────────────────────────────
+python3 << 'PYEOF'
+import json
+with open('/tmp/wh_nodes.json') as f:
+    nodes = json.load(f)
+# ... make changes to nodes ...
+with open('/tmp/wh_patched.json', 'w') as f:
+    json.dump(nodes, f)
+PYEOF
+
+# ── STEP 4: write to BOTH tables ─────────────────────────────────────────────
+docker cp /tmp/wh_patched.json backend-n8n-db-1:/tmp/wh_patched.json
+docker exec backend-n8n-db-1 psql -U n8n -d n8n -c "
+  UPDATE workflow_history
+    SET nodes = (SELECT nodes::jsonb FROM (SELECT pg_read_file('/tmp/wh_patched.json') AS nodes) t)
+    WHERE \"versionId\" = '$VERID';
+  UPDATE workflow_entity
+    SET nodes = (SELECT nodes::jsonb FROM (SELECT pg_read_file('/tmp/wh_patched.json') AS nodes) t)
+    WHERE id = 'WORKFLOW_ID';"
+
+# ── STEP 5: restart n8n ──────────────────────────────────────────────────────
+cd /home/stderr/hospitality-project/backend && docker compose restart n8n
+sleep 8
+
+# ── STEP 6: re-register Telegram webhook (ALWAYS needed after restart) ───────
+BOT=$(docker exec backend-n8n-1 sh -c 'echo $TELEGRAM_BOT_TOKEN')
+curl -s "https://api.telegram.org/bot${BOT}/setWebhook" \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://n8n.hobbitonranch.com/webhook/475cd6ce-bb05-46ee-aea8-663b6e9d8433/webhook","allowed_updates":["message","callback_query"]}' \
+  | python3 -m json.tool
+
+# ── STEP 7: verify by sending a real message in Telegram ─────────────────────
+# Do NOT test with "Execute Workflow" in the n8n UI — it runs in a different mode
+# and does NOT reflect real webhook behaviour.
+```
+
+### How to verify the patch actually took effect
+
+After restarting, always verify by checking the LATEST execution in the DB:
+
+```bash
+# Get the latest execution ID
+docker exec backend-n8n-db-1 psql -U n8n -d n8n -c \
+  "SELECT id, mode, status FROM execution_entity WHERE \"workflowId\"='WORKFLOW_ID' ORDER BY id DESC LIMIT 3;"
+
+# Check the workflowData snapshot used in that execution
+# (n8n writes this from workflow_history at execution time)
+EID=<latest id>
+docker exec backend-n8n-db-1 psql -U n8n -d n8n -c \
+  "COPY (SELECT \"workflowData\" FROM execution_data WHERE \"executionId\"=$EID) TO '/tmp/check.json';"
+docker cp backend-n8n-db-1:/tmp/check.json /tmp/check.json
+python3 -c "
+with open('/tmp/check.json') as f: s = f.read()
+print('your_patch_string in snapshot:', 'your_patch_string' in s)
+"
+```
+
+If your patch string is NOT in the snapshot of the latest execution, the fix did not take effect.
+
+---
+
 ## 1. Task Runner: `$helpers` and `fetch` DON'T WORK in webhook mode
 
 ### The problem
