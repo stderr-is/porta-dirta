@@ -41,29 +41,37 @@ The following nodes were originally Code type and caused `$helpers is not define
 When Claude patches a workflow by writing directly to the PostgreSQL `workflow_entity` table, those patches are **lost** the next time someone clicks "Save" or "Publish" in the n8n UI. The UI saves its cached (old) state back to the DB.
 
 ### The fix
-After patching the DB, always reload the workflow into n8n's runtime using the **n8n API** — never ask the user to click Publish:
+After patching the DB, use the n8n API `PUT` endpoint to flush n8n's internal runtime state. **`deactivate/activate` alone is NOT enough** — it only toggles the active flag and re-registers webhooks, it does NOT reload the workflow code from the DB.
 
 ```bash
-# Deactivate (flushes runtime cache)
-curl -s -X POST "http://localhost:5678/api/v1/workflows/WORKFLOW_ID/deactivate" \
-  -H "X-N8N-API-KEY: n8n_api_activation_key_portadirta_2026"
+# Step 1: fetch (reads from DB — has your patch)
+curl -s "http://localhost:5678/api/v1/workflows/WORKFLOW_ID" \
+  -H "X-N8N-API-KEY: n8n_api_activation_key_portadirta_2026" > /tmp/wf.json
 
-# Re-activate (loads fresh from DB)
+# Step 2: PUT back (flushes n8n's internal state)
+# IMPORTANT: settings must only contain 'executionOrder' — other keys cause 400 error
+python3 -c "
+import json
+with open('/tmp/wf.json') as f: wf = json.load(f)
+body = {'name': wf['name'], 'nodes': wf['nodes'], 'connections': wf['connections'],
+        'settings': {'executionOrder': wf['settings'].get('executionOrder','v1')},
+        'staticData': wf.get('staticData')}
+print(json.dumps(body))
+" | curl -s -X PUT "http://localhost:5678/api/v1/workflows/WORKFLOW_ID" \
+  -H "X-N8N-API-KEY: n8n_api_activation_key_portadirta_2026" \
+  -H "Content-Type: application/json" -d @-
+
+# Step 3: re-activate (PUT deactivates it)
 curl -s -X POST "http://localhost:5678/api/v1/workflows/WORKFLOW_ID/activate" \
   -H "X-N8N-API-KEY: n8n_api_activation_key_portadirta_2026"
 ```
 
 The API key `n8n_api_activation_key_portadirta_2026` is stored in the `user_api_keys` table.
-It was created with:
-```sql
-INSERT INTO user_api_keys (id, "userId", label, "apiKey", "createdAt", "updatedAt")
-VALUES (gen_random_uuid(), '6de9a6aa-03c2-4307-94b7-512655032e8e',
-  'activation-key', 'n8n_api_activation_key_portadirta_2026', NOW(), NOW());
-```
 
 ### Consequences
 - Never tell the user to "click Publish" after a DB patch
-- If the user clicks Publish on their own and patches disappear, just re-apply the patch and reload via API
+- `deactivate/activate` is insufficient — must use `PUT` to actually flush runtime state
+- If the user clicks Publish, patches disappear — re-apply the patch and use PUT to reload
 
 ---
 
