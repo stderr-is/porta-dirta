@@ -9,8 +9,9 @@
 - [feedback_telegram_restart_window.md](feedback_telegram_restart_window.md) — Button taps lost during n8n restart window; TELEGRAM_BOT_TOKEN env var can be empty after restart
 
 ## Credentials & Tokens
-- [reference_credentials.md](reference_credentials.md) — ⭐ MASTER credentials file: all logins, passwords, tokens, ports for every service
+- [reference_credentials.md](reference_credentials.md) — ⭐ MASTER credentials file: all logins, passwords, tokens, ports for every service (gitignored)
 - [reference_beds24_tokens.md](reference_beds24_tokens.md) — Beds24 API V2 refresh token, room IDs, and how to get an access token
+- [reference_memory_setup.md](reference_memory_setup.md) — How this memory system works + how to replicate on a new machine (symlink, Google Drive, git)
 
 ## Project Context
 - [project_portadirta.md](project_portadirta.md) — High-level project overview and working directory

@@ -11,10 +11,10 @@
             "id": "c2b2c49498512190",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "New tab"
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ]
@@ -74,7 +74,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 404.5
   },
   "right": {
     "id": "22a6615ebaa685fb",
@@ -176,28 +176,42 @@
       "bases:Create new base": false
     }
   },
-  "active": "73a639e47ac56d02",
+  "active": "c2b2c49498512190",
   "lastOpenFiles": [
-    "07_Menu_System.md.tmp.2895248.1774302541240",
+    "memory/project_cunyado_pending_info.md",
+    "memory/project_portadirta.md",
+    "memory/reference_beds24_tokens.md",
+    "memory/feedback_n8n_tastyigniter_proxy.md",
+    "memory/feedback_n8n_http_body.md",
+    "memory/feedback_n8n_task_runner.md",
+    "memory/feedback_telegram_restart_window.md",
+    "memory/feedback_n8n_imap_fields.md",
+    "memory/feedback_n8n_workflow_patching.md",
+    "memory/reference_credentials.md",
+    "memory/MEMORY.md",
+    "memory",
+    "12_Bugfix_Hotel_Proxy.md",
+    "01_Implementation_Roadmap.md",
+    "00_Master_Architecture.md",
+    "10_VPS_Migration.md.tmp.2210313.1774526011573",
+    "10_VPS_Migration.md.tmp.2210313.1774525320399",
+    "10_VPS_Migration.md.tmp.2210313.1774525313576",
+    "10_VPS_Migration.md.tmp.2210313.1774524559698",
+    "10_VPS_Migration.md",
+    "10_VPS_Migration.md.tmp.2210313.1774524315471",
+    "09_Email_Pipeline_Debug.md.tmp.2210313.1774440486831",
+    "09_Email_Pipeline_Debug.md.tmp.2210313.1774440478383",
+    "08_N8N_Troubleshooting.md.tmp.2210313.1774438304663",
+    "09_Email_Pipeline_Debug.md.tmp.2210313.1774437043908",
+    "11_Hotel_Availability_Enrichment_Plan.md",
+    "10_Email_Enrichment_Plan.md",
+    "09_Email_Pipeline_Debug.md",
+    "08_N8N_Troubleshooting.md",
     "07_Menu_System.md",
-    "07_Menu_System.md.tmp.2895248.1774301465900",
-    "01_Implementation_Roadmap.md.tmp.3687132.1774276153889",
-    "06_SEO_Strategy.md.tmp.3687132.1774276120926",
-    "06_SEO_Strategy.md.tmp.2895248.1774187401500",
-    "06_SEO_Strategy.md.tmp.2895248.1774187391155",
-    "05_AI_Automation.md.tmp.2895248.1774187376739",
-    "05_AI_Automation.md.tmp.2895248.1774187365688",
-    "05_AI_Automation.md.tmp.2895248.1774187350474",
-    "05_AI_Automation.md.tmp.2895248.1774187338165",
-    "05_AI_Automation.md.tmp.2895248.1774187328074",
     "05_Audit_Issues.md",
     "06_SEO_Strategy.md",
     "05_AI_Automation.md",
     "04_Hospitality_Design_System.md",
-    "01_Implementation_Roadmap.md",
-    "03_Design_System.md",
-    "CLAUDE.md",
-    "02_Risk_Management.md",
-    "00_Master_Architecture.md"
+    "03_Design_System.md"
   ]
 }
