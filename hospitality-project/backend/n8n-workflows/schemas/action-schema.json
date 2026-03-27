@@ -1,0 +1,50 @@
+{
+  "_comment": "Defines the Gemini output schema and allowed action list for Workflow B. Schema Validator Code node checks against this before any API call.",
+
+  "geminiOutputSchema": {
+    "action": "string — one of the values in allowedActions below",
+    "endpoint": "string — full API path e.g. /properties/318433/availability",
+    "method": "string — GET | POST | PUT | PATCH | DELETE",
+    "payload": "object | null — body for POST/PUT/PATCH, null for GET/DELETE",
+    "isDestructive": "boolean — true requires Telegram confirmation before execution",
+    "confirmationMessage": "string — human-readable summary shown in Telegram confirm dialog",
+    "humanReadableSummary": "string — shown in Telegram after successful execution"
+  },
+
+  "allowedActions": {
+    "admin": [
+      "beds24.getOccupancy",
+      "beds24.listBookings",
+      "beds24.getRevenue",
+      "beds24.blockRoom",
+      "beds24.updatePrice",
+      "beds24.cancelBooking",
+      "tastyigniter.listReservations",
+      "tastyigniter.checkAvailability",
+      "tastyigniter.deleteReservation",
+      "hievents.getTicketCounts",
+      "hievents.listEvents"
+    ],
+    "collaborator": [
+      "tastyigniter.listReservations",
+      "tastyigniter.checkAvailability",
+      "hievents.getTicketCounts",
+      "hievents.listEvents",
+      "beds24.getOccupancy"
+    ]
+  },
+
+  "destructiveActions": [
+    "beds24.blockRoom",
+    "beds24.updatePrice",
+    "beds24.cancelBooking",
+    "tastyigniter.deleteReservation"
+  ],
+
+  "validationRules": {
+    "dates": "Must match YYYY-MM-DD",
+    "prices": "Must be a positive number, not below room floor, not above room ceiling",
+    "roomIds": "Must be a string matching a known Beds24 room ID",
+    "personas": "Must be integer between 1 and 20"
+  }
+}

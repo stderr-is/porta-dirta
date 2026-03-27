@@ -33,20 +33,20 @@ services:
   # Reads menu JSON files at request time from the shared menu-data volume.
   # Uncomment and configure when deploying to VPS (Hostinger/Coolify).
   #
-  # frontend:
-  #   build:
-  #     context: ../frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "4321:4321"
-  #   environment:
-  #     # Where Astro reads live menu JSON files (written by TastyIgniter/n8n)
-  #     MENU_DATA_PATH: /app/data
-  #   volumes:
-  #     - menu-data:/app/data
-  #   restart: always
-  #   mem_limit: 256m
-  #   mem_reservation: 128m
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4321:4321"
+    environment:
+      # Where Astro reads live menu JSON files (written by TastyIgniter/n8n)
+      MENU_DATA_PATH: /app/data
+    volumes:
+      - menu-data:/app/data
+    restart: always
+    mem_limit: 256m
+    mem_reservation: 128m
 
   events:
     build:
@@ -55,8 +55,8 @@ services:
     ports:
       - "8082:80"
     environment:
-      VITE_API_URL_CLIENT: https://events.hobbitonranch.com/api
-      VITE_FRONTEND_URL: https://events.hobbitonranch.com
+      VITE_API_URL_CLIENT: https://eventos.portadirta.com/api
+      VITE_FRONTEND_URL: https://eventos.portadirta.com
       VITE_STRIPE_PUBLISHABLE_KEY: ""
     volumes:
       - ./hi.events/backend/.env:/app/backend/.env
@@ -101,33 +101,35 @@ services:
       - DB_POSTGRESDB_PASSWORD=n8n_pass
       - DB_POSTGRESDB_USER=n8n
       # Stable encryption key — NEVER change this or all credentials become unreadable
-      - N8N_ENCRYPTION_KEY=44ad7c7792af3d44fdd16bc19747501c08765f53550576e18fecfb8e32a8f207
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       # Allow Code nodes to read $env variables (needed for Identity Router)
       - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
       # Public URL so n8n can register Telegram webhooks correctly
-      - WEBHOOK_URL=https://n8n.hobbitonranch.com/
-      - N8N_EDITOR_BASE_URL=https://n8n.hobbitonranch.com/
+      - WEBHOOK_URL=https://n8n.portadirta.com/
+      - N8N_EDITOR_BASE_URL=https://n8n.portadirta.com/
+      # Trust the first proxy (Cloudflare/Tunnel) for accurate IP/Header handling
+      - N8N_PROXY_HOPS=1
       # ── AI Automation Layer ────────────────────────────────────────
       # Claude API key (Pro account) — replaces Gemini (free tier didn't work)
       # Get key: https://console.anthropic.com/settings/keys
-      - ANTHROPIC_API_KEY=REPLACE_WITH_ANTHROPIC_API_KEY
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       # Create bot via @BotFather on Telegram → /newbot
-      - TELEGRAM_BOT_TOKEN=8348668157:AAEMAD_F37GNJJZxOd4C5krZg4OnPaZ_MD4
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       # Find your ID: message @userinfobot on Telegram
-      - TELEGRAM_ADMIN_ID=1330098629
+      - TELEGRAM_ADMIN_ID=${TELEGRAM_ADMIN_ID}
       # Collaborator ID (restaurant partner, read-only access)
-      - TELEGRAM_COLLAB_ID=REPLACE_WITH_COLLAB_TELEGRAM_ID
+      - TELEGRAM_COLLAB_ID=${TELEGRAM_COLLAB_ID}
       # Beds24 V2 long-lived token (from frontend/.env BEDS24_REFRESH_TOKEN flow)
-      - BEDS24_API_TOKEN=REPLACE_WITH_BEDS24_V2_TOKEN
-      - BEDS24_PROP_ID=318433
+      - BEDS24_API_TOKEN=${BEDS24_API_TOKEN}
+      - BEDS24_PROP_ID=${BEDS24_PROP_ID}
       # Business email for SMTP replies
-      - BUSINESS_EMAIL=info@portadirta.com
+      - BUSINESS_EMAIL=${BUSINESS_EMAIL}
       # ── Menu System ───────────────────────────────────────────────
       # Google Doc IDs — share each doc as "anyone with link can view"
       # then paste the ID from the URL: docs.google.com/document/d/<ID>/edit
-      - MENU_CARTA_DOC_ID=12tEHjkxxktMUzgj1Wq006gL56Qor9xButJ9JR-VKXeE
-      - MENU_MENU_DOC_ID=1WYJCS8m5wN7XIL17Wpl9hfSKvBkdTVElszs12cCdV0Q
-      - MENU_BEBIDAS_DOC_ID=REPLACE_WITH_BEBIDAS_DOC_ID
+      - MENU_CARTA_DOC_ID=${MENU_CARTA_DOC_ID}
+      - MENU_MENU_DOC_ID=${MENU_MENU_DOC_ID}
+      - MENU_BEBIDAS_DOC_ID=${MENU_BEBIDAS_DOC_ID}
     depends_on:
       - n8n-db
     restart: always
