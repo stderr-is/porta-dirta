@@ -62,7 +62,9 @@ tags: [wbs, planning, execution]
 - [ ] Activate all 4 workflows, test Workflow A with a real test email to info@portadirta.com
 - [x] Test Workflow B routing — FIXED (2026-03-20): n8n v2 IF node typeVersion 2 requires new condition format; all 5 IF nodes migrated. Bot now correctly routes text → Claude → API.
 - [x] Workflow B end-to-end price update — FIXED (2026-03-21): n8n HTTP Request v4 body encoding bug resolved. Root cause: `body.parameters` is silently ignored; must use `jsonBody` with `JSON.stringify(...)`. TastyIgniter PHP proxy at `/api/internal/beds24/calendar` bypasses the n8n body encoding entirely — accepts flat JSON, builds Beds24 nested array in PHP, forwards via curl. Bot command "Sube Torre Badum a 150€ hasta el final del mes" → `💰 Precio actualizado` confirmed working.
-- [ ] **Configure `BEDS24_API_TOKEN`**: replace `REPLACE_WITH_BEDS24_V2_TOKEN` in `docker-compose.yml` then `docker compose up -d n8n` — bot returns 401 until this is set
+- [x] **Configure `BEDS24_API_TOKEN`**: moved all secrets to `backend/.env` and updated `docker-compose.yml`. Restarted n8n. (2026-03-24)
+- [x] **Email Enrichment**: emails now first classify intent, then fetch live restaurant availability + live hotel availability (Beds24), then draft informed replies. (2026-03-25)
+- [x] **Menú Especial Semana Santa**: Integrated editorial redesign on `/restaurante` page + synchronized `menu.json` for AI/dynamic page. (2026-03-25)
 - [ ] Test Workflow C: trigger manually, verify pricing recommendation appears in Telegram
 - [ ] Verify Identity Router blocks unauthorized Telegram IDs
 - [x] Workflow B — Full command suite (2026-03-22): 10 new bot commands added + tested:
@@ -217,7 +219,7 @@ See `_memory/08_N8N_Troubleshooting.md` — **CRITICAL: read before touching n8n
 **Automation:** Cron job for nightly encrypted PostgreSQL dumps of TastyIgniter/Hi.Events to a separate drive.
 
 ## Pre-Launch Checklist (before going live)
-- [ ] **Fill legal page placeholders** — edit `legal.astro` and `privacidad.astro`: replace `[NOMBRE COMPLETO DEL TITULAR O RAZÓN SOCIAL]`, `[NIF/CIF]`, and `[Registro Mercantil...]` with real data. These show as bold red on the live page until filled.
+- [x] **Fill legal page placeholders**: replaced all `[NOMBRE TITULAR]` and `[NIF/CIF]` with real data in `legal.astro`, `privacidad.astro`, and `cookies.astro`. (2026-03-25)
 - [ ] **Remove beta disclaimer banners** from 3 pages — search `TODO: REMOVE BEFORE LAUNCH`:
   - `frontend/src/pages/hotel.astro` — above Beds24 hero widget AND above booking anchor widget
   - `frontend/src/pages/restaurante.astro` — above reservation form
@@ -231,7 +233,7 @@ See `_memory/08_N8N_Troubleshooting.md` — **CRITICAL: read before touching n8n
 - [ ] **Remove beta disclaimer from Beds24 email templates** — done manually in Beds24 dashboard → Templates
 - [ ] **Remove beta disclaimer from n8n "Check-in Tomorrow" workflow** — edit the SMTP send node body
 - [ ] Set Cloudflare Pages env vars to production URLs (replace `hobbitonranch.com` → `portadirta.com` subdomains)
-- [x] **Legal pages created** — `/legal` (Aviso Legal LSSI-CE), `/privacidad` (GDPR privacy policy), `/cookies` (EU Cookie Directive). All 3 footer links now resolve. Placeholders [NOMBRE TITULAR] and [NIF/CIF] must be filled before launch.
+- [x] **Legal pages created** — `/legal` (Aviso Legal LSSI-CE), `/privacidad` (GDPR privacy policy), `/cookies` (EU Cookie Directive). All 3 footer links now resolve.
 - [x] **GDPR consent checkboxes** — added to all 4 forms: contacto, restaurante, eventos, experiencias. Each links to /privacidad. Required field (HTML5 `required`).
 - [x] **CSP fixed** — added Google Maps to `frame-src` and `connect-src` (was blocked, causing broken map embed in contacto page).
 
