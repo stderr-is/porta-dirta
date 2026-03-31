@@ -1,0 +1,178 @@
+{
+  "name": "A: Silent Concierge — Email Draft",
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "postProcessAction": "read",
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "forceReconnect": 60
+        }
+      },
+      "id": "a1000001-0000-0000-0000-000000000001",
+      "name": "IMAP — New Email",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        250,
+        300
+      ],
+      "credentials": {
+        "imap": {
+          "id": "REPLACE_IMAP_CRED_ID",
+          "name": "info@portadirta.com IMAP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract email fields and generate idempotency key from Message-ID header.\n// Duplicate emails (same messageKey) are silently skipped.\nconst email = items[0].json;\nconst rawId = email.messageId || (email.subject + email.date);\nconst messageKey = Buffer.from(rawId).toString('base64').replace(/[^a-zA-Z0-9]/g, '').slice(0, 24);\n\n// Idempotency check — skip if already processed in last 24h\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.processed) staticData.processed = {};\nconst entry = staticData.processed[messageKey];\nif (entry && (Date.now() - entry.ts) < 86400000) {\n  console.log('[Silent Concierge] Skipping duplicate:', messageKey);\n  return [];\n}\n\nconst body = email.text\n  || (email.html ? email.html.replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim() : '')\n  || '(no body)';\n\nreturn [{\n  json: {\n    messageKey,\n    fromEmail: email.from || '',\n    fromName: email.fromName || '',\n    replyTo: email.replyTo || email.from || '',\n    subject: email.subject || '(sin asunto)',\n    body: body.slice(0, 3000), // cap at 3k chars for Gemini\n    receivedAt: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "a1000002-0000-0000-0000-000000000002",
+      "name": "Extract & Deduplicate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        470,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $env.ANTHROPIC_API_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\\n  \"model\": \"claude-haiku-4-5-20251001\",\\n  \"max_tokens\": 2048,\\n  \"messages\": [{\\n    \"role\": \"user\",\\n    \"content\": {{ JSON.stringify(\\n      'You are the email concierge for Porta D\\'irta, a boutique hotel in Pe\\u00f1\\u00edscola, Spain.\\n\\nROLE: Draft a polite, professional reply. Output ONLY valid JSON matching this schema exactly:\\n{\\\"language\\\":\\\"es|en|fr|de|pt|it\\\",\\\"intent\\\":\\\"brief description\\\",\\\"draftSubject\\\":\\\"Re: subject\\\",\\\"draftBody\\\":\\\"full body text, \\\\n for linebreaks, sign off as El equipo de Porta D\\'irta\\\"}\\n\\nPROPERTY: Cam\\u00ed del Pebret s/n, 12598 Pe\\u00f1\\u00edscola. Tel: +34 644 026 066. Restaurant: Tue-Sun, lunch 13-16h, dinner 20-23h. Check-in 15:00, Check-out 11:00. Free parking. Pets allowed.\\n\\nTONE: Warm, personal, Mediterranean \\u2014 not corporate.\\nLANGUAGE: Reply in the same language as the guest email. If unsure, use Spanish.\\nNEVER promise prices or availability \\u2014 say you will confirm shortly.\\nOUTPUT: JSON ONLY. No markdown, no prose outside the JSON object.\\n\\nGUEST EMAIL:\\nFROM: ' + $json.fromName + ' <' + $json.fromEmail + '>\\nSUBJECT: ' + $json.subject + '\\nBODY:\\n' + $json.body\\n    ) }}\\n  }]\\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a1000003-0000-0000-0000-000000000003",
+      "name": "Claude — Draft Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        690,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Gemini response and store draft in static data.\nconst geminiRaw = items[0].json;\nlet draft;\ntry {\n  const text = geminiRaw.content?.[0]?.text || '{}';\n  draft = JSON.parse(text);\n} catch (e) {\n  throw new Error('[Silent Concierge] Claude returned invalid JSON: ' + e.message);\n}\n\nif (!draft.draftBody || !draft.draftSubject) {\n  throw new Error('[Silent Concierge] Gemini response missing required fields');\n}\n\n// Store draft in workflow static data keyed by messageKey\nconst ctx = $('Extract & Deduplicate').first().json;\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.drafts) staticData.drafts = {};\nstaticData.drafts[ctx.messageKey] = {\n  ts: Date.now(),\n  fromEmail: ctx.fromEmail,\n  fromName: ctx.fromName,\n  replyTo: ctx.replyTo,\n  originalSubject: ctx.subject,\n  draftSubject: draft.draftSubject,\n  draftBody: draft.draftBody,\n  language: draft.language,\n  intent: draft.intent\n};\n\nreturn [{\n  json: {\n    messageKey: ctx.messageKey,\n    fromEmail: ctx.fromEmail,\n    fromName: ctx.fromName,\n    intent: draft.intent,\n    language: draft.language,\n    draftSubject: draft.draftSubject,\n    draftBody: draft.draftBody\n  }\n}];"
+      },
+      "id": "a1000004-0000-0000-0000-000000000004",
+      "name": "Parse & Store Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        910,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $env.TELEGRAM_ADMIN_ID }}",
+        "text": "=📧 *Nueva consulta de huésped*\n\n👤 *De:* {{ $json.fromName }} \\<{{ $json.fromEmail }}\\>\n💬 *Intención:* {{ $json.intent }}\n🌐 *Idioma:* {{ $json.language }}\n\n*Borrador de respuesta:*\n───────────────────\n📌 *Asunto:* {{ $json.draftSubject }}\n\n{{ $json.draftBody }}\n───────────────────\n\n¿Qué hacemos con este email?",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "reply_markup": "={\"inline_keyboard\":[[{\"text\":\"✅ Aprobar y enviar\",\"callback_data\":\"approve_{{ $json.messageKey }}\"},{\"text\":\"✏️ Editar\",\"callback_data\":\"edit_{{ $json.messageKey }}\"}],[{\"text\":\"🗑️ Ignorar\",\"callback_data\":\"ignore_{{ $json.messageKey }}\"}]]}"
+        }
+      },
+      "id": "a1000005-0000-0000-0000-000000000005",
+      "name": "Telegram — Send Draft",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1130,
+        300
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "IMAP — New Email": {
+      "main": [
+        [
+          {
+            "node": "Extract & Deduplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract & Deduplicate": {
+      "main": [
+        [
+          {
+            "node": "Gemini — Draft Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini — Draft Reply": {
+      "main": [
+        [
+          {
+            "node": "Parse & Store Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Store Draft": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Send Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a1000000-0000-0000-0000-000000000000",
+  "id": "workflow-a-silent-concierge",
+  "tags": [
+    {
+      "name": "ai"
+    },
+    {
+      "name": "email"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+---
+/**
+ * en/index.astro — Placeholder for English version
+ *
+ * For Phase 4, we provide a clean "Coming Soon" page that redirects
+ * international guests to the primary contact channel in English.
+ */
+
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Boutique Villa & Restaurant in Peñíscola"
+  description="Porta D'irta — A luxury off-grid retreat and Mediterranean restaurant on the Azahar Coast, Peñíscola (Spain). English version coming soon."
+  lang="en"
+>
+
+  <section class="min-h-screen bg-brand-blue flex items-center justify-center py-24 px-4 text-center">
+    <div class="max-w-3xl flex flex-col items-center gap-8">
+
+      <!-- Label -->
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+        Porta D'irta &middot; Peñíscola
+      </p>
+
+      <!-- Heading -->
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl text-white leading-tight">
+        Our English version is <br class="hidden sm:block" /> coming very soon.
+      </h1>
+
+      <!-- Divider -->
+      <div class="w-16 h-px bg-brand-gold/50"></div>
+
+      <!-- Copy -->
+      <p class="font-body text-brand-sand text-lg leading-relaxed max-w-xl">
+        We are currently translating our Mediterranean experience. In the meantime, you can explore our property through our photography or contact us directly for bookings and inquiries in English.
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 mt-4">
+        <a
+          href="https://wa.me/34644026066"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+        >
+          Contact via WhatsApp
+        </a>
+        <a
+          href="/"
+          class="inline-flex items-center px-8 py-4 border border-white/40 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+        >
+          View Spanish Site
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

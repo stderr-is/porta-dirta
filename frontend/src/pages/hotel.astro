@@ -1,0 +1,736 @@
+---
+/**
+ * hotel.astro — Hotel & Rooms page for Porta D'irta
+ *
+ * Sections:
+ *   1. Hero              — Full-viewport with availability search bar
+ *   2. Property intro    — Two-column villa introduction
+ *   3. Room listings     — Three room cards
+ *   4. Amenities grid    — 12-icon grid
+ *   5. Booking anchor    — Beds24 placeholder form
+ *   6. Cross-sell bar    — Links to Restaurant, Events, Experiences
+ */
+
+import Layout from '../layouts/Layout.astro';
+import GarlandDivider from '../components/GarlandDivider.astro';
+import SustainabilityStatus from '../components/SustainabilityStatus.astro';
+import BookingSearchForm from '../components/BookingSearchForm.astro';
+---
+
+<Layout
+  title="Hotel & Habitaciones"
+  description="Descubre nuestras habitaciones y suites mediterráneas en Porta D'irta, una villa boutique a orillas del mar en Peñíscola. Reserva tu estancia perfecta."
+  ogImage="/assets/images/property-aerial-twilight.jpg"
+>
+
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify([
+    {
+      "@context": "https://schema.org",
+      "@type": "LodgingBusiness",
+      "name": "Porta D'irta",
+      "description": "Porta D'irta is a 3-room boutique hotel in Peñíscola, on the Costa del Azahar (Castellón, Spain), with rooms from €120/night. It features sea view suites, a private pool, and Mediterranean gardens.",
+      "url": "https://www.portadirta.com/hotel",
+      "telephone": "+34644026066",
+      "numberOfRooms": "3",
+      "checkinTime": "15:00",
+      "checkoutTime": "11:00",
+      "currenciesAccepted": "EUR",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Camí del Pebret, s/n",
+        "addressLocality": "Peñíscola",
+        "addressRegion": "Castellón",
+        "postalCode": "12598",
+        "addressCountry": "ES"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 40.3600,
+        "longitude": 0.4087
+      },
+      "image": "https://www.portadirta.com/assets/images/property-aerial-twilight.jpg",
+      "priceRange": "€€€",
+      "starRating": { "@type": "Rating", "ratingValue": "4" },
+      "containsPlace": {
+        "@type": "Restaurant",
+        "name": "Restaurante Porta D'irta",
+        "url": "https://www.portadirta.com/restaurante"
+      },
+      "amenityFeature": [
+        { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Piscina", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Restaurante", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Aire acondicionado", "value": true }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://www.portadirta.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Hotel",
+          "item": "https://www.portadirta.com/hotel"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿A qué hora es el check-in y check-out en Porta D'irta?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El horario de entrada (check-in) es a partir de las 15:00 y el de salida (check-out) es hasta las 11:00."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Porta D'irta tiene vistas al mar?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, todas nuestras habitaciones y suites tienen vistas directas al mar Mediterráneo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Hay parking disponible en el hotel?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, ofrecemos parking gratuito para todos nuestros huéspedes dentro de la propiedad."
+          }
+        }
+      ]
+    }
+  ])} />
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 1 · HERO
+       Full-viewport background with availability search bar
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+
+    <!-- REPLACE: real villa hero photo -->
+    <img
+      src="/assets/images/property-aerial-twilight.jpg"
+      alt="Porta D'irta — villa junto al mar en Peñíscola"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+
+    <!-- Brand-blue overlay -->
+    <div class="absolute inset-0 bg-brand-forest/50"></div>
+
+    <!-- Hero content — centred with booking form -->
+    <div class="relative z-10 flex flex-col items-center text-center gap-6 px-4 w-full max-w-3xl mx-auto">
+
+      <!-- Label -->
+      <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase">
+        EL HOTEL
+      </p>
+
+      <!-- Main heading -->
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+        Tu refugio mediterráneo
+      </h1>
+
+      <!-- TODO: REMOVE BEFORE LAUNCH — beta disclaimer -->
+      <div class="w-full bg-amber-400/90 border border-amber-300 text-amber-950 font-body text-xs px-4 py-2 rounded-lg text-center">
+        ⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente:
+        <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
+      </div>
+
+      <!-- Booking form — frosted glass pill -->
+      <div class="w-full backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl px-5 py-4 shadow-lg">
+        <BookingSearchForm formId="hero" />
+      </div>
+
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-70">
+      <span class="text-white font-body text-xs tracking-widest uppercase">Descubrir</span>
+      <svg class="w-5 h-5 text-brand-gold animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 2 · PROPERTY INTRO
+       Two-column villa introduction
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="bg-brand-cream py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+      <!-- Left: text content -->
+      <div class="flex flex-col gap-8">
+
+        <!-- Label -->
+        <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase">
+          BIENVENIDOS
+        </p>
+
+        <!-- Heading -->
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
+          La villa
+        </h2>
+
+        <!-- Paragraphs -->
+        <p class="font-body text-brand-stone leading-relaxed text-base">
+          Porta D'irta es una villa boutique enclavada entre el Parque Natural de la Irta y las aguas cristalinas del Mediterráneo. Cada rincón ha sido diseñado para que el tiempo se detenga: materiales naturales, luz generosa y el sonido del mar como banda sonora permanente de tu estancia.
+        </p>
+        <p class="font-body text-brand-stone leading-relaxed text-base">
+          Nuestras habitaciones y suites conjugan el lujo contemporáneo con la calidez de la arquitectura levantina. Despierta con vistas al horizonte azul, disfruta del desayuno en nuestra terraza y deja que la brisa mediterránea dicte el ritmo de tus días. Aquí, el bienestar no es un servicio, es una forma de vida.
+        </p>
+
+        <SustainabilityStatus />
+
+        <!-- Feature icons row -->
+        <div class="flex flex-wrap gap-6 md:gap-8 mt-4">
+
+          <!-- Pool icon -->
+          <div class="flex flex-col items-center gap-2 text-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-brand-blue/10">
+              <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <!-- Simple pool: wavy lines -->
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>
+                <rect x="8" y="5" width="3" height="5" rx="0.5" stroke-width="1.5"/>
+                <circle cx="9.5" cy="4" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+            <span class="font-body text-xs text-brand-stone tracking-wide">Piscina privada</span>
+          </div>
+
+          <!-- Beach icon -->
+          <div class="flex flex-col items-center gap-2 text-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-brand-blue/10">
+              <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <!-- Umbrella + horizon -->
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c-4.5 3-6 7-5 10"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c4.5 3 6 7 5 10"/>
+                <line x1="12" y1="3" x2="11" y2="18" stroke-linecap="round"/>
+                <path stroke-linecap="round" d="M3 20h18"/>
+              </svg>
+            </div>
+            <span class="font-body text-xs text-brand-stone tracking-wide">A 200m del mar</span>
+          </div>
+
+          <!-- WiFi icon -->
+          <div class="flex flex-col items-center gap-2 text-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-brand-blue/10">
+              <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12.55a11 11 0 0114.08 0"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M1.42 9a16 16 0 0121.16 0"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.53 16.11a6 6 0 016.95 0"/>
+                <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+            <span class="font-body text-xs text-brand-stone tracking-wide">WiFi gratuito</span>
+          </div>
+
+          <!-- Parking icon -->
+          <div class="flex flex-col items-center gap-2 text-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-brand-blue/10">
+              <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7h4a3 3 0 010 6H9"/>
+              </svg>
+            </div>
+            <span class="font-body text-xs text-brand-stone tracking-wide">Parking</span>
+          </div>
+
+        </div>
+        <!-- end feature icons -->
+
+      </div>
+
+      <!-- Right: stacked images -->
+      <div class="flex flex-col gap-4">
+        <!-- REPLACE: real photo -->
+        <img
+          src="/assets/images/room-1.jpg"
+          alt="Interior de la villa Porta D'irta"
+          width="600" height="400"
+          class="w-full rounded-xl object-cover shadow-lg"
+        />
+        <!-- REPLACE: real photo -->
+        <img
+          src="/assets/images/terrace-breakfast.jpg"
+          alt="Terraza y jardín de Porta D'irta"
+          width="600" height="400"
+          class="w-full rounded-xl object-cover shadow-lg"
+        />
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 3 · ROOM LISTINGS
+       Three room cards on brand-blue background
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="bg-brand-blue py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+
+      <!-- Section heading -->
+      <div class="text-center mb-16">
+        <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-4">ALOJAMIENTO</p>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white leading-tight">Nuestras Habitaciones</h2>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Card 1 · Habitación Mediterránea -->
+        <article class="bg-white shadow-xl rounded-xl overflow-hidden flex flex-col">
+          <div class="relative overflow-hidden">
+            <!-- REPLACE: real room photos -->
+            <img
+              src="/assets/images/room-2.jpg"
+              alt="Habitación Mediterránea en Porta D'irta"
+              width="600" height="400"
+              class="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
+            />
+            <!-- Price badge -->
+            <div class="absolute top-4 right-4 bg-brand-blue/90 backdrop-blur-sm text-white font-body text-xs px-3 py-1.5 rounded-full">
+              desde €120/noche
+            </div>
+          </div>
+          <div class="flex flex-col flex-1 p-6 gap-4">
+            <h3 class="font-display text-2xl text-brand-blue">Habitación Mediterránea</h3>
+            <p class="font-body text-sm text-brand-stone leading-relaxed">
+              Disfruta de la esencia del Mediterráneo en nuestra habitación estándar superior. Con una decoración inspirada en los tonos de la costa, ofrece el equilibrio perfecto entre confort y estilo.
+            </p>
+            <ul class="flex flex-col gap-2 font-body text-sm text-brand-stone flex-1">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Cama doble king-size
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Baño privado con ducha
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Aire acondicionado y calefacción
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                WiFi de alta velocidad
+              </li>
+            </ul>
+            <a
+              href="#reservar"
+              class="mt-2 block text-center bg-brand-gold hover:bg-brand-stone text-white font-body font-medium tracking-widest uppercase text-sm px-6 py-3 rounded-lg transition-colors duration-200"
+            >
+              Reservar
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 2 · Suite Junior -->
+        <article class="bg-white shadow-xl rounded-xl overflow-hidden flex flex-col">
+          <div class="relative overflow-hidden">
+            <!-- REPLACE: real room photos -->
+            <img
+              src="/assets/images/room-3.jpg"
+              alt="Suite Junior en Porta D'irta"
+              width="600" height="400"
+              class="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute top-4 right-4 bg-brand-blue/90 backdrop-blur-sm text-white font-body text-xs px-3 py-1.5 rounded-full">
+              desde €180/noche
+            </div>
+          </div>
+          <div class="flex flex-col flex-1 p-6 gap-4">
+            <h3 class="font-display text-2xl text-brand-blue">Suite Junior</h3>
+            <p class="font-body text-sm text-brand-stone leading-relaxed">
+              Espacio y elegancia se unen en nuestra Suite Junior. Ideal para estancias más largas, cuenta con una acogedora zona de estar y una terraza donde disfrutar de la calma de Peñíscola.
+            </p>
+            <ul class="flex flex-col gap-2 font-body text-sm text-brand-stone flex-1">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Cama doble extra grande
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Sala de estar independiente
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Baño con bañera y ducha
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Terraza privada
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Minibar y cafetera Nespresso
+              </li>
+            </ul>
+            <a
+              href="#reservar"
+              class="mt-2 block text-center bg-brand-gold hover:bg-brand-stone text-white font-body font-medium tracking-widest uppercase text-sm px-6 py-3 rounded-lg transition-colors duration-200"
+            >
+              Reservar
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 3 · Suite Panorámica -->
+        <article class="bg-white shadow-xl rounded-xl overflow-hidden flex flex-col">
+          <div class="relative overflow-hidden">
+            <!-- REPLACE: real room photos -->
+            <img
+              src="/assets/images/room-4.jpg"
+              alt="Suite Panorámica con vistas al mar en Porta D'irta"
+              width="600" height="400"
+              class="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute top-4 right-4 bg-brand-blue/90 backdrop-blur-sm text-white font-body text-xs px-3 py-1.5 rounded-full">
+              desde €250/noche
+            </div>
+          </div>
+          <div class="flex flex-col flex-1 p-6 gap-4">
+            <h3 class="font-display text-2xl text-brand-blue">Suite Panorámica</h3>
+            <p class="font-body text-sm text-brand-stone leading-relaxed">
+              Nuestra joya de la corona. La Suite Panorámica ofrece vistas inigualables al mar desde todos sus ángulos, junto con servicios exclusivos para una experiencia de máximo lujo.
+            </p>
+            <ul class="flex flex-col gap-2 font-body text-sm text-brand-stone flex-1">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Vistas panorámicas al mar Mediterráneo
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Suite de 80 m² con salón privado
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Gran terraza con tumbonas y jacuzzi
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Desayuno incluido en habitación
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Servicio de mayordomo 24h
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-gold shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Transfer privado aeropuerto incluido
+              </li>
+            </ul>
+            <a
+              href="#reservar"
+              class="mt-2 block text-center bg-brand-gold hover:bg-brand-stone text-white font-body font-medium tracking-widest uppercase text-sm px-6 py-3 rounded-lg transition-colors duration-200"
+            >
+              Reservar
+            </a>
+          </div>
+        </article>
+
+      </div>
+      <!-- end cards grid -->
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 4 · AMENITIES GRID
+       12-icon grid of hotel amenities
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="bg-brand-cream py-24 md:py-32">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-12">
+
+      <!-- Heading -->
+      <div class="text-center mb-16">
+        <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-4">INSTALACIONES</p>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">Todo lo que necesitas</h2>
+      </div>
+
+      <!-- 6-col grid (3 on mobile) -->
+      <div class="grid grid-cols-3 md:grid-cols-6 gap-8">
+
+        <!-- Piscina -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M3 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>
+              <path stroke-linecap="round" d="M3 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>
+              <rect x="9" y="5" width="2.5" height="5" rx="0.5"/>
+              <circle cx="10.25" cy="4" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Piscina</span>
+        </div>
+
+        <!-- Playa Cercana -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M12 3c-4 2.5-5.5 6.5-4.5 9.5"/>
+              <path stroke-linecap="round" d="M12 3c4 2.5 5.5 6.5 4.5 9.5"/>
+              <line x1="12" y1="3" x2="11" y2="17" stroke-linecap="round"/>
+              <path stroke-linecap="round" d="M4 21h16"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Playa Cercana</span>
+        </div>
+
+        <!-- Restaurante -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 11l1-8h16l1 8"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 11h18v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2z"/>
+              <line x1="12" y1="15" x2="12" y2="21" stroke-linecap="round"/>
+              <line x1="8" y1="21" x2="16" y2="21" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Restaurante</span>
+        </div>
+
+        <!-- WiFi -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M5 12.55a11 11 0 0114.08 0"/>
+              <path stroke-linecap="round" d="M1.42 9a16 16 0 0121.16 0"/>
+              <path stroke-linecap="round" d="M8.53 16.11a6 6 0 016.95 0"/>
+              <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">WiFi</span>
+        </div>
+
+        <!-- Parking -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7h4a3 3 0 010 6H9"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Parking</span>
+        </div>
+
+        <!-- Jardín -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M12 21V10"/>
+              <path stroke-linecap="round" d="M12 10C12 10 8 7 8 4c0 0 4 0 4 6z"/>
+              <path stroke-linecap="round" d="M12 14C12 14 16 11 16 8c0 0-4 0-4 6z"/>
+              <line x1="8" y1="21" x2="16" y2="21" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Jardín</span>
+        </div>
+
+        <!-- Tenis -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"/>
+              <path stroke-linecap="round" d="M3.5 9.5C6 9.5 6 14.5 3.5 14.5"/>
+              <path stroke-linecap="round" d="M20.5 9.5C18 9.5 18 14.5 20.5 14.5"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Tenis</span>
+        </div>
+
+        <!-- Terraza -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <rect x="3" y="14" width="18" height="3" rx="1"/>
+              <line x1="7" y1="14" x2="7" y2="21" stroke-linecap="round"/>
+              <line x1="17" y1="14" x2="17" y2="21" stroke-linecap="round"/>
+              <path stroke-linecap="round" d="M3 17h18"/>
+              <path stroke-linecap="round" d="M8 14V9a4 4 0 018 0v5"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Terraza</span>
+        </div>
+
+        <!-- Desayuno -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M18 8h1a4 4 0 010 8h-1"/>
+              <path stroke-linecap="round" d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
+              <line x1="6" y1="1" x2="6" y2="4" stroke-linecap="round"/>
+              <line x1="10" y1="1" x2="10" y2="4" stroke-linecap="round"/>
+              <line x1="14" y1="1" x2="14" y2="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Desayuno</span>
+        </div>
+
+        <!-- Transfer -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2"/>
+              <circle cx="7.5" cy="17.5" r="2.5"/>
+              <circle cx="17.5" cy="17.5" r="2.5"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Transfer</span>
+        </div>
+
+        <!-- Cuna disponible -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9h18"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9v7a2 2 0 002 2h14a2 2 0 002-2V9"/>
+              <line x1="7" y1="9" x2="7" y2="18" stroke-linecap="round"/>
+              <line x1="17" y1="9" x2="17" y2="18" stroke-linecap="round"/>
+              <path stroke-linecap="round" d="M5 9V7a7 7 0 0114 0v2"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Cuna disponible</span>
+        </div>
+
+        <!-- Pet-friendly -->
+        <div class="flex flex-col items-center gap-3 text-center">
+          <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-brand-blue/8 border border-brand-blue/10">
+            <svg class="w-7 h-7 text-brand-blue" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <circle cx="4.5" cy="9.5" r="2.5"/>
+              <circle cx="9" cy="5.5" r="2.5"/>
+              <circle cx="15" cy="5.5" r="2.5"/>
+              <circle cx="19.5" cy="9.5" r="2.5"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 12c-3.5 0-7 3-7 6 0 1.1.9 2 2 2h10a2 2 0 002-2c0-3-3.5-6-7-6z"/>
+            </svg>
+          </div>
+          <span class="font-body text-xs text-brand-stone leading-tight">Pet-friendly</span>
+        </div>
+
+      </div>
+      <!-- end amenities grid -->
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 5 · BOOKING ANCHOR
+       Beds24 placeholder booking form
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section id="reservar" class="bg-brand-blue py-24 md:py-32">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col items-center gap-12">
+
+      <!-- Heading -->
+      <div class="text-center">
+        <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-4">RESERVAS</p>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white leading-tight">Comprueba disponibilidad</h2>
+      </div>
+
+      <!-- TODO: REMOVE BEFORE LAUNCH — beta disclaimer -->
+      <div class="w-full max-w-2xl mx-auto mb-6 bg-amber-400/90 border border-amber-300 text-amber-950 font-body text-sm px-4 py-3 rounded-lg text-center">
+        ⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente por teléfono:
+        <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
+      </div>
+
+      <!-- Custom booking search form -->
+      <div class="w-full backdrop-blur-md bg-white/10 border border-white/25 rounded-2xl p-8 md:p-10">
+        <BookingSearchForm formId="sec" />
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 6 · CROSS-SELL BAR
+       Links to Restaurant, Events, Experiences
+       ═══════════════════════════════════════════════════════════════════ -->
+  <section class="bg-brand-cream py-24 md:py-32">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-12">
+
+      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-brand-sand/40">
+
+        <!-- Restaurante -->
+        <a
+          href="/restaurante"
+          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-4 sm:px-6 md:px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
+        >
+          <div class="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-brand-blue/20 group-hover:border-brand-gold transition-colors duration-200">
+            <svg class="w-5 h-5 text-brand-blue group-hover:text-brand-gold transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="font-body font-medium text-brand-blue group-hover:text-brand-gold text-base transition-colors duration-200 flex items-center gap-2">
+              Restaurante
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform duration-200 inline-block">→</span>
+            </span>
+            <span class="font-body text-brand-stone text-sm">Cocina mediterránea de autor</span>
+          </div>
+        </a>
+
+        <!-- Eventos & Celebraciones -->
+        <a
+          href="/eventos"
+          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-4 sm:px-6 md:px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
+        >
+          <div class="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-brand-blue/20 group-hover:border-brand-gold transition-colors duration-200">
+            <svg class="w-5 h-5 text-brand-blue group-hover:text-brand-gold transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A1.995 1.995 0 003 15.546M21 9.455c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A1.995 1.995 0 003 9.455"/>
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+            </svg>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="font-body font-medium text-brand-blue group-hover:text-brand-gold text-base transition-colors duration-200 flex items-center gap-2">
+              Eventos & Celebraciones
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform duration-200 inline-block">→</span>
+            </span>
+            <span class="font-body text-brand-stone text-sm">Bodas, reuniones y momentos únicos</span>
+          </div>
+        </a>
+
+        <!-- Experiencias Locales -->
+        <a
+          href="/experiencias"
+          class="group flex flex-col sm:flex-row items-center sm:items-start gap-4 px-4 sm:px-6 md:px-8 py-8 md:py-0 text-center sm:text-left hover:bg-brand-blue/4 rounded-xl transition-colors duration-200"
+        >
+          <div class="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-brand-blue/20 group-hover:border-brand-gold transition-colors duration-200">
+            <svg class="w-5 h-5 text-brand-blue group-hover:text-brand-gold transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="font-body font-medium text-brand-blue group-hover:text-brand-gold text-base transition-colors duration-200 flex items-center gap-2">
+              Experiencias Locales
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform duration-200 inline-block">→</span>
+            </span>
+            <span class="font-body text-brand-stone text-sm">Descubre Peñíscola y la Costa del Azahar</span>
+          </div>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

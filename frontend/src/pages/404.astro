@@ -1,0 +1,124 @@
+---
+/**
+ * 404.astro — Custom on-brand 404 page for Porta D'irta
+ *
+ * Self-contained: does NOT use the Layout component.
+ * Imports global.css directly, includes its own minimal header and links.
+ *
+ * Design:
+ *   - Full viewport bg-brand-blue, centered content.
+ *   - Decorative large "404" behind headline (absolute positioned).
+ *   - Four ghost-button links back to key sections.
+ *   - White logo at top.
+ */
+
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO -->
+    <title>Página no encontrada | Porta D'irta</title>
+    <meta name="description" content="La página que buscas no existe. Vuelve al inicio de Porta D'irta, villa & restaurante en Peñíscola." />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-brand-blue font-body antialiased">
+
+    <!-- Full-viewport centered layout -->
+    <div class="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+
+      <!-- ── Top: Logo ─────────────────────────────────────────── -->
+      <a
+        href="/"
+        aria-label="Porta D'irta — inicio"
+        class="absolute top-8 left-1/2 -translate-x-1/2"
+      >
+        <img
+          src="https://portadirta.com/wp-content/uploads/2026/02/LOGO-negativo.png"
+          alt="Porta D'irta"
+          class="h-12 w-auto object-contain"
+          loading="eager"
+          decoding="async"
+        />
+      </a>
+
+      <!-- ── Decorative 404 number (background layer) ──────────── -->
+      <div class="relative flex flex-col items-center">
+
+        <span
+          class="font-display italic text-[6rem] sm:text-[9rem] md:text-[12rem] text-white/10 leading-none select-none pointer-events-none"
+          aria-hidden="true"
+        >
+          404
+        </span>
+
+        <!-- ── Foreground content (overlaid on the 404) ────────── -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-4">
+
+          <!-- Main heading -->
+          <h1 class="font-display italic text-2xl sm:text-3xl md:text-4xl text-white leading-snug">
+            Te has perdido en el Mediterráneo
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="font-body text-brand-sand text-base max-w-md">
+            La página que buscas no existe, pero podemos llevarte a donde quieras.
+          </p>
+
+        </div>
+      </div>
+
+      <!-- ── Quick-link ghost buttons ──────────────────────────── -->
+      <nav
+        class="flex flex-wrap items-center justify-center gap-4 mt-8"
+        aria-label="Navegación de recuperación"
+      >
+        <a
+          href="/"
+          class="border border-white/30 text-white hover:border-brand-gold hover:text-brand-gold px-6 py-3 rounded-lg transition-colors duration-200 font-body text-sm uppercase tracking-widest"
+        >
+          Inicio
+        </a>
+        <a
+          href="/hotel"
+          class="border border-white/30 text-white hover:border-brand-gold hover:text-brand-gold px-6 py-3 rounded-lg transition-colors duration-200 font-body text-sm uppercase tracking-widest"
+        >
+          Hotel
+        </a>
+        <a
+          href="/restaurante"
+          class="border border-white/30 text-white hover:border-brand-gold hover:text-brand-gold px-6 py-3 rounded-lg transition-colors duration-200 font-body text-sm uppercase tracking-widest"
+        >
+          Restaurante
+        </a>
+        <a
+          href="/experiencias"
+          class="border border-white/30 text-white hover:border-brand-gold hover:text-brand-gold px-6 py-3 rounded-lg transition-colors duration-200 font-body text-sm uppercase tracking-widest"
+        >
+          Experiencias
+        </a>
+      </nav>
+
+    </div>
+
+  </body>
+</html>

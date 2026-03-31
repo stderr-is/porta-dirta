@@ -1,0 +1,1086 @@
+---
+/**
+ * restaurante.astro — Restaurant page for Porta D'irta
+ *
+ * Sections:
+ *   1. Hero          — Full-viewport, bg image + brand-blue overlay
+ *   2. Philosophy    — Two-column: text + portrait image
+ *   3. Menus         — 3 glassmorphism cards on brand-blue
+ *   4. Gallery strip — 4 images with hover zoom
+ *   5. Table Booking — Frosted glass form
+ *   6. Hours & Map   — Two-column: hours table + map placeholder
+ */
+
+import Layout from '../layouts/Layout.astro';
+import GarlandDivider from '../components/GarlandDivider.astro';
+import BotanicalAccent from '../components/BotanicalAccent.astro';
+---
+
+<Layout
+  title="Restaurante"
+  description="Sabores del Mediterráneo en Peñíscola. Cocina de temporada, producto local y vistas al mar en el restaurante de Porta D'irta."
+  ogImage="/assets/images/food-paella-wine.jpg"
+>
+
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify([
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Restaurante Porta D'irta",
+      "description": "Porta D'irta is a Mediterranean restaurant in Peñíscola, Castellón, specialized in seasonal local products, Maestrazgo rice, and fresh fish from the local market.",
+      "url": "https://www.portadirta.com/restaurante",
+      "telephone": "+34644026066",
+      "servesCuisine": ["Mediterránea", "Española", "Arroces"],
+      "priceRange": "€€€",
+      "acceptsReservations": "true",
+      "menu": "https://www.portadirta.com/carta",
+      "currenciesAccepted": "EUR",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Camí del Pebret, s/n",
+        "addressLocality": "Peñíscola",
+        "addressRegion": "Castellón",
+        "postalCode": "12598",
+        "addressCountry": "ES"
+      },
+      "image": "https://www.portadirta.com/assets/images/food-paella-wine.jpg",
+      "isContainedInPlace": {
+        "@type": "LodgingBusiness",
+        "name": "Porta D'irta",
+        "url": "https://www.portadirta.com/hotel"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+          "opens": "13:00",
+          "closes": "16:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+          "opens": "20:00",
+          "closes": "22:00"
+        }
+      ],
+      "hasMap": "https://maps.google.com/?q=Porta+D%27irta+Pe%C3%B1%C3%ADscola"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://www.portadirta.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Restaurante",
+          "item": "https://www.portadirta.com/restaurante"
+        }
+      ]
+    }
+  ])} />
+
+  <!-- ================================================================
+       SECTION 1 — HERO
+       ================================================================ -->
+  <section
+    class="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
+    aria-label="Hero del restaurante"
+  >
+    <!-- REPLACE: real restaurant hero photo -->
+    <img
+      src="/assets/images/restaurant-terrace.jpg"
+      alt="Terraza del restaurante Porta D'irta frente al mar"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+      decoding="async"
+    />
+    <!-- REPLACE: real restaurant hero photo -->
+
+    <!-- Brand-blue overlay -->
+    <div class="absolute inset-0 bg-brand-forest/52"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4">
+      <!-- Eyebrow label -->
+      <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+        Restaurante
+      </span>
+
+      <!-- Main heading -->
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight max-w-3xl">
+        Sabores del Mediterráneo
+      </h1>
+
+      <!-- Tagline -->
+      <p class="font-body text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
+        Cocina de temporada, producto local y el mar como horizonte.
+        Una experiencia gastronómica única en Peñíscola.
+      </p>
+
+      <!-- CTA buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
+        <a
+          href="#reservar"
+          class="inline-flex items-center px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg"
+        >
+          Reservar Mesa
+        </a>
+        <a
+          href="#filosofia"
+          class="inline-flex items-center px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+        >
+          Descubrir
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll chevron -->
+    <a
+      href="#filosofia"
+      class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/60 hover:text-brand-gold transition-colors duration-300 animate-bounce"
+      aria-label="Desplazarse hacia abajo"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </a>
+  </section>
+
+  <!-- ================================================================
+       SECTION 2 — PHILOSOPHY / ABOUT
+       ================================================================ -->
+  <section
+    id="filosofia"
+    class="bg-brand-cream py-24 md:py-32"
+    aria-label="Nuestra filosofía"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center min-h-[60vh]">
+
+        <!-- Left: text -->
+        <div class="flex flex-col gap-6">
+          <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+            Nuestra Filosofía
+          </span>
+          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
+            El sabor auténtico de la Costa del Azahar
+          </h2>
+          <p class="font-body text-base text-brand-stone leading-relaxed">
+            En el restaurante de Porta D'irta creemos que la gastronomía es un
+            reflejo del territorio. Por eso trabajamos mano a mano con
+            productores locales de Castellón para ofrecer una carta de temporada
+            que honra los ingredientes de nuestra tierra: el arroz de los
+            arrozales del Maestrazgo, el pescado fresco de la lonja de
+            Peñíscola y las verduras de huerta cultivadas a escasos kilómetros.
+          </p>
+          <p class="font-body text-base text-brand-stone leading-relaxed">
+            Nuestra cocina fusiona la tradición mediterránea con técnicas
+            contemporáneas, buscando siempre la sencillez con elegancia. Cada
+            plato es una invitación a descubrir los sabores que han definido
+            esta costa durante siglos, elaborados con mimo y respeto por el
+            producto. Comer en Porta D'irta es, ante todo, una experiencia de
+            lugar.
+          </p>
+        </div>
+
+        <!-- Right: image -->
+        <div>
+          <!-- REPLACE: real photo -->
+          <img
+            src="/assets/images/food-paella-serving.jpg"
+            alt="Chef preparando un plato mediterráneo en la cocina"
+            width="800" height="600"
+            class="w-full h-auto rounded-sm shadow-xl object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <!-- REPLACE: real photo -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 2b — MENÚ ESPECIAL SEMANA SANTA (temporary — remove after ~April 27 2026)
+       ================================================================ -->
+  <section
+    class="relative bg-brand-cream py-24 md:py-32 overflow-hidden border-t border-brand-forest/5"
+    aria-label="Menú Especial Semana Santa"
+  >
+    <!-- Sage botanical accents for a "pressed leaves" look on light background -->
+    <div class="opacity-20 text-brand-forest">
+      <BotanicalAccent position="top-left" />
+      <BotanicalAccent position="bottom-right" />
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+        <!-- Column 1: Editorial Image & Intro (5 cols) -->
+        <div class="lg:col-span-5 flex flex-col gap-8">
+          <div class="flex flex-col gap-4">
+            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+              Edición Limitada · Semana Santa 2026
+            </span>
+            <h2 class="font-display text-4xl sm:text-5xl md:text-6xl text-brand-blue leading-[1.1]">
+              Menú Especial <br />
+              <span class="italic font-light text-brand-forest/80">Semana Santa</span>
+            </h2>
+            <div class="w-20 h-px bg-brand-gold/60 mt-2"></div>
+          </div>
+
+          <p class="font-body text-base text-brand-stone leading-relaxed max-w-md">
+            Celebra la tradición en un entorno natural único. Hemos diseñado una
+            experiencia gastronómica de cuatro tiempos que rinde homenaje al
+            producto local y a los sabores de nuestra costa en estas fechas tan
+            señaladas.
+          </p>
+
+          <div class="relative rounded-sm overflow-hidden aspect-[4/5] shadow-2xl group">
+            <img
+              src="/assets/images/food-paella-wine.jpg"
+              alt="Mesa preparada para el menú de Semana Santa"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-brand-forest/10 mix-blend-multiply"></div>
+          </div>
+        </div>
+
+        <!-- Column 2: The Menu Card (7 cols) -->
+        <div class="lg:col-span-7">
+          <!-- Premium Light Glassmorphism card -->
+          <div class="relative backdrop-blur-xl bg-white/40 border border-brand-forest/10 rounded-xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(26,46,26,0.12)]">
+
+            <!-- Woven Palm motif background detail -->
+            <div class="absolute top-0 right-0 p-4 opacity-[0.03] text-brand-forest pointer-events-none">
+              <svg class="w-32 h-32 rotate-12" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C11.5,2 11,2.19 10.59,2.59L2.59,10.59C2.19,11 2,11.5 2,12C2,12.5 2.19,13 2.59,13.41L10.59,21.41C11,21.81 11.5,22 12,22C12.5,22 13,21.81 13.41,21.41L21.41,13.41C21.81,13 22,12.5 22,12C22,11.5 21.81,11 21.41,10.59L13.41,2.59C13,2.19 12.5,2 12,2M12,4L20,12L12,20L4,12L12,4M12,6L6,12L12,18L18,12L12,6Z"/></svg>
+            </div>
+
+            <!-- Card Header: Info & "Wax Seal" Price -->
+            <div class="flex items-center justify-between px-8 py-5 border-b border-brand-forest/5 bg-white/30">
+              <div>
+                <p class="font-body text-[9px] uppercase tracking-[0.2em] text-brand-gold mb-0.5 font-bold">Servicio de Almuerzo</p>
+                <p class="font-body text-xs text-brand-blue/70">13:00 – 17:00</p>
+              </div>
+
+              <!-- Wax Seal Price Badge -->
+              <div class="relative flex items-center justify-center">
+                <div class="absolute inset-0 scale-110 opacity-20 text-brand-gold">
+                  <svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 0 C22.4 0 0 22.4 0 50 C0 77.6 22.4 100 50 100 C77.6 100 100 77.6 100 50 C100 22.4 77.6 0 50 0 M50 10 C72.1 10 90 27.9 90 50 C90 72.1 72.1 90 50 90 C27.9 90 10 72.1 10 50 C10 27.9 27.9 10 50 10"/></svg>
+                </div>
+                <div class="relative bg-brand-forest/5 border border-brand-gold/20 rounded-full w-14 h-14 flex flex-col items-center justify-center shadow-inner">
+                  <span class="font-display text-xl text-brand-blue leading-none">35€</span>
+                  <span class="font-body text-[7px] uppercase tracking-tighter text-brand-stone/60">p.p.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Menu body -->
+            <div class="px-8 sm:px-12 py-8 flex flex-col gap-8">
+
+              <!-- Aperitivos -->
+              <div class="group">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="font-display text-lg text-purple-900/40 italic leading-none">I.</span>
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                    Aperitivo
+                  </h3>
+                  <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
+                </div>
+                <div class="pl-8 flex flex-col gap-1">
+                  <span class="font-body text-sm text-brand-blue/90 font-medium tracking-tight">La tostada d'irta</span>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
+                    <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Entrantes -->
+              <div class="group">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="font-display text-lg text-purple-900/40 italic leading-none">II.</span>
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                    Entrantes
+                  </h3>
+                  <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
+                </div>
+                <div class="pl-8 flex flex-col gap-4">
+                  <!-- Item 1 -->
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-sm text-brand-blue/90 font-medium max-w-sm leading-snug tracking-tight">Crema de guisante y espinaca con panceta curada y picatostes</span>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Sulfitos</span>
+                    </div>
+                  </div>
+                  <!-- Minimal divider -->
+                  <div class="flex justify-start pl-2 opacity-10"><div class="w-4 h-px bg-brand-forest"></div></div>
+                  <!-- Item 2 -->
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-sm text-brand-blue/90 font-medium max-w-sm leading-snug tracking-tight">Mejillones a la marinera</span>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Moluscos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Sulfitos</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Platos -->
+              <div class="group">
+                <div class="flex items-center gap-3 mb-1">
+                  <span class="font-display text-lg text-purple-900/40 italic leading-none">III.</span>
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                    Principales
+                  </h3>
+                  <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
+                </div>
+                <p class="font-body text-[7px] text-brand-stone/40 italic mb-3 pl-8 uppercase tracking-[0.15em] font-bold">Un plato por persona · Arroces mín. 2 personas</p>
+                <div class="pl-8 flex flex-col gap-4">
+                  <!-- Option 1 -->
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">Fideuá marinera</span>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Crustáceos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Pescado</span>
+                    </div>
+                  </div>
+                  <!-- Option 2 -->
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-snug tracking-tight">Arroz de secreto ibérico y carrillera de vaca</span>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Sulfitos</span>
+                    </div>
+                  </div>
+                  <!-- Option 3 (Premium) -->
+                  <div class="flex flex-col gap-1">
+                    <div class="flex items-center justify-between gap-4">
+                      <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">Arroz meloso de pulpo y gambón</span>
+                      <span class="font-body text-[7px] text-brand-gold border border-brand-gold/20 px-1.5 py-0.5 rounded-sm font-bold bg-white/50">+5€</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Crustáceos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Sulfitos</span>
+                    </div>
+                  </div>
+                  <!-- Option 4 -->
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-snug tracking-tight">Codillo a baja temperatura y purèe del chef</span>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Lácteos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Sulfitos</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Postres -->
+              <div class="group">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="font-display text-lg text-purple-900/40 italic leading-none">IV.</span>
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                    Postres
+                  </h3>
+                  <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
+                </div>
+                <div class="pl-8 flex flex-col gap-4">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">Tarta de Queso – Arándanos</span>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Gluten</span>
+                    </div>
+                  </div>
+                  <!-- Minimal divider -->
+                  <div class="flex justify-start pl-2 opacity-10"><div class="w-4 h-px bg-brand-forest"></div></div>
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">Brownie de chocolate</span>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Gluten</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Frutos secos</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Card Footer: Terms & Booking -->
+            <div class="px-8 py-6 border-t border-brand-forest/5 bg-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+              <p class="font-body text-[10px] text-brand-stone/50 leading-relaxed max-w-[220px]">
+                Incluye pan y agua. Se recomienda reserva previa.
+              </p>
+              <a
+                href="#reservar"
+                onclick="document.querySelector('[name=observaciones]') ? document.querySelector('[name=observaciones]').value = 'Reserva para Menú Semana Santa' : null"
+                class="inline-flex items-center px-8 py-3.5 rounded-sm bg-brand-forest/90 hover:bg-brand-blue text-white font-body text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-300 shadow-md"
+              >
+                Reservar Mesa
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Transition to the dark blue Menus section below -->
+    <div class="absolute bottom-0 left-0 w-full translate-y-1/2 z-10">
+      <GarlandDivider />
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 3 — DAY & NIGHT MENUS
+       ================================================================ -->
+  <section
+    class="bg-brand-blue py-24 md:py-32"
+    aria-label="Nuestra oferta gastronómica"
+  >
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Section heading -->
+      <div id="carta" class="text-center mb-16">
+        <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+          Gastronomía
+        </span>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
+          La Mesa de Día y de Noche
+        </h2>
+        <p class="font-body text-sm text-white/60 mt-4 max-w-xl mx-auto leading-relaxed">
+          Dos momentos distintos, dos propuestas pensadas para cada uno.
+        </p>
+      </div>
+
+      <!-- Two editorial cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+
+        <!-- Card: De Día -->
+        <a
+          href="/taperia"
+          class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
+          aria-label="Ver los menús de día"
+        >
+          <img
+            src="/assets/images/food-paella-close.jpg"
+            alt="Tapas y desayuno en Porta D'irta"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            width="800" height="520"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-blue via-brand-blue/55 to-transparent"></div>
+
+          <!-- Sun badge -->
+          <div class="relative self-start m-6">
+            <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80">☀ De Día</span>
+          </div>
+
+          <div class="relative mt-auto p-8 flex flex-col gap-4">
+            <h3 class="font-display text-3xl sm:text-4xl text-white leading-tight">
+              Del Desayuno<br /><span class="italic font-light">a la Sobremesa</span>
+            </h3>
+
+            <p class="font-body text-sm text-white/70 leading-relaxed max-w-sm">
+              Empezamos con el desayuno mediterráneo de la casa y continuamos con las
+              tapas de La Taperia. Para el almuerzo, el Menú Especial de Semana Santa
+              llena la mesa de sabores de la costa.
+            </p>
+
+            <!-- Service time pills -->
+            <ul class="flex flex-col gap-1.5 mt-1">
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-gold/50 shrink-0"></span>
+                <span class="font-body text-xs text-white/60 uppercase tracking-widest">Desayuno</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-gold/50 shrink-0"></span>
+                <span class="font-body text-xs text-white/60 uppercase tracking-widest">La Taperia · 10:00 – 13:00</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>
+                <span class="font-body text-xs text-brand-gold uppercase tracking-widest">Menú Semana Santa · 13:00 – 17:00</span>
+              </li>
+            </ul>
+
+            <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
+              Ver menús de día
+              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- Card: De Noche -->
+        <a
+          href="/streetfood"
+          class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
+          aria-label="Ver Street Food by Fifty-Five"
+        >
+          <img
+            src="/assets/images/streetfood-fifty-five.png"
+            alt="Street Food by Fifty-Five en Porta D'irta"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            width="800" height="520"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-blue via-brand-blue/70 to-brand-blue/40"></div>
+
+          <!-- Moon badge -->
+          <div class="relative self-start m-6">
+            <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80">☾ De Noche</span>
+          </div>
+
+          <div class="relative mt-auto p-8 flex flex-col gap-4">
+            <div>
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+                18:00 – 22:00
+              </span>
+              <h3 class="font-display text-3xl sm:text-4xl text-white mt-1 leading-tight">
+                Street Food<br /><span class="italic font-light text-white/80">by Fifty-Five</span>
+              </h3>
+            </div>
+
+            <p class="font-body text-sm text-white/70 leading-relaxed max-w-sm">
+              Cuando cae la noche, la cocina cambia de registro. Burgers, pizzas y snacks
+              pensados para compartir sin formalismos, con las mejores vistas de Peñíscola
+              de fondo.
+            </p>
+
+            <ul class="flex flex-col gap-1.5 mt-1">
+              {['Snacks & Para Picar', 'Burgers', 'Pizzas', 'Postres'].map(tag => (
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-brand-gold/50 shrink-0"></span>
+                  <span class="font-body text-xs text-white/60 uppercase tracking-widest">{tag}</span>
+                </li>
+              ))}
+            </ul>
+
+            <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
+              Ver menú nocturno
+              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- Card: Menú Especial -->
+        <a
+          href="/menu"
+          class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
+          aria-label="Ver el Menú Especial"
+          style="display:none"
+        >
+          <!-- Photo -->
+          <img
+            src="/assets/images/food-paella-serving.jpg"
+            alt="Servicio de paella — Menú Especial de Porta D'irta"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            width="800" height="520"
+            loading="lazy"
+          />
+          <!-- Gradient overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-blue via-brand-blue/60 to-transparent"></div>
+
+          <!-- Price badge -->
+          <div class="relative self-end m-6 px-4 py-2 rounded-full bg-brand-gold/90 backdrop-blur-sm">
+            <span class="font-display text-brand-blue font-medium text-lg leading-none">35€ <span class="font-body text-xs font-normal">/pers.</span></span>
+          </div>
+
+          <!-- Content -->
+          <div class="relative mt-auto p-8 flex flex-col gap-4">
+            <div>
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+                Precio fijo · Sábados y domingos
+              </span>
+              <h3 class="font-display text-3xl sm:text-4xl text-white mt-1 leading-tight">
+                Menú Especial
+              </h3>
+            </div>
+
+            <p class="font-body text-sm text-white/75 leading-relaxed max-w-sm">
+              Cuatro tiempos alrededor de la mesa: aperitivo de bienvenida, entrante,
+              plato principal —con paella para los que no se resisten— y postre casero.
+              Pan y agua incluidos.
+            </p>
+
+            <ul class="flex flex-wrap gap-x-4 gap-y-1">
+              {['Aperitivos', 'Entrantes', 'Arroces & Platos', 'Postres'].map(tag => (
+                <li class="font-body text-xs uppercase tracking-widest text-brand-sand/60">{tag}</li>
+              ))}
+            </ul>
+
+            <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
+              Ver menú especial
+              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+            </span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 4 — GALLERY STRIP
+       ================================================================ -->
+  <section
+    class="bg-brand-cream py-24 md:py-32"
+    aria-label="Galería de imágenes"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- 4-image strip -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 overflow-hidden">
+
+        <!-- Image 1 -->
+        <div class="overflow-hidden rounded-sm">
+          <!-- REPLACE: real photo -->
+          <img
+            src="/assets/images/food-paella-close.jpg"
+            alt="Terraza del restaurante con vistas al mar"
+            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <!-- REPLACE: real photo -->
+        </div>
+
+        <!-- Image 2 -->
+        <div class="overflow-hidden rounded-sm">
+          <!-- REPLACE: real photo -->
+          <img
+            src="/assets/images/food-paella-wine.jpg"
+            alt="Jardín del restaurante al atardecer"
+            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <!-- REPLACE: real photo -->
+        </div>
+
+        <!-- Image 3 -->
+        <div class="overflow-hidden rounded-sm">
+          <!-- REPLACE: real photo -->
+          <img
+            src="/assets/images/restaurant-aerial.jpg"
+            alt="Interior elegante del salón principal"
+            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <!-- REPLACE: real photo -->
+        </div>
+
+        <!-- Image 4 -->
+        <div class="overflow-hidden rounded-sm">
+          <!-- REPLACE: real photo -->
+          <img
+            src="/assets/images/restaurant-terrace.jpg"
+            alt="Detalle de un plato del menú de degustación"
+            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <!-- REPLACE: real photo -->
+        </div>
+
+      </div>
+
+      <!-- Caption -->
+      <p class="text-center font-body text-sm text-brand-stone tracking-wider mt-8">
+        La terraza, el jardín y el interior
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 5 — TABLE BOOKING
+       ================================================================ -->
+  <section
+    id="reservar"
+    class="bg-brand-blue py-24 md:py-32"
+    aria-label="Reserva tu mesa"
+  >
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+
+
+      <!-- Heading -->
+      <div class="text-center mb-12">
+        <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+          Reservas
+        </span>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
+          Reserva tu Mesa
+        </h2>
+      </div>
+
+      <!-- REPLACE: TastyIgniter booking widget -->
+      <!-- Frosted glass form card -->
+      <div class="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-4 sm:p-6 lg:p-8">
+        <form
+          id="restaurant-form"
+          method="POST"
+          action="/api/reservas"
+          novalidate
+          class="flex flex-col gap-5"
+          aria-label="Formulario de reserva de mesa"
+        >
+          <input type="hidden" name="source" value="restaurante" />
+
+          <!-- Row 1: Nombre + Email -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-2">
+              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70">
+                Nombre *
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                required
+                autocomplete="name"
+                placeholder="Tu nombre completo"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="tu@email.com"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+          </div>
+
+          <!-- Row 2: Teléfono + Nº personas -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-2">
+              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70">
+                Teléfono *
+              </label>
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                required
+                autocomplete="tel"
+                placeholder="+34 600 000 000"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70">
+                Nº Personas *
+              </label>
+              <input
+                type="number"
+                id="personas"
+                name="personas"
+                required
+                min="1"
+                max="20"
+                placeholder="2"
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+          </div>
+
+          <!-- Row 3: Fecha + Hora -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-2">
+              <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70">
+                Fecha *
+              </label>
+              <input
+                type="date"
+                id="fecha"
+                name="fecha"
+                required
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="hora" class="font-body text-xs uppercase tracking-widest text-white/70">
+                Hora *
+              </label>
+              <select
+                id="hora"
+                name="hora"
+                required
+                class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 appearance-none"
+              >
+                <option value="" disabled selected class="text-brand-blue">Selecciona un turno</option>
+                <optgroup label="Mediodía" class="text-brand-blue">
+                  <option value="13:00" class="text-brand-blue">13:00</option>
+                  <option value="13:30" class="text-brand-blue">13:30</option>
+                  <option value="14:00" class="text-brand-blue">14:00</option>
+                  <option value="14:30" class="text-brand-blue">14:30</option>
+                  <option value="15:00" class="text-brand-blue">15:00</option>
+                  <option value="15:30" class="text-brand-blue">15:30</option>
+                </optgroup>
+                <optgroup label="Noche" class="text-brand-blue">
+                  <option value="20:00" class="text-brand-blue">20:00</option>
+                  <option value="20:30" class="text-brand-blue">20:30</option>
+                  <option value="21:00" class="text-brand-blue">21:00</option>
+                  <option value="21:30" class="text-brand-blue">21:30</option>
+                  <option value="22:00" class="text-brand-blue">22:00</option>
+                  <option value="22:30" class="text-brand-blue">22:30</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="flex flex-col gap-2">
+            <label for="observaciones" class="font-body text-xs uppercase tracking-widest text-white/70">
+              Observaciones
+            </label>
+            <textarea
+              id="observaciones"
+              name="observaciones"
+              rows="4"
+              placeholder="Alergias, celebraciones especiales, preferencias de mesa..."
+              class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 resize-none"
+            ></textarea>
+          </div>
+
+          <!-- RGPD: Consentimiento (Art. 6.1.a RGPD) -->
+          <div class="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="rgpd"
+              name="rgpd"
+              required
+              class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold"
+            />
+            <label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">
+              He leído y acepto la
+              <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold">Política de Privacidad</a>.
+              Consiento el tratamiento de mis datos para gestionar mi reserva. *
+            </label>
+          </div>
+
+          <!-- Submit CTA -->
+          <button
+            type="submit"
+            class="w-full px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-200 mt-2"
+          >
+            Confirmar Reserva
+          </button>
+
+        </form>
+
+        <!-- Phone fallback -->
+        <p class="text-center font-body text-sm text-white/50 mt-6">
+          O llámanos al
+          <a href="tel:+34644026066" class="text-white/80 hover:text-brand-gold transition-colors duration-200">
+            +34 644 026 066
+          </a>
+        </p>
+      </div>
+      <!-- REPLACE: TastyIgniter booking widget -->
+
+    </div>
+  </section>
+
+  <!-- Pre-fill form from URL params sent by Beds24 confirmation emails.
+       Supported params: fecha (YYYY-MM-DD), personas, nombre, email, telefono
+       Example: /restaurante?fecha=2026-07-15&personas=2&nombre=John+Doe&email=john@example.com -->
+  <script is:inline>
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      var map = {
+        fecha:    'fecha',
+        personas: 'personas',
+        nombre:   'nombre',
+        email:    'email',
+        telefono: 'telefono',
+      };
+      Object.entries(map).forEach(function(entry) {
+        var param = entry[0], fieldId = entry[1];
+        var val = p.get(param);
+        if (val) {
+          var el = document.getElementById(fieldId);
+          if (el) el.value = val;
+        }
+      });
+    })();
+  </script>
+
+  <script is:inline define:vars={{ tastyigniterUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'https://restaurant.portadirta.com' }}>
+    document.getElementById('restaurant-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var form = e.target;
+      var btn = form.querySelector('button[type="submit"]');
+      var originalText = btn.textContent;
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+
+      try {
+        var formData = new FormData(form);
+        var data = {
+          nombre:        formData.get('nombre'),
+          email:         formData.get('email'),
+          telefono:      formData.get('telefono'),
+          personas:      parseInt(formData.get('personas'), 10),
+          fecha:         formData.get('fecha'),
+          hora:          formData.get('hora'),
+          observaciones: formData.get('observaciones') || '',
+        };
+        var res = await fetch(tastyigniterUrl + '/api/public/reservations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+          var errBody = await res.json().catch(function() { return {}; });
+          throw new Error(errBody.message || 'Error en el servidor');
+        }
+        form.innerHTML = '<div class="text-center py-8"><p class="text-brand-gold font-display text-2xl italic">¡Reserva confirmada! Nos pondremos en contacto pronto.</p></div>';
+      } catch (err) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        var errDiv = form.querySelector('.form-error');
+        if (!errDiv) {
+          errDiv = document.createElement('p');
+          errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
+          form.appendChild(errDiv);
+        }
+        errDiv.textContent = 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+      }
+    });
+  </script>
+
+  <!-- ================================================================
+       SECTION 6 — HOURS & LOCATION
+       ================================================================ -->
+  <section
+    class="bg-brand-cream py-24 md:py-32"
+    aria-label="Horarios y ubicación"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+
+        <!-- Left: Opening hours -->
+        <div class="flex flex-col gap-8">
+          <div>
+            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+              Horarios
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3">
+              Cuándo nos puedes visitar
+            </h2>
+          </div>
+
+          <table class="w-full font-body text-sm" aria-label="Horario del restaurante">
+            <tbody class="divide-y divide-brand-stone/20">
+              <tr>
+                <td class="py-4 pr-6 text-brand-stone font-medium">Todos los días</td>
+                <td class="py-4 text-brand-blue">
+                  13:00 – 16:00
+                  <span class="mx-2 text-brand-stone/40" aria-hidden="true">·</span>
+                  20:00 – 22:00
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="font-body text-xs text-brand-stone/70 leading-relaxed">
+            Recomendamos reservar con antelación, especialmente en fin de semana.
+          </p>
+        </div>
+
+        <!-- Right: Map placeholder -->
+        <div class="flex flex-col gap-6">
+          <div>
+            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+              Ubicación
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3">
+              Cómo llegar
+            </h2>
+          </div>
+
+          <div class="rounded-xl overflow-hidden h-48 sm:h-64 border border-brand-stone/10">
+            <iframe
+              src="https://maps.google.com/maps?q=40.335276,0.374050&hl=es&z=15&output=embed"
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Ubicación de Porta D'irta en Peñíscola"
+            ></iframe>
+          </div>
+
+          <address class="not-italic flex flex-col gap-2">
+            <p class="font-body text-sm text-brand-blue leading-relaxed">
+              Camí del Pebret, s/n<br />
+              12598 Peñíscola, Castellón<br />
+              España
+            </p>
+            <a
+              href="https://maps.google.com/?q=Peñíscola,Castellón,España"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-body text-sm text-brand-gold hover:text-brand-stone transition-colors duration-200 inline-flex items-center gap-1.5 mt-1"
+            >
+              Abrir en Google Maps
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="7" y1="17" x2="17" y2="7"/>
+                <polyline points="7 7 17 7 17 17"/>
+              </svg>
+            </a>
+          </address>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</Layout>

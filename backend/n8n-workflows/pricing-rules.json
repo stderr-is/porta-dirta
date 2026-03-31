@@ -1,0 +1,28 @@
+{
+  "_comment": "Yield management pricing rules for Workflow C. Edit base/floor/ceiling per room — no workflow changes needed.",
+  "_note": "Base prices are approximate from March 2026 booking data. Adjust to match your actual rate plan.",
+  "rooms": [
+    { "roomId": 662792, "name": "Torre Badum",        "base": 90,  "floor": 70,  "ceiling": 180 },
+    { "roomId": 662793, "name": "Cala El Pebret",     "base": 100, "floor": 80,  "ceiling": 190 },
+    { "roomId": 662794, "name": "Cala Aljub",         "base": 100, "floor": 80,  "ceiling": 190 },
+    { "roomId": 662795, "name": "Ermita Sant Antoni", "base": 120, "floor": 95,  "ceiling": 220 }
+  ],
+  "tiers": [
+    { "occupancyMin": 0,  "occupancyMax": 50,  "multiplier": 1.00, "label": "Temporada baja"    },
+    { "occupancyMin": 51, "occupancyMax": 70,  "multiplier": 1.15, "label": "Demanda normal"    },
+    { "occupancyMin": 71, "occupancyMax": 85,  "multiplier": 1.30, "label": "Alta demanda"      },
+    { "occupancyMin": 86, "occupancyMax": 100, "multiplier": 1.50, "label": "Pico — casi lleno" }
+  ],
+  "specialDates": [
+    { "date": "2026-04-02", "multiplier": 1.35, "label": "Jueves Santo" },
+    { "date": "2026-04-03", "multiplier": 1.35, "label": "Viernes Santo" },
+    { "date": "2026-04-05", "multiplier": 1.35, "label": "Domingo de Pascua" },
+    { "date": "2026-04-06", "multiplier": 1.30, "label": "Lunes de Pascua" },
+    { "date": "2026-06-24", "multiplier": 1.30, "label": "San Joan" },
+    { "date": "2026-07-25", "multiplier": 1.30, "label": "Santiago" },
+    { "date": "2026-08-14", "multiplier": 1.40, "label": "Víspera Asunción" },
+    { "date": "2026-08-15", "multiplier": 1.50, "label": "Asunción" },
+    { "date": "2026-12-06", "multiplier": 1.25, "label": "Constitución" },
+    { "date": "2026-12-08", "multiplier": 1.25, "label": "Inmaculada" }
+  ]
+}

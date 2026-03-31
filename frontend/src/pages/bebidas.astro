@@ -1,0 +1,108 @@
+---
+/**
+ * bebidas.astro — Drinks & wine list page
+ * SSR · Mobile-first · QR table destination
+ * NOTE: currently using mockup data — replace bebidas.json when real list is ready.
+ */
+
+import fs from 'node:fs';
+import Layout from '../layouts/Layout.astro';
+import GarlandDivider from '../components/GarlandDivider.astro';
+import bebidasFallback from '../data/bebidas.json';
+
+// On VPS (SSR), read the live file written by n8n. Fall back to bundled data on Cloudflare.
+let bebidas: typeof bebidasFallback = bebidasFallback;
+const menuDataPath = process.env.MENU_DATA_PATH;
+if (menuDataPath) {
+  try { bebidas = JSON.parse(fs.readFileSync(`${menuDataPath}/bebidas.json`, 'utf-8')); } catch {}
+}
+
+const menuSchema = {
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  "name": "Carta de Bebidas — Restaurante Porta D'irta",
+  "description": "Selección de vinos, cervezas, refrescos y cafés del restaurante Porta D'irta en Peñíscola.",
+  "url": "https://www.portadirta.com/bebidas",
+  "inLanguage": "es",
+  "hasMenuSection": bebidas.sections.map(section => ({
+    "@type": "MenuSection",
+    "name": section.name,
+    "hasMenuItem": section.items.map(item => ({
+      "@type": "MenuItem",
+      "name": item.name,
+      "description": item.description || undefined,
+      "offers": { "@type": "Offer", "price": item.price.toFixed(2), "priceCurrency": "EUR" }
+    }))
+  }))
+};
+---
+
+<Layout
+  title="Bebidas — Restaurante"
+  description="Carta de vinos, cervezas y bebidas del restaurante Porta D'irta en Peñíscola."
+  ogImage="/assets/images/food-paella-wine.jpg"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(menuSchema)} />
+
+  <!-- ── Header ───────────────────────────────────────────────────── -->
+  <section class="bg-brand-blue pt-28 pb-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-3">
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Restaurante Porta D'irta</p>
+      <h1 class="font-display font-light italic text-5xl sm:text-6xl text-white leading-tight">Bebidas</h1>
+      <GarlandDivider light />
+      <p class="font-body text-white/50 text-xs">
+        Actualizada el {new Date(bebidas.updated).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Sections ─────────────────────────────────────────────────── -->
+  <section class="bg-brand-cream py-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
+
+      {bebidas.sections.map(section => (
+        <div>
+          <div class="flex items-center gap-3 mb-1">
+            <h2 class="font-display text-2xl sm:text-3xl text-brand-blue shrink-0">{section.name}</h2>
+            <div class="flex-1 h-px bg-brand-blue/15"></div>
+          </div>
+          <ul class="flex flex-col divide-y divide-brand-sand/40">
+            {section.items.map(item => (
+              <li class="py-3.5 flex items-start justify-between gap-3">
+                <div class="flex flex-col gap-1 min-w-0">
+                  <span class="font-body font-medium text-brand-blue text-[15px] leading-snug">{item.name}</span>
+                  {item.description && (
+                    <span class="font-body text-brand-stone text-[13px] leading-relaxed">{item.description}</span>
+                  )}
+                </div>
+                <div class="flex flex-col items-end shrink-0 gap-0.5 pt-0.5">
+                  <span class="font-body font-medium text-brand-gold text-[15px] tabular-nums">{item.price.toFixed(2)} €</span>
+                  {item.unit && (
+                    <span class="font-body text-[11px] text-brand-stone/50 uppercase tracking-wide">{item.unit}</span>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <p class="font-body text-[11px] text-brand-stone/50 italic text-center border-t border-brand-sand/40 pt-6">
+        Precios con IVA incluido. Disponibilidad sujeta a temporada.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ── Bottom nav ────────────────────────────────────────────────── -->
+  <section class="bg-brand-blue py-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href="/mesa" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">← Todos los menús</a>
+      <span class="hidden sm:block text-white/20">|</span>
+      <a href="/reservar" class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
+        Reservar mesa
+      </a>
+    </div>
+  </section>
+
+</Layout>

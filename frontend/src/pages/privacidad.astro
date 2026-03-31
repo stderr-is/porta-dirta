@@ -1,0 +1,273 @@
+---
+/**
+ * privacidad.astro — Política de Privacidad (RGPD / LOPDGDD)
+ *
+ * Compliant with:
+ *   - Reglamento (UE) 2016/679 (RGPD / GDPR)
+ *   - Ley Orgánica 3/2018 (LOPDGDD)
+ *
+ * Data processors documented:
+ *   - TastyIgniter (self-hosted, same server) — reservation & contact forms
+ *   - Beds24 Ltd (UK/IE company) — hotel booking widget, third-party processor
+ *   - Google LLC (US company) — Google Fonts CDN (IP address transfer)
+ *
+ * Placeholders marked [ENTRE CORCHETES] must be completed before launch.
+ */
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Política de Privacidad"
+  description="Política de Privacidad de Porta D'irta. Cómo tratamos tus datos personales según el RGPD."
+>
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="min-h-[30vh] bg-brand-blue flex items-center justify-center py-20">
+    <div class="text-center px-4">
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold mb-4">Protección de datos</p>
+      <h1 class="font-display italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
+        Política de Privacidad
+      </h1>
+    </div>
+  </section>
+
+  <!-- ── Content ───────────────────────────────────────────── -->
+  <section class="bg-brand-cream py-16 lg:py-24">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-stone prose-headings:font-display prose-headings:italic prose-headings:text-brand-blue prose-a:text-brand-blue">
+
+      <p class="text-sm text-stone-500 mb-10">Última actualización: marzo de 2026</p>
+
+      <!-- Intro -->
+      <p>
+        En Porta D'irta respetamos tu privacidad y tratamos tus datos personales de conformidad
+        con el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la
+        Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y Garantía
+        de los Derechos Digitales (LOPDGDD).
+      </p>
+
+      <!-- 1. Responsable -->
+      <h2>1. Responsable del tratamiento</h2>
+      <table class="w-full text-sm border-collapse">
+        <tbody>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 font-semibold text-stone-700 whitespace-nowrap">Responsable</td>
+            <td class="py-2 text-stone-600">Puerto de Irta SL</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 font-semibold text-stone-700 whitespace-nowrap">NIF / CIF</td>
+            <td class="py-2 text-stone-600">B19896083</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 font-semibold text-stone-700 whitespace-nowrap">Domicilio</td>
+            <td class="py-2 text-stone-600">Camí del Pebret, s/n · 12598 Peñíscola · Castellón · España</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 font-semibold text-stone-700 whitespace-nowrap">Contacto DPO / privacidad</td>
+            <td class="py-2 text-stone-600"><a href="mailto:info@portadirta.com">info@portadirta.com</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2. Datos que recabamos -->
+      <h2>2. Datos personales que tratamos</h2>
+      <p>Recabamos los datos que tú mismo nos proporcionas a través de los formularios del sitio web:</p>
+
+      <h3 class="text-base font-semibold not-italic">Formulario de contacto general</h3>
+      <ul>
+        <li>Nombre y apellidos</li>
+        <li>Correo electrónico</li>
+        <li>Teléfono</li>
+        <li>Asunto y mensaje libre</li>
+      </ul>
+
+      <h3 class="text-base font-semibold not-italic">Formulario de reserva de restaurante</h3>
+      <ul>
+        <li>Nombre y apellidos</li>
+        <li>Correo electrónico</li>
+        <li>Teléfono</li>
+        <li>Fecha, hora y número de comensales</li>
+        <li>Comentarios especiales (alergias, ocasiones especiales, etc.)</li>
+      </ul>
+
+      <h3 class="text-base font-semibold not-italic">Formulario de consulta de eventos y celebraciones</h3>
+      <ul>
+        <li>Nombre y apellidos</li>
+        <li>Correo electrónico</li>
+        <li>Teléfono</li>
+        <li>Tipo de evento, número de invitados y fecha estimada</li>
+        <li>Mensaje libre</li>
+      </ul>
+
+      <h3 class="text-base font-semibold not-italic">Reserva de alojamiento (motor Beds24)</h3>
+      <p>
+        Las reservas de habitaciones se gestionan a través del motor de reservas de
+        <strong>Beds24</strong> (Kingsberry Ltd, registrada en la Unión Europea). Beds24
+        actúa como encargado del tratamiento conforme a sus propios
+        <a href="https://beds24.com/privacy-policy" target="_blank" rel="noopener noreferrer">términos de privacidad</a>.
+        Los datos que introduces en el widget de reserva (nombre, email, tarjeta de crédito,
+        etc.) son procesados directamente por Beds24 bajo sus medidas de seguridad PCI-DSS.
+        Porta D'irta tiene acceso a los datos de la reserva confirmada con el fin de
+        gestionar tu estancia.
+      </p>
+
+      <!-- 3. Finalidades y base jurídica -->
+      <h2>3. Finalidades del tratamiento y base jurídica</h2>
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="border-b-2 border-stone-300">
+            <th class="py-2 pr-4 text-left font-semibold text-stone-700">Finalidad</th>
+            <th class="py-2 pr-4 text-left font-semibold text-stone-700">Base jurídica (Art. 6 RGPD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Gestionar tu solicitud de contacto o consulta</td>
+            <td class="py-2 text-stone-600">Consentimiento del interesado (Art. 6.1.a)</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Gestionar la reserva de mesa en el restaurante</td>
+            <td class="py-2 text-stone-600">Ejecución de un contrato (Art. 6.1.b)</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Gestionar consultas de eventos y celebraciones</td>
+            <td class="py-2 text-stone-600">Consentimiento del interesado (Art. 6.1.a)</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Gestionar la reserva de alojamiento y la estancia</td>
+            <td class="py-2 text-stone-600">Ejecución de un contrato (Art. 6.1.b)</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Cumplimiento de obligaciones contables y fiscales</td>
+            <td class="py-2 text-stone-600">Obligación legal (Art. 6.1.c)</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-4 text-stone-600">Envío de comunicaciones comerciales propias (si lo aceptas)</td>
+            <td class="py-2 text-stone-600">Consentimiento del interesado (Art. 6.1.a)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 4. Destinatarios -->
+      <h2>4. Destinatarios y transferencias internacionales</h2>
+      <p>
+        Porta D'irta no vende ni cede tus datos a terceros con fines comerciales. Sin embargo,
+        puede ser necesaria la comunicación a los siguientes proveedores de servicios en calidad
+        de encargados del tratamiento:
+      </p>
+      <ul>
+        <li>
+          <strong>Beds24 (Kingsberry Ltd)</strong> — motor de reservas de alojamiento.
+          Empresa registrada en la UE. Tus datos de reserva quedan almacenados en sus
+          servidores conforme a sus medidas de seguridad. Véase su
+          <a href="https://beds24.com/privacy-policy" target="_blank" rel="noopener noreferrer">política de privacidad</a>.
+        </li>
+        <li>
+          <strong>Google LLC</strong> — proveedor de fuentes tipográficas (Google Fonts CDN).
+          Al cargar la página, tu navegador puede realizar una solicitud a los servidores
+          de Google, transfiriendo tu dirección IP. Google LLC está establecida en EE. UU.;
+          dicha transferencia se ampara en las Cláusulas Contractuales Tipo aprobadas por la
+          Comisión Europea. Puedes consultar la
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacidad de Google</a>.
+          <br />
+          <em>Nota: estamos evaluando el alojamiento local de las fuentes para eliminar esta transferencia.</em>
+        </li>
+        <li>
+          <strong>Proveedor de hosting</strong> — el alojamiento del sitio web puede implicar
+          el almacenamiento de logs de acceso (IP, user-agent, timestamp) por parte del
+          proveedor de infraestructura, únicamente con fines de seguridad y diagnóstico.
+        </li>
+      </ul>
+      <p>
+        No se realizan transferencias internacionales de datos más allá de las indicadas
+        anteriormente y siempre amparadas en garantías adecuadas conforme al Capítulo V del RGPD.
+      </p>
+
+      <!-- 5. Plazo de conservación -->
+      <h2>5. Plazo de conservación de los datos</h2>
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="border-b-2 border-stone-300">
+            <th class="py-2 pr-4 text-left font-semibold text-stone-700">Tipo de dato</th>
+            <th class="py-2 text-left font-semibold text-stone-700">Plazo de conservación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Consultas y contacto general</td>
+            <td class="py-2 text-stone-600">12 meses desde la última comunicación</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Reservas de restaurante</td>
+            <td class="py-2 text-stone-600">5 años (obligaciones contables — Ley 58/2003, General Tributaria)</td>
+          </tr>
+          <tr class="border-b border-stone-200">
+            <td class="py-2 pr-4 text-stone-600">Reservas de alojamiento</td>
+            <td class="py-2 text-stone-600">5 años (obligaciones contables) + 3 años (libro de registro de viajeros — RD 933/2021)</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-4 text-stone-600">Datos de facturación</td>
+            <td class="py-2 text-stone-600">10 años (Código de Comercio)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Una vez transcurridos los plazos indicados, los datos serán suprimidos o anonimizados
+        de forma irreversible.
+      </p>
+
+      <!-- 6. Derechos -->
+      <h2>6. Tus derechos</h2>
+      <p>
+        En virtud del RGPD y la LOPDGDD, tienes derecho a:
+      </p>
+      <ul>
+        <li><strong>Acceso</strong> — saber qué datos tuyos tratamos.</li>
+        <li><strong>Rectificación</strong> — corregir datos inexactos o incompletos.</li>
+        <li><strong>Supresión</strong> («derecho al olvido») — solicitar la eliminación de tus datos cuando ya no sean necesarios.</li>
+        <li><strong>Oposición</strong> — oponerte al tratamiento en determinadas circunstancias.</li>
+        <li><strong>Limitación del tratamiento</strong> — solicitar que suspendamos el tratamiento mientras se resuelve una incidencia.</li>
+        <li><strong>Portabilidad</strong> — recibir tus datos en formato estructurado y de uso común.</li>
+        <li><strong>Retirada del consentimiento</strong> — en cualquier momento y sin coste, cuando el tratamiento se base en tu consentimiento, sin que ello afecte a la licitud del tratamiento previo.</li>
+      </ul>
+      <p>
+        Para ejercer cualquiera de estos derechos, envía un correo electrónico a
+        <a href="mailto:info@portadirta.com">info@portadirta.com</a> indicando el derecho
+        que deseas ejercer y adjuntando una copia de tu documento de identidad. Responderemos
+        en el plazo máximo de <strong>30 días</strong>.
+      </p>
+      <p>
+        Si consideras que el tratamiento de tus datos infringe la normativa, tienes derecho a
+        presentar una reclamación ante la
+        <strong>Agencia Española de Protección de Datos (AEPD)</strong>:
+        <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">www.aepd.es</a>
+        · C/ Jorge Juan, 6 · 28001 Madrid.
+      </p>
+
+      <!-- 7. Menores -->
+      <h2>7. Menores de edad</h2>
+      <p>
+        Nuestros servicios no están dirigidos a menores de 14 años. Si eres menor de esa edad,
+        no envíes datos personales a través de este sitio web sin el consentimiento de tus
+        padres o tutores legales.
+      </p>
+
+      <!-- 8. Modificaciones -->
+      <h2>8. Modificaciones de esta política</h2>
+      <p>
+        Porta D'irta puede actualizar esta Política de Privacidad para reflejar cambios
+        legislativos o en el tratamiento de datos. Te notificaremos los cambios significativos
+        a través del aviso en el sitio web. La fecha de «Última actualización» en la cabecera
+        de este documento siempre reflejará la versión vigente.
+      </p>
+
+      <!-- Back links -->
+      <div class="mt-12 pt-8 border-t border-stone-200 flex gap-6 text-sm">
+        <a href="/legal" class="text-brand-blue hover:underline">→ Aviso Legal</a>
+        <a href="/cookies" class="text-brand-blue hover:underline">→ Política de Cookies</a>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

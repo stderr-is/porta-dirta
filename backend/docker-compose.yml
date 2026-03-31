@@ -1,0 +1,153 @@
+services:
+  restaurant:
+    build:
+      context: ./tastyigniter
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    environment:
+      # Path where menu JSON files are written (shared with frontend container)
+      MENU_DATA_PATH: /var/www/data
+    depends_on:
+      - restaurant-db
+    volumes:
+      - menu-data:/var/www/data
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+
+  restaurant-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: tastyigniter
+      MYSQL_USER: tasty
+      MYSQL_PASSWORD: tasty_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+
+  # ── Astro SSR Frontend ────────────────────────────────────────────────────
+  # Reads menu JSON files at request time from the shared menu-data volume.
+  # Uncomment and configure when deploying to VPS (Hostinger/Coolify).
+  #
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4321:4321"
+    environment:
+      # Where Astro reads live menu JSON files (written by TastyIgniter/n8n)
+      MENU_DATA_PATH: /app/data
+    volumes:
+      - menu-data:/app/data
+    restart: always
+    mem_limit: 256m
+    mem_reservation: 128m
+
+  events:
+    build:
+      context: ./hi.events
+      dockerfile: Dockerfile.all-in-one
+    ports:
+      - "8082:80"
+    environment:
+      VITE_API_URL_CLIENT: https://eventos.portadirta.com/api
+      VITE_FRONTEND_URL: https://eventos.portadirta.com
+      VITE_STRIPE_PUBLISHABLE_KEY: ""
+    volumes:
+      - ./hi.events/backend/.env:/app/backend/.env
+    depends_on:
+      - events-db
+    restart: always
+    mem_limit: 1g
+    mem_reservation: 512m
+
+  events-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: hievents
+      POSTGRES_USER: hievents
+      POSTGRES_PASSWORD: hievents_pass
+    volumes:
+      - ./data/pgsql:/var/lib/postgresql/data
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+
+  n8n-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: n8n_pass
+      POSTGRES_DB: n8n
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    restart: always
+    mem_limit: 256m
+    mem_reservation: 128m
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_HOST=n8n-db
+      - DB_POSTGRESDB_PASSWORD=n8n_pass
+      - DB_POSTGRESDB_USER=n8n
+      # Stable encryption key — NEVER change this or all credentials become unreadable
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      # Allow Code nodes to read $env variables (needed for Identity Router)
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      # Public URL so n8n can register Telegram webhooks correctly
+      - WEBHOOK_URL=https://n8n.portadirta.com/
+      - N8N_EDITOR_BASE_URL=https://n8n.portadirta.com/
+      # Trust the first proxy (Cloudflare/Tunnel) for accurate IP/Header handling
+      - N8N_PROXY_HOPS=1
+      # ── AI Automation Layer ────────────────────────────────────────
+      # Claude API key (Pro account) — replaces Gemini (free tier didn't work)
+      # Get key: https://console.anthropic.com/settings/keys
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # Create bot via @BotFather on Telegram → /newbot
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      # Find your ID: message @userinfobot on Telegram
+      - TELEGRAM_ADMIN_ID=${TELEGRAM_ADMIN_ID}
+      # Collaborator ID (restaurant partner, read-only access)
+      - TELEGRAM_COLLAB_ID=${TELEGRAM_COLLAB_ID}
+      # Beds24 V2 long-lived token (from frontend/.env BEDS24_REFRESH_TOKEN flow)
+      - BEDS24_API_TOKEN=${BEDS24_API_TOKEN}
+      - BEDS24_PROP_ID=${BEDS24_PROP_ID}
+      # Business email for SMTP replies
+      - BUSINESS_EMAIL=${BUSINESS_EMAIL}
+      # ── Menu System ───────────────────────────────────────────────
+      # Google Doc IDs — share each doc as "anyone with link can view"
+      # then paste the ID from the URL: docs.google.com/document/d/<ID>/edit
+      - MENU_CARTA_DOC_ID=${MENU_CARTA_DOC_ID}
+      - MENU_MENU_DOC_ID=${MENU_MENU_DOC_ID}
+      - MENU_BEBIDAS_DOC_ID=${MENU_BEBIDAS_DOC_ID}
+    depends_on:
+      - n8n-db
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data/uptime-kuma:/app/data
+    restart: always
+    mem_limit: 256m
+    mem_reservation: 128m
+
+volumes:
+  # Shared between restaurant (writer) and frontend (reader).
+  # TastyIgniter writes carta.json / menu.json / bebidas.json here after n8n pipeline.
+  # Astro SSR reads them on each request — no rebuild needed.
+  menu-data:

@@ -1,0 +1,42 @@
+{
+  "updated": "2026-03-25",
+  "name": "Menú Especial Semana Santa",
+  "price": 35.00,
+  "priceNote": "por persona — pan y agua incluidos",
+  "available": "Semana Santa 2026 (13:00 – 17:00)",
+  "sections": [
+    {
+      "name": "Aperitivos de bienvenida",
+      "items": [
+        { "name": "La tostada d'irta", "description": "", "allergens": ["gluten", "lácteos"] }
+      ]
+    },
+    {
+      "name": "Entrantes al centro",
+      "items": [
+        { "name": "Crema de guisante y espinaca con panceta curada y picatostes", "description": "", "allergens": ["gluten", "lácteos", "sulfitos"] },
+        { "name": "Mejillones a la marinera", "description": "", "allergens": ["moluscos", "gluten", "sulfitos"] }
+      ]
+    },
+    {
+      "name": "Platos a elegir",
+      "choose": true,
+      "note": "Un plato por persona · Arroces mín. 2 personas",
+      "items": [
+        { "name": "Fideuá marinera", "description": "Mín. 2 personas", "supplement": null, "allergens": ["gluten", "crustáceos", "moluscos", "pescado", "huevo"] },
+        { "name": "Arroz de secreto ibérico y carrillera de vaca", "description": "Mín. 2 personas", "supplement": null, "allergens": ["sulfitos"] },
+        { "name": "Arroz meloso de pulpo y gambón", "description": "Mín. 2 personas", "supplement": 5.00, "allergens": ["crustáceos", "moluscos", "sulfitos"] },
+        { "name": "Codillo a baja temperatura y purèe del chef", "description": "", "supplement": null, "allergens": ["lácteos", "sulfitos"] },
+        { "name": "Caldereta Peñiscolana", "description": "", "supplement": null, "allergens": ["pescado", "crustáceos", "moluscos", "gluten", "sulfitos"] }
+      ]
+    },
+    {
+      "name": "Postres caseros a elegir",
+      "choose": true,
+      "items": [
+        { "name": "Tarta de Queso – Arándanos", "description": "", "allergens": ["lácteos", "huevo", "gluten"] },
+        { "name": "Brownie de chocolate", "description": "", "allergens": ["gluten", "huevo", "lácteos", "frutos secos"] }
+      ]
+    }
+  ]
+}

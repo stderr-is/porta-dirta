@@ -1,0 +1,65 @@
+---
+/**
+ * SustainabilityStatus.astro — Live off-grid metrics
+ *
+ * This component fetches real-time solar data from a public endpoint
+ * (e.g., an n8n workflow connected to the SmartLife / Easun inverter).
+ * It communicates the "Transparent Sustainability" brand value.
+ */
+
+// In production, this would be an n8n webhook URL
+// const STATUS_API = 'https://n8n.hobbitonranch.com/webhook/live-solar-status';
+
+// Mock data for initial launch (Wave 2)
+const stats = {
+  solarPower: 1240, // Watts
+  batteryLevel: 88, // Percentage
+  co2Saved: 1420,   // kg
+  status: 'OPTIMAL'
+};
+---
+
+<div class="bg-brand-blue/5 border border-brand-sand/30 rounded-2xl p-6 flex flex-col gap-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+      <span class="font-body text-xs uppercase tracking-widest text-brand-blue font-bold">Estado Off-Grid: En Vivo</span>
+    </div>
+    <span class="font-body text-[10px] text-brand-stone/60">Actualizado hace 5 min</span>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-2 gap-4">
+
+    <!-- Solar Gen -->
+    <div class="flex flex-col gap-1">
+      <span class="font-body text-[10px] uppercase tracking-wider text-brand-stone">Generación Solar</span>
+      <div class="flex items-baseline gap-1">
+        <span class="font-display text-2xl text-brand-blue">{stats.solarPower}</span>
+        <span class="font-body text-xs text-brand-stone">W</span>
+      </div>
+    </div>
+
+    <!-- Battery -->
+    <div class="flex flex-col gap-1">
+      <span class="font-body text-[10px] uppercase tracking-wider text-brand-stone">Nivel de Batería</span>
+      <div class="flex items-baseline gap-1">
+        <span class="font-display text-2xl text-brand-blue">{stats.batteryLevel}%</span>
+        <div class="w-12 h-2.5 bg-brand-stone/10 rounded-full overflow-hidden mt-1.5">
+          <div class="h-full bg-green-500" style={`width: ${stats.batteryLevel}%`}></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footnote -->
+  <div class="pt-4 border-t border-brand-sand/20">
+    <p class="font-body text-[11px] leading-relaxed text-brand-stone/80">
+      <strong>Impacto:</strong> Hemos evitado la emisión de <span class="text-brand-blue font-bold">{stats.co2Saved}kg de CO2</span> este año gracias a nuestro sistema de autoconsumo.
+    </p>
+  </div>
+
+</div>

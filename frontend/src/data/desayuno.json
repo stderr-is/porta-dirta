@@ -1,0 +1,16 @@
+{
+  "updated": "2026-03-28",
+  "sections": [
+    {
+      "name": "Desayuno",
+      "items": [
+        {
+          "name": "Desayuno Porta d'irta",
+          "description": "Tostadas con aceite de oliva y tomate, embutidos, huevos al gusto y bacon asado, mantequilla y mermelada. Café o infusión y zumo.",
+          "price": 12.50,
+          "allergens": ["gluten", "huevo", "lácteos"]
+        }
+      ]
+    }
+  ]
+}

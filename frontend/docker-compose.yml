@@ -1,0 +1,28 @@
+# Porta D'irta — Frontend SSR container (Hostinger VPS)
+#
+# TRANSITIONAL PHASE:
+#   Backend services (TastyIgniter, Hi.Events, n8n) still run locally
+#   and are exposed via Cloudflare Tunnel (hobbitonranch.com subdomains).
+#   Only this container runs on Hostinger.
+#
+# FINAL STATE (when backends migrate to Hostinger VPS):
+#   Update PUBLIC_TASTYIGNITER_URL and PUBLIC_HIEVENTS_URL to final
+#   portadirta.com subdomains, then `docker compose up -d --build`.
+#
+# Usage:
+#   cp .env.example .env   # fill in values
+#   docker compose up -d --build
+
+services:
+  frontend:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "4321:4321"
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=4321
+    mem_limit: 512m
+    mem_reservation: 256m

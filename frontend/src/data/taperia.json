@@ -1,0 +1,23 @@
+{
+  "updated": "2026-03-28",
+  "sections": [
+    {
+      "name": "Tapas",
+      "note": "10:00 – 13:00",
+      "items": [
+        { "name": "Aceitunas aliñadas",                     "description": "", "price": 4.50,  "allergens": ["sulfitos"] },
+        { "name": "Pan con Tomate o all-i-oli",             "description": "", "price": 5.50,  "allergens": ["gluten", "huevo"] },
+        { "name": "Patatas Bravas",                         "description": "", "price": 8.50,  "allergens": [] },
+        { "name": "Patatas con all-i-oli",                  "description": "", "price": 8.50,  "allergens": ["huevo"] },
+        { "name": "Plato de Jamón",                         "description": "", "price": 18.00, "allergens": ["sulfitos"] },
+        { "name": "Plato de Queso Curado de Oveja",         "description": "", "price": 14.00, "allergens": ["lácteos"] },
+        { "name": "Mejillones Marinera",                    "description": "", "price": 15.50, "allergens": ["moluscos", "gluten", "sulfitos"] },
+        { "name": "Crujiente de Pollo Casero",              "description": "", "price": 14.50, "allergens": ["gluten", "huevo"] },
+        { "name": "Palitos de Queso y Mermelada de Tomate", "description": "", "price": 13.50, "allergens": ["lácteos", "gluten"] },
+        { "name": "Fondue de Camembert",                    "description": "", "price": 14.50, "allergens": ["lácteos", "gluten"] },
+        { "name": "Gambones a la plancha",                  "description": "", "price": 16.00, "allergens": ["crustáceos"] },
+        { "name": "Puntillas rebozadas",                    "description": "", "price": 15.50, "allergens": ["gluten", "moluscos"] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,266 @@
+{
+  "name": "A2: Silent Concierge — Telegram Callback Handler",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["message", "callback_query"],
+        "additionalFields": {}
+      },
+      "id": "a2000001-0000-0000-0000-000000000001",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "REPLACE_WEBHOOK_ID_A2",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Determine event type and extract relevant data\nconst update = items[0].json;\nlet eventType, callbackData, messageKey, action, chatId, replyToMsgId, text;\n\nif (update.callback_query) {\n  eventType = 'callback';\n  callbackData = update.callback_query.data || '';\n  chatId = update.callback_query.message?.chat?.id?.toString();\n  const parts = callbackData.split('_');\n  action = parts[0]; // approve | edit | ignore\n  messageKey = parts.slice(1).join('_');\n} else if (update.message) {\n  eventType = 'message';\n  chatId = update.message.chat?.id?.toString();\n  text = update.message.text || '';\n  replyToMsgId = update.message.reply_to_message?.message_id?.toString();\n}\n\nreturn [{\n  json: { eventType, callbackData, action, messageKey, chatId, text, replyToMsgId }\n}];"
+      },
+      "id": "a2000002-0000-0000-0000-000000000002",
+      "name": "Parse Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "output": "single",
+        "rules": {
+          "rules": [
+            {
+              "value1": "={{ $json.action }}",
+              "operation": "equal",
+              "value2": "approve",
+              "output": 0
+            },
+            {
+              "value1": "={{ $json.action }}",
+              "operation": "equal",
+              "value2": "edit",
+              "output": 1
+            },
+            {
+              "value1": "={{ $json.eventType }}",
+              "operation": "equal",
+              "value2": "message",
+              "output": 2
+            }
+          ]
+        },
+        "fallbackOutput": "none"
+      },
+      "id": "a2000003-0000-0000-0000-000000000003",
+      "name": "Route: Approve / Edit / Reply",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// APPROVE branch: load draft from static data and prepare for sending\nconst { messageKey, chatId } = items[0].json;\nconst staticData = $getWorkflowStaticData('global');\nconst draft = staticData.drafts?.[messageKey];\n\nif (!draft) {\n  return [{ json: { error: 'Draft not found or expired (>24h)', messageKey, chatId } }];\n}\n\n// Mark as processed to prevent double-send\nif (!staticData.processed) staticData.processed = {};\nif (staticData.processed[messageKey]) {\n  return [{ json: { error: 'Already sent — ignoring duplicate approve', messageKey, chatId } }];\n}\nstaticData.processed[messageKey] = { ts: Date.now(), action: 'sent' };\ndelete staticData.drafts[messageKey];\n\nreturn [{ json: { ...draft, messageKey, chatId, readyToSend: true } }];"
+      },
+      "id": "a2000004-0000-0000-0000-000000000004",
+      "name": "Load Draft (Approve)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [910, 160]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [{ "value1": "={{ $json.readyToSend }}", "value2": true }]
+        }
+      },
+      "id": "a2000005-0000-0000-0000-000000000005",
+      "name": "Draft Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1130, 160]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.BUSINESS_EMAIL }}",
+        "toEmail": "={{ $json.replyTo }}",
+        "subject": "={{ $json.draftSubject }}",
+        "text": "={{ $json.draftBody }}",
+        "options": {}
+      },
+      "id": "a2000006-0000-0000-0000-000000000006",
+      "name": "Send Email (SMTP)",
+      "type": "n8n-nodes-base.sendEmail",
+      "typeVersion": 2,
+      "position": [1350, 120],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_SMTP_CRED_ID",
+          "name": "info@portadirta.com SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "=✅ *Email enviado*\n\nPara: {{ $json.replyTo }}\nAsunto: {{ $json.draftSubject }}",
+        "additionalFields": { "parse_mode": "Markdown" }
+      },
+      "id": "a2000007-0000-0000-0000-000000000007",
+      "name": "Telegram — Sent Confirmation",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1570, 120],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "⚠️ Borrador no encontrado (puede haber expirado tras 24h). Revisa el email directamente en Gmail.",
+        "additionalFields": {}
+      },
+      "id": "a2000008-0000-0000-0000-000000000008",
+      "name": "Telegram — Draft Expired",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1350, 220],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// EDIT branch: retrieve original draft body, request force_reply from admin\nconst { messageKey, chatId } = items[0].json;\nconst staticData = $getWorkflowStaticData('global');\nconst draft = staticData.drafts?.[messageKey];\n\nif (!draft) {\n  return [{ json: { error: 'draft_not_found', chatId, messageKey } }];\n}\n\n// Store pending edit so the reply message can be matched\nif (!staticData.pendingEdits) staticData.pendingEdits = {};\n\nreturn [{ json: {\n  chatId,\n  messageKey,\n  originalDraftBody: draft.draftBody,\n  draftSubject: draft.draftSubject\n} }];"
+      },
+      "id": "a2000009-0000-0000-0000-000000000009",
+      "name": "Load Draft (Edit)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "=✏️ *Editar borrador*\n\nAsunto: {{ $json.draftSubject }}\n\nBorrador actual:\n───────────────────\n{{ $json.originalDraftBody }}\n───────────────────\n\n📝 *Responde a este mensaje con el texto revisado* y lo enviaré por ti.",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "reply_markup": "{\"force_reply\":true,\"selective\":true,\"input_field_placeholder\":\"Escribe el cuerpo revisado del email...\"}"
+        }
+      },
+      "id": "a2000010-0000-0000-0000-000000000010",
+      "name": "Telegram — Request Edit (force_reply)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1130, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store the force_reply message ID so we can match the admin's reply\nconst sentMsg = items[0].json;\nconst { chatId, messageKey } = $('Load Draft (Edit)').first().json;\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.pendingEdits) staticData.pendingEdits = {};\nstaticData.pendingEdits[sentMsg.message_id?.toString()] = { messageKey, chatId };\nreturn [{ json: { stored: true } }];"
+      },
+      "id": "a2000011-0000-0000-0000-000000000011",
+      "name": "Store Pending Edit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1350, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// REPLY branch: check if this message is a reply to a force_reply edit request\nconst { replyToMsgId, text, chatId } = items[0].json;\nif (!replyToMsgId || !text) return [];\n\nconst staticData = $getWorkflowStaticData('global');\nconst pendingEdit = staticData.pendingEdits?.[replyToMsgId];\nif (!pendingEdit) return []; // not a tracked edit reply, ignore\n\nconst { messageKey } = pendingEdit;\nconst draft = staticData.drafts?.[messageKey];\nif (!draft) return [{ json: { error: 'draft_expired', chatId } }];\n\n// Update the draft body with the admin's revised text\ndraft.draftBody = text;\nstaticData.drafts[messageKey] = draft;\ndelete staticData.pendingEdits[replyToMsgId];\n\nreturn [{ json: {\n  messageKey,\n  chatId,\n  draftSubject: draft.draftSubject,\n  draftBody: draft.draftBody,\n  replyTo: draft.replyTo,\n  fromName: draft.fromName\n} }];"
+      },
+      "id": "a2000012-0000-0000-0000-000000000012",
+      "name": "Apply Edit Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [910, 440]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "=📧 *Borrador actualizado*\n\nPara: {{ $json.replyTo }} ({{ $json.fromName }})\nAsunto: {{ $json.draftSubject }}\n\n{{ $json.draftBody }}\n───────────────────",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "reply_markup": "={\"inline_keyboard\":[[{\"text\":\"✅ Aprobar y enviar\",\"callback_data\":\"approve_{{ $json.messageKey }}\"},{\"text\":\"🗑️ Ignorar\",\"callback_data\":\"ignore_{{ $json.messageKey }}\"}]]}"
+        }
+      },
+      "id": "a2000013-0000-0000-0000-000000000013",
+      "name": "Telegram — Re-present Draft",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1130, 440],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_TELEGRAM_CRED_ID",
+          "name": "Porta D'irta Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [[{ "node": "Parse Event", "type": "main", "index": 0 }]]
+    },
+    "Parse Event": {
+      "main": [[{ "node": "Route: Approve / Edit / Reply", "type": "main", "index": 0 }]]
+    },
+    "Route: Approve / Edit / Reply": {
+      "main": [
+        [{ "node": "Load Draft (Approve)", "type": "main", "index": 0 }],
+        [{ "node": "Load Draft (Edit)",    "type": "main", "index": 0 }],
+        [{ "node": "Apply Edit Reply",     "type": "main", "index": 0 }]
+      ]
+    },
+    "Load Draft (Approve)": {
+      "main": [[{ "node": "Draft Exists?", "type": "main", "index": 0 }]]
+    },
+    "Draft Exists?": {
+      "main": [
+        [{ "node": "Send Email (SMTP)",      "type": "main", "index": 0 }],
+        [{ "node": "Telegram — Draft Expired","type": "main", "index": 0 }]
+      ]
+    },
+    "Send Email (SMTP)": {
+      "main": [[{ "node": "Telegram — Sent Confirmation", "type": "main", "index": 0 }]]
+    },
+    "Load Draft (Edit)": {
+      "main": [[{ "node": "Telegram — Request Edit (force_reply)", "type": "main", "index": 0 }]]
+    },
+    "Telegram — Request Edit (force_reply)": {
+      "main": [[{ "node": "Store Pending Edit", "type": "main", "index": 0 }]]
+    },
+    "Apply Edit Reply": {
+      "main": [[{ "node": "Telegram — Re-present Draft", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "a2000000-0000-0000-0000-000000000000",
+  "id": "workflow-a2-callback-handler",
+  "tags": [{ "name": "ai" }, { "name": "email" }]
+}
