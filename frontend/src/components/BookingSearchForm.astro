@@ -17,14 +17,14 @@
  *   formId — unique string; must be different per instance on the same page
  */
 
-import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { useTranslations } from '@/i18n/utils';
 
 interface Props {
   formId: string;
-  lang: string;
+  lang?: string;
 }
-const { formId, lang } = Astro.props;
-const t = useTranslations(lang);
+const { formId } = Astro.props;
+const t = useTranslations();
 ---
 
 <form
@@ -46,11 +46,12 @@ const t = useTranslations(lang);
         class="flex-1 min-w-0 px-4 py-2.5 flex flex-col text-left rounded-l-xl
                hover:bg-white/10 transition-colors duration-200 focus:outline-none"
       >
-        <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80 leading-none mb-1">
+        <span data-i18n="reservar.booking_form.checkin_label" class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80 leading-none mb-1">
           {t('reservar.booking_form.checkin_label')}
         </span>
         <span
           id={`checkin-display-${formId}`}
+          data-i18n="reservar.booking_form.select_date"
           class="font-body text-sm text-white/55 leading-none truncate"
         >{t('reservar.booking_form.select_date')}</span>
       </button>
@@ -70,11 +71,12 @@ const t = useTranslations(lang);
         class="flex-1 min-w-0 px-4 py-2.5 flex flex-col text-left rounded-r-xl
                hover:bg-white/10 transition-colors duration-200 focus:outline-none"
       >
-        <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80 leading-none mb-1">
+        <span data-i18n="reservar.booking_form.checkout_label" class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80 leading-none mb-1">
           {t('reservar.booking_form.checkout_label')}
         </span>
         <span
           id={`checkout-display-${formId}`}
+          data-i18n="reservar.booking_form.select_date"
           class="font-body text-sm text-white/55 leading-none truncate"
         >{t('reservar.booking_form.select_date')}</span>
       </button>
@@ -88,14 +90,16 @@ const t = useTranslations(lang);
         <!-- Adults -->
         <div class="flex items-center gap-1.5 px-3">
           <button type="button" data-action="dec" data-target={`adults-${formId}`}
+            data-i18n-aria-label="reservar.booking_form.reduce_adults_aria"
             aria-label={t('reservar.booking_form.reduce_adults_aria')}
             class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">−</button>
           <div class="flex flex-col items-center w-10">
-            <span class="font-body text-[10px] uppercase tracking-[0.15em] text-brand-gold/80 leading-none mb-0.5">{t('reservar.booking_form.adults_abbr')}</span>
+            <span data-i18n="reservar.booking_form.adults_abbr" class="font-body text-[10px] uppercase tracking-[0.15em] text-brand-gold/80 leading-none mb-0.5">{t('reservar.booking_form.adults_abbr')}</span>
             <input type="number" id={`adults-${formId}`} value="2" min="1" max="10" readonly
               class="w-full bg-transparent text-white text-center font-body text-sm leading-none focus:outline-none" />
           </div>
           <button type="button" data-action="inc" data-target={`adults-${formId}`}
+            data-i18n-aria-label="reservar.booking_form.increase_adults_aria"
             aria-label={t('reservar.booking_form.increase_adults_aria')}
             class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">+</button>
         </div>
@@ -103,14 +107,16 @@ const t = useTranslations(lang);
         <!-- Children -->
         <div class="flex items-center gap-1.5 px-3">
           <button type="button" data-action="dec" data-target={`children-${formId}`}
+            data-i18n-aria-label="reservar.booking_form.reduce_children_aria"
             aria-label={t('reservar.booking_form.reduce_children_aria')}
             class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">−</button>
           <div class="flex flex-col items-center w-10">
-            <span class="font-body text-[10px] uppercase tracking-[0.15em] text-brand-gold/80 leading-none mb-0.5">{t('reservar.booking_form.children_abbr')}</span>
+            <span data-i18n="reservar.booking_form.children_abbr" class="font-body text-[10px] uppercase tracking-[0.15em] text-brand-gold/80 leading-none mb-0.5">{t('reservar.booking_form.children_abbr')}</span>
             <input type="number" id={`children-${formId}`} value="0" min="0" max="6" readonly
               class="w-full bg-transparent text-white text-center font-body text-sm leading-none focus:outline-none" />
           </div>
           <button type="button" data-action="inc" data-target={`children-${formId}`}
+            data-i18n-aria-label="reservar.booking_form.increase_children_aria"
             aria-label={t('reservar.booking_form.increase_children_aria')}
             class="text-white/60 hover:text-brand-gold text-lg leading-none w-4 text-center transition-colors select-none flex-shrink-0">+</button>
         </div>
@@ -120,6 +126,7 @@ const t = useTranslations(lang);
     <!-- ── Submit ─────────────────────────────────────────────── -->
     <button
       type="submit"
+      data-i18n="reservar.booking_form.book_button"
       class="w-full min-[450px]:flex-shrink-0 min-[450px]:w-auto bg-brand-gold text-brand-blue font-body text-sm uppercase
              tracking-[0.15em] font-medium rounded-xl px-5 py-2.5
              hover:bg-brand-stone transition-colors duration-200 whitespace-nowrap"
@@ -131,20 +138,7 @@ const t = useTranslations(lang);
 </form>
 
 
-<script is:inline define:vars={{
-  formId,
-  lang: Astro.props.lang,
-  translatedMonths: t('reservar.booking_form.months'),
-  translatedDays: t('reservar.booking_form.days'),
-  translatedNight: t('reservar.night'),
-  translatedNights: t('reservar.nights'),
-  translatedAdult: t('reservar.adult'),
-  translatedAdults: t('reservar.adults'),
-  translatedChild: t('reservar.child'),
-  translatedChildren: t('reservar.children'),
-  translatedLoadingAvailability: t('reservar.loading_availability'),
-  translatedModifyButton: t('reservar.modify_button'),
-}}>
+<script is:inline define:vars={{ formId }}>
 (function () {
 
   /* ── Helpers ───────────────────────────────────────────────── */
@@ -153,13 +147,23 @@ const t = useTranslations(lang);
   function fromISO(s) { return new Date(s + 'T00:00:00'); }
   function addDays(d, n) { var r = new Date(d); r.setDate(r.getDate()+n); return r; }
   function fmtShort(d) {
-    // Use the page's language for formatting
+    var lang = document.documentElement.lang || 'es';
     return new Intl.DateTimeFormat(lang, { day:'numeric', month:'short' }).format(d);
+  }
+  /* Read calendar strings from the global i18n object at call time so the
+     calendar always uses the currently active language. */
+  function getI18n() {
+    var lang = document.documentElement.lang || 'es';
+    var i18n = window.__i18n;
+    var locale = (i18n && i18n[lang]) ? i18n[lang] : (i18n && i18n['es'] ? i18n['es'] : {});
+    var bf = (locale.reservar && locale.reservar.booking_form) ? locale.reservar.booking_form : {};
+    return {
+      months: bf.months || ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+      days:   bf.days   || ["Su","Mo","Tu","We","Th","Fr","Sa"],
+    };
   }
 
   var TODAY = new Date(); TODAY.setHours(0,0,0,0);
-  var MONTHS = translatedMonths;
-  var DAYS   = translatedDays;
 
   /* ── Create calendar panel in <body> (avoids overflow:hidden clipping) ── */
   function makePanel(id) {
@@ -198,6 +202,9 @@ const t = useTranslations(lang);
     var panel = makePanel(cfg.panelId);
 
     function render() {
+      var s = getI18n();
+      var MONTHS = s.months;
+      var DAYS   = s.days;
       var minISO = cfg.getMin();
       var min    = minISO ? fromISO(minISO) : TODAY;
       /* jump view forward if entirely before min */
@@ -255,6 +262,8 @@ const t = useTranslations(lang);
       document.getElementById(cfg.valId).value = iso;
       var disp = document.getElementById(cfg.displayId);
       disp.textContent = fmtShort(fromISO(iso));
+      // Remove data-i18n so the i18n engine won't reset this to "Select"
+      disp.removeAttribute('data-i18n');
       disp.classList.remove('text-white/55'); disp.classList.add('text-white');
       close();
       if (cfg.onPick) cfg.onPick(iso);

@@ -1,22 +1,22 @@
 ---
 /**
- * src/pages/hotel.astro — Hotel page for default locale (es)
+ * src/pages/hotel.astro — Hotel page
+ * Translations are applied client-side via data-i18n attributes.
  */
 
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
 import BookingSearchForm from '../components/BookingSearchForm.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations } from '../i18n/utils';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const t = useTranslations();
 ---
 
 <Layout
   title={t('hotel.meta_title')}
   description={t('hotel.meta_description')}
-  lang={lang}
+  titleKey="hotel.meta_title"
+  descriptionKey="hotel.meta_description"
   ogImage={t('hotel.og_image')}
 >
   <!-- SECTION 1: HERO -->
@@ -27,6 +27,7 @@ const t = useTranslations(lang);
     <img
       src={t('hotel.hero_img')}
       alt={t('hotel.hero_alt')}
+      data-i18n-alt="hotel.hero_alt"
       class="absolute inset-0 w-full h-full object-cover"
       loading="eager"
       decoding="async"
@@ -34,20 +35,21 @@ const t = useTranslations(lang);
     <div class="absolute inset-0 bg-brand-forest/55"></div>
 
     <div class="relative z-10 flex flex-col items-center gap-6 px-4">
-      <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+      <span data-i18n="hotel.hero_label" class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
         {t('hotel.hero_label')}
       </span>
       <h1
+        data-i18n="hotel.hero_heading"
         class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight max-w-3xl"
       >
         {t('hotel.hero_heading')}
       </h1>
       <GarlandDivider light />
-      <p class="font-body text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
+      <p data-i18n="hotel.hero_body" class="font-body text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
         {t('hotel.hero_body')}
       </p>
       <div class="w-full max-w-md backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl px-5 py-4 shadow-lg mt-6">
-        <BookingSearchForm formId="hotel" lang={lang} />
+        <BookingSearchForm formId="hotel" />
       </div>
     </div>
 
@@ -72,25 +74,26 @@ const t = useTranslations(lang);
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[60vh]">
         <div class="flex flex-col gap-6">
-          <span class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
+          <span data-i18n="hotel.property_label" class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
             {t('hotel.property_label')}
           </span>
           <h2
             id="property-intro-heading"
+            data-i18n="hotel.property_heading"
             class="font-display font-light text-5xl md:text-6xl text-brand-blue leading-tight"
           >
             {t('hotel.property_heading')}
           </h2>
           <GarlandDivider />
-          <p class="font-body text-brand-stone text-lg leading-relaxed max-w-md">
+          <p data-i18n="hotel.property_body" class="font-body text-brand-stone text-lg leading-relaxed max-w-md">
             {t('hotel.property_body')}
           </p>
           <div class="mt-2">
             <a
-              href={getRelativeLocaleUrl(lang, 'contacto')}
+              href="/contacto"
               class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-md"
             >
-              {t('hotel.property_cta')}
+              <span data-i18n="hotel.property_cta">{t('hotel.property_cta')}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
               </svg>
@@ -100,16 +103,16 @@ const t = useTranslations(lang);
 
         <div class="grid grid-cols-2 gap-3">
           <div class="overflow-hidden rounded-sm">
-            <img src={t('hotel.img_url_villa1')} alt={t('hotel.img_alt_villa1')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.img_url_villa1')} alt={t('hotel.img_alt_villa1')} data-i18n-alt="hotel.img_alt_villa1" class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
           </div>
           <div class="overflow-hidden rounded-sm">
-            <img src={t('hotel.img_url_villa2')} alt={t('hotel.img_alt_villa2')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.img_url_villa2')} alt={t('hotel.img_alt_villa2')} data-i18n-alt="hotel.img_alt_villa2" class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
           </div>
           <div class="overflow-hidden rounded-sm">
-            <img src={t('hotel.img_url_villa3')} alt={t('hotel.img_alt_villa3')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.img_url_villa3')} alt={t('hotel.img_alt_villa3')} data-i18n-alt="hotel.img_alt_villa3" class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
           </div>
           <div class="overflow-hidden rounded-sm">
-            <img src={t('hotel.img_url_villa4')} alt={t('hotel.img_alt_villa4')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.img_url_villa4')} alt={t('hotel.img_alt_villa4')} data-i18n-alt="hotel.img_alt_villa4" class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
           </div>
         </div>
       </div>
@@ -125,14 +128,14 @@ const t = useTranslations(lang);
 
       <!-- Section Heading -->
       <div class="text-center mb-16">
-        <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+        <span data-i18n="hotel.rooms_label" class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
           {t('hotel.rooms_label')}
         </span>
-        <h2 id="rooms-heading" class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
+        <h2 id="rooms-heading" data-i18n="hotel.rooms_heading" class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
           {t('hotel.rooms_heading')}
         </h2>
         <GarlandDivider />
-        <p class="font-body text-sm text-white/60 mt-4 max-w-xl mx-auto leading-relaxed">
+        <p data-i18n="hotel.rooms_body" class="font-body text-sm text-white/60 mt-4 max-w-xl mx-auto leading-relaxed">
           {t('hotel.rooms_body')}
         </p>
       </div>
@@ -143,11 +146,11 @@ const t = useTranslations(lang);
         <!-- Room 1: Suite -->
         <article class="group rounded-xl overflow-hidden bg-white shadow-md border border-transparent hover:border-brand-gold transition-colors duration-300">
           <div class="overflow-hidden">
-            <img src={t('hotel.room1_img_url')} alt={t('hotel.room1_img_alt')} class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.room1_img_url')} alt={t('hotel.room1_img_alt')} data-i18n-alt="hotel.room1_img_alt" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
           </div>
           <div class="p-6 flex flex-col gap-3">
-            <h3 class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room1_title')}</h3>
-            <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room1_body')}</p>
+            <h3 data-i18n="hotel.room1_title" class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room1_title')}</h3>
+            <p data-i18n="hotel.room1_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room1_body')}</p>
             <ul class="flex flex-wrap gap-2 font-body text-xs text-brand-stone/60">
               {['Suite', 'King Bed', 'Sea View', 'Balcony', 'Walk-in Shower'].map(tag => (
                 <li class="border border-brand-stone/15 px-2 py-1 rounded-md">{tag}</li>
@@ -159,11 +162,11 @@ const t = useTranslations(lang);
         <!-- Room 2: Double -->
         <article class="group rounded-xl overflow-hidden bg-white shadow-md border border-transparent hover:border-brand-gold transition-colors duration-300">
           <div class="overflow-hidden">
-            <img src={t('hotel.room2_img_url')} alt={t('hotel.room2_img_alt')} class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.room2_img_url')} alt={t('hotel.room2_img_alt')} data-i18n-alt="hotel.room2_img_alt" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
           </div>
           <div class="p-6 flex flex-col gap-3">
-            <h3 class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room2_title')}</h3>
-            <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room2_body')}</p>
+            <h3 data-i18n="hotel.room2_title" class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room2_title')}</h3>
+            <p data-i18n="hotel.room2_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room2_body')}</p>
             <ul class="flex flex-wrap gap-2 font-body text-xs text-brand-stone/60">
               {['Double Room', 'Queen Bed', 'Garden View', 'En-suite Bath'].map(tag => (
                 <li class="border border-brand-stone/15 px-2 py-1 rounded-md">{tag}</li>
@@ -175,11 +178,11 @@ const t = useTranslations(lang);
         <!-- Room 3: Twin -->
         <article class="group rounded-xl overflow-hidden bg-white shadow-md border border-transparent hover:border-brand-gold transition-colors duration-300">
           <div class="overflow-hidden">
-            <img src={t('hotel.room3_img_url')} alt={t('hotel.img_alt_room3')} class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.room3_img_url')} alt={t('hotel.img_alt_room3')} data-i18n-alt="hotel.img_alt_room3" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
           </div>
           <div class="p-6 flex flex-col gap-3">
-            <h3 class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room3_title')}</h3>
-            <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room3_body')}</p>
+            <h3 data-i18n="hotel.room3_title" class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room3_title')}</h3>
+            <p data-i18n="hotel.room3_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room3_body')}</p>
             <ul class="flex flex-wrap gap-2 font-body text-xs text-brand-stone/60">
               {['Twin Room', 'Two Single Beds', 'Terrace Access', 'Bathtub'].map(tag => (
                 <li class="border border-brand-stone/15 px-2 py-1 rounded-md">{tag}</li>
@@ -191,11 +194,11 @@ const t = useTranslations(lang);
         <!-- Room 4: Accessible -->
         <article class="group rounded-xl overflow-hidden bg-white shadow-md border border-transparent hover:border-brand-gold transition-colors duration-300">
           <div class="overflow-hidden">
-            <img src={t('hotel.room4_img_url')} alt={t('hotel.img_alt_room4')} class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+            <img src={t('hotel.room4_img_url')} alt={t('hotel.img_alt_room4')} data-i18n-alt="hotel.img_alt_room4" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
           </div>
           <div class="p-6 flex flex-col gap-3">
-            <h3 class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room4_title')}</h3>
-            <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room4_body')}</p>
+            <h3 data-i18n="hotel.room4_title" class="font-display font-light text-2xl text-brand-blue leading-snug">{t('hotel.room4_title')}</h3>
+            <p data-i18n="hotel.room4_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.room4_body')}</p>
             <ul class="flex flex-wrap gap-2 font-body text-xs text-brand-stone/60">
               {['Accessible Room', 'King Bed', 'Accessible Bath', 'Ground Floor'].map(tag => (
                 <li class="border border-brand-stone/15 px-2 py-1 rounded-md">{tag}</li>
@@ -211,10 +214,10 @@ const t = useTranslations(lang);
   <section class="bg-brand-cream py-24 md:py-32">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
-        <span class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
+        <span data-i18n="hotel.amenities_label" class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
           {t('hotel.amenities_label')}
         </span>
-        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue mt-3">
+        <h2 data-i18n="hotel.amenities_heading" class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue mt-3">
           {t('hotel.amenities_heading')}
         </h2>
       </div>
@@ -223,26 +226,26 @@ const t = useTranslations(lang);
         <!-- Amenity 1 -->
         <div class="flex flex-col items-center gap-3">
           <svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 3a3 3 0 0 0-3 3v11"></path><path d="M6 3a3 3 0 0 0 3 3h11"></path><path d="M11 19.5V21a3 3 0 0 0 3 3h11"></path><path d="M6 21v-1.5a3 3 0 0 0-3-3H3"></path></svg>
-          <h4 class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity1_title')}</h4>
-          <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity1_body')}</p>
+          <h4 data-i18n="hotel.amenity1_title" class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity1_title')}</h4>
+          <p data-i18n="hotel.amenity1_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity1_body')}</p>
         </div>
         <!-- Amenity 2 -->
         <div class="flex flex-col items-center gap-3">
           <svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L3 11V7a2 2 0 0 1 2-2h5"></path><path d="M10 14a2 2 0 0 0 2-2v6a2 2 0 0 0-2 2H5a2 2 0 0 0-2 2v1"></path></svg>
-          <h4 class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity2_title')}</h4>
-          <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity2_body')}</p>
+          <h4 data-i18n="hotel.amenity2_title" class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity2_title')}</h4>
+          <p data-i18n="hotel.amenity2_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity2_body')}</p>
         </div>
         <!-- Amenity 3 -->
         <div class="flex flex-col items-center gap-3">
           <svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-6a2 2 0 0 0-2 2v10"></path><path d="M18 17a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"></path></svg>
-          <h4 class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity3_title')}</h4>
-          <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity3_body')}</p>
+          <h4 data-i18n="hotel.amenity3_title" class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity3_title')}</h4>
+          <p data-i18n="hotel.amenity3_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity3_body')}</p>
         </div>
         <!-- Amenity 4 -->
         <div class="flex flex-col items-center gap-3">
           <svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20a8 8 0 0 1-8-8V6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v6a8 8 0 0 1-8 8Z"></path><path d="M12 12h.01M12 16h.01M12 8h.01"></path></svg>
-          <h4 class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity4_title')}</h4>
-          <p class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity4_body')}</p>
+          <h4 data-i18n="hotel.amenity4_title" class="font-body font-medium text-lg text-brand-blue">{t('hotel.amenity4_title')}</h4>
+          <p data-i18n="hotel.amenity4_body" class="font-body text-brand-stone text-sm leading-relaxed">{t('hotel.amenity4_body')}</p>
         </div>
       </div>
     </div>

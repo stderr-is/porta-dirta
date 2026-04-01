@@ -1,21 +1,21 @@
 ---
 /**
- * src/pages/reservar.astro — Reservations page for default locale (es)
+ * src/pages/reservar.astro — Reservations page
+ * Translations are applied client-side via data-i18n attributes.
  */
 
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations } from '../i18n/utils';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const t = useTranslations();
 ---
 
 <Layout
   title={t('reservar.meta_title')}
   description={t('reservar.meta_description')}
-  lang={lang}
+  titleKey="reservar.meta_title"
+  descriptionKey="reservar.meta_description"
   noindex={true}
 >
 
@@ -41,11 +41,11 @@ const t = useTranslations(lang);
   <!-- ── Page header ─────────────────────────────────────────────── -->
   <section class="bg-brand-blue pt-28 pb-10 text-center">
 
-    <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-4">
+    <p data-i18n="reservar.hero_label" class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-4">
       {t('reservar.hero_label')}
     </p>
 
-    <h1 class="font-display italic text-5xl md:text-6xl text-white leading-tight mb-3">
+    <h1 data-i18n="reservar.hero_heading" class="font-display italic text-5xl md:text-6xl text-white leading-tight mb-3">
       {t('reservar.hero_heading')}
     </h1>
 
@@ -72,7 +72,7 @@ const t = useTranslations(lang);
       <a href="/hotel#reservar" class="text-brand-gold/80 hover:text-brand-gold underline text-xs transition-colors">Modificar</a>
     </div>
 
-    <p class="font-body text-white/60 text-sm max-w-md mx-auto">
+    <p data-i18n="reservar.booking_guarantee" class="font-body text-white/60 text-sm max-w-md mx-auto">
       {t('reservar.booking_guarantee')}
     </p>
 

@@ -27,15 +27,8 @@ export default defineConfig({
     adapter: node({ mode: 'standalone' }),
   }),
 
-  // i18n routing — Spanish is the default with no URL prefix.
-  // English, French, and German will be served at /en/, /fr/, /de/ respectively.
-  i18n: {
-    defaultLocale: 'es',
-    locales: ['es', 'en', 'fr', 'de'],
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
+  // No Astro i18n routing — translations are handled client-side via
+  // src/scripts/i18n-client.ts and data-i18n attributes.
 
   vite: {
     plugins: [tailwindcss()],

@@ -23,13 +23,11 @@ import Footer from '../components/Footer.astro';
 import FloatingActions from '../components/FloatingActions.astro';
 import '../styles/global.css';
 
-import { getLangFromUrl } from '../i18n/utils';
-import { getRelativeLocaleUrl } from 'astro:i18n';
-
-const lang = getLangFromUrl(Astro.url);
 const {
   title,
   description,
+  titleKey,
+  descriptionKey,
   ogImage = 'https://www.portadirta.com/assets/images/property-aerial-pool.jpg',
   googleSiteVerification,
   noindex = false,
@@ -37,12 +35,14 @@ const {
 
 const fullTitle = `${title} | Porta D'irta`;
 const canonicalUrl = new URL(Astro.url.pathname, 'https://www.portadirta.com').href;
-// Ensure og:image is always an absolute URL (Facebook/WhatsApp reject relative paths)
 const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.portadirta.com${ogImage}`;
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth">
+<html lang="es" class="scroll-smooth"
+  data-i18n-title={titleKey}
+  data-i18n-desc={descriptionKey}
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -62,19 +62,7 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.port
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
-    {(() => {
-      const purePath = Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/");
-      const baseUrl = "https://www.portadirta.com";
-      return (
-        <>
-          <link rel="alternate" hreflang="es" href={`${baseUrl}${purePath}`} />
-          <link rel="alternate" hreflang="en" href={`${baseUrl}/en${purePath === '/' ? '' : purePath}`} />
-          <link rel="alternate" hreflang="fr" href={`${baseUrl}/fr${purePath === '/' ? '' : purePath}`} />
-          <link rel="alternate" hreflang="de" href={`${baseUrl}/de${purePath === '/' ? '' : purePath}`} />
-          <link rel="alternate" hreflang="x-default" href={`${baseUrl}${purePath}`} />
-        </>
-      );
-    })()}
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -84,7 +72,7 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.port
     <meta property="og:image" content={ogImageAbsolute} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : lang === 'en' ? 'en_GB' : lang === 'fr' ? 'fr_FR' : 'de_DE'} />
+    <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="Porta D'irta" />
 
     <!-- Twitter Card -->
@@ -131,6 +119,11 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.port
 
     <!-- Floating CTAs (Booking bar + WhatsApp) -->
     <FloatingActions />
+
+    <!-- Client-side i18n engine — swaps data-i18n attributes based on localStorage preference -->
+    <script>
+      import '../scripts/i18n-client';
+    </script>
 
   </body>
 </html>

@@ -22,18 +22,9 @@
  *   - Active link state: pass `currentPath` prop and compare.
  *   - Consider replacing checkbox trick with Astro's View Transitions API.
  */
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations } from '../i18n/utils';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-
-// Strip any existing locale prefix so we can prepend the target locale.
-// When on the root "/" path the replace has no match, so we return "" (not "/")
-// to avoid generating "/en/" (trailing slash) which 404s on Cloudflare Pages.
-const strippedPath = Astro.url.pathname === '/'
-  ? ''
-  : Astro.url.pathname.replace(/^\/(en|fr|de)/, '');
+const t = useTranslations();
 ---
 
 <div class="nav-root">
@@ -68,27 +59,27 @@ const strippedPath = Astro.url.pathname === '/'
         <!-- ── CENTER: Desktop nav links ────────────────── -->
         <ul class="hidden sm:flex items-center gap-3 lg:gap-8 list-none m-0 p-0">
           <li>
-            <a href={getRelativeLocaleUrl(lang, 'hotel')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+            <a href="/hotel" data-i18n="nav.hotel" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
               {t('nav.hotel')}
             </a>
           </li>
           <li>
-            <a href={getRelativeLocaleUrl(lang, 'restaurante')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+            <a href="/restaurante" data-i18n="nav.restaurante" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
               {t('nav.restaurante')}
             </a>
           </li>
           <li>
-            <a href={getRelativeLocaleUrl(lang, 'eventos')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+            <a href="/eventos" data-i18n="nav.eventos" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
               {t('nav.eventos')}
             </a>
           </li>
           <li>
-            <a href={getRelativeLocaleUrl(lang, 'experiencias')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+            <a href="/experiencias" data-i18n="nav.experiencias" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
               {t('nav.experiencias')}
             </a>
           </li>
           <li>
-            <a href={getRelativeLocaleUrl(lang, 'contacto')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+            <a href="/contacto" data-i18n="nav.contacto" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
               {t('nav.contacto')}
             </a>
           </li>
@@ -98,15 +89,14 @@ const strippedPath = Astro.url.pathname === '/'
         <div class="flex items-center gap-4">
 
           <!-- Language switcher — full inline at lg+ -->
-          <!-- Wave 2: replace hrefs with Astro i18n locale paths -->
           <div class="hidden lg:flex items-center gap-2" aria-label="Seleccionar idioma">
-            <a href={Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/") || "/"} class={`font-body text-xs uppercase tracking-widest ${!["en","fr","de"].includes(Astro.currentLocale ?? "") ? "font-semibold text-brand-gold" : "text-white"} hover:text-brand-gold transition-colors duration-200`}>ES</a>
+            <button data-lang-btn="es" onclick="window.setLang('es')" class="font-body text-xs uppercase tracking-widest font-semibold text-brand-gold hover:text-brand-gold transition-colors duration-200 cursor-pointer bg-transparent border-none p-0">ES</button>
             <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-            <a href={"/en" + strippedPath} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "en" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>EN</a>
+            <button data-lang-btn="en" onclick="window.setLang('en')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 cursor-pointer bg-transparent border-none p-0">EN</button>
             <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-            <a href={"/fr" + strippedPath} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "fr" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>FR</a>
+            <button data-lang-btn="fr" onclick="window.setLang('fr')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 cursor-pointer bg-transparent border-none p-0">FR</button>
             <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-            <a href={"/de" + strippedPath} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "de" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>DE</a>
+            <button data-lang-btn="de" onclick="window.setLang('de')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 cursor-pointer bg-transparent border-none p-0">DE</button>
           </div>
 
           <!-- Language switcher — compact dropdown at sm–lg -->
@@ -118,16 +108,16 @@ const strippedPath = Astro.url.pathname === '/'
               </svg>
             </summary>
             <div class="absolute right-0 top-full mt-2 bg-brand-blue/95 backdrop-blur-md rounded-lg py-1 border border-white/10 shadow-xl z-[70] min-w-[72px]">
-              <a href={Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/") || "/"} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${!["en","fr","de"].includes(Astro.currentLocale ?? "") ? "font-semibold text-brand-gold" : "text-white"} hover:text-brand-gold transition-colors duration-200`}>ES</a>
-              <a href={"/en" + strippedPath} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${Astro.currentLocale === "en" ? "font-semibold text-brand-gold" : "text-white/60"} hover:text-brand-gold transition-colors duration-200`}>EN</a>
-              <a href={"/fr" + strippedPath} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${Astro.currentLocale === "fr" ? "font-semibold text-brand-gold" : "text-white/60"} hover:text-brand-gold transition-colors duration-200`}>FR</a>
-              <a href={"/de" + strippedPath} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${Astro.currentLocale === "de" ? "font-semibold text-brand-gold" : "text-white/60"} hover:text-brand-gold transition-colors duration-200`}>DE</a>
+              <button data-lang-btn="es" onclick="window.setLang('es')" class="block w-full text-left px-4 py-2 font-body text-xs uppercase tracking-wide font-semibold text-brand-gold hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer">ES</button>
+              <button data-lang-btn="en" onclick="window.setLang('en')" class="block w-full text-left px-4 py-2 font-body text-xs uppercase tracking-wide text-white/60 hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer">EN</button>
+              <button data-lang-btn="fr" onclick="window.setLang('fr')" class="block w-full text-left px-4 py-2 font-body text-xs uppercase tracking-wide text-white/60 hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer">FR</button>
+              <button data-lang-btn="de" onclick="window.setLang('de')" class="block w-full text-left px-4 py-2 font-body text-xs uppercase tracking-wide text-white/60 hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer">DE</button>
             </div>
           </details>
 
           <!-- CTA — tablet and desktop -->
           <a
-            href={getRelativeLocaleUrl(lang, 'reservar')}
+            href="/reservar"
             class="
               hidden sm:inline-flex items-center
               px-3 lg:px-5 py-2 rounded-sm
@@ -135,6 +125,7 @@ const strippedPath = Astro.url.pathname === '/'
               text-brand-blue font-body text-sm uppercase tracking-wide lg:tracking-widest font-medium
               transition-colors duration-200
             "
+            data-i18n="nav.reservar"
           >
             {t('nav.reservar')}
           </a>
@@ -164,36 +155,37 @@ const strippedPath = Astro.url.pathname === '/'
     >
       <ul class="list-none m-0 p-0 flex flex-col py-4">
         <li>
-          <a href={getRelativeLocaleUrl(lang, 'hotel')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.hotel')}</a>
+          <a href="/hotel" data-i18n="nav.hotel" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.hotel')}</a>
         </li>
         <li>
-          <a href={getRelativeLocaleUrl(lang, 'restaurante')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.restaurante')}</a>
+          <a href="/restaurante" data-i18n="nav.restaurante" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.restaurante')}</a>
         </li>
         <li>
-          <a href={getRelativeLocaleUrl(lang, 'eventos')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.eventos')}</a>
+          <a href="/eventos" data-i18n="nav.eventos" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.eventos')}</a>
         </li>
         <li>
-          <a href={getRelativeLocaleUrl(lang, 'experiencias')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.experiencias')}</a>
+          <a href="/experiencias" data-i18n="nav.experiencias" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.experiencias')}</a>
         </li>
         <li>
-          <a href={getRelativeLocaleUrl(lang, 'contacto')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.contacto')}</a>
+          <a href="/contacto" data-i18n="nav.contacto" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.contacto')}</a>
         </li>
 
         <!-- Language switcher — mobile -->
         <li class="px-6 pt-4 pb-2 flex gap-3 border-t border-white/10 mt-2" aria-label="Seleccionar idioma">
-          <a href={Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/") || "/"} class={`font-body text-xs uppercase tracking-widest ${!["en","fr","de"].includes(Astro.currentLocale ?? "") ? "font-semibold text-brand-gold" : "text-white"} hover:text-brand-gold transition-colors duration-200`}>ES</a>
+          <button data-lang-btn="es" onclick="window.setLang('es')" class="font-body text-xs uppercase tracking-widest font-semibold text-brand-gold hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">ES</button>
           <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-          <a href={"/en" + strippedPath} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "en" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>EN</a>
+          <button data-lang-btn="en" onclick="window.setLang('en')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">EN</button>
           <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-          <a href={"/fr" + strippedPath} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "fr" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>FR</a>
+          <button data-lang-btn="fr" onclick="window.setLang('fr')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">FR</button>
           <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-          <a href={"/de" + strippedPath} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "de" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>DE</a>
+          <button data-lang-btn="de" onclick="window.setLang('de')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">DE</button>
         </li>
 
         <!-- CTA — mobile -->
         <li class="px-6 pt-2 pb-4">
           <a
-            href={getRelativeLocaleUrl(lang, 'reservar')}
+            href="/reservar"
+            data-i18n="nav.reservar"
             class="
               block w-full text-center
               px-5 py-3 rounded-sm
