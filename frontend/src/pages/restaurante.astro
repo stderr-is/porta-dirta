@@ -6,20 +6,17 @@
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
 import BotanicalAccent from '../components/BotanicalAccent.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations } from '../i18n/utils';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const t = useTranslations();
 const menuNightTags = Array.isArray(t('restaurante.menu_night_tags') as any) ? (t('restaurante.menu_night_tags') as unknown as string[]) : [];
 const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any) ? (t('restaurante.menu_special_tags') as unknown as string[]) : [];
 ---
 
 <Layout
-  title={t('restaurante.meta_title')}
-  description={t('restaurante.meta_description')}
+  titleKey="restaurante.meta_title"
+  descriptionKey="restaurante.meta_description"
   ogImage={t('restaurante.og_image')}
-  lang={lang}
 >
 
   <script type="application/ld+json" slot="head" set:html={JSON.stringify([
@@ -91,10 +88,12 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
   <section
     class="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
     aria-label={t('restaurante.hero_alt')}
+    data-i18n-aria-label="restaurante.hero_alt"
   >
     <img
       src={t('restaurante.hero_img')}
       alt={t('restaurante.hero_alt')}
+      data-i18n-alt="restaurante.hero_alt"
       class="absolute inset-0 w-full h-full object-cover"
       loading="eager"
       decoding="async"
@@ -106,17 +105,17 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
     <!-- Content -->
     <div class="relative z-10 flex flex-col items-center gap-6 px-4">
       <!-- Eyebrow label -->
-      <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+      <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.hero_label">
         {t('restaurante.hero_label')}
       </span>
 
       <!-- Main heading -->
-      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight max-w-3xl">
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight max-w-3xl" data-i18n="restaurante.hero_heading">
         {t('restaurante.hero_heading')}
       </h1>
 
       <!-- Tagline -->
-      <p class="font-body text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
+      <p class="font-body text-base sm:text-lg text-white/80 max-w-xl leading-relaxed" data-i18n="restaurante.hero_body">
         {t('restaurante.hero_body')}
       </p>
 
@@ -125,12 +124,14 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
         <a
           href="#reservar"
           class="inline-flex items-center px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg"
+          data-i18n="restaurante.hero_cta_reserve"
         >
           {t('restaurante.hero_cta_reserve')}
         </a>
         <a
           href="#filosofia"
           class="inline-flex items-center px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+          data-i18n="restaurante.hero_cta_discover"
         >
           {t('restaurante.hero_cta_discover')}
         </a>
@@ -142,6 +143,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
       href="#filosofia"
       class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/60 hover:text-brand-gold transition-colors duration-300 animate-bounce"
       aria-label={t('restaurante.hero_scroll_down_aria')}
+      data-i18n-aria-label="restaurante.hero_scroll_down_aria"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -167,22 +169,23 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
     id="filosofia"
     class="bg-brand-cream py-24 md:py-32"
     aria-label={t('restaurante.philosophy_label')}
+    data-i18n-aria-label="restaurante.philosophy_label"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center min-h-[60vh]">
 
         <!-- Left: text -->
         <div class="flex flex-col gap-6">
-          <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+          <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.philosophy_label">
             {t('restaurante.philosophy_label')}
           </span>
-          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
+          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight" data-i18n="restaurante.philosophy_heading">
             {t('restaurante.philosophy_heading')}
           </h2>
-          <p class="font-body text-base text-brand-stone leading-relaxed">
+          <p class="font-body text-base text-brand-stone leading-relaxed" data-i18n="restaurante.philosophy_body1">
             {t('restaurante.philosophy_body1')}
           </p>
-          <p class="font-body text-base text-brand-stone leading-relaxed">
+          <p class="font-body text-base text-brand-stone leading-relaxed" data-i18n="restaurante.philosophy_body2">
             {t('restaurante.philosophy_body2')}
           </p>
         </div>
@@ -192,6 +195,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
           <img
             src={t('restaurante.philosophy_img')}
             alt={t('restaurante.philosophy_img_alt')}
+            data-i18n-alt="restaurante.philosophy_img_alt"
             width="800" height="600"
             class="w-full h-auto rounded-sm shadow-xl object-cover"
             loading="lazy"
@@ -209,6 +213,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
   <section
     class="relative bg-brand-cream py-24 md:py-32 overflow-hidden border-t border-brand-forest/5"
     aria-label={t('restaurante.easter_label')}
+    data-i18n-aria-label="restaurante.easter_label"
   >
     <!-- Sage botanical accents for a "pressed leaves" look on light background -->
     <div class="opacity-20 text-brand-forest">
@@ -223,17 +228,17 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
         <!-- Column 1: Editorial Image & Intro (5 cols) -->
         <div class="lg:col-span-5 flex flex-col gap-8">
           <div class="flex flex-col gap-4">
-            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.easter_label">
               {t('restaurante.easter_label')}
             </span>
             <h2 class="font-display text-4xl sm:text-5xl md:text-6xl text-brand-blue leading-[1.1]">
-              {t('restaurante.easter_heading_part1')} <br />
-              <span class="italic font-light text-brand-forest/80">{t('restaurante.easter_heading_part2')}</span>
+              <span data-i18n="restaurante.easter_heading_part1">{t('restaurante.easter_heading_part1')}</span> <br />
+              <span data-i18n="restaurante.easter_heading_part2" class="italic font-light text-brand-forest/80">{t('restaurante.easter_heading_part2')}</span>
             </h2>
             <div class="w-20 h-px bg-brand-gold/60 mt-2"></div>
           </div>
 
-          <p class="font-body text-base text-brand-stone leading-relaxed max-w-md">
+          <p class="font-body text-base text-brand-stone leading-relaxed max-w-md" data-i18n="restaurante.easter_body">
             {t('restaurante.easter_body')}
           </p>
 
@@ -241,6 +246,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             <img
               src={t('restaurante.easter_img')}
               alt={t('restaurante.easter_img_alt')}
+              data-i18n-alt="restaurante.easter_img_alt"
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
             />
@@ -261,8 +267,8 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             <!-- Card Header: Info & "Wax Seal" Price -->
             <div class="flex items-center justify-between px-8 py-5 border-b border-brand-forest/5 bg-white/30">
               <div>
-                <p class="font-body text-[9px] uppercase tracking-[0.2em] text-brand-gold mb-0.5 font-bold">{t('restaurante.easter_lunch_service')}</p>
-                <p class="font-body text-xs text-brand-blue/70">{t('restaurante.easter_hours')}</p>
+                <p class="font-body text-[9px] uppercase tracking-[0.2em] text-brand-gold mb-0.5 font-bold" data-i18n="restaurante.easter_lunch_service">{t('restaurante.easter_lunch_service')}</p>
+                <p class="font-body text-xs text-brand-blue/70" data-i18n="restaurante.easter_hours">{t('restaurante.easter_hours')}</p>
               </div>
 
               <!-- Wax Seal Price Badge -->
@@ -271,8 +277,8 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   <svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 0 C22.4 0 0 22.4 0 50 C0 77.6 22.4 100 50 100 C77.6 100 100 77.6 100 50 C100 22.4 77.6 0 50 0 M50 10 C72.1 10 90 27.9 90 50 C90 72.1 72.1 90 50 90 C27.9 90 10 72.1 10 50 C10 27.9 27.9 10 50 10"/></svg>
                 </div>
                 <div class="relative bg-brand-forest/5 border border-brand-gold/20 rounded-full w-14 h-14 flex flex-col items-center justify-center shadow-inner">
-                  <span class="font-display text-xl text-brand-blue leading-none">{t('restaurante.easter_price')}</span>
-                  <span class="font-body text-[7px] uppercase tracking-tighter text-brand-stone/60">{t('restaurante.easter_p_p')}</span>
+                  <span class="font-display text-xl text-brand-blue leading-none" data-i18n="restaurante.easter_price">{t('restaurante.easter_price')}</span>
+                  <span class="font-body text-[7px] uppercase tracking-tighter text-brand-stone/60" data-i18n="restaurante.easter_p_p">{t('restaurante.easter_p_p')}</span>
                 </div>
               </div>
             </div>
@@ -284,13 +290,13 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
               <div class="group">
                 <div class="flex items-center gap-3 mb-3">
                   <span class="font-display text-lg text-purple-900/40 italic leading-none">I.</span>
-                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2" data-i18n="restaurante.easter_aperitivo_title">
                     {t('restaurante.easter_aperitivo_title')}
                   </h3>
                   <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
                 </div>
                 <div class="pl-8 flex flex-col gap-1">
-                  <span class="font-body text-sm text-brand-blue/90 font-medium tracking-tight">{t('restaurante.easter_aperitivo_item')}</span>
+                  <span class="font-body text-sm text-brand-blue/90 font-medium tracking-tight" data-i18n="restaurante.easter_aperitivo_item">{t('restaurante.easter_aperitivo_item')}</span>
                   <div class="flex flex-wrap gap-2">
                     <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
                     <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
@@ -302,7 +308,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
               <div class="group">
                 <div class="flex items-center gap-3 mb-3">
                   <span class="font-display text-lg text-purple-900/40 italic leading-none">II.</span>
-                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2" data-i18n="restaurante.easter_entrantes_title">
                     {t('restaurante.easter_entrantes_title')}
                   </h3>
                   <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
@@ -310,7 +316,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                 <div class="pl-8 flex flex-col gap-4">
                   <!-- Item 1 -->
                   <div class="flex flex-col gap-1">
-                    <span class="font-body text-sm text-brand-blue/90 font-medium max-w-sm leading-snug tracking-tight">{t('restaurante.easter_entrantes_item1')}</span>
+                    <span class="font-body text-sm text-brand-blue/90 font-medium max-w-sm leading-snug tracking-tight" data-i18n="restaurante.easter_entrantes_item1">{t('restaurante.easter_entrantes_item1')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
@@ -321,7 +327,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   <div class="flex justify-start pl-2 opacity-10"><div class="w-4 h-px bg-brand-forest"></div></div>
                   <!-- Item 2 -->
                   <div class="flex flex-col gap-1">
-                    <span class="font-body text-sm text-brand-blue/90 font-medium max-w-sm leading-snug tracking-tight">{t('restaurante.easter_entrantes_item2')}</span>
+                    <span class="font-body text-sm text-brand-blue/90 font-medium max-w-sm leading-snug tracking-tight" data-i18n="restaurante.easter_entrantes_item2">{t('restaurante.easter_entrantes_item2')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Moluscos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
@@ -335,16 +341,16 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
               <div class="group">
                 <div class="flex items-center gap-3 mb-1">
                   <span class="font-display text-lg text-purple-900/40 italic leading-none">III.</span>
-                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2" data-i18n="restaurante.easter_principales_title">
                     {t('restaurante.easter_principales_title')}
                   </h3>
                   <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
                 </div>
-                <p class="font-body text-[7px] text-brand-stone/40 italic mb-3 pl-8 uppercase tracking-[0.15em] font-bold">{t('restaurante.easter_principales_note')}</p>
+                <p class="font-body text-[7px] text-brand-stone/40 italic mb-3 pl-8 uppercase tracking-[0.15em] font-bold" data-i18n="restaurante.easter_principales_note">{t('restaurante.easter_principales_note')}</p>
                 <div class="pl-8 flex flex-col gap-4">
                   <!-- Option 1 -->
                   <div class="flex flex-col gap-1">
-                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">{t('restaurante.easter_principales_item1')}</span>
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight" data-i18n="restaurante.easter_principales_item1">{t('restaurante.easter_principales_item1')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Crustáceos</span>
@@ -353,7 +359,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   </div>
                   <!-- Option 2 -->
                   <div class="flex flex-col gap-1">
-                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-snug tracking-tight">{t('restaurante.easter_principales_item2')}</span>
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-snug tracking-tight" data-i18n="restaurante.easter_principales_item2">{t('restaurante.easter_principales_item2')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Sulfitos</span>
                     </div>
@@ -361,7 +367,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   <!-- Option 3 (Premium) -->
                   <div class="flex flex-col gap-1">
                     <div class="flex items-center justify-between gap-4">
-                      <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">{t('restaurante.easter_principales_item3')}</span>
+                      <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight" data-i18n="restaurante.easter_principales_item3">{t('restaurante.easter_principales_item3')}</span>
                       <span class="font-body text-[7px] text-brand-gold border border-brand-gold/20 px-1.5 py-0.5 rounded-sm font-bold bg-white/50">+5€</span>
                     </div>
                     <div class="flex flex-wrap gap-2">
@@ -371,7 +377,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   </div>
                   <!-- Option 4 -->
                   <div class="flex flex-col gap-1">
-                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-snug tracking-tight">{t('restaurante.easter_principales_item4')}</span>
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-snug tracking-tight" data-i18n="restaurante.easter_principales_item4">{t('restaurante.easter_principales_item4')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Lácteos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Sulfitos</span>
@@ -384,14 +390,14 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
               <div class="group">
                 <div class="flex items-center gap-3 mb-3">
                   <span class="font-display text-lg text-purple-900/40 italic leading-none">IV.</span>
-                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2">
+                  <h3 class="font-body text-[9px] uppercase tracking-[0.4em] text-brand-blue font-bold flex items-center gap-2" data-i18n="restaurante.easter_postres_title">
                     {t('restaurante.easter_postres_title')}
                   </h3>
                   <div class="flex-1 h-px bg-brand-forest/10 transition-all duration-500 group-hover:bg-brand-gold/30"></div>
                 </div>
                 <div class="pl-8 flex flex-col gap-4">
                   <div class="flex flex-col gap-1">
-                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">{t('restaurante.easter_postres_item1')}</span>
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight" data-i18n="restaurante.easter_postres_item1">{t('restaurante.easter_postres_item1')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Gluten</span>
@@ -400,7 +406,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   <!-- Minimal divider -->
                   <div class="flex justify-start pl-2 opacity-10"><div class="w-4 h-px bg-brand-forest"></div></div>
                   <div class="flex flex-col gap-1">
-                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">{t('restaurante.easter_postres_item2')}</span>
+                    <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight" data-i18n="restaurante.easter_postres_item2">{t('restaurante.easter_postres_item2')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Gluten</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Frutos secos</span>
@@ -413,13 +419,14 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
             <!-- Card Footer: Terms & Booking -->
             <div class="px-8 py-6 border-t border-brand-forest/5 bg-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-              <p class="font-body text-[10px] text-brand-stone/50 leading-relaxed max-w-[220px]">
+              <p class="font-body text-[10px] text-brand-stone/50 leading-relaxed max-w-[220px]" data-i18n="restaurante.easter_footer_note">
                 {t('restaurante.easter_footer_note')}
               </p>
               <a
                 href="#reservar"
                 onclick="document.querySelector('[name=observaciones]') ? document.querySelector('[name=observaciones]').value = 'Reserva para Menú Semana Santa' : null"
                 class="inline-flex items-center px-8 py-3.5 rounded-sm bg-brand-forest/90 hover:bg-brand-blue text-white font-body text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-300 shadow-md"
+                data-i18n="restaurante.hero_cta_reserve"
               >
                 {t('restaurante.hero_cta_reserve')}
               </a>
@@ -444,18 +451,19 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
   <section
     class="bg-brand-blue py-24 md:py-32"
     aria-label={t('restaurante.menus_aria_label')}
+    data-i18n-aria-label="restaurante.menus_aria_label"
   >
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Section heading -->
       <div id="carta" class="text-center mb-16">
-        <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+        <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.menu_day_label">
           {t('restaurante.menu_day_label')}
         </span>
-        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3" data-i18n="restaurante.menu_day_heading">
           {t('restaurante.menu_day_heading')}
         </h2>
-        <p class="font-body text-sm text-white/60 mt-4 max-w-xl mx-auto leading-relaxed">
+        <p class="font-body text-sm text-white/60 mt-4 max-w-xl mx-auto leading-relaxed" data-i18n="restaurante.menu_day_body">
           {t('restaurante.menu_day_body')}
         </p>
       </div>
@@ -465,13 +473,15 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
         <!-- Card: De Día -->
         <a
-          href={getRelativeLocaleUrl(lang, 'taperia')}
+          href="/taperia"
           class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
           aria-label={t('restaurante.menu_day_aria_label')}
+          data-i18n-aria-label="restaurante.menu_day_aria_label"
         >
           <img
             src={t('restaurante.menu_day_img')}
             alt={t('restaurante.menu_day_img_alt')}
+            data-i18n-alt="restaurante.menu_day_img_alt"
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             width="800" height="520"
             loading="lazy"
@@ -480,15 +490,15 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
           <!-- Sun badge -->
           <div class="relative self-start m-6">
-            <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80">{t('restaurante.menu_day_badge')}</span>
+            <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80" data-i18n="restaurante.menu_day_badge">{t('restaurante.menu_day_badge')}</span>
           </div>
 
           <div class="relative mt-auto p-8 flex flex-col gap-4">
             <h3 class="font-display text-3xl sm:text-4xl text-white leading-tight">
-              {t('restaurante.menu_day_title_part1')}<br /><span class="italic font-light">{t('restaurante.menu_day_title_part2')}</span>
+              <span data-i18n="restaurante.menu_day_title_part1">{t('restaurante.menu_day_title_part1')}</span><br /><span data-i18n="restaurante.menu_day_title_part2" class="italic font-light">{t('restaurante.menu_day_title_part2')}</span>
             </h3>
 
-            <p class="font-body text-sm text-white/70 leading-relaxed max-w-sm">
+            <p class="font-body text-sm text-white/70 leading-relaxed max-w-sm" data-i18n="restaurante.menu_day_card_body">
               {t('restaurante.menu_day_card_body')}
             </p>
 
@@ -496,20 +506,20 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             <ul class="flex flex-col gap-1.5 mt-1">
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-brand-gold/50 shrink-0"></span>
-                <span class="font-body text-xs text-white/60 uppercase tracking-widest">{t('restaurante.menu_day_service1')}</span>
+                <span class="font-body text-xs text-white/60 uppercase tracking-widest" data-i18n="restaurante.menu_day_service1">{t('restaurante.menu_day_service1')}</span>
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-brand-gold/50 shrink-0"></span>
-                <span class="font-body text-xs text-white/60 uppercase tracking-widest">{t('restaurante.menu_day_service2')}</span>
+                <span class="font-body text-xs text-white/60 uppercase tracking-widest" data-i18n="restaurante.menu_day_service2">{t('restaurante.menu_day_service2')}</span>
               </li>
               <li class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>
-                <span class="font-body text-xs text-brand-gold uppercase tracking-widest">{t('restaurante.menu_day_service3')}</span>
+                <span class="font-body text-xs text-brand-gold uppercase tracking-widest" data-i18n="restaurante.menu_day_service3">{t('restaurante.menu_day_service3')}</span>
               </li>
             </ul>
 
             <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
-              {t('restaurante.menu_day_cta')}
+              <span data-i18n="restaurante.menu_day_cta">{t('restaurante.menu_day_cta')}</span>
               <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
             </span>
           </div>
@@ -517,13 +527,15 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
         <!-- Card: De Noche -->
         <a
-          href={getRelativeLocaleUrl(lang, 'streetfood')}
+          href="/streetfood"
           class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
           aria-label={t('restaurante.menu_night_aria_label')}
+          data-i18n-aria-label="restaurante.menu_night_aria_label"
         >
           <img
             src={t('restaurante.menu_night_img')}
             alt={t('restaurante.menu_night_img_alt')}
+            data-i18n-alt="restaurante.menu_night_img_alt"
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             width="800" height="520"
             loading="lazy"
@@ -532,20 +544,20 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
           <!-- Moon badge -->
           <div class="relative self-start m-6">
-            <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80">{t('restaurante.menu_night_badge')}</span>
+            <span class="font-body text-[10px] uppercase tracking-[0.2em] text-brand-gold/80" data-i18n="restaurante.menu_night_badge">{t('restaurante.menu_night_badge')}</span>
           </div>
 
           <div class="relative mt-auto p-8 flex flex-col gap-4">
             <div>
-              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.menu_night_time">
                 {t('restaurante.menu_night_time')}
               </span>
               <h3 class="font-display text-3xl sm:text-4xl text-white mt-1 leading-tight">
-                {t('restaurante.menu_night_title_part1')}<br /><span class="italic font-light text-white/80">{t('restaurante.menu_night_title_part2')}</span>
+                <span data-i18n="restaurante.menu_night_title_part1">{t('restaurante.menu_night_title_part1')}</span><br /><span data-i18n="restaurante.menu_night_title_part2" class="italic font-light text-white/80">{t('restaurante.menu_night_title_part2')}</span>
               </h3>
             </div>
 
-            <p class="font-body text-sm text-white/70 leading-relaxed max-w-sm">
+            <p class="font-body text-sm text-white/70 leading-relaxed max-w-sm" data-i18n="restaurante.menu_night_card_body">
               {t('restaurante.menu_night_card_body')}
             </p>
 
@@ -559,7 +571,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             </ul>
 
             <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
-              {t('restaurante.menu_night_cta')}
+              <span data-i18n="restaurante.menu_night_cta">{t('restaurante.menu_night_cta')}</span>
               <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
             </span>
           </div>
@@ -567,15 +579,17 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
         <!-- Card: Menú Especial -->
         <a
-          href={getRelativeLocaleUrl(lang, 'menu')}
+          href="/menu"
           class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
           aria-label={t('restaurante.menu_special_aria_label')}
+          data-i18n-aria-label="restaurante.menu_special_aria_label"
           style="display:none"
         >
           <!-- Photo -->
           <img
             src={t('restaurante.menu_special_img')}
             alt={t('restaurante.menu_special_img_alt')}
+            data-i18n-alt="restaurante.menu_special_img_alt"
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             width="800" height="520"
             loading="lazy"
@@ -585,21 +599,21 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
           <!-- Price badge -->
           <div class="relative self-end m-6 px-4 py-2 rounded-full bg-brand-gold/90 backdrop-blur-sm">
-            <span class="font-display text-brand-blue font-medium text-lg leading-none">{t('restaurante.menu_special_price_value')} <span class="font-body text-xs font-normal">{t('restaurante.menu_special_price_unit')}</span></span>
+            <span class="font-display text-brand-blue font-medium text-lg leading-none"><span data-i18n="restaurante.menu_special_price_value">{t('restaurante.menu_special_price_value')}</span> <span data-i18n="restaurante.menu_special_price_unit" class="font-body text-xs font-normal">{t('restaurante.menu_special_price_unit')}</span></span>
           </div>
 
           <!-- Content -->
           <div class="relative mt-auto p-8 flex flex-col gap-4">
             <div>
-              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+              <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.menu_special_label">
                 {t('restaurante.menu_special_label')}
               </span>
-              <h3 class="font-display text-3xl sm:text-4xl text-white mt-1 leading-tight">
+              <h3 class="font-display text-3xl sm:text-4xl text-white mt-1 leading-tight" data-i18n="restaurante.menu_special_heading">
                 {t('restaurante.menu_special_heading')}
               </h3>
             </div>
 
-            <p class="font-body text-sm text-white/75 leading-relaxed max-w-sm">
+            <p class="font-body text-sm text-white/75 leading-relaxed max-w-sm" data-i18n="restaurante.menu_special_body">
               {t('restaurante.menu_special_body')}
             </p>
 
@@ -610,7 +624,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             </ul>
 
             <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
-              {t('restaurante.menu_special_cta')}
+              <span data-i18n="restaurante.menu_special_cta">{t('restaurante.menu_special_cta')}</span>
               <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
             </span>
           </div>
@@ -626,6 +640,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
   <section
     class="bg-brand-cream py-24 md:py-32"
     aria-label={t('restaurante.gallery_aria_label')}
+    data-i18n-aria-label="restaurante.gallery_aria_label"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -637,6 +652,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
           <img
             src={t('restaurante.gallery_img1')}
             alt={t('restaurante.gallery_img1_alt')}
+            data-i18n-alt="restaurante.gallery_img1_alt"
             class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -648,6 +664,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
           <img
             src={t('restaurante.gallery_img2')}
             alt={t('restaurante.gallery_img2_alt')}
+            data-i18n-alt="restaurante.gallery_img2_alt"
             class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -659,6 +676,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
           <img
             src={t('restaurante.gallery_img3')}
             alt={t('restaurante.gallery_img3_alt')}
+            data-i18n-alt="restaurante.gallery_img3_alt"
             class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -670,6 +688,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
           <img
             src={t('restaurante.gallery_img4')}
             alt={t('restaurante.gallery_img4_alt')}
+            data-i18n-alt="restaurante.gallery_img4_alt"
             class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -679,7 +698,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
       </div>
 
       <!-- Caption -->
-      <p class="text-center font-body text-sm text-brand-stone tracking-wider mt-8">
+      <p class="text-center font-body text-sm text-brand-stone tracking-wider mt-8" data-i18n="restaurante.gallery_caption">
         {t('restaurante.gallery_caption')}
       </p>
 
@@ -693,15 +712,16 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
     id="reservar"
     class="bg-brand-blue py-24 md:py-32"
     aria-label={t('restaurante.booking_label')}
+    data-i18n-aria-label="restaurante.booking_label"
   >
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Heading -->
       <div class="text-center mb-12">
-        <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+        <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.booking_label">
           {t('restaurante.booking_label')}
         </span>
-        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3">
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-3" data-i18n="restaurante.booking_heading">
           {t('restaurante.booking_heading')}
         </h2>
       </div>
@@ -718,13 +738,14 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             novalidate
             class="flex flex-col gap-5"
             aria-label={t('restaurante.form_aria_label')}
+            data-i18n-aria-label="restaurante.form_aria_label"
           >
             <input type="hidden" name="source" value="restaurante" />
 
             <!-- Row 1: Nombre + Email -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-2">
-                <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70">
+                <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70" data-i18n="restaurante.form_name_label">
                   {t('restaurante.form_name_label')}
                 </label>
                 <input
@@ -734,11 +755,12 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   required
                   autocomplete="name"
                   placeholder={t('restaurante.form_name_placeholder')}
+                  data-i18n-placeholder="restaurante.form_name_placeholder"
                   class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
                 />
               </div>
               <div class="flex flex-col gap-2">
-                <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70">
+                <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70" data-i18n="restaurante.form_email_label">
                   {t('restaurante.form_email_label')}
                 </label>
                 <input
@@ -748,6 +770,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   required
                   autocomplete="email"
                   placeholder={t('restaurante.form_email_placeholder')}
+                  data-i18n-placeholder="restaurante.form_email_placeholder"
                   class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
                 />
               </div>
@@ -756,7 +779,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             <!-- Row 2: Teléfono + Nº personas -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-2">
-                <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70">
+                <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70" data-i18n="restaurante.form_phone_label">
                   {t('restaurante.form_phone_label')}
                 </label>
                 <input
@@ -766,11 +789,12 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   required
                   autocomplete="tel"
                   placeholder={t('restaurante.form_phone_placeholder')}
+                  data-i18n-placeholder="restaurante.form_phone_placeholder"
                   class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
                 />
               </div>
               <div class="flex flex-col gap-2">
-                <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70">
+                <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70" data-i18n="restaurante.form_people_label">
                   {t('restaurante.form_people_label')}
                 </label>
                 <input
@@ -781,6 +805,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   min="1"
                   max="20"
                   placeholder={t('restaurante.form_people_placeholder')}
+                  data-i18n-placeholder="restaurante.form_people_placeholder"
                   class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
                 />
               </div>
@@ -789,7 +814,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             <!-- Row 3: Fecha + Hora -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-2">
-                <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70">
+                <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70" data-i18n="restaurante.form_date_label">
                   {t('restaurante.form_date_label')}
                 </label>
                 <input
@@ -801,7 +826,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                 />
               </div>
               <div class="flex flex-col gap-2">
-                <label for="hora" class="font-body text-xs uppercase tracking-widest text-white/70">
+                <label for="hora" class="font-body text-xs uppercase tracking-widest text-white/70" data-i18n="restaurante.form_time_label">
                   {t('restaurante.form_time_label')}
                 </label>
                 <select
@@ -810,7 +835,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                   required
                   class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 appearance-none"
                 >
-                  <option value="" disabled selected class="text-brand-blue">{t('restaurante.form_time_placeholder')}</option>
+                  <option value="" disabled selected class="text-brand-blue" data-i18n="restaurante.form_time_placeholder">{t('restaurante.form_time_placeholder')}</option>
                   <optgroup label="Mediodía" class="text-brand-blue">
                     <option value="13:00" class="text-brand-blue">13:00</option>
                     <option value="13:30" class="text-brand-blue">13:30</option>
@@ -833,7 +858,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
             <!-- Observaciones -->
             <div class="flex flex-col gap-2">
-              <label for="observaciones" class="font-body text-xs uppercase tracking-widest text-white/70">
+              <label for="observaciones" class="font-body text-xs uppercase tracking-widest text-white/70" data-i18n="restaurante.form_obs_label">
                 {t('restaurante.form_obs_label')}
               </label>
               <textarea
@@ -841,6 +866,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                 name="observaciones"
                 rows="4"
                 placeholder={t('restaurante.form_obs_placeholder')}
+                data-i18n-placeholder="restaurante.form_obs_placeholder"
                 class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 resize-none"
               ></textarea>
             </div>
@@ -855,9 +881,9 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
                 class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold"
               />
               <label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">
-                {t('restaurante.rgpd_text_part1')}
-                <a href={getRelativeLocaleUrl(lang, 'privacidad')} target="_blank" class="underline hover:text-brand-gold">{t('restaurante.rgpd_privacy_policy')}</a>.
-                {t('restaurante.rgpd_text_part2')}
+                <span data-i18n="restaurante.rgpd_text_part1">{t('restaurante.rgpd_text_part1')}</span>
+                <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold" data-i18n="restaurante.rgpd_privacy_policy">{t('restaurante.rgpd_privacy_policy')}</a>.
+                <span data-i18n="restaurante.rgpd_text_part2">{t('restaurante.rgpd_text_part2')}</span>
               </label>
             </div>
 
@@ -865,6 +891,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
             <button
               type="submit"
               class="w-full px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-200 mt-2"
+              data-i18n="restaurante.form_submit_button"
             >
               {t('restaurante.form_submit_button')}
             </button>
@@ -873,8 +900,8 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
           <!-- Phone fallback -->
           <p class="text-center font-body text-sm text-white/50 mt-6">
-            {t('restaurante.phone_fallback_text')}
-            <a href={`tel:${t('contacto.restaurant_phone')}`} class="text-white/80 hover:text-brand-gold transition-colors duration-200">
+            <span data-i18n="restaurante.phone_fallback_text">{t('restaurante.phone_fallback_text')}</span>
+            <a href={`tel:${t('contacto.restaurant_phone')}`} class="text-white/80 hover:text-brand-gold transition-colors duration-200" data-i18n="contacto.restaurant_phone">
               {t('contacto.restaurant_phone')}
             </a>
           </p>
@@ -944,6 +971,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
   <section
     class="bg-brand-cream py-24 md:py-32"
     aria-label={t('restaurante.hours_label')}
+    data-i18n-aria-label="restaurante.hours_label"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
@@ -951,28 +979,28 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
         <!-- Left: Opening hours -->
         <div class="flex flex-col gap-8">
           <div>
-            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.hours_label">
               {t('restaurante.hours_label')}
             </span>
-            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3">
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3" data-i18n="restaurante.hours_heading">
               {t('restaurante.hours_heading')}
             </h2>
           </div>
 
-          <table class="w-full font-body text-sm" aria-label={t('restaurante.hours_table_aria_label')}>
+          <table class="w-full font-body text-sm" aria-label={t('restaurante.hours_table_aria_label')} data-i18n-aria-label="restaurante.hours_table_aria_label">
             <tbody class="divide-y divide-brand-stone/20">
               <tr>
-                <td class="py-4 pr-6 text-brand-stone font-medium">{t('restaurante.hours_all_days')}</td>
+                <td class="py-4 pr-6 text-brand-stone font-medium" data-i18n="restaurante.hours_all_days">{t('restaurante.hours_all_days')}</td>
                 <td class="py-4 text-brand-blue">
-                  {t('restaurante.hours_time_lunch')}
+                  <span data-i18n="restaurante.hours_time_lunch">{t('restaurante.hours_time_lunch')}</span>
                   <span class="mx-2 text-brand-stone/40" aria-hidden="true">·</span>
-                  {t('restaurante.hours_time_dinner')}
+                  <span data-i18n="restaurante.hours_time_dinner">{t('restaurante.hours_time_dinner')}</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <p class="font-body text-xs text-brand-stone/70 leading-relaxed">
+          <p class="font-body text-xs text-brand-stone/70 leading-relaxed" data-i18n="restaurante.hours_note">
             {t('restaurante.hours_note')}
           </p>
         </div>
@@ -980,10 +1008,10 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
         <!-- Right: Map -->
         <div class="flex flex-col gap-6">
           <div>
-            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
+            <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold" data-i18n="restaurante.location_label">
               {t('restaurante.location_label')}
             </span>
-            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3">
+            <h2 class="font-display text-2xl sm:text-3xl md:text-4xl text-brand-blue mt-3" data-i18n="restaurante.location_heading">
               {t('restaurante.location_heading')}
             </h2>
           </div>
@@ -1003,9 +1031,9 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
 
           <address class="not-italic flex flex-col gap-2">
             <p class="font-body text-sm text-brand-blue leading-relaxed">
-              {t('restaurante.location_address_line1')}<br />
-              {t('restaurante.location_address_line2')}<br />
-              {t('restaurante.location_address_line3')}
+              <span data-i18n="restaurante.location_address_line1">{t('restaurante.location_address_line1')}</span><br />
+              <span data-i18n="restaurante.location_address_line2">{t('restaurante.location_address_line2')}</span><br />
+              <span data-i18n="restaurante.location_address_line3">{t('restaurante.location_address_line3')}</span>
             </p>
             <a
               href={t('restaurante.location_open_maps_url')}
@@ -1013,7 +1041,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
               rel="noopener noreferrer"
               class="font-body text-sm text-brand-gold hover:text-brand-stone transition-colors duration-200 inline-flex items-center gap-1.5 mt-1"
             >
-              {t('restaurante.location_open_maps')}
+              <span data-i18n="restaurante.location_open_maps">{t('restaurante.location_open_maps')}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"

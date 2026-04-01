@@ -4,19 +4,15 @@
  */
 
 import Layout from '../layouts/Layout.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations } from '../i18n/utils';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const t = useTranslations();
 const contactUrl = import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081';
-const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{value: string, label: string}>;
 ---
 
 <Layout
-  title={t('contacto.meta_title')}
-  description={t('contacto.meta_description')}
-  lang={lang}
+  titleKey="contacto.meta_title"
+  descriptionKey="contacto.meta_description"
 >
 
   <script type="application/ld+json" slot="head" set:html={JSON.stringify({
@@ -41,13 +37,13 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
   <!-- SECTION 1 — HERO -->
   <section class="min-h-[50vh] bg-brand-blue flex items-center justify-center py-24 md:py-32">
     <div class="text-center px-4">
-      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold mb-6">
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold mb-6" data-i18n="contacto.hero_label">
         {t('contacto.hero_label')}
       </p>
-      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl text-white leading-tight mb-6">
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl text-white leading-tight mb-6" data-i18n="contacto.hero_heading">
         {t('contacto.hero_heading')}
       </h1>
-      <p class="font-body text-brand-sand text-lg tracking-wide">
+      <p class="font-body text-brand-sand text-lg tracking-wide" data-i18n="contacto.hero_body">
         {t('contacto.hero_body')}
       </p>
     </div>
@@ -69,16 +65,16 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
               </svg>
             </div>
             <div class="flex flex-col gap-1">
-              <h3 class="font-body text-sm uppercase tracking-widest text-brand-gold font-medium">
+              <h3 class="font-body text-sm uppercase tracking-widest text-brand-gold font-medium" data-i18n="contacto.hotel_bookings_label">
                 {t('contacto.hotel_bookings_label')}
               </h3>
-              <a href={'tel:' + t('contacto.hotel_phone')} class="font-display text-xl text-brand-blue hover:text-brand-gold transition-colors duration-200">
+              <a href={'tel:' + t('contacto.hotel_phone')} class="font-display text-xl text-brand-blue hover:text-brand-gold transition-colors duration-200" data-i18n="contacto.hotel_phone">
                 {t('contacto.hotel_phone')}
               </a>
-              <a href={'mailto:' + t('contacto.hotel_email')} class="font-body text-sm text-brand-stone hover:text-brand-blue transition-colors duration-200">
+              <a href={'mailto:' + t('contacto.hotel_email')} class="font-body text-sm text-brand-stone hover:text-brand-blue transition-colors duration-200" data-i18n="contacto.hotel_email">
                 {t('contacto.hotel_email')}
               </a>
-              <p class="font-body text-xs text-brand-stone/70 mt-1">
+              <p class="font-body text-xs text-brand-stone/70 mt-1" data-i18n="contacto.hotel_hours">
                 {t('contacto.hotel_hours')}
               </p>
             </div>
@@ -95,16 +91,16 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
               </svg>
             </div>
             <div class="flex flex-col gap-1">
-              <h3 class="font-body text-sm uppercase tracking-widest text-brand-gold font-medium">
+              <h3 class="font-body text-sm uppercase tracking-widest text-brand-gold font-medium" data-i18n="contacto.restaurant_label">
                 {t('contacto.restaurant_label')}
               </h3>
-              <a href={'tel:' + t('contacto.restaurant_phone')} class="font-display text-xl text-brand-blue hover:text-brand-gold transition-colors duration-200">
+              <a href={'tel:' + t('contacto.restaurant_phone')} class="font-display text-xl text-brand-blue hover:text-brand-gold transition-colors duration-200" data-i18n="contacto.restaurant_phone">
                 {t('contacto.restaurant_phone')}
               </a>
-              <a href={'mailto:' + t('contacto.restaurant_email')} class="font-body text-sm text-brand-stone hover:text-brand-blue transition-colors duration-200">
+              <a href={'mailto:' + t('contacto.restaurant_email')} class="font-body text-sm text-brand-stone hover:text-brand-blue transition-colors duration-200" data-i18n="contacto.restaurant_email">
                 {t('contacto.restaurant_email')}
               </a>
-              <p class="font-body text-xs text-brand-stone/70 mt-1">
+              <p class="font-body text-xs text-brand-stone/70 mt-1" data-i18n="contacto.restaurant_hours">
                 {t('contacto.restaurant_hours')}
               </p>
             </div>
@@ -118,13 +114,13 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
               </svg>
             </div>
             <div class="flex flex-col gap-1">
-              <h3 class="font-body text-sm uppercase tracking-widest text-brand-gold font-medium">
+              <h3 class="font-body text-sm uppercase tracking-widest text-brand-gold font-medium" data-i18n="contacto.events_label">
                 {t('contacto.events_label')}
               </h3>
-              <a href={'mailto:' + t('contacto.events_email')} class="font-body text-sm text-brand-stone hover:text-brand-blue transition-colors duration-200">
+              <a href={'mailto:' + t('contacto.events_email')} class="font-body text-sm text-brand-stone hover:text-brand-blue transition-colors duration-200" data-i18n="contacto.events_email">
                 {t('contacto.events_email')}
               </a>
-              <p class="font-body text-xs text-brand-stone/70 mt-1">
+              <p class="font-body text-xs text-brand-stone/70 mt-1" data-i18n="contacto.events_response_time">
                 {t('contacto.events_response_time')}
               </p>
             </div>
@@ -150,7 +146,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
 
             <!-- Form -->
             <div id="form-wrapper">
-              <h2 class="font-display text-3xl text-brand-blue mb-8">
+              <h2 class="font-display text-3xl text-brand-blue mb-8" data-i18n="contacto.form_heading">
                 {t('contacto.form_heading')}
               </h2>
 
@@ -166,7 +162,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                 <!-- Nombre -->
                 <div class="flex flex-col gap-2">
                   <label for="nombre" class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">
-                    {t('contacto.form_name_label')} *
+                    <span data-i18n="contacto.form_name_label">{t('contacto.form_name_label')}</span> *
                   </label>
                   <input
                     type="text"
@@ -175,6 +171,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                     required
                     autocomplete="name"
                     placeholder={t('contacto.form_name_placeholder')}
+                    data-i18n-placeholder="contacto.form_name_placeholder"
                     class="border border-brand-stone/30 text-brand-blue placeholder-brand-stone/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-blue transition-colors duration-200 bg-white"
                   />
                 </div>
@@ -182,7 +179,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                 <!-- Email -->
                 <div class="flex flex-col gap-2">
                   <label for="email" class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">
-                    {t('contacto.form_email_label')} *
+                    <span data-i18n="contacto.form_email_label">{t('contacto.form_email_label')}</span> *
                   </label>
                   <input
                     type="email"
@@ -197,7 +194,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
 
                 <!-- Teléfono -->
                 <div class="flex flex-col gap-2">
-                  <label for="telefono" class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">
+                  <label for="telefono" class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium" data-i18n="contacto.form_phone_label">
                     {t('contacto.form_phone_label')}
                   </label>
                   <input
@@ -212,7 +209,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                 <!-- Asunto -->
                 <div class="flex flex-col gap-2">
                   <label for="asunto" class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">
-                    {t('contacto.form_subject_label')} *
+                    <span data-i18n="contacto.form_subject_label">{t('contacto.form_subject_label')}</span> *
                   </label>
                   <select
                     id="asunto"
@@ -220,17 +217,19 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                     required
                     class="border border-brand-stone/30 text-brand-blue rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-blue transition-colors duration-200 bg-white appearance-none"
                   >
-                    <option value="" disabled selected>{t('contacto.form_subject_placeholder')}</option>
-                    {subjectOptions.map((option) => (
-                      <option value={option.value}>{option.label}</option>
-                    ))}
+                    <option value="" disabled selected data-i18n="contacto.form_subject_placeholder">{t('contacto.form_subject_placeholder')}</option>
+                    <option value="reserva">Reserva de mesa</option>
+                    <option value="alergenos">Alérgenos e intolerancias</option>
+                    <option value="eventos">Eventos y celebraciones</option>
+                    <option value="grupos">Grupos y catering</option>
+                    <option value="otro">Otro</option>
                   </select>
                 </div>
 
                 <!-- Mensaje -->
                 <div class="flex flex-col gap-2">
                   <label for="mensaje" class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">
-                    {t('contacto.form_message_label')} *
+                    <span data-i18n="contacto.form_message_label">{t('contacto.form_message_label')}</span> *
                   </label>
                   <textarea
                     id="mensaje"
@@ -238,6 +237,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                     rows="5"
                     required
                     placeholder={t('contacto.form_message_placeholder')}
+                    data-i18n-placeholder="contacto.form_message_placeholder"
                     class="border border-brand-stone/30 text-brand-blue placeholder-brand-stone/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-blue transition-colors duration-200 bg-white resize-y"
                   ></textarea>
                 </div>
@@ -252,9 +252,9 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                     class="mt-1 h-4 w-4 flex-shrink-0 rounded border-brand-stone/40 text-brand-blue focus:ring-brand-blue"
                   />
                   <label for="rgpd" class="font-body text-xs text-brand-stone/80 leading-relaxed">
-                    {t('contacto.rgpd_text_part1')}
-                    <a href={getRelativeLocaleUrl(lang, 'privacidad')} target="_blank" class="underline hover:text-brand-blue">{t('contacto.rgpd_privacy_policy')}</a>.
-                    {t('contacto.rgpd_text_part2')} *
+                    <span data-i18n="contacto.rgpd_text_part1">{t('contacto.rgpd_text_part1')}</span>
+                    <a href="/privacidad" target="_blank" class="underline hover:text-brand-blue" data-i18n="contacto.rgpd_privacy_policy">{t('contacto.rgpd_privacy_policy')}</a>.
+                    <span data-i18n="contacto.rgpd_text_part2">{t('contacto.rgpd_text_part2')}</span> *
                   </label>
                 </div>
 
@@ -263,6 +263,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                   id="form-error"
                   class="hidden font-body text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3"
                   role="alert"
+                  data-i18n="contacto.form_error_message"
                 >
                   {t('contacto.form_error_message')}
                 </p>
@@ -272,6 +273,7 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
                   type="submit"
                   id="submit-btn"
                   class="w-full bg-brand-blue text-white font-body text-sm uppercase tracking-widest font-medium rounded-lg px-8 py-4 hover:bg-brand-blue-light transition-colors duration-200 mt-2"
+                  data-i18n="contacto.form_submit_button"
                 >
                   {t('contacto.form_submit_button')}
                 </button>
