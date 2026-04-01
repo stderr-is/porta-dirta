@@ -1,0 +1,69 @@
+# --- 1. THE BIG OFFENDERS (Dependencies) ---
+**/node_modules/
+**/vendor/
+**/bower_components/
+**/.npm/
+**/.pnpm-store/
+
+# --- 2. BACKEND SPECIFIC (n8n, Kuma, Laravel) ---
+# n8n & Kuma often have SQLite DBs or local storage
+**/*.sqlite
+**/*.sqlite-journal
+**/database.sqlite
+**/.n8n/
+**/backups/
+**/logs/
+*.log
+
+# hi.events & TastyIgniter (PHP/Laravel/OctoberCMS)
+**/storage/framework/
+**/storage/logs/
+**/storage/cache/
+**/bootstrap/cache/
+**/public/storage/
+**/themes/*/assets/vendor/
+
+# --- 3. BUILD & CACHE ---
+**/dist/
+**/build/
+**/.cache/
+**/.next/
+**/.nuxt/
+**/.svelte-kit/
+**/.turbo/
+**/.parcel-cache/
+**/out/
+
+# --- 4. MEDIA & ASSETS (Essential for Hotel Sites) ---
+# Claude cannot "see" images; reading them is a pure waste of tokens.
+**/public/images/
+**/public/uploads/
+**/storage/app/public/
+**/*.jpg
+**/*.jpeg
+**/*.png
+**/*.gif
+**/*.svg
+**/*.webp
+**/*.ico
+**/*.mp4
+**/*.pdf
+
+# --- 5. SYSTEM & IDE ---
+.git/
+.svn/
+.hg/
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.bak
+.env*
+!.env.example 
+
+# --- 6. LOCK FILES ---
+# Very large text files that Claude rarely needs to read fully.
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+composer.lock

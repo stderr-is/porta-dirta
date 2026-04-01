@@ -1,16 +1,24 @@
 ---
 /**
- * src/pages/hotel.astro — Hotel page for default locale (es)
+ * src/pages/[lang]/hotel.astro — Dynamic hotel page for all locales
  */
 
-import Layout from '../layouts/Layout.astro';
-import GarlandDivider from '../components/GarlandDivider.astro';
-import BookingSearchForm from '../components/BookingSearchForm.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import Layout from '../../layouts/Layout.astro';
+import GarlandDivider from '../../components/GarlandDivider.astro';
+import BookingSearchForm from '../../components/BookingSearchForm.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+export async function getStaticPaths() {
+  return ['en', 'fr', 'de'].map((lang) => {
+    return {
+      params: { lang },
+    };
+  });
+}
 ---
 
 <Layout

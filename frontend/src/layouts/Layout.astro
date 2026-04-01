@@ -23,19 +23,13 @@ import Footer from '../components/Footer.astro';
 import FloatingActions from '../components/FloatingActions.astro';
 import '../styles/global.css';
 
-interface Props {
-  title: string;
-  description: string;
-  lang?: string;
-  ogImage?: string;
-  googleSiteVerification?: string;
-  noindex?: boolean;
-}
+import { getLangFromUrl } from '../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
+const lang = getLangFromUrl(Astro.url);
 const {
   title,
   description,
-  lang = 'es',
   ogImage = 'https://www.portadirta.com/assets/images/property-aerial-pool.jpg',
   googleSiteVerification,
   noindex = false,
@@ -51,7 +45,7 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.port
 <html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width" />
 
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
@@ -68,6 +62,19 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.port
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {(() => {
+      const purePath = Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/");
+      const baseUrl = "https://www.portadirta.com";
+      return (
+        <>
+          <link rel="alternate" hreflang="es" href={`${baseUrl}${purePath}`} />
+          <link rel="alternate" hreflang="en" href={`${baseUrl}/en${purePath === '/' ? '' : purePath}`} />
+          <link rel="alternate" hreflang="fr" href={`${baseUrl}/fr${purePath === '/' ? '' : purePath}`} />
+          <link rel="alternate" hreflang="de" href={`${baseUrl}/de${purePath === '/' ? '' : purePath}`} />
+          <link rel="alternate" hreflang="x-default" href={`${baseUrl}${purePath}`} />
+        </>
+      );
+    })()}
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

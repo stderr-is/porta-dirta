@@ -1,18 +1,26 @@
 ---
 /**
- * src/pages/restaurante.astro — Restaurant page for default locale (es)
+ * src/pages/[lang]/restaurante.astro — Dynamic restaurant page for all locales
  */
 
-import Layout from '../layouts/Layout.astro';
-import GarlandDivider from '../components/GarlandDivider.astro';
-import BotanicalAccent from '../components/BotanicalAccent.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import Layout from '../../layouts/Layout.astro';
+import GarlandDivider from '../../components/GarlandDivider.astro';
+import BotanicalAccent from '../../components/BotanicalAccent.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const menuNightTags = Array.isArray(t('restaurante.menu_night_tags') as any) ? (t('restaurante.menu_night_tags') as unknown as string[]) : [];
 const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any) ? (t('restaurante.menu_special_tags') as unknown as string[]) : [];
+
+export async function getStaticPaths() {
+  return ['en', 'fr', 'de'].map((lang) => {
+    return {
+      params: { lang },
+    };
+  });
+}
 ---
 
 <Layout
@@ -28,12 +36,12 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
       "@type": "Restaurant",
       "name": t('restaurante.schema_name'),
       "description": t('restaurante.schema_description'),
-      "url": "https://www.portadirta.com/restaurante",
+      "url": `https://www.portadirta.com/${lang === 'es' ? '' : lang + '/'}restaurante`,
       "telephone": t('contacto.restaurant_phone'),
       "servesCuisine": t('restaurante.schema_servesCuisine', { returnObjects: true }),
       "priceRange": t('restaurante.schema_priceRange'),
       "acceptsReservations": "true",
-      "menu": "https://www.portadirta.com/carta",
+      "menu": `https://www.portadirta.com/${lang === 'es' ? '' : lang + '/'}carta`,
       "currenciesAccepted": "EUR",
       "address": {
         "@type": "PostalAddress",
@@ -47,7 +55,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
       "isContainedInPlace": {
         "@type": "LodgingBusiness",
         "name": "Porta D'irta",
-        "url": "https://www.portadirta.com/hotel"
+        "url": `https://www.portadirta.com/${lang === 'es' ? '' : lang + '/'}hotel`
       },
       "openingHoursSpecification": [
         {
@@ -72,14 +80,14 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Inicio",
-          "item": "https://www.portadirta.com/"
+          "name": t('nav.home'),
+          "item": `https://www.portadirta.com/${lang === 'es' ? '' : lang + '/'}`
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Restaurante",
-          "item": "https://www.portadirta.com/restaurante"
+          "name": t('nav.restaurante'),
+          "item": `https://www.portadirta.com/${lang === 'es' ? '' : lang + '/'}restaurante`
         }
       ]
     }
@@ -706,185 +714,176 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
         </h2>
       </div>
 
+      <!-- REPLACE: TastyIgniter booking widget -->
       <!-- Frosted glass form card -->
       <div class="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-4 sm:p-6 lg:p-8">
+        <form
+          id="restaurant-form"
+          method="POST"
+          action="/api/reservas"
+          novalidate
+          class="flex flex-col gap-5"
+          aria-label={t('restaurante.form_aria_label')}
+        >
+          <input type="hidden" name="source" value="restaurante" />
 
-        <!-- Form wrapper — hidden on success -->
-        <div id="form-wrapper">
-          <form
-            id="restaurant-form"
-            method="POST"
-            action="/api/reservas"
-            novalidate
-            class="flex flex-col gap-5"
-            aria-label={t('restaurante.form_aria_label')}
-          >
-            <input type="hidden" name="source" value="restaurante" />
-
-            <!-- Row 1: Nombre + Email -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div class="flex flex-col gap-2">
-                <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70">
-                  {t('restaurante.form_name_label')}
-                </label>
-                <input
-                  type="text"
-                  id="nombre"
-                  name="nombre"
-                  required
-                  autocomplete="name"
-                  placeholder={t('restaurante.form_name_placeholder')}
-                  class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
-                />
-              </div>
-              <div class="flex flex-col gap-2">
-                <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70">
-                  {t('restaurante.form_email_label')}
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  autocomplete="email"
-                  placeholder={t('restaurante.form_email_placeholder')}
-                  class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
-                />
-              </div>
-            </div>
-
-            <!-- Row 2: Teléfono + Nº personas -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div class="flex flex-col gap-2">
-                <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70">
-                  {t('restaurante.form_phone_label')}
-                </label>
-                <input
-                  type="tel"
-                  id="telefono"
-                  name="telefono"
-                  required
-                  autocomplete="tel"
-                  placeholder={t('restaurante.form_phone_placeholder')}
-                  class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
-                />
-              </div>
-              <div class="flex flex-col gap-2">
-                <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70">
-                  {t('restaurante.form_people_label')}
-                </label>
-                <input
-                  type="number"
-                  id="personas"
-                  name="personas"
-                  required
-                  min="1"
-                  max="20"
-                  placeholder={t('restaurante.form_people_placeholder')}
-                  class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
-                />
-              </div>
-            </div>
-
-            <!-- Row 3: Fecha + Hora -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div class="flex flex-col gap-2">
-                <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70">
-                  {t('restaurante.form_date_label')}
-                </label>
-                <input
-                  type="date"
-                  id="fecha"
-                  name="fecha"
-                  required
-                  class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
-                />
-              </div>
-              <div class="flex flex-col gap-2">
-                <label for="hora" class="font-body text-xs uppercase tracking-widest text-white/70">
-                  {t('restaurante.form_time_label')}
-                </label>
-                <select
-                  id="hora"
-                  name="hora"
-                  required
-                  class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 appearance-none"
-                >
-                  <option value="" disabled selected class="text-brand-blue">{t('restaurante.form_time_placeholder')}</option>
-                  <optgroup label="Mediodía" class="text-brand-blue">
-                    <option value="13:00" class="text-brand-blue">13:00</option>
-                    <option value="13:30" class="text-brand-blue">13:30</option>
-                    <option value="14:00" class="text-brand-blue">14:00</option>
-                    <option value="14:30" class="text-brand-blue">14:30</option>
-                    <option value="15:00" class="text-brand-blue">15:00</option>
-                    <option value="15:30" class="text-brand-blue">15:30</option>
-                  </optgroup>
-                  <optgroup label="Noche" class="text-brand-blue">
-                    <option value="20:00" class="text-brand-blue">20:00</option>
-                    <option value="20:30" class="text-brand-blue">20:30</option>
-                    <option value="21:00" class="text-brand-blue">21:00</option>
-                    <option value="21:30" class="text-brand-blue">21:30</option>
-                    <option value="22:00" class="text-brand-blue">22:00</option>
-                    <option value="22:30" class="text-brand-blue">22:30</option>
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-
-            <!-- Observaciones -->
+          <!-- Row 1: Nombre + Email -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div class="flex flex-col gap-2">
-              <label for="observaciones" class="font-body text-xs uppercase tracking-widest text-white/70">
-                {t('restaurante.form_obs_label')}
+              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70">
+                {t('restaurante.form_name_label')}
               </label>
-              <textarea
-                id="observaciones"
-                name="observaciones"
-                rows="4"
-                placeholder={t('restaurante.form_obs_placeholder')}
-                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 resize-none"
-              ></textarea>
-            </div>
-
-            <!-- RGPD: Consentimiento (Art. 6.1.a RGPD) -->
-            <div class="flex items-start gap-3">
               <input
-                type="checkbox"
-                id="rgpd"
-                name="rgpd"
+                type="text"
+                id="nombre"
+                name="nombre"
                 required
-                class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold"
+                autocomplete="name"
+                placeholder={t('restaurante.form_name_placeholder')}
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
               />
-              <label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">
-                {t('restaurante.rgpd_text_part1')}
-                <a href={getRelativeLocaleUrl(lang, 'privacidad')} target="_blank" class="underline hover:text-brand-gold">{t('restaurante.rgpd_privacy_policy')}</a>.
-                {t('restaurante.rgpd_text_part2')}
-              </label>
             </div>
+            <div class="flex flex-col gap-2">
+              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70">
+                {t('restaurante.form_email_label')}
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder={t('restaurante.form_email_placeholder')}
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+          </div>
 
-            <!-- Submit CTA -->
-            <button
-              type="submit"
-              class="w-full px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-200 mt-2"
-            >
-              {t('restaurante.form_submit_button')}
-            </button>
+          <!-- Row 2: Teléfono + Nº personas -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-2">
+              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70">
+                {t('restaurante.form_phone_label')}
+              </label>
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                required
+                autocomplete="tel"
+                placeholder={t('restaurante.form_phone_placeholder')}
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70">
+                {t('restaurante.form_people_label')}
+              </label>
+              <input
+                type="number"
+                id="personas"
+                name="personas"
+                required
+                min="1"
+                max="20"
+                placeholder={t('restaurante.form_people_placeholder')}
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+          </div>
 
-          </form>
+          <!-- Row 3: Fecha + Hora -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-2">
+              <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70">
+                {t('restaurante.form_date_label')}
+              </label>
+              <input
+                type="date"
+                id="fecha"
+                name="fecha"
+                required
+                class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="hora" class="font-body text-xs uppercase tracking-widest text-white/70">
+                {t('restaurante.form_time_label')}
+              </label>
+              <select
+                id="hora"
+                name="hora"
+                required
+                class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 appearance-none"
+              >
+                <option value="" disabled selected class="text-brand-blue">{t('restaurante.form_time_placeholder')}</option>
+                <optgroup label={t('restaurante.form_mediodia_label')} class="text-brand-blue">
+                  <option value="13:00" class="text-brand-blue">13:00</option>
+                  <option value="13:30" class="text-brand-blue">13:30</option>
+                  <option value="14:00" class="text-brand-blue">14:00</option>
+                  <option value="14:30" class="text-brand-blue">14:30</option>
+                  <option value="15:00" class="text-brand-blue">15:00</option>
+                  <option value="15:30" class="text-brand-blue">15:30</option>
+                </optgroup>
+                <optgroup label={t('restaurante.form_noche_label')} class="text-brand-blue">
+                  <option value="20:00" class="text-brand-blue">20:00</option>
+                  <option value="20:30" class="text-brand-blue">20:30</option>
+                  <option value="21:00" class="text-brand-blue">21:00</option>
+                  <option value="21:30" class="text-brand-blue">21:30</option>
+                  <option value="22:00" class="text-brand-blue">22:00</option>
+                  <option value="22:30" class="text-brand-blue">22:30</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
 
-          <!-- Phone fallback -->
-          <p class="text-center font-body text-sm text-white/50 mt-6">
-            {t('restaurante.phone_fallback_text')}
-            <a href={`tel:${t('contacto.restaurant_phone')}`} class="text-white/80 hover:text-brand-gold transition-colors duration-200">
-              {t('contacto.restaurant_phone')}
-            </a>
-          </p>
-        </div>
+          <!-- Observaciones -->
+          <div class="flex flex-col gap-2">
+            <label for="observaciones" class="font-body text-xs uppercase tracking-widest text-white/70">
+              {t('restaurante.form_obs_label')}
+            </label>
+            <textarea
+              id="observaciones"
+              name="observaciones"
+              rows="4"
+              placeholder={t('restaurante.form_obs_placeholder')}
+              class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 resize-none"
+            ></textarea>
+          </div>
 
-        <!-- Success message — shown on successful submit -->
-        <div id="form-success" class="hidden text-center py-8">
-          <p class="text-brand-gold font-display text-2xl italic">¡Reserva confirmada! Nos pondremos en contacto pronto.</p>
-        </div>
+          <!-- RGPD: Consentimiento (Art. 6.1.a RGPD) -->
+          <div class="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="rgpd"
+              name="rgpd"
+              required
+              class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold"
+            />
+            <label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">
+              {t('restaurante.rgpd_text_part1')}
+              <a href={getRelativeLocaleUrl(lang, 'privacidad')} target="_blank" class="underline hover:text-brand-gold">{t('restaurante.rgpd_privacy_policy')}</a>.
+              {t('restaurante.rgpd_text_part2')}
+            </label>
+          </div>
 
+          <!-- Submit CTA -->
+          <button
+            type="submit"
+            class="w-full px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-200 mt-2"
+          >
+            {t('restaurante.form_submit_button')}
+          </button>
+
+        </form>
+
+        <!-- Phone fallback -->
+        <p class="text-center font-body text-sm text-white/50 mt-6">
+          {t('restaurante.phone_fallback_text')}
+          <a href={`tel:${t('contacto.restaurant_phone')}`} class="text-white/80 hover:text-brand-gold transition-colors duration-200">
+            {t('contacto.restaurant_phone')}
+          </a>
+        </p>
       </div>
 
     </div>
@@ -893,13 +892,13 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
   <!-- Pre-fill form from URL params sent by Beds24 confirmation emails.
        Supported params: fecha (YYYY-MM-DD), personas, nombre, email, telefono
        Example: /restaurante?fecha=2026-07-15&personas=2&nombre=John+Doe&email=john@example.com -->
-  <script is:inline define:vars={{ tastyigniterUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'https://restaurant.portadirta.com' }}>
+  <script is:inline define:vars={{ tastyigniterUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'https://restaurant.portadirta.com', lang }}>
     document.getElementById('restaurant-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       var form = e.target;
       var btn = form.querySelector('button[type="submit"]');
       var originalText = btn.textContent;
-      btn.textContent = 'Enviando…';
+      btn.textContent = translatedStrings.form_sending; // Use translated string
       btn.disabled = true;
 
       try {
@@ -920,10 +919,9 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
         });
         if (!res.ok) {
           var errBody = await res.json().catch(function() { return {}; });
-          throw new Error(errBody.message || 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.');
+          throw new Error(errBody.message || translatedStrings.form_error_msg); // Use translated string
         }
-        document.getElementById('form-wrapper').classList.add('hidden');
-        document.getElementById('form-success').classList.remove('hidden');
+        form.innerHTML = '<div class="text-center py-8"><p class="text-brand-gold font-display text-2xl italic">' + translatedStrings.form_success_msg + '</p></div>'; // Use translated string
       } catch (err) {
         btn.textContent = originalText;
         btn.disabled = false;
@@ -933,9 +931,64 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
           errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
           form.appendChild(errDiv);
         }
-        errDiv.textContent = err.message || 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+        errDiv.textContent = translatedStrings.form_error_msg; // Use translated string
       }
     });
+
+    // Translate optgroup labels in time select
+    const timeSelect = document.getElementById('hora');
+    if (timeSelect) {
+      const optgroups = timeSelect.querySelectorAll('optgroup');
+      optgroups.forEach(group => {
+        if (group.label === 'Mediodía') {
+          group.label = translatedStrings.form_mediodia_label;
+        } else if (group.label === 'Noche') {
+          group.label = translatedStrings.form_noche_label;
+        }
+      });
+    }
+
+    // Helper for accessing translations in inline script
+    // This is a simplified version; a more robust solution would be to use a proper client-side i18n library
+    const getNestedTranslation = (obj, path) => {
+      return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    };
+
+    // Assuming `translations` is available globally from `translations.ts` or passed via define:vars
+    // For now, hardcode the path to translations; a better way would be to pass `t` function
+    // For simplicity, directly access the es translations and manually pass them.
+    // THIS IS A TEMPORARY WORKAROUND, AND SHOULD BE REPLACED WITH A PROPER CLIENT-SIDE I18N APPROACH
+    const allTranslations = {
+      es: {
+        form_sending: 'Enviando...',
+        form_success_msg: '¡Reserva confirmada! Nos pondremos en contacto pronto.',
+        form_error_msg: 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.',
+        form_mediodia_label: 'Mediodía',
+        form_noche_label: 'Noche',
+      },
+      en: {
+        form_sending: 'Sending...',
+        form_success_msg: 'Reservation confirmed! We will contact you soon.',
+        form_error_msg: 'An error occurred. Please try again or call us directly.',
+        form_mediodia_label: 'Lunch',
+        form_noche_label: 'Dinner',
+      },
+      fr: {
+        form_sending: 'Envoi en cours...',
+        form_success_msg: 'Réservation confirmée ! Nous vous contacterons bientôt.',
+        form_error_msg: 'Une erreur est survenue. Veuillez réessayer ou nous appeler directement.',
+        form_mediodia_label: 'Midi',
+        form_noche_label: 'Soir',
+      },
+      de: {
+        form_sending: 'Wird gesendet...',
+        form_success_msg: 'Reservierung bestätigt! Wir werden Sie bald kontaktieren.',
+        form_error_msg: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an.',
+        form_mediodia_label: 'Mittag',
+        form_noche_label: 'Abend',
+      },
+    };
+    const translatedStrings = allTranslations[lang] || allTranslations.es; // Fallback to Spanish
   </script>
 
   <!-- ================================================================
@@ -977,7 +1030,7 @@ const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any)
           </p>
         </div>
 
-        <!-- Right: Map -->
+        <!-- Right: Map placeholder -->
         <div class="flex flex-col gap-6">
           <div>
             <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">

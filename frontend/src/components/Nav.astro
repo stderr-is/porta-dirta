@@ -22,6 +22,11 @@
  *   - Active link state: pass `currentPath` prop and compare.
  *   - Consider replacing checkbox trick with Astro's View Transitions API.
  */
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <div class="nav-root">
@@ -56,28 +61,28 @@
         <!-- ── CENTER: Desktop nav links ────────────────── -->
         <ul class="hidden sm:flex items-center gap-3 lg:gap-8 list-none m-0 p-0">
           <li>
-            <a href="/hotel" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
-              Hotel
+            <a href={getRelativeLocaleUrl(lang, 'hotel')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+              {t('nav.hotel')}
             </a>
           </li>
           <li>
-            <a href="/restaurante" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
-              Restaurante
+            <a href={getRelativeLocaleUrl(lang, 'restaurante')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+              {t('nav.restaurante')}
             </a>
           </li>
           <li>
-            <a href="/eventos" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
-              Eventos
+            <a href={getRelativeLocaleUrl(lang, 'eventos')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+              {t('nav.eventos')}
             </a>
           </li>
           <li>
-            <a href="/experiencias" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
-              Experiencias
+            <a href={getRelativeLocaleUrl(lang, 'experiencias')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+              {t('nav.experiencias')}
             </a>
           </li>
           <li>
-            <a href="/contacto" class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
-              Contacto
+            <a href={getRelativeLocaleUrl(lang, 'contacto')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+              {t('nav.contacto')}
             </a>
           </li>
         </ul>
@@ -88,13 +93,13 @@
           <!-- Language switcher — full inline at lg+ -->
           <!-- Wave 2: replace hrefs with Astro i18n locale paths -->
           <div class="hidden lg:flex items-center gap-2" aria-label="Seleccionar idioma">
-            <a href="/" class="font-body text-xs uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">ES</a>
+            <a href={Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/") || "/"} class={`font-body text-xs uppercase tracking-widest ${!["en","fr","de"].includes(Astro.currentLocale ?? "") ? "font-semibold text-brand-gold" : "text-white"} hover:text-brand-gold transition-colors duration-200`}>ES</a>
             <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-            <a href="/en/" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200">EN</a>
+            <a href={"/en" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "en" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>EN</a>
             <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-            <a href="/fr/" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200">FR</a>
+            <a href={"/fr" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "fr" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>FR</a>
             <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-            <a href="/de/" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200">DE</a>
+            <a href={"/de" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "de" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>DE</a>
           </div>
 
           <!-- Language switcher — compact dropdown at sm–lg -->
@@ -106,16 +111,16 @@
               </svg>
             </summary>
             <div class="absolute right-0 top-full mt-2 bg-brand-blue/95 backdrop-blur-md rounded-lg py-1 border border-white/10 shadow-xl z-[70] min-w-[72px]">
-              <a href="/" class="block px-4 py-2 font-body text-xs uppercase tracking-wide text-white hover:text-brand-gold transition-colors duration-200">ES</a>
-              <a href="/en/" class="block px-4 py-2 font-body text-xs uppercase tracking-wide text-white/60 hover:text-brand-gold transition-colors duration-200">EN</a>
-              <a href="/fr/" class="block px-4 py-2 font-body text-xs uppercase tracking-wide text-white/60 hover:text-brand-gold transition-colors duration-200">FR</a>
-              <a href="/de/" class="block px-4 py-2 font-body text-xs uppercase tracking-wide text-white/60 hover:text-brand-gold transition-colors duration-200">DE</a>
+              <a href={Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/") || "/"} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${!["en","fr","de"].includes(Astro.currentLocale ?? "") ? "font-semibold text-brand-gold" : "text-white"} hover:text-brand-gold transition-colors duration-200`}>ES</a>
+              <a href={"/en" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${Astro.currentLocale === "en" ? "font-semibold text-brand-gold" : "text-white/60"} hover:text-brand-gold transition-colors duration-200`}>EN</a>
+              <a href={"/fr" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${Astro.currentLocale === "fr" ? "font-semibold text-brand-gold" : "text-white/60"} hover:text-brand-gold transition-colors duration-200`}>FR</a>
+              <a href={"/de" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`block px-4 py-2 font-body text-xs uppercase tracking-wide ${Astro.currentLocale === "de" ? "font-semibold text-brand-gold" : "text-white/60"} hover:text-brand-gold transition-colors duration-200`}>DE</a>
             </div>
           </details>
 
           <!-- CTA — tablet and desktop -->
           <a
-            href="/reservar"
+            href={getRelativeLocaleUrl(lang, 'reservar')}
             class="
               hidden sm:inline-flex items-center
               px-3 lg:px-5 py-2 rounded-sm
@@ -124,7 +129,7 @@
               transition-colors duration-200
             "
           >
-            Reservar
+            {t('nav.reservar')}
           </a>
 
           <!-- Hamburger label — small mobile only -->
@@ -152,36 +157,36 @@
     >
       <ul class="list-none m-0 p-0 flex flex-col py-4">
         <li>
-          <a href="/hotel" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">Hotel</a>
+          <a href={getRelativeLocaleUrl(lang, 'hotel')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.hotel')}</a>
         </li>
         <li>
-          <a href="/restaurante" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">Restaurante</a>
+          <a href={getRelativeLocaleUrl(lang, 'restaurante')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.restaurante')}</a>
         </li>
         <li>
-          <a href="/eventos" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">Eventos</a>
+          <a href={getRelativeLocaleUrl(lang, 'eventos')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.eventos')}</a>
         </li>
         <li>
-          <a href="/experiencias" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">Experiencias</a>
+          <a href={getRelativeLocaleUrl(lang, 'experiencias')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.experiencias')}</a>
         </li>
         <li>
-          <a href="/contacto" class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">Contacto</a>
+          <a href={getRelativeLocaleUrl(lang, 'contacto')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.contacto')}</a>
         </li>
 
         <!-- Language switcher — mobile -->
         <li class="px-6 pt-4 pb-2 flex gap-3 border-t border-white/10 mt-2" aria-label="Seleccionar idioma">
-          <a href="/" class="font-body text-xs uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">ES</a>
+          <a href={Astro.url.pathname.replace(/^\/(en|fr|de)(\/|$)/, "/") || "/"} class={`font-body text-xs uppercase tracking-widest ${!["en","fr","de"].includes(Astro.currentLocale ?? "") ? "font-semibold text-brand-gold" : "text-white"} hover:text-brand-gold transition-colors duration-200`}>ES</a>
           <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-          <a href="/en/" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200">EN</a>
+          <a href={"/en" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "en" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>EN</a>
           <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-          <a href="/fr/" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200">FR</a>
+          <a href={"/fr" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "fr" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>FR</a>
           <span class="text-white/30 text-xs" aria-hidden="true">|</span>
-          <a href="/de/" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200">DE</a>
+          <a href={"/de" + (Astro.url.pathname.replace(/^\/(en|fr|de)/, "") || "/")} class={`font-body text-xs uppercase tracking-widest ${Astro.currentLocale === "de" ? "font-semibold text-brand-gold" : "text-white/70"} hover:text-brand-gold transition-colors duration-200`}>DE</a>
         </li>
 
         <!-- CTA — mobile -->
         <li class="px-6 pt-2 pb-4">
           <a
-            href="/reservar"
+            href={getRelativeLocaleUrl(lang, 'reservar')}
             class="
               block w-full text-center
               px-5 py-3 rounded-sm
@@ -190,7 +195,7 @@
               transition-colors duration-200
             "
           >
-            Reservar
+            {t('nav.reservar')}
           </a>
         </li>
       </ul>

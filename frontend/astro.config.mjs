@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import node from '@astrojs/node';
+import sitemap from '@astrojs/sitemap';
 
 // BUILD_TARGET=node → SSR for Hostinger VPS (output: 'server' + node adapter)
 // default           → SSG for Cloudflare Pages (output: 'static', no adapter)
@@ -19,6 +20,8 @@ export default defineConfig({
   build: {
     format: 'file',
   },
+
+  integrations: [sitemap()],
 
   ...(isNode && {
     adapter: node({ mode: 'standalone' }),
