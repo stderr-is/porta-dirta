@@ -88,12 +88,12 @@ function fmtFecha(d: Date) {
     <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
 
       <!-- Section label -->
-      <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">
+      <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium" data-i18n="eventos.hero_label">
         EVENTOS &amp; CELEBRACIONES
       </p>
 
       <!-- Main heading -->
-      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight" data-i18n="eventos.hero_heading">
         Momentos que duran para siempre
       </h1>
 
@@ -102,13 +102,13 @@ function fmtFecha(d: Date) {
 
       <!-- Badge pills -->
       <div class="flex flex-wrap justify-center gap-3 mt-2">
-        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full" data-i18n="eventos.hero_pill_bodas">
           Bodas
         </span>
-        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full" data-i18n="eventos.hero_pill_comuniones">
           Comuniones
         </span>
-        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full" data-i18n="eventos.hero_pill_cumpleanos">
           Cumpleaños
         </span>
       </div>
@@ -118,6 +118,7 @@ function fmtFecha(d: Date) {
         href="#espacio"
         class="mt-6 inline-flex items-center gap-2 font-body text-white/70 text-xs uppercase tracking-widest hover:text-white transition-colors duration-300"
         aria-label="Descubrir el espacio"
+        data-i18n="eventos.hero_cta"
       >
         Descubrir el espacio
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -148,12 +149,12 @@ function fmtFecha(d: Date) {
         <div class="flex flex-col gap-6">
 
           <!-- Label -->
-          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium" data-i18n="eventos.venue_label">
             EL ESPACIO
           </p>
 
           <!-- Heading -->
-          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
+          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight" data-i18n="eventos.venue_heading">
             Un entorno único
           </h2>
 
@@ -215,8 +216,8 @@ function fmtFecha(d: Date) {
               <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
-          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Capacidad</p>
-          <p class="font-display text-2xl text-brand-blue font-light">Hasta 120 invitados</p>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium" data-i18n="eventos.feature_capacity_label">Capacidad</p>
+          <p class="font-display text-2xl text-brand-blue font-light" data-i18n="eventos.feature_capacity_value">Hasta 120 invitados</p>
         </div>
 
         <!-- Outdoor -->
@@ -227,8 +228,8 @@ function fmtFecha(d: Date) {
               <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
           </div>
-          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Exterior</p>
-          <p class="font-display text-2xl text-brand-blue font-light">Jardín y terraza</p>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium" data-i18n="eventos.feature_outdoor_label">Exterior</p>
+          <p class="font-display text-2xl text-brand-blue font-light" data-i18n="eventos.feature_outdoor_value">Jardín y terraza</p>
         </div>
 
         <!-- Sports -->
@@ -240,8 +241,8 @@ function fmtFecha(d: Date) {
               <line x1="2" y1="12" x2="22" y2="12"/>
             </svg>
           </div>
-          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Deportes</p>
-          <p class="font-display text-2xl text-brand-blue font-light">Pista de tenis</p>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium" data-i18n="eventos.feature_sports_label">Deportes</p>
+          <p class="font-display text-2xl text-brand-blue font-light" data-i18n="eventos.feature_sports_value">Pista de tenis</p>
         </div>
 
         <!-- Catering -->
@@ -255,8 +256,8 @@ function fmtFecha(d: Date) {
               <line x1="14" y1="1" x2="14" y2="4"/>
             </svg>
           </div>
-          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium">Gastronomía</p>
-          <p class="font-display text-2xl text-brand-blue font-light">Restaurante propio</p>
+          <p class="font-body text-xs uppercase tracking-widest text-brand-stone font-medium" data-i18n="eventos.feature_catering_label">Gastronomía</p>
+          <p class="font-display text-2xl text-brand-blue font-light" data-i18n="eventos.feature_catering_value">Restaurante propio</p>
         </div>
 
       </div>
@@ -277,10 +278,10 @@ function fmtFecha(d: Date) {
 
       <!-- Section heading -->
       <div class="text-center mb-16">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4" data-i18n="eventos.types_label">
           CELEBRACIONES
         </p>
-        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white">
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white" data-i18n="eventos.types_heading">
           ¿Qué estás celebrando?
         </h2>
       </div>
@@ -306,7 +307,7 @@ function fmtFecha(d: Date) {
 
           <!-- Content -->
           <div class="flex flex-col gap-4 p-7 flex-1">
-            <h3 class="font-display text-3xl text-white font-light">Bodas</h3>
+            <h3 class="font-display text-3xl text-white font-light" data-i18n="eventos.type_bodas_heading">Bodas</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">
               Tu boda en Porta D'irta es mucho más que una ceremonia: es el inicio de una historia
               inolvidable. Nuestros paquetes nupciales incluyen decoración personalizada, menú de
@@ -343,7 +344,7 @@ function fmtFecha(d: Date) {
 
           <!-- Content -->
           <div class="flex flex-col gap-4 p-7 flex-1">
-            <h3 class="font-display text-3xl text-white font-light">Comuniones</h3>
+            <h3 class="font-display text-3xl text-white font-light" data-i18n="eventos.type_comuniones_heading">Comuniones</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">
               Celebra este momento único rodeado de los seres más queridos en un entorno mágico
               frente al Mediterráneo. Ofrecemos menús especialmente diseñados para todas las
@@ -380,7 +381,7 @@ function fmtFecha(d: Date) {
 
           <!-- Content -->
           <div class="flex flex-col gap-4 p-7 flex-1">
-            <h3 class="font-display text-3xl text-white font-light">Eventos Privados</h3>
+            <h3 class="font-display text-3xl text-white font-light" data-i18n="eventos.type_private_heading">Eventos Privados</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">
               Desde cumpleaños íntimos hasta cenas de empresa o retiros corporativos, nuestra
               villa se adapta a cualquier tipo de evento privado. Disponemos de espacios flexibles
@@ -418,10 +419,10 @@ function fmtFecha(d: Date) {
       <div class="max-w-7xl mx-auto">
 
         <div class="text-center mb-16">
-          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4" data-i18n="eventos.upcoming_label">
             AGENDA
           </p>
-          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">
+          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue" data-i18n="eventos.upcoming_heading">
             Próximos Eventos en Porta D'irta
           </h2>
         </div>
@@ -460,7 +461,7 @@ function fmtFecha(d: Date) {
                       <span class="font-body text-sm text-brand-stone font-normal"> / persona</span>
                     </span>
                   ) : (
-                    <span class="font-body text-sm text-brand-stone italic">Entrada libre</span>
+                    <span class="font-body text-sm text-brand-stone italic" data-i18n="eventos.upcoming_free">Entrada libre</span>
                   )}
                   {ev.data.ticketsUrl ? (
                     <a
@@ -470,7 +471,7 @@ function fmtFecha(d: Date) {
                       class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
                       aria-label={`Comprar entradas para ${ev.data.titulo}`}
                     >
-                      Comprar Entradas
+                      <span data-i18n="eventos.upcoming_buy_tickets">Comprar Entradas</span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <line x1="5" y1="12" x2="19" y2="12"/>
                         <polyline points="12 5 19 12 12 19"/>
@@ -481,7 +482,7 @@ function fmtFecha(d: Date) {
                       href="#contacto"
                       class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300"
                     >
-                      Más información
+                      <span data-i18n="eventos.upcoming_more_info">Más información</span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <line x1="5" y1="12" x2="19" y2="12"/>
                         <polyline points="12 5 19 12 12 19"/>
@@ -548,13 +549,13 @@ function fmtFecha(d: Date) {
 
       <!-- Section heading -->
       <div class="text-center mb-12">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4" data-i18n="eventos.form_label">
           CONTACTO
         </p>
-        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight" data-i18n="eventos.form_heading">
           Cuéntanos tu evento
         </h2>
-        <p class="font-body text-white/60 text-base mt-4 leading-relaxed">
+        <p class="font-body text-white/60 text-base mt-4 leading-relaxed" data-i18n="eventos.form_body">
           Rellena el formulario y nuestro equipo te contactará para diseñar juntos la celebración perfecta.
         </p>
       </div>
@@ -575,7 +576,7 @@ function fmtFecha(d: Date) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
-              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_name_label">
                 Nombre *
               </label>
               <input
@@ -589,7 +590,7 @@ function fmtFecha(d: Date) {
             </div>
 
             <div class="flex flex-col gap-2">
-              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_email_label">
                 Email *
               </label>
               <input
@@ -608,7 +609,7 @@ function fmtFecha(d: Date) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
-              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_phone_label">
                 Teléfono
               </label>
               <input
@@ -621,7 +622,7 @@ function fmtFecha(d: Date) {
             </div>
 
             <div class="flex flex-col gap-2">
-              <label for="tipo-evento" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="tipo-evento" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_type_label">
                 Tipo de evento *
               </label>
               <select
@@ -630,12 +631,12 @@ function fmtFecha(d: Date) {
                 required
                 class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 appearance-none"
               >
-                <option value="" disabled selected class="text-brand-blue">Selecciona una opción</option>
-                <option value="boda" class="text-brand-blue">Boda</option>
-                <option value="comunion" class="text-brand-blue">Comunión</option>
-                <option value="cumpleanos" class="text-brand-blue">Cumpleaños</option>
-                <option value="corporativo" class="text-brand-blue">Evento corporativo</option>
-                <option value="otro" class="text-brand-blue">Otro</option>
+                <option value="" disabled selected class="text-brand-blue" data-i18n="eventos.form_type_select">Selecciona una opción</option>
+                <option value="boda" class="text-brand-blue" data-i18n="eventos.form_type_boda">Boda</option>
+                <option value="comunion" class="text-brand-blue" data-i18n="eventos.form_type_comunion">Comunión</option>
+                <option value="cumpleanos" class="text-brand-blue" data-i18n="eventos.form_type_cumpleanos">Cumpleaños</option>
+                <option value="corporativo" class="text-brand-blue" data-i18n="eventos.form_type_corporativo">Evento corporativo</option>
+                <option value="otro" class="text-brand-blue" data-i18n="eventos.form_type_otro">Otro</option>
               </select>
             </div>
 
@@ -645,7 +646,7 @@ function fmtFecha(d: Date) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
-              <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="fecha" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_date_label">
                 Fecha aproximada
               </label>
               <input
@@ -657,7 +658,7 @@ function fmtFecha(d: Date) {
             </div>
 
             <div class="flex flex-col gap-2">
-              <label for="invitados" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="invitados" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_guests_label">
                 Número de invitados
               </label>
               <input
@@ -675,7 +676,7 @@ function fmtFecha(d: Date) {
 
           <!-- Mensaje -->
           <div class="flex flex-col gap-2">
-            <label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+            <label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_message_label">
               Mensaje
             </label>
             <textarea
@@ -709,11 +710,11 @@ function fmtFecha(d: Date) {
               type="submit"
               class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto"
             >
-              Enviar Consulta
+              <span data-i18n="eventos.form_submit">Enviar Consulta</span>
             </button>
 
             <!-- Reassurance text -->
-            <p class="font-body text-white/50 text-xs text-center">
+            <p class="font-body text-white/50 text-xs text-center" data-i18n="eventos.form_response_time">
               Respondemos en menos de 48 horas &middot; info@portadirta.com
             </p>
           </div>
@@ -736,7 +737,7 @@ function fmtFecha(d: Date) {
   >
     <div class="max-w-5xl mx-auto">
 
-      <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12">
+      <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12" data-i18n="eventos.crosssell_label">
         DESCUBRE MÁS
       </p>
 
@@ -748,7 +749,7 @@ function fmtFecha(d: Date) {
           class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
           aria-label="Ver El Hotel"
         >
-          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300" data-i18n="eventos.crosssell_hotel">
             El Hotel
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
@@ -763,7 +764,7 @@ function fmtFecha(d: Date) {
           class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
           aria-label="Ver El Restaurante"
         >
-          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300" data-i18n="eventos.crosssell_restaurante">
             El Restaurante
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
@@ -778,7 +779,7 @@ function fmtFecha(d: Date) {
           class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
           aria-label="Ver Experiencias"
         >
-          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300" data-i18n="eventos.crosssell_experiencias">
             Experiencias
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">

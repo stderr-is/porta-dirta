@@ -69,7 +69,7 @@ const t = useTranslations();
         </svg>
         <span id="summary-guests-text"></span>
       </span>
-      <a href="/hotel#reservar" class="text-brand-gold/80 hover:text-brand-gold underline text-xs transition-colors">Modificar</a>
+      <a href="/hotel#reservar" class="text-brand-gold/80 hover:text-brand-gold underline text-xs transition-colors" data-i18n="reservar.modify_button">Modificar</a>
     </div>
 
     <p data-i18n="reservar.booking_guarantee" class="font-body text-white/60 text-sm max-w-md mx-auto">
@@ -84,7 +84,7 @@ const t = useTranslations();
     <!-- Loading state shown until iframe fires load event -->
     <div id="booking-loader" class="flex flex-col items-center justify-center py-24 gap-4">
       <div class="w-8 h-8 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
-      <p class="font-body text-brand-stone text-sm">Cargando disponibilidad…</p>
+      <p class="font-body text-brand-stone text-sm" data-i18n="reservar.loading_text">Cargando disponibilidad…</p>
     </div>
 
     <iframe

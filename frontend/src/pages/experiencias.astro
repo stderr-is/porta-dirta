@@ -198,12 +198,12 @@ const livePackages: HiPackage[] = hiEvents
     <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
 
       <!-- Section label -->
-      <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">
+      <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium" data-i18n="experiencias.hero_label">
         EXPERIENCIAS
       </p>
 
       <!-- Main heading -->
-      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight" data-i18n="experiencias.hero_heading">
         Descubre la Costa del Azahar
       </h1>
 
@@ -211,22 +211,22 @@ const livePackages: HiPackage[] = hiEvents
       <GarlandDivider light />
 
       <!-- Subtitle -->
-      <p class="font-body text-white/80 text-lg leading-relaxed max-w-xl">
+      <p class="font-body text-white/80 text-lg leading-relaxed max-w-xl" data-i18n="experiencias.hero_subtitle">
         Excursiones, gastronomía y aventuras diseñadas para nuestros huéspedes
       </p>
 
       <!-- Badge pills -->
       <div class="flex flex-wrap justify-center gap-3 mt-2">
-        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full" data-i18n="experiencias.hero_pill_naturaleza">
           Naturaleza
         </span>
-        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full" data-i18n="experiencias.hero_pill_mar">
           Mar
         </span>
-        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full" data-i18n="experiencias.hero_pill_cultura">
           Cultura
         </span>
-        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
+        <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full" data-i18n="experiencias.hero_pill_gastronomia">
           Gastronomía
         </span>
       </div>
@@ -236,6 +236,7 @@ const livePackages: HiPackage[] = hiEvents
         href="#experiencias"
         class="mt-6 inline-flex items-center gap-2 font-body text-white/70 text-xs uppercase tracking-widest hover:text-white transition-colors duration-300"
         aria-label="Descubrir experiencias"
+        data-i18n="experiencias.hero_cta"
       >
         Descubrir experiencias
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -266,12 +267,12 @@ const livePackages: HiPackage[] = hiEvents
         <div class="flex flex-col gap-6">
 
           <!-- Label -->
-          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium" data-i18n="experiencias.intro_label">
             PARA NUESTROS HUÉSPEDES
           </p>
 
           <!-- Heading -->
-          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
+          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight" data-i18n="experiencias.intro_heading">
             Todo lo que Peñíscola tiene que ofrecerte
           </h2>
 
@@ -370,14 +371,14 @@ const livePackages: HiPackage[] = hiEvents
 
       <!-- Section header -->
       <div class="flex flex-col items-center gap-4 text-center mb-16">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium" data-i18n="experiencias.packages_label">
           RESERVA TU EXPERIENCIA
         </p>
-        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
+        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight" data-i18n="experiencias.packages_heading">
           Nuestros Paquetes
         </h2>
         <GarlandDivider />
-        <p class="font-body text-brand-stone text-lg leading-relaxed max-w-2xl">
+        <p class="font-body text-brand-stone text-lg leading-relaxed max-w-2xl" data-i18n="experiencias.packages_body">
           Plazas limitadas. Reserva con antelación para garantizar tu experiencia.
         </p>
       </div>
@@ -388,7 +389,7 @@ const livePackages: HiPackage[] = hiEvents
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-brand-gold/60" aria-hidden="true">
             <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
           </svg>
-          <p class="font-display italic text-2xl text-brand-blue/60">
+          <p class="font-display italic text-2xl text-brand-blue/60" data-i18n="experiencias.packages_empty">
             Próximamente nuevas experiencias
           </p>
           <p class="font-body text-brand-stone/70 text-base max-w-md">
@@ -520,12 +521,12 @@ const livePackages: HiPackage[] = hiEvents
       <div class="flex flex-col gap-8 max-w-lg">
 
         <!-- Label -->
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium" data-i18n="experiencias.sierra_label">
           NATURALEZA
         </p>
 
         <!-- Heading -->
-        <h2 class="font-display italic text-4xl sm:text-5xl md:text-6xl text-white leading-tight">
+        <h2 class="font-display italic text-4xl sm:text-5xl md:text-6xl text-white leading-tight" data-i18n="experiencias.sierra_heading">
           Sierra de Irta
         </h2>
 
@@ -552,28 +553,28 @@ const livePackages: HiPackage[] = hiEvents
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span class="font-body text-white text-base">Senderismo guiado</span>
+            <span class="font-body text-white text-base" data-i18n="experiencias.sierra_act1">Senderismo guiado</span>
           </li>
 
           <li class="flex items-center gap-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span class="font-body text-white text-base">Rutas en bicicleta</span>
+            <span class="font-body text-white text-base" data-i18n="experiencias.sierra_act2">Rutas en bicicleta</span>
           </li>
 
           <li class="flex items-center gap-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span class="font-body text-white text-base">Observación de aves</span>
+            <span class="font-body text-white text-base" data-i18n="experiencias.sierra_act3">Observación de aves</span>
           </li>
 
           <li class="flex items-center gap-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span class="font-body text-white text-base">Fotografía de naturaleza</span>
+            <span class="font-body text-white text-base" data-i18n="experiencias.sierra_act4">Fotografía de naturaleza</span>
           </li>
 
         </ul>
@@ -584,6 +585,7 @@ const livePackages: HiPackage[] = hiEvents
             href="#contacto"
             data-exp="sierra-irta"
             class="exp-cta inline-flex items-center justify-center px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg"
+            data-i18n="experiencias.sierra_cta"
           >
             Reservar Excursión
           </a>
@@ -610,10 +612,10 @@ const livePackages: HiPackage[] = hiEvents
 
       <!-- Section heading -->
       <div class="text-center mb-16">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4" data-i18n="experiencias.sea_label">
           MAR &amp; PLAYA
         </p>
-        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">
+        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue" data-i18n="experiencias.sea_heading">
           El Mediterráneo a tu puerta
         </h2>
       </div>
@@ -775,10 +777,10 @@ const livePackages: HiPackage[] = hiEvents
 
       <!-- Section heading -->
       <div class="text-center mb-16">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4" data-i18n="experiencias.cultura_label">
           CULTURA &amp; GASTRONOMÍA
         </p>
-        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white">
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white" data-i18n="experiencias.cultura_heading">
           Peñíscola, historia y sabor
         </h2>
       </div>
@@ -809,7 +811,7 @@ const livePackages: HiPackage[] = hiEvents
           </div>
 
           <div class="flex flex-col gap-4 p-8 flex-1">
-            <h3 class="font-display text-3xl text-white font-light">Peñíscola Histórica</h3>
+            <h3 class="font-display text-3xl text-white font-light" data-i18n="experiencias.cultura_peniscola_heading">Peñíscola Histórica</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">
               Descubre los secretos del castillo templario donde el Papa Luna escribió sus
               bulas, y pasea por las callejuelas empedradas de la ciudad amurallada. Nuestros
@@ -821,6 +823,7 @@ const livePackages: HiPackage[] = hiEvents
                 href="#contacto"
                 data-exp="cultura-historia"
                 class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
+                data-i18n="experiencias.cultura_peniscola_cta"
               >
                 Explorar
               </a>
@@ -852,7 +855,7 @@ const livePackages: HiPackage[] = hiEvents
           </div>
 
           <div class="flex flex-col gap-4 p-8 flex-1">
-            <h3 class="font-display text-3xl text-white font-light">Cata de Vinos &amp; Gastronomía</h3>
+            <h3 class="font-display text-3xl text-white font-light" data-i18n="experiencias.cultura_vinos_heading">Cata de Vinos &amp; Gastronomía</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">
               Cata guiada de cuatro vinos D.O. Valencia con maridaje de productos locales.
               El sumiller del restaurante os guiará por la historia, aromas y sabores de la
@@ -863,6 +866,7 @@ const livePackages: HiPackage[] = hiEvents
                 href="#contacto"
                 data-exp="gastronomia"
                 class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
+                data-i18n="experiencias.cultura_vinos_cta"
               >
                 Explorar
               </a>
@@ -889,16 +893,16 @@ const livePackages: HiPackage[] = hiEvents
 
       <!-- Section heading -->
       <div class="text-center mb-6">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4" data-i18n="experiencias.partners_label">
           COLABORADORES
         </p>
-        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">
+        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue" data-i18n="experiencias.partners_heading">
           Nuestros colaboradores locales
         </h2>
       </div>
 
       <!-- Subtitle -->
-      <p class="font-body text-brand-stone text-base text-center leading-relaxed max-w-2xl mx-auto mb-16">
+      <p class="font-body text-brand-stone text-base text-center leading-relaxed max-w-2xl mx-auto mb-16" data-i18n="experiencias.partners_subtitle">
         Trabajamos con los mejores proveedores de la zona para ofrecerte experiencias auténticas
       </p>
 
@@ -954,13 +958,13 @@ const livePackages: HiPackage[] = hiEvents
 
       <!-- Section heading -->
       <div class="text-center mb-12">
-        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4" data-i18n="experiencias.form_label">
           PLANIFICA TU ESTANCIA
         </p>
-        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight" data-i18n="experiencias.form_heading">
           Diseña tu experiencia perfecta
         </h2>
-        <p class="font-body text-white/60 text-base mt-4 leading-relaxed">
+        <p class="font-body text-white/60 text-base mt-4 leading-relaxed" data-i18n="experiencias.form_body">
           Cuéntanos qué te apetece y lo organizamos todo por ti
         </p>
       </div>
@@ -981,7 +985,7 @@ const livePackages: HiPackage[] = hiEvents
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
-              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="experiencias.form_name_label">
                 Nombre *
               </label>
               <input
@@ -995,7 +999,7 @@ const livePackages: HiPackage[] = hiEvents
             </div>
 
             <div class="flex flex-col gap-2">
-              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="experiencias.form_email_label">
                 Email *
               </label>
               <input
@@ -1014,7 +1018,7 @@ const livePackages: HiPackage[] = hiEvents
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
-              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="experiencias.form_phone_label">
                 Teléfono
               </label>
               <input
@@ -1027,7 +1031,7 @@ const livePackages: HiPackage[] = hiEvents
             </div>
 
             <div class="flex flex-col gap-2">
-              <label for="tipo-experiencia" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="tipo-experiencia" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="experiencias.form_type_label">
                 Tipo de experiencia *
               </label>
               <select
@@ -1036,12 +1040,12 @@ const livePackages: HiPackage[] = hiEvents
                 required
                 class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 appearance-none"
               >
-                <option value="" disabled selected class="text-brand-blue">Selecciona una opción</option>
-                <option value="sierra-irta" class="text-brand-blue">Sierra de Irta</option>
-                <option value="actividades-acuaticas" class="text-brand-blue">Actividades Acuáticas</option>
-                <option value="cultura-historia" class="text-brand-blue">Cultura &amp; Historia</option>
-                <option value="gastronomia" class="text-brand-blue">Gastronomía</option>
-                <option value="combinacion" class="text-brand-blue">Combinación personalizada</option>
+                <option value="" disabled selected class="text-brand-blue" data-i18n="experiencias.form_type_select">Selecciona una opción</option>
+                <option value="sierra-irta" class="text-brand-blue" data-i18n="experiencias.form_type_sierra">Sierra de Irta</option>
+                <option value="actividades-acuaticas" class="text-brand-blue" data-i18n="experiencias.form_type_acuaticas">Actividades Acuáticas</option>
+                <option value="cultura-historia" class="text-brand-blue" data-i18n="experiencias.form_type_cultura">Cultura &amp; Historia</option>
+                <option value="gastronomia" class="text-brand-blue" data-i18n="experiencias.form_type_gastronomia">Gastronomía</option>
+                <option value="combinacion" class="text-brand-blue" data-i18n="experiencias.form_type_combinacion">Combinación personalizada</option>
               </select>
             </div>
 
@@ -1051,7 +1055,7 @@ const livePackages: HiPackage[] = hiEvents
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
-              <label for="fecha-llegada" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="fecha-llegada" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="experiencias.form_date_label">
                 Fecha de llegada
               </label>
               <input
@@ -1063,7 +1067,7 @@ const livePackages: HiPackage[] = hiEvents
             </div>
 
             <div class="flex flex-col gap-2">
-              <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+              <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="experiencias.form_guests_label">
                 Nº personas
               </label>
               <input
@@ -1081,7 +1085,7 @@ const livePackages: HiPackage[] = hiEvents
 
           <!-- Mensaje especial -->
           <div class="flex flex-col gap-2">
-            <label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
+            <label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="experiencias.form_message_label">
               Mensaje especial
             </label>
             <textarea
@@ -1115,11 +1119,11 @@ const livePackages: HiPackage[] = hiEvents
               type="submit"
               class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto"
             >
-              Planificar mi Experiencia
+              <span data-i18n="experiencias.form_submit">Planificar mi Experiencia</span>
             </button>
 
             <!-- Reassurance text -->
-            <p class="font-body text-white/50 text-xs text-center">
+            <p class="font-body text-white/50 text-xs text-center" data-i18n="experiencias.form_response_time">
               Incluido en estancias de 3 noches o más &middot; Resto bajo reserva previa
             </p>
           </div>
@@ -1142,7 +1146,7 @@ const livePackages: HiPackage[] = hiEvents
   >
     <div class="max-w-5xl mx-auto">
 
-      <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12">
+      <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12" data-i18n="experiencias.crosssell_label">
         DESCUBRE MÁS
       </p>
 
@@ -1154,7 +1158,7 @@ const livePackages: HiPackage[] = hiEvents
           class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
           aria-label="Ver El Hotel"
         >
-          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300" data-i18n="experiencias.crosssell_hotel">
             El Hotel →
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
@@ -1169,7 +1173,7 @@ const livePackages: HiPackage[] = hiEvents
           class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
           aria-label="Ver El Restaurante"
         >
-          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300" data-i18n="experiencias.crosssell_restaurante">
             El Restaurante →
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
@@ -1184,7 +1188,7 @@ const livePackages: HiPackage[] = hiEvents
           class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300"
           aria-label="Ver Eventos y Celebraciones"
         >
-          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
+          <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300" data-i18n="experiencias.crosssell_eventos">
             Eventos &amp; Celebraciones →
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
