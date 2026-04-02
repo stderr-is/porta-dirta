@@ -4,55 +4,181 @@
     {
       "name": "Aperitivos & Vermuts",
       "items": [
-        { "name": "Vermut Casero",  "description": "", "price": 3.70, "unit": "copa" },
-        { "name": "Martini Blanco", "description": "", "price": 3.20, "unit": "copa" },
-        { "name": "Martini Rojo",   "description": "", "price": 3.20, "unit": "copa" }
+        {
+          "name": "Vermut Casero",
+          "description": "",
+          "price": 3.7,
+          "unit": "copa"
+        },
+        {
+          "name": "Martini Blanco",
+          "description": "",
+          "price": 3.2,
+          "unit": "copa"
+        },
+        {
+          "name": "Martini Rojo",
+          "description": "",
+          "price": 3.2,
+          "unit": "copa"
+        }
       ]
     },
     {
       "name": "Cervezas",
       "items": [
-        { "name": "Caña Estrella Galicia",   "description": "",      "price": 2.90, "unit": null },
-        { "name": "Tercio Estrella Galicia", "description": "33 cl", "price": 3.50, "unit": null },
-        { "name": "Pinta Estrella Galicia",  "description": "",      "price": 5.00, "unit": null }
+        {
+          "name": "Caña Estrella Galicia",
+          "description": "",
+          "price": 2.9,
+          "unit": null
+        },
+        {
+          "name": "Tercio Estrella Galicia",
+          "description": "33 cl",
+          "price": 3.5,
+          "unit": null
+        },
+        {
+          "name": "Pinta Estrella Galicia",
+          "description": "",
+          "price": 5.0,
+          "unit": null
+        }
       ]
     },
     {
       "name": "Copas & Combinados",
       "items": [
-        { "name": "Tinto del Verano", "description": "",             "price": 4.50, "unit": null },
-        { "name": "Sangría",          "description": "",             "price": 4.50, "unit": null },
-        { "name": "Copa de vino",     "description": "Tinto/Blanco", "price": 3.20, "unit": "copa" }
+        {
+          "name": "Tinto del Verano",
+          "description": "",
+          "price": 4.5,
+          "unit": null
+        },
+        {
+          "name": "Sangría",
+          "description": "",
+          "price": 4.5,
+          "unit": null
+        },
+        {
+          "name": "Copa de vino",
+          "description": "Tinto/Blanco",
+          "price": 3.2,
+          "unit": "copa"
+        }
       ]
     },
     {
       "name": "Refrescos & Sin Alcohol",
       "items": [
-        { "name": "Agua",     "description": "Con o sin gas", "price": 2.50, "unit": null },
-        { "name": "Refresco", "description": "",              "price": 3.50, "unit": null },
-        { "name": "Zumo",     "description": "",              "price": 2.50, "unit": null }
+        {
+          "name": "Agua",
+          "description": "Con o sin gas",
+          "price": 2.5,
+          "unit": null
+        },
+        {
+          "name": "Refresco",
+          "description": "",
+          "price": 3.5,
+          "unit": null
+        },
+        {
+          "name": "Zumo",
+          "description": "",
+          "price": 2.5,
+          "unit": null
+        }
       ]
     },
     {
       "name": "Bodega",
       "items": [
-        { "name": "Gorgorito",               "description": "Ribera del Duero · Tinto",  "price": 14.00, "unit": "botella" },
-        { "name": "El Circo Chardonnay",     "description": "Blanco",                    "price": 16.00, "unit": "botella" },
-        { "name": "Conde Valdemar · Tinto",  "description": "Rioja",                     "price": 18.50, "unit": "botella" },
-        { "name": "Conde Valdemar · Rosado", "description": "Rioja",                     "price": 18.50, "unit": "botella" },
-        { "name": "Conde Valdemar · Blanco", "description": "Rioja",                     "price": 19.50, "unit": "botella" }
+        {
+          "name": "Gorgorito",
+          "description": "Ribera del Duero · Tinto",
+          "price": 14.0,
+          "unit": "botella"
+        },
+        {
+          "name": "El Circo Chardonnay",
+          "description": "Blanco",
+          "price": 16.0,
+          "unit": "botella"
+        },
+        {
+          "name": "Conde Valdemar · Tinto",
+          "description": "Rioja",
+          "price": 18.5,
+          "unit": "botella"
+        },
+        {
+          "name": "Conde Valdemar · Rosado",
+          "description": "Rioja",
+          "price": 18.5,
+          "unit": "botella"
+        },
+        {
+          "name": "Conde Valdemar · Blanco",
+          "description": "Rioja",
+          "price": 19.5,
+          "unit": "botella"
+        }
       ]
     },
     {
       "name": "Coctelería",
       "items": [
-        { "name": "Mojito Cubano y de Sabores", "description": "",              "price": 9.00,  "unit": null },
-        { "name": "Mojito Sin Alcohol",         "description": "",              "price": 7.50,  "unit": null },
-        { "name": "Piña Colada",               "description": "",              "price": 9.00,  "unit": null },
-        { "name": "Spritz",                    "description": "",              "price": 7.50,  "unit": null },
-        { "name": "Sangría para 2",            "description": "",              "price": 16.00, "unit": null },
-        { "name": "Agua d'Irta",               "description": "Para 2 personas", "price": 18.00, "unit": null }
+        {
+          "name": "Mojito Cubano y de Sabores",
+          "description": "",
+          "price": 9.0,
+          "unit": null
+        },
+        {
+          "name": "Mojito Sin Alcohol",
+          "description": "",
+          "price": 7.5,
+          "unit": null
+        },
+        {
+          "name": "Piña Colada",
+          "description": "",
+          "price": 9.0,
+          "unit": null
+        },
+        {
+          "name": "Spritz",
+          "description": "",
+          "price": 7.5,
+          "unit": null
+        },
+        {
+          "name": "Sangría para 2",
+          "description": "",
+          "price": 16.0,
+          "unit": null
+        },
+        {
+          "name": "Agua d'Irta",
+          "description": "Para 2 personas",
+          "price": 18.0,
+          "unit": null
+        }
       ]
     }
-  ]
+  ],
+  "translations": {
+    "en": {
+      "sections": []
+    },
+    "fr": {
+      "sections": []
+    },
+    "de": {
+      "sections": []
+    }
+  }
 }

@@ -6,11 +6,14 @@ import fs from 'node:fs';
 import Layout from '../../layouts/Layout.astro';
 import GarlandDivider from '../../components/GarlandDivider.astro';
 import bebidasFallback from '../../data/bebidas.json';
-export const prerender = true;
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'de' } }];
 }
 const { lang } = Astro.params;
+const langParam = lang as string;
+if (!langParam || !['en', 'fr', 'de'].includes(langParam)) {
+  return new Response(null, { status: 404 });
+}
 const ui = {
   en: {
     title: 'Drinks \u2014 Restaurant',
@@ -46,6 +49,9 @@ const menuDataPath = process.env.MENU_DATA_PATH;
 if (menuDataPath) {
   try { bebidas = JSON.parse(fs.readFileSync(`${menuDataPath}/bebidas.json`, 'utf-8')); } catch {}
 }
+// Use translated sections if available, fall back to Spanish
+const langSections = (bebidas as any).translations?.[langParam]?.sections;
+const sections = langSections?.length ? langSections : bebidas.sections;
 const updatedDate = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(bebidas.updated));
 ---
 

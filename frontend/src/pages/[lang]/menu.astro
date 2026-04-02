@@ -9,7 +9,6 @@ import Layout from '../../layouts/Layout.astro';
 import GarlandDivider from '../../components/GarlandDivider.astro';
 import menuFallback from '../../data/menu.json';
 
-export const prerender = true;
 export function getStaticPaths() {
   return [
     { params: { lang: 'en' } },
@@ -19,6 +18,10 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
+const langParam = lang as string;
+if (!langParam || !['en', 'fr', 'de'].includes(langParam)) {
+  return new Response(null, { status: 404 });
+}
 
 const ui = {
   en: {
@@ -109,6 +112,9 @@ const menuDataPath = process.env.MENU_DATA_PATH;
 if (menuDataPath) {
   try { menu = JSON.parse(fs.readFileSync(`${menuDataPath}/menu.json`, 'utf-8')); } catch {}
 }
+// Use translated sections if available, fall back to Spanish
+const langSections = (menu as any).translations?.[langParam]?.sections;
+const sections = langSections?.length ? langSections : menu.sections;
 ---
 
 <Layout
