@@ -1347,16 +1347,16 @@ export const translations: Record<Locale, Record<string, any>> = {
       agenda_more: "Mehr Informationen",
       agenda_cards: {
         "cena-maridaje": {
-          title: "Dinner Pairing — Terra Alta Wines",
-          body: "Seven seasonal courses paired with Valencia D.O. wines selected by our sommelier. Limited to 24 guests for an intimate experience.",
+          title: "Dinner-Pairing — Weine der Terra Alta",
+          body: "Sieben Saisongerichte, kombiniert mit D.O. Valencia-Weinen, ausgewählt von unserem Sommelier. Auf 24 Gäste begrenzt für ein intimes Erlebnis.",
         },
         "mercado-artesanal": {
-          title: "Summer Artisan Market",
-          body: "Three days of local crafts, zero-kilometre cuisine and live music in the gardens of Porta D'irta. Free entry for everyone.",
+          title: "Sommerlicher Kunsthandwerksmarkt",
+          body: "Drei Tage mit lokalem Kunsthandwerk, regionaler Küche und Live-Musik in den Gärten von Porta D'irta. Freier Eintritt für alle.",
         },
         "noche-jazz-terraza": {
-          title: "Jazz Night on the Terrace",
-          body: "A magical evening under the stars with the best jazz musicians from the Mediterranean. Drinks, sea breeze and live music on the Porta D'irta terrace.",
+          title: "Jazz-Nacht auf der Terrasse",
+          body: "Ein magischer Abend unter den Sternen mit den besten Jazzmusikern des Mittelmeers. Drinks, Meeresbrise und Live-Musik auf der Terrasse von Porta D'irta.",
         },
       },
       contact_label: "Kontakt",

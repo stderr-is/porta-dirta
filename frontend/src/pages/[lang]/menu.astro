@@ -1,0 +1,228 @@
+---
+/**
+ * [lang]/menu.astro — Fixed-price set menu (multilingual)
+ * EN / FR / DE versions of the special menu QR page
+ */
+
+import fs from 'node:fs';
+import Layout from '../../layouts/Layout.astro';
+import GarlandDivider from '../../components/GarlandDivider.astro';
+import menuFallback from '../../data/menu.json';
+
+export const prerender = true;
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+  ];
+}
+
+const { lang } = Astro.params;
+
+const ui = {
+  en: {
+    title: "Special Menu — Restaurant",
+    description_prefix: "Special fixed-price menu at",
+    restaurant_label: "Porta D'irta Restaurant",
+    available_label: "Available",
+    choose_label: "Choose one dish",
+    allergens_label: "Allergens",
+    allergen_note: "Severe intolerance or allergy? Let our team know and we'll take care of everything.",
+    supplement_suffix: "/p.p.",
+    carta_link: "See the Menu →",
+    book_link: "Book a table",
+    allergens: {
+      'gluten': 'Gluten', 'lácteos': 'Dairy', 'huevo': 'Egg', 'pescado': 'Fish',
+      'crustáceos': 'Crustaceans', 'moluscos': 'Molluscs', 'frutos secos': 'Tree nuts',
+      'cacahuetes': 'Peanuts', 'soja': 'Soya', 'sulfitos': 'Sulphites',
+      'mostaza': 'Mustard', 'sésamo': 'Sesame', 'apio': 'Celery', 'altramuces': 'Lupin',
+    },
+  },
+  fr: {
+    title: "Menu Spécial — Restaurant",
+    description_prefix: "Menu spécial à prix fixe à",
+    restaurant_label: "Restaurant Porta D'irta",
+    available_label: "Disponible",
+    choose_label: "Choisissez un plat",
+    allergens_label: "Allergènes",
+    allergen_note: "Intolérance ou allergie grave ? Signalez-le à notre équipe et nous nous en occupons.",
+    supplement_suffix: "/p.p.",
+    carta_link: "Voir la carte →",
+    book_link: "Réserver une table",
+    allergens: {
+      'gluten': 'Gluten', 'lácteos': 'Produits laitiers', 'huevo': 'Œufs', 'pescado': 'Poisson',
+      'crustáceos': 'Crustacés', 'moluscos': 'Mollusques', 'frutos secos': 'Fruits à coque',
+      'cacahuetes': 'Arachides', 'soja': 'Soja', 'sulfitos': 'Sulfites',
+      'mostaza': 'Moutarde', 'sésamo': 'Sésame', 'apio': 'Céleri', 'altramuces': 'Lupin',
+    },
+  },
+  de: {
+    title: "Spezialmenü — Restaurant",
+    description_prefix: "Spezielles Festpreismenü in",
+    restaurant_label: "Restaurant Porta D'irta",
+    available_label: "Verfügbar",
+    choose_label: "Wählen Sie ein Gericht",
+    allergens_label: "Allergene",
+    allergen_note: "Schwere Unverträglichkeit oder Allergie? Informieren Sie unser Team und wir kümmern uns darum.",
+    supplement_suffix: "/P.P.",
+    carta_link: "Karte ansehen →",
+    book_link: "Tisch reservieren",
+    allergens: {
+      'gluten': 'Gluten', 'lácteos': 'Milch', 'huevo': 'Eier', 'pescado': 'Fisch',
+      'crustáceos': 'Krebstiere', 'moluscos': 'Weichtiere', 'frutos secos': 'Schalenfrüchte',
+      'cacahuetes': 'Erdnüsse', 'soja': 'Soja', 'sulfitos': 'Sulfite',
+      'mostaza': 'Senf', 'sésamo': 'Sesam', 'apio': 'Sellerie', 'altramuces': 'Lupinen',
+    },
+  },
+} as const;
+
+type Lang = keyof typeof ui;
+const t = ui[lang as Lang];
+
+const ALLERGEN_COLORS: Record<string, { bg: string; text: string }> = {
+  'gluten':       { bg: 'bg-amber-100',   text: 'text-amber-800'  },
+  'lácteos':      { bg: 'bg-sky-100',     text: 'text-sky-800'    },
+  'huevo':        { bg: 'bg-yellow-100',  text: 'text-yellow-800' },
+  'pescado':      { bg: 'bg-blue-100',    text: 'text-blue-800'   },
+  'crustáceos':   { bg: 'bg-orange-100',  text: 'text-orange-800' },
+  'moluscos':     { bg: 'bg-violet-100',  text: 'text-violet-800' },
+  'frutos secos': { bg: 'bg-green-100',   text: 'text-green-800'  },
+  'cacahuetes':   { bg: 'bg-lime-100',    text: 'text-lime-800'   },
+  'soja':         { bg: 'bg-emerald-100', text: 'text-emerald-800'},
+  'sulfitos':     { bg: 'bg-rose-100',    text: 'text-rose-800'   },
+  'mostaza':      { bg: 'bg-yellow-50',   text: 'text-yellow-700' },
+  'sésamo':       { bg: 'bg-stone-100',   text: 'text-stone-700'  },
+  'apio':         { bg: 'bg-teal-100',    text: 'text-teal-800'   },
+  'altramuces':   { bg: 'bg-pink-100',    text: 'text-pink-800'   },
+};
+
+function getAllergenInfo(key: string) {
+  const label = (t.allergens as Record<string, string>)[key.toLowerCase()] ?? key;
+  const colors = ALLERGEN_COLORS[key.toLowerCase()] ?? { bg: 'bg-gray-100', text: 'text-gray-700' };
+  return { label, ...colors };
+}
+
+// On VPS (SSR), read the live file written by n8n. Fall back to bundled data on Cloudflare.
+let menu: typeof menuFallback = menuFallback;
+const menuDataPath = process.env.MENU_DATA_PATH;
+if (menuDataPath) {
+  try { menu = JSON.parse(fs.readFileSync(`${menuDataPath}/menu.json`, 'utf-8')); } catch {}
+}
+---
+
+<Layout
+  title={t.title}
+  description={`${t.description_prefix} ${menu.price}€ ${t.supplement_suffix} — Porta D'irta, Peñíscola.`}
+  ogImage="/assets/images/food-paella-wine.jpg"
+>
+
+  <!-- ── Page header ─────────────────────────────────────────────── -->
+  <section class="bg-brand-blue pt-28 pb-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-4">
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">{t.restaurant_label}</p>
+      <h1 class="font-display font-light italic text-5xl sm:text-6xl text-white leading-tight">
+        {menu.name}
+      </h1>
+      <GarlandDivider light />
+      <div class="flex flex-col items-center gap-1">
+        <span class="font-display text-4xl text-brand-gold font-light">{menu.price.toFixed(0)}€</span>
+        <span class="font-body text-white/60 text-sm">{menu.priceNote}</span>
+      </div>
+      {menu.available && (
+        <p class="font-body text-xs uppercase tracking-[0.2em] text-brand-sand/70">
+          {t.available_label}: {menu.available}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- ── Menu sections ───────────────────────────────────────────── -->
+  <section class="bg-brand-cream py-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
+
+      {menu.sections.map((section, i) => (
+        <div>
+          <div class="flex items-center gap-4 mb-5">
+            <div class="flex items-center gap-3 shrink-0">
+              <span class="font-body text-xs text-brand-gold uppercase tracking-widest">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h2 class="font-display text-2xl sm:text-3xl text-brand-blue">{section.name}</h2>
+            </div>
+            <div class="flex-1 h-px bg-brand-blue/15"></div>
+          </div>
+          {section.note && (
+            <p class="font-body text-xs text-brand-stone uppercase tracking-widest mb-4 -mt-2">{section.note}</p>
+          )}
+          <ul class="flex flex-col gap-3">
+            {section.items.map(item => (
+              <li class="flex items-start justify-between gap-4">
+                <div class="flex items-start gap-2 min-w-0">
+                  {section.choose && (
+                    <span class="mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full bg-brand-gold/60"></span>
+                  )}
+                  <div class="flex flex-col gap-1">
+                    <span class="font-body text-brand-blue text-base leading-snug">{item.name}</span>
+                    {item.description && (
+                      <span class="font-body text-brand-stone text-sm">{item.description}</span>
+                    )}
+                    {item.allergens && item.allergens.length > 0 && (
+                      <div class="flex flex-wrap gap-1 mt-0.5">
+                        {item.allergens.map((a: string) => {
+                          const info = getAllergenInfo(a);
+                          return (
+                            <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold leading-none ${info.bg} ${info.text}`}>
+                              {info.label}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {item.supplement && (
+                  <span class="font-body text-brand-gold text-sm shrink-0 tabular-nums whitespace-nowrap">
+                    +{item.supplement.toFixed(0)}€{t.supplement_suffix}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+          {section.choose && (
+            <p class="font-body text-xs text-brand-stone/50 italic mt-3">{t.choose_label}</p>
+          )}
+        </div>
+      ))}
+
+      <!-- Allergen legend -->
+      <div class="border-t border-brand-sand/40 pt-6 flex flex-col gap-3">
+        <p class="font-body text-[11px] uppercase tracking-widest text-brand-stone/60">{t.allergens_label}</p>
+        <div class="flex flex-wrap gap-2">
+          {Object.keys(ALLERGEN_COLORS).map(key => {
+            const info = getAllergenInfo(key);
+            return (
+              <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${info.bg} ${info.text}`}>{info.label}</span>
+            );
+          })}
+        </div>
+        <p class="font-body text-[11px] text-brand-stone/50 italic mt-1">{t.allergen_note}</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────────────── -->
+  <section class="bg-brand-blue py-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+      <a href={`/${lang}/taperia`} class="font-body text-sm uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200">
+        {t.carta_link}
+      </a>
+      <span class="hidden sm:block text-white/20">|</span>
+      <a href={`/${lang}/reservar`} class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
+        {t.book_link}
+      </a>
+    </div>
+  </section>
+
+</Layout>
