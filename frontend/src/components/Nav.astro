@@ -89,7 +89,7 @@ const t = useTranslations();
         <div class="flex items-center gap-4">
 
           <!-- Language switcher — full inline at lg+ -->
-          <div class="hidden lg:flex items-center gap-2" aria-label="Seleccionar idioma">
+          <div class="hidden lg:flex items-center gap-2" aria-label="Seleccionar idioma" translate="no">
             <button data-lang-btn="es" onclick="window.setLang('es')" class="font-body text-xs uppercase tracking-widest font-semibold text-brand-gold hover:text-brand-gold transition-colors duration-200 cursor-pointer bg-transparent border-none p-0">ES</button>
             <span class="text-white/30 text-xs" aria-hidden="true">|</span>
             <button data-lang-btn="en" onclick="window.setLang('en')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 cursor-pointer bg-transparent border-none p-0">EN</button>
@@ -100,7 +100,7 @@ const t = useTranslations();
           </div>
 
           <!-- Language switcher — compact dropdown at sm–lg -->
-          <details class="hidden sm:block lg:hidden relative lang-details" aria-label="Seleccionar idioma">
+          <details class="hidden sm:block lg:hidden relative lang-details" aria-label="Seleccionar idioma" translate="no">
             <summary class="flex items-center gap-1 font-body text-xs uppercase tracking-wide text-white hover:text-brand-gold cursor-pointer select-none transition-colors duration-200">
               <span id="lang-summary-current">ES</span>
               <svg class="w-3 h-3 opacity-60 transition-transform duration-200 lang-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -171,7 +171,7 @@ const t = useTranslations();
         </li>
 
         <!-- Language switcher — mobile -->
-        <li class="px-6 pt-4 pb-2 flex gap-3 border-t border-white/10 mt-2" aria-label="Seleccionar idioma">
+        <li class="px-6 pt-4 pb-2 flex gap-3 border-t border-white/10 mt-2" aria-label="Seleccionar idioma" translate="no">
           <button data-lang-btn="es" onclick="window.setLang('es')" class="font-body text-xs uppercase tracking-widest font-semibold text-brand-gold hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">ES</button>
           <span class="text-white/30 text-xs" aria-hidden="true">|</span>
           <button data-lang-btn="en" onclick="window.setLang('en')" class="font-body text-xs uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">EN</button>
