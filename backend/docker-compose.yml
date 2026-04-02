@@ -110,9 +110,8 @@ services:
       # Trust the first proxy (Cloudflare/Tunnel) for accurate IP/Header handling
       - N8N_PROXY_HOPS=1
       # ── AI Automation Layer ────────────────────────────────────────
-      # Claude API key (Pro account) — replaces Gemini (free tier didn't work)
-      # Get key: https://console.anthropic.com/settings/keys
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # DeepSeek API key for n8n text intent routing
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       # Create bot via @BotFather on Telegram → /newbot
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       # Find your ID: message @userinfobot on Telegram
