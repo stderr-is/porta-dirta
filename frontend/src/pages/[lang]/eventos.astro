@@ -18,6 +18,13 @@ const eventosLocales = (await getCollection('eventos-locales'))
   .filter((e) => e.data.fecha >= new Date(new Date().setHours(0, 0, 0, 0)))
   .sort((a, b) => a.data.fecha.getTime() - b.data.fecha.getTime());
 
+const agendaCards = t('eventos.agenda_cards') as Record<
+  string,
+  { title: string; body: string }
+>;
+const getAgendaCopy = (eventId: string, fallbackTitle: string, fallbackBody: string) =>
+  agendaCards[eventId] ?? { title: fallbackTitle, body: fallbackBody };
+
 const formWebhookUrl = import.meta.env.PUBLIC_N8N_EVENTOS_WEBHOOK ?? import.meta.env.PUBLIC_N8N_WEBHOOK ?? 'REPLACE_WITH_N8N_WEBHOOK_URL';
 ---
 
@@ -193,41 +200,44 @@ const formWebhookUrl = import.meta.env.PUBLIC_N8N_EVENTOS_WEBHOOK ?? import.meta
 
       {eventosLocales.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {eventosLocales.map((ev) => (
-            <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
-              <div class="relative">
-                <img src={ev.data.imagen ?? '/assets/images/property-aerial-pool.jpg'} alt={ev.data.titulo} class="w-full h-48 object-cover" loading="lazy" decoding="async" />
-                <div class="absolute top-4 left-4">
-                  <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                    {dateFormatter.format(ev.data.fecha)}
-                    {ev.data.fechaFin && ` – ${dateFormatter.format(ev.data.fechaFin)}`}
-                  </span>
+          {eventosLocales.map((ev) => {
+            const copy = getAgendaCopy(ev.id, ev.data.titulo, ev.data.descripcion);
+            return (
+              <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+                <div class="relative">
+                  <img src={ev.data.imagen ?? '/assets/images/property-aerial-pool.jpg'} alt={copy.title} class="w-full h-48 object-cover" loading="lazy" decoding="async" />
+                  <div class="absolute top-4 left-4">
+                    <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
+                      {dateFormatter.format(ev.data.fecha)}
+                      {ev.data.fechaFin && ` – ${dateFormatter.format(ev.data.fechaFin)}`}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div class="flex flex-col gap-3 p-6 flex-1">
-                <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">{ev.data.titulo}</h3>
-                <p class="font-body text-brand-stone text-sm leading-relaxed">{ev.data.descripcion}</p>
-                <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
-                  {ev.data.precio ? (
-                    <span class="font-display text-xl text-brand-blue">€{ev.data.precio}<span class="font-body text-sm text-brand-stone font-normal"> / persona</span></span>
-                  ) : (
-                    <span class="font-body text-sm text-brand-stone italic">{t('eventos.agenda_free')}</span>
-                  )}
-                  {ev.data.ticketsUrl ? (
-                    <a href={ev.data.ticketsUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300" aria-label={`${t('eventos.agenda_buy')} ${ev.data.titulo}`}>
-                      {t('eventos.agenda_buy')}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </a>
-                  ) : (
-                    <a href={getRelativeLocaleUrl(lang, 'contacto')} class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300">
-                      {t('eventos.agenda_more')}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </a>
-                  )}
+                <div class="flex flex-col gap-3 p-6 flex-1">
+                  <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">{copy.title}</h3>
+                  <p class="font-body text-brand-stone text-sm leading-relaxed">{copy.body}</p>
+                  <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
+                    {ev.data.precio ? (
+                      <span class="font-display text-xl text-brand-blue">€{ev.data.precio}<span class="font-body text-sm text-brand-stone font-normal"> / persona</span></span>
+                    ) : (
+                      <span class="font-body text-sm text-brand-stone italic">{t('eventos.agenda_free')}</span>
+                    )}
+                    {ev.data.ticketsUrl ? (
+                      <a href={ev.data.ticketsUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300" aria-label={`${t('eventos.agenda_buy')} ${copy.title}`}>
+                        {t('eventos.agenda_buy')}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                      </a>
+                    ) : (
+                      <a href={getRelativeLocaleUrl(lang, 'contacto')} class="inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300">
+                        {t('eventos.agenda_more')}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       ) : (
         <p class="text-center font-body text-brand-stone">{t('eventos.agenda_empty')}</p>

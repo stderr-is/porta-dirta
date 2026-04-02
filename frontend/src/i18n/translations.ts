@@ -97,6 +97,20 @@ export const translations: Record<Locale, Record<string, any>> = {
       agenda_free: "Entrada libre",
       agenda_buy: "Comprar entradas",
       agenda_more: "Más información",
+      agenda_cards: {
+        "cena-maridaje": {
+          title: "Cena Maridaje — Vinos de la Terra Alta",
+          body: "Siete platos de temporada maridados con vinos D.O. Valencia seleccionados por el sumiller de la casa. Cupos limitados a 24 comensales para una experiencia íntima.",
+        },
+        "mercado-artesanal": {
+          title: "Mercado Artesanal de Verano",
+          body: "Tres días de artesanía local, gastronomía kilómetro cero y música en vivo en los jardines de Porta D'irta. Entrada libre para todos.",
+        },
+        "noche-jazz-terraza": {
+          title: "Noche de Jazz en la Terraza",
+          body: "Una velada mágica bajo las estrellas con los mejores músicos de jazz del mediterráneo. Copas, brisa marina y música en vivo en la terraza de Porta D'irta.",
+        },
+      },
       contact_label: "Contacto",
       contact_heading: "Cuéntanos tu evento",
       contact_body: "Rellena el formulario y nuestro equipo te contactará para diseñar juntos la celebración perfecta.",
@@ -499,6 +513,20 @@ export const translations: Record<Locale, Record<string, any>> = {
       agenda_free: "Free entry",
       agenda_buy: "Buy tickets",
       agenda_more: "More information",
+      agenda_cards: {
+        "cena-maridaje": {
+          title: "Dinner Pairing — Terra Alta Wines",
+          body: "Seven seasonal courses paired with Valencia D.O. wines selected by our sommelier. Limited to 24 guests for an intimate experience.",
+        },
+        "mercado-artesanal": {
+          title: "Summer Artisan Market",
+          body: "Three days of local crafts, zero-kilometre cuisine and live music in the gardens of Porta D'irta. Free entry for everyone.",
+        },
+        "noche-jazz-terraza": {
+          title: "Jazz Night on the Terrace",
+          body: "A magical evening under the stars with the best jazz musicians from the Mediterranean. Drinks, sea breeze and live music on the Porta D'irta terrace.",
+        },
+      },
       contact_label: "Contact",
       contact_heading: "Tell us about your event",
       contact_body: "Fill in the form and our team will contact you to design the perfect celebration together.",
@@ -901,6 +929,20 @@ export const translations: Record<Locale, Record<string, any>> = {
       agenda_free: "Entrée libre",
       agenda_buy: "Acheter des billets",
       agenda_more: "Plus d'informations",
+      agenda_cards: {
+        "cena-maridaje": {
+          title: "Dîner Accord Mets-Vins — Vins de la Terra Alta",
+          body: "Sept plats de saison accordés avec des vins D.O. Valencia sélectionnés par notre sommelier. Limité à 24 convives pour une expérience intime.",
+        },
+        "mercado-artesanal": {
+          title: "Marché Artisanal d'Été",
+          body: "Trois jours d'artisanat local, de gastronomie locale et de musique en direct dans les jardins de Porta D'irta. Entrée libre pour tous.",
+        },
+        "noche-jazz-terraza": {
+          title: "Nuit Jazz sur la Terrasse",
+          body: "Une soirée magique sous les étoiles avec les meilleurs musiciens de jazz de la Méditerranée. Verres, brise marine et musique en direct sur la terrasse de Porta D'irta.",
+        },
+      },
       contact_label: "Contact",
       contact_heading: "Parlez-nous de votre événement",
       contact_body: "Remplissez le formulaire et notre équipe vous contactera pour imaginer ensemble la célébration parfaite.",
@@ -1303,6 +1345,20 @@ export const translations: Record<Locale, Record<string, any>> = {
       agenda_free: "Freier Eintritt",
       agenda_buy: "Tickets kaufen",
       agenda_more: "Mehr Informationen",
+      agenda_cards: {
+        "cena-maridaje": {
+          title: "Dinner Pairing — Terra Alta Wines",
+          body: "Seven seasonal courses paired with Valencia D.O. wines selected by our sommelier. Limited to 24 guests for an intimate experience.",
+        },
+        "mercado-artesanal": {
+          title: "Summer Artisan Market",
+          body: "Three days of local crafts, zero-kilometre cuisine and live music in the gardens of Porta D'irta. Free entry for everyone.",
+        },
+        "noche-jazz-terraza": {
+          title: "Jazz Night on the Terrace",
+          body: "A magical evening under the stars with the best jazz musicians from the Mediterranean. Drinks, sea breeze and live music on the Porta D'irta terrace.",
+        },
+      },
       contact_label: "Kontakt",
       contact_heading: "Erzählen Sie uns von Ihrer Veranstaltung",
       contact_body: "Füllen Sie das Formular aus und unser Team meldet sich, um gemeinsam die perfekte Feier zu gestalten.",
