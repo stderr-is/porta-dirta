@@ -11,12 +11,16 @@
 interface Props {
   webhookUrl?: string;
   successMessage?: string;
+  sendingText?: string;
+  errorMessage?: string;
   formId: string;
 }
 
 const {
   webhookUrl = 'REPLACE_WITH_N8N_WEBHOOK_URL',
   successMessage = '¡Gracias! Nos pondremos en contacto pronto.',
+  sendingText = 'Enviando...',
+  errorMessage = 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.',
   formId,
 } = Astro.props;
 ---
@@ -31,13 +35,13 @@ const {
   <slot />
 </form>
 
-<script define:vars={{ webhookUrl, successMessage, formId }}>
+<script define:vars={{ webhookUrl, successMessage, sendingText, errorMessage, formId }}>
   document.getElementById(formId).addEventListener('submit', async (e) => {
     e.preventDefault();
     const form = e.target;
     const btn = form.querySelector('button[type="submit"]');
     const originalText = btn.textContent;
-    btn.textContent = 'Enviando...';
+    btn.textContent = sendingText;
     btn.disabled = true;
 
     try {
@@ -54,11 +58,11 @@ const {
       btn.disabled = false;
       let errDiv = form.querySelector('.form-error');
       if (!errDiv) {
-        errDiv = document.createElement('p');
-        errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
-        form.appendChild(errDiv);
-      }
-      errDiv.textContent = 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+      errDiv = document.createElement('p');
+      errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
+      form.appendChild(errDiv);
     }
+    errDiv.textContent = errorMessage;
+  }
   });
 </script>
