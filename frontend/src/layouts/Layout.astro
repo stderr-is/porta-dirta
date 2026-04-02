@@ -47,6 +47,39 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.port
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
 
+    <!--
+      Early locale bootstrap — runs synchronously before any paint.
+      1. Reads the saved language from localStorage.
+      2. Validates it is one of the four supported locales; clears
+         invalid / corrupted values (e.g. 'it' from browser auto-detect).
+      3. Sets <html lang> immediately so SEO/AT tools see the right value.
+      4. Hides the page briefly for non-Spanish users to prevent a flash
+         of untranslated Spanish content (FOUC) before the module script
+         applies the correct translations.  The module script re-shows the
+         page inside applyLang() once translations are in place.
+    -->
+    <script is:inline>
+      (function () {
+        var VALID = { es: 1, en: 1, fr: 1, de: 1 };
+        var saved;
+        try { saved = localStorage.getItem('porta-lang'); } catch (e) { saved = null; }
+        if (!saved || !VALID[saved]) {
+          saved = 'es';
+          try { localStorage.removeItem('porta-lang'); } catch (e) {}
+        }
+        document.documentElement.lang = saved;
+        if (saved !== 'es') {
+          // Hide page until i18n-client.ts applies translations.
+          // Safety timeout: reveal after 2 s even if the module script fails
+          // to load (e.g. network error). Typical reveal happens in < 100 ms.
+          document.documentElement.style.visibility = 'hidden';
+          setTimeout(function () {
+            document.documentElement.style.visibility = '';
+          }, 2000);
+        }
+      })();
+    </script>
+
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
 

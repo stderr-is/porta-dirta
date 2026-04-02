@@ -9,6 +9,7 @@ export const translations: Record<Locale, Record<string, any>> = {
       experiencias: "Experiencias",
       eventos: "Eventos",
       reservar: "Reservar",
+      cta_mobile: "Reservar Estancia",
       contacto: "Contacto",
     },
     home: {
@@ -499,6 +500,7 @@ export const translations: Record<Locale, Record<string, any>> = {
       experiencias: "Experiences",
       eventos: "Events",
       reservar: "Book Now",
+      cta_mobile: "Book Stay",
       contacto: "Contact",
     },
     home: {
@@ -989,6 +991,7 @@ export const translations: Record<Locale, Record<string, any>> = {
       experiencias: "Expériences",
       eventos: "Événements",
       reservar: "Réserver",
+      cta_mobile: "Réserver un séjour",
       contacto: "Contact",
     },
     home: {
@@ -1479,6 +1482,7 @@ export const translations: Record<Locale, Record<string, any>> = {
       experiencias: "Erlebnisse",
       eventos: "Veranstaltungen",
       reservar: "Buchen",
+      cta_mobile: "Aufenthalt buchen",
       contacto: "Kontakt",
     },
     home: {

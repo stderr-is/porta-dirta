@@ -16,6 +16,8 @@ import { translations } from '../i18n/translations';
 
 type FlatDict = Record<string, string>;
 
+const VALID_LANGS = new Set(['es', 'en', 'fr', 'de']);
+
 /** Flatten a nested object into 'section.key' → value pairs */
 function flatten(obj: Record<string, unknown>, prefix = ''): FlatDict {
   const out: FlatDict = {};
@@ -88,14 +90,27 @@ function applyLang(lang: string): void {
     btn.classList.toggle('font-semibold', isActive);
     btn.classList.toggle('text-brand-gold', isActive);
     btn.classList.toggle('text-white/70', !isActive);
+    btn.classList.toggle('text-white/60', !isActive);
     btn.classList.toggle('text-white', !isActive && !btn.classList.contains('text-white/70'));
   });
+
+  // Compact dropdown summary — update visible language code
+  const summaryText = document.getElementById('lang-summary-current');
+  if (summaryText) summaryText.textContent = lang.toUpperCase();
+
+  // Reveal page if it was hidden by the early inline FOUC-prevention script
+  document.documentElement.style.visibility = '';
 
   // Notify sub-components (e.g. BookingSearchForm calendar)
   document.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
 }
 
 export function setLang(lang: string): void {
+  // Guard against invalid or corrupted locale values
+  if (!VALID_LANGS.has(lang)) {
+    if (import.meta.env.DEV) console.warn(`[i18n] setLang called with unknown locale: "${lang}"`);
+    return;
+  }
   localStorage.setItem('porta-lang', lang);
   applyLang(lang);
 }
@@ -103,8 +118,16 @@ export function setLang(lang: string): void {
 // Expose globally so Nav inline onclick="" can call it
 (window as Window & { setLang: typeof setLang }).setLang = setLang;
 
-// Apply saved preference immediately (if not default Spanish)
-const saved = localStorage.getItem('porta-lang') ?? 'es';
-if (saved !== 'es') {
-  applyLang(saved);
+// Read and validate saved preference; clear any corrupted value
+let rawSaved: string | null = null;
+try { rawSaved = localStorage.getItem('porta-lang'); } catch (_) { /* storage blocked */ }
+const saved = (rawSaved && VALID_LANGS.has(rawSaved)) ? rawSaved : 'es';
+if (rawSaved && !VALID_LANGS.has(rawSaved)) {
+  // Corrupted value — clear it so future loads use the default
+  try { localStorage.removeItem('porta-lang'); } catch (_) {}
 }
+
+// Always apply the current language (even 'es') so:
+//  • button highlight state is always correct
+//  • the FOUC visibility:hidden set by the early inline script is always lifted
+applyLang(saved);
