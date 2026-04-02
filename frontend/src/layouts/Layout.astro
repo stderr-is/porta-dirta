@@ -49,23 +49,34 @@ const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `https://www.port
 
     <!--
       Early locale bootstrap — runs synchronously before any paint.
-      1. Reads the saved language from localStorage.
-      2. Validates it is one of the four supported locales; clears
-         invalid / corrupted values (e.g. 'it' from browser auto-detect).
-      3. Sets <html lang> immediately so SEO/AT tools see the right value.
-      4. Hides the page briefly for non-Spanish users to prevent a flash
-         of untranslated Spanish content (FOUC) before the module script
-         applies the correct translations.  The module script re-shows the
-         page inside applyLang() once translations are in place.
+      Priority chain (mirrors i18n-client.ts):
+        1. Explicit user choice stored in localStorage ('porta-lang').
+        2. Browser language preference via navigator.language (first-time
+           visitors or after clearing storage) — base code only ('en-US' → 'en').
+        3. Hard fallback to 'es' if the browser language is not one of the
+           four supported locales.
+      Corrupted / unsupported localStorage values are cleared.
+      Sets <html lang> immediately so SEO/AT tools see the right value.
+      Hides the page briefly for non-Spanish users to prevent a flash of
+      untranslated Spanish content (FOUC) before the module script applies
+      the correct translations.  The module script re-shows the page inside
+      applyLang() once translations are in place.
     -->
     <script is:inline>
       (function () {
         var VALID = { es: 1, en: 1, fr: 1, de: 1 };
-        var saved;
-        try { saved = localStorage.getItem('porta-lang'); } catch (e) { saved = null; }
-        if (!saved || !VALID[saved]) {
-          saved = 'es';
+        var raw;
+        try { raw = localStorage.getItem('porta-lang'); } catch (e) { raw = null; }
+        if (raw && !VALID[raw]) {
           try { localStorage.removeItem('porta-lang'); } catch (e) {}
+          raw = null;
+        }
+        var saved;
+        if (raw) {
+          saved = raw;
+        } else {
+          var browserLang = ((navigator.language || '').split('-')[0] || '').toLowerCase();
+          saved = VALID[browserLang] ? browserLang : 'es';
         }
         document.documentElement.lang = saved;
         if (saved !== 'es') {

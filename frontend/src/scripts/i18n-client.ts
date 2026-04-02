@@ -118,13 +118,22 @@ export function setLang(lang: string): void {
 // Expose globally so Nav inline onclick="" can call it
 (window as Window & { setLang: typeof setLang }).setLang = setLang;
 
-// Read and validate saved preference; clear any corrupted value
+// Priority: 1) explicit user choice (localStorage) → 2) browser preference (navigator.language) → 3) 'es'
 let rawSaved: string | null = null;
 try { rawSaved = localStorage.getItem('porta-lang'); } catch (_) { /* storage blocked */ }
-const saved = (rawSaved && VALID_LANGS.has(rawSaved)) ? rawSaved : 'es';
 if (rawSaved && !VALID_LANGS.has(rawSaved)) {
-  // Corrupted value — clear it so future loads use the default
+  // Corrupted value — clear it so the browser-preference fallback kicks in
   try { localStorage.removeItem('porta-lang'); } catch (_) {}
+  rawSaved = null;
+}
+let saved: string;
+if (rawSaved) {
+  saved = rawSaved;
+} else {
+  // No stored preference — honour the browser's Accept-Language on first visit.
+  // navigator.language returns tags like 'en-US' or 'fr-FR'; take the base code.
+  const browserLang = (navigator.language || '').split('-')[0].toLowerCase();
+  saved = VALID_LANGS.has(browserLang) ? browserLang : 'es';
 }
 
 // Always apply the current language (even 'es') so:
