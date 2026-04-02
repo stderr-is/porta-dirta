@@ -1,0 +1,733 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GarlandDivider from '../../components/GarlandDivider.astro';
+import FormHandler from '../../components/FormHandler.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+import { getCollection } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+const lang = getLangFromUrl(Astro.url);
+
+export async function getStaticPaths() {
+  return ['en', 'fr', 'de'].map((lang) => ({ params: { lang } }));
+}
+
+const copy = {
+  es: {
+    title: 'Experiencias',
+    description: 'Descubre la Costa del Azahar con excursiones, actividades náuticas, cultura y gastronomía diseñadas exclusivamente para los huéspedes de Porta D\'irta en Peñíscola.',
+    heroLabel: 'Experiencias',
+    heroHeading: 'Descubre la Costa del Azahar',
+    heroBody: 'Excursiones, gastronomía y aventuras diseñadas para nuestros huéspedes',
+    heroPills: ['Naturaleza', 'Mar', 'Cultura', 'Gastronomía'],
+    introLabel: 'Para nuestros huéspedes',
+    introHeading: 'Todo lo que Peñíscola tiene que ofrecerte',
+    introBody1: 'En Porta D\'irta creemos que una estancia perfecta va mucho más allá de las comodidades de la villa. Por eso hemos seleccionado las mejores experiencias de la Costa del Azahar y las hemos organizado exclusivamente para nuestros huéspedes.',
+    introBody2: 'Trabajamos con guías locales certificados y colaboradores de confianza para garantizarte autenticidad, seguridad y momentos únicos.',
+    introImg1: 'Senderismo en la Sierra de Irta',
+    introImg2: 'Kayak en el Mediterráneo',
+    introImg3: 'Castillo de Peñíscola',
+    introImg4: 'Gastronomía local — arroz a banda',
+    packagesDisclaimer: '⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente por teléfono:',
+    packagesLabel: 'Reserva tu experiencia',
+    packagesHeading: 'Nuestros paquetes',
+    packagesBody: 'Plazas limitadas. Reserva con antelación para garantizar tu experiencia.',
+    packagesEmptyTitle: 'Próximamente nuevas experiencias',
+    packagesEmptyBody: 'Estamos preparando nuevos paquetes para la próxima temporada. Contacta con nosotros para más información.',
+    packagesEmptyCta: 'Contactar',
+    sierraLabel: 'Naturaleza',
+    sierraHeading: 'Sierra de Irta',
+    sierraBody1: 'El Parque Natural de la Sierra de Irta es uno de los últimos tramos de litoral virgen del Mediterráneo español. Con más de 5.000 hectáreas de monte bajo, acantilados y calas secretas, es el escenario ideal para conectar con la naturaleza a pocos minutos de la villa.',
+    sierraBody2: 'Nuestros guías locales te llevan por los senderos más espectaculares, adaptando el recorrido a tu nivel físico y tus intereses.',
+    sierraActivities: ['Senderismo guiado', 'Rutas en bicicleta', 'Observación de aves', 'Fotografía de naturaleza'],
+    sierraCta: 'Reservar excursión',
+    sierraPricePrefix: 'desde',
+    seaLabel: 'Mar & Playa',
+    seaHeading: 'El Mediterráneo a tu puerta',
+    sea1Title: 'Kayak & Snorkel',
+    sea1Body: 'Explora las calas y fondos marinos de la Sierra de Irta en kayak. Sesión de 2.5 horas con guía certificado, equipo incluido.',
+    sea2Title: 'Snorkel en las Cuevas',
+    sea2Body: 'Sumérgete en las cuevas y grutas submarinas de la costa de Peñíscola. Nuestros monitores certificados te acompañan para descubrir un mundo submarino lleno de vida y colores.',
+    sea3Title: 'Pesca Tradicional',
+    sea3Body: 'Embárcate con pescadores locales al amanecer y aprende las técnicas de pesca artesanal del Mediterráneo.',
+    seaCta: 'Consultar disponibilidad',
+    cultureLabel: 'Cultura & Gastronomía',
+    cultureHeading: 'Peñíscola, historia y sabor',
+    culture1Title: 'Peñíscola Histórica',
+    culture1Body: 'Descubre los secretos del castillo templario donde el Papa Luna escribió sus bulas y pasea por las callejuelas de la ciudad amurallada.',
+    culture2Title: 'Cata de Vinos & Gastronomía',
+    culture2Body: 'El sumiller del restaurante os guiará por la historia, aromas y sabores de la tierra. Cupos muy limitados para una experiencia íntima.',
+    cultureCta: 'Explorar',
+    partnersLabel: 'Colaboradores',
+    partnersHeading: 'Nuestros colaboradores locales',
+    partnersBody: 'Trabajamos con los mejores proveedores de la zona para ofrecerte experiencias auténticas.',
+    formLabel: 'Planifica tu estancia',
+    formHeading: 'Diseña tu experiencia perfecta',
+    formBody: 'Cuéntanos qué te apetece y lo organizamos todo por ti',
+    formName: 'Nombre *',
+    formNamePlaceholder: 'Tu nombre completo',
+    formEmail: 'Email *',
+    formEmailPlaceholder: 'tu@email.com',
+    formPhone: 'Teléfono',
+    formPhonePlaceholder: '+34 600 000 000',
+    formType: 'Tipo de experiencia *',
+    formTypePlaceholder: 'Selecciona una opción',
+    formTypeOptions: ['Sierra de Irta', 'Actividades Acuáticas', 'Cultura & Historia', 'Gastronomía', 'Combinación personalizada'],
+    formDate: 'Fecha de llegada',
+    formPeople: 'Nº personas',
+    formPeoplePlaceholder: 'Ej. 4',
+    formMessage: 'Mensaje especial',
+    formMessagePlaceholder: 'Cuéntanos tus preferencias, nivel físico, alergias alimentarias o cualquier detalle especial...',
+    formSubmit: 'Planificar mi experiencia',
+    formSuccess: '¡Gracias! Hemos recibido tu consulta.',
+    formSuccessSub: 'Nos pondremos en contacto contigo en menos de 24 horas para organizar tu experiencia.',
+    formError: 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.',
+    formPrivacy: 'He leído y acepto la',
+    formPrivacyLink: 'Política de Privacidad',
+    formPrivacyTail: '. Consiento el tratamiento de mis datos para gestionar mi solicitud de experiencia. *',
+    formNote: 'Incluido en estancias de 3 noches o más · Resto bajo reserva previa',
+    moreLabel: 'Descubre más',
+    moreHotel: 'El Hotel',
+    moreRestaurant: 'El Restaurante',
+    moreEvents: 'Eventos & Celebraciones',
+    hiEventsPackages: {
+      'ruta-guiada-sierra-de-irta': {
+        title: 'Ruta Guiada Sierra de Irta',
+        body: 'Descubre la reserva natural de la Sierra de Irta con un guía experto. Recorrido de 3 horas por senderos costeros y miradores sobre el Mediterráneo.',
+        cover: '/assets/images/sierra-trail-vertical.jpg',
+      },
+      'visita-guiada-al-castillo-papal': {
+        title: 'Visita Guiada al Castillo Papal',
+        body: 'El Castillo del Papa Luna, joya medieval de Peñíscola, te espera. Visita guiada de 90 minutos por historia, murallas y vistas al mar.',
+        cover: '/assets/images/property-aerial-dusk.jpg',
+      },
+      'cata-de-vinos-y-gastronomia': {
+        title: 'Cata de Vinos y Gastronomía',
+        body: 'Una velada de gastronomía valenciana: cata guiada de 4 vinos D.O. Valencia con maridaje de productos locales.',
+        cover: '/assets/images/food-paella-close.jpg',
+      },
+      'kayak-y-snorkel-en-la-costa': {
+        title: 'Kayak y Snorkel en la Costa',
+        body: 'Explora calas y fondos marinos de la Sierra de Irta en una salida guiada con equipo incluido y paradas para snorkel.',
+        cover: '/assets/images/sierra-tower-sea.jpg',
+      },
+    },
+  },
+  en: {
+    title: 'Experiences',
+    description: 'Discover the Costa del Azahar with excursions, water activities, culture and gastronomy designed exclusively for Porta D\'irta guests in Peñíscola.',
+    heroLabel: 'Experiences',
+    heroHeading: 'Discover the Costa del Azahar',
+    heroBody: 'Excursions, gastronomy and adventures designed for our guests',
+    heroPills: ['Nature', 'Sea', 'Culture', 'Gastronomy'],
+    introLabel: 'For our guests',
+    introHeading: 'Everything Peñíscola has to offer',
+    introBody1: 'At Porta D\'irta we believe a perfect stay goes far beyond the villa\'s comforts. That is why we have selected the best experiences on the Costa del Azahar and organised them exclusively for our guests.',
+    introBody2: 'We work with certified local guides and trusted partners to guarantee authenticity, safety and unique moments.',
+    introImg1: 'Hiking in the Sierra de Irta',
+    introImg2: 'Kayaking in the Mediterranean',
+    introImg3: 'Peñíscola Castle',
+    introImg4: 'Local gastronomy — arroz a banda',
+    packagesDisclaimer: '⚠️ Test mode. For bookings, please call us directly:',
+    packagesLabel: 'Book your experience',
+    packagesHeading: 'Our packages',
+    packagesBody: 'Limited places. Book in advance to secure your experience.',
+    packagesEmptyTitle: 'New experiences coming soon',
+    packagesEmptyBody: 'We are preparing new packages for the next season. Contact us for more information.',
+    packagesEmptyCta: 'Contact us',
+    sierraLabel: 'Nature',
+    sierraHeading: 'Sierra de Irta',
+    sierraBody1: 'The Sierra de Irta Natural Park is one of the last untouched stretches of the Spanish Mediterranean coast. With more than 5,000 hectares of scrubland, cliffs and hidden coves, it is the ideal setting to reconnect with nature.',
+    sierraBody2: 'Our local guides take you along the most spectacular trails, adapting the route to your fitness level and interests.',
+    sierraActivities: ['Guided hiking', 'Bike routes', 'Birdwatching', 'Nature photography'],
+    sierraCta: 'Book excursion',
+    sierraPricePrefix: 'from',
+    seaLabel: 'Sea & Beach',
+    seaHeading: 'The Mediterranean at your door',
+    sea1Title: 'Kayak & Snorkel',
+    sea1Body: 'Explore the coves and seabeds of Sierra de Irta by kayak. A 2.5-hour session with certified guide and all equipment included.',
+    sea2Title: 'Cave Snorkelling',
+    sea2Body: 'Dive into the sea caves and underwater grottos of Peñíscola. Our certified instructors guide you through a vibrant underwater world.',
+    sea3Title: 'Traditional Fishing',
+    sea3Body: 'Set out with local fishermen at dawn and learn the traditional Mediterranean fishing techniques.',
+    seaCta: 'Check availability',
+    cultureLabel: 'Culture & Gastronomy',
+    cultureHeading: 'Peñíscola, history and flavour',
+    culture1Title: 'Historic Peñíscola',
+    culture1Body: 'Discover the secrets of the Templar castle where Pope Luna wrote his bulls and wander the cobbled lanes of the walled town.',
+    culture2Title: 'Wine & Gastronomy Tasting',
+    culture2Body: 'Our restaurant sommelier will guide you through the history, aromas and flavours of the land in a very limited, intimate experience.',
+    cultureCta: 'Explore',
+    partnersLabel: 'Partners',
+    partnersHeading: 'Our local partners',
+    partnersBody: 'We work with the best providers in the area to offer authentic experiences.',
+    formLabel: 'Plan your stay',
+    formHeading: 'Design your perfect experience',
+    formBody: 'Tell us what you feel like doing and we will organise everything for you',
+    formName: 'Name *',
+    formNamePlaceholder: 'Your full name',
+    formEmail: 'Email *',
+    formEmailPlaceholder: 'your@email.com',
+    formPhone: 'Phone',
+    formPhonePlaceholder: '+34 600 000 000',
+    formType: 'Experience type *',
+    formTypePlaceholder: 'Choose an option',
+    formTypeOptions: ['Sierra de Irta', 'Water Activities', 'Culture & History', 'Gastronomy', 'Custom combination'],
+    formDate: 'Arrival date',
+    formPeople: 'No. of people',
+    formPeoplePlaceholder: 'e.g. 4',
+    formMessage: 'Special message',
+    formMessagePlaceholder: 'Tell us your preferences, fitness level, food allergies or any special details...',
+    formSubmit: 'Plan my experience',
+    formSuccess: 'Thank you! We have received your request.',
+    formSuccessSub: 'We will contact you within 24 hours to organise your experience.',
+    formError: 'Something went wrong. Please try again or call us directly.',
+    formPrivacy: 'I have read and accept the',
+    formPrivacyLink: 'Privacy Policy',
+    formPrivacyTail: '. I consent to the processing of my data to manage my experience request. *',
+    formNote: 'Included in stays of 3 nights or more · Otherwise by prior booking',
+    moreLabel: 'Discover more',
+    moreHotel: 'The Hotel',
+    moreRestaurant: 'The Restaurant',
+    moreEvents: 'Events & Celebrations',
+    hiEventsPackages: {
+      'ruta-guiada-sierra-de-irta': {
+        title: 'Guided Sierra de Irta Route',
+        body: 'Discover the Sierra de Irta nature reserve with an expert guide. A 3-hour route through coastal trails and Mediterranean viewpoints.',
+        cover: '/assets/images/sierra-trail-vertical.jpg',
+      },
+      'visita-guiada-al-castillo-papal': {
+        title: 'Guided Visit to the Papal Castle',
+        body: 'The Castle of Pope Luna, Peñíscola’s medieval jewel, awaits. A 90-minute guided visit through history, walls and sea views.',
+        cover: '/assets/images/property-aerial-dusk.jpg',
+      },
+      'cata-de-vinos-y-gastronomia': {
+        title: 'Wine and Gastronomy Tasting',
+        body: 'An evening of Valencian gastronomy: a guided tasting of 4 Valencia D.O. wines paired with local products.',
+        cover: '/assets/images/food-paella-close.jpg',
+      },
+      'kayak-y-snorkel-en-la-costa': {
+        title: 'Kayak and Snorkel Along the Coast',
+        body: 'Explore the coves and seabeds of Sierra de Irta on a guided outing with equipment included and snorkelling stops.',
+        cover: '/assets/images/sierra-tower-sea.jpg',
+      },
+    },
+  },
+  fr: {
+    title: 'Expériences',
+    description: 'Découvrez la Costa del Azahar avec des excursions, activités nautiques, culture et gastronomie conçues exclusivement pour les hôtes de Porta D\'irta à Peñíscola.',
+    heroLabel: 'Expériences',
+    heroHeading: 'Découvrez la Costa del Azahar',
+    heroBody: 'Excursions, gastronomie et aventures conçues pour nos hôtes',
+    heroPills: ['Nature', 'Mer', 'Culture', 'Gastronomie'],
+    introLabel: 'Pour nos hôtes',
+    introHeading: 'Tout ce que Peñíscola a à offrir',
+    introBody1: 'À Porta D\'irta, nous pensons qu\'un séjour parfait va bien au-delà du confort de la villa. C\'est pourquoi nous avons sélectionné les meilleures expériences de la Costa del Azahar pour nos hôtes.',
+    introBody2: 'Nous travaillons avec des guides locaux certifiés et des partenaires de confiance pour garantir authenticité, sécurité et moments uniques.',
+    introImg1: 'Randonnée dans la Sierra de Irta',
+    introImg2: 'Kayak en Méditerranée',
+    introImg3: 'Château de Peñíscola',
+    introImg4: 'Gastronomie locale — arroz a banda',
+    packagesDisclaimer: '⚠️ Système en phase de test. Pour les réservations, appelez-nous directement :',
+    packagesLabel: 'Réservez votre expérience',
+    packagesHeading: 'Nos forfaits',
+    packagesBody: 'Places limitées. Réservez à l\'avance pour garantir votre expérience.',
+    packagesEmptyTitle: 'De nouvelles expériences bientôt',
+    packagesEmptyBody: 'Nous préparons de nouveaux forfaits pour la prochaine saison. Contactez-nous pour plus d\'informations.',
+    packagesEmptyCta: 'Nous contacter',
+    sierraLabel: 'Nature',
+    sierraHeading: 'Sierra de Irta',
+    sierraBody1: 'Le parc naturel de la Sierra de Irta est l\'un des derniers littoraux vierges de la Méditerranée espagnole. Avec plus de 5 000 hectares de maquis, de falaises et de criques cachées, c\'est le cadre idéal pour se reconnecter à la nature.',
+    sierraBody2: 'Nos guides locaux vous emmènent sur les sentiers les plus spectaculaires, en adaptant le parcours à votre niveau et à vos envies.',
+    sierraActivities: ['Randonnée guidée', 'Circuits à vélo', 'Observation des oiseaux', 'Photographie nature'],
+    sierraCta: 'Réserver l\'excursion',
+    sierraPricePrefix: 'à partir de',
+    seaLabel: 'Mer & Plage',
+    seaHeading: 'La Méditerranée à votre porte',
+    sea1Title: 'Kayak & Snorkeling',
+    sea1Body: 'Explorez les criques et les fonds marins de la Sierra de Irta en kayak. Séance de 2h30 avec guide certifié et équipement inclus.',
+    sea2Title: 'Snorkeling dans les Grottes',
+    sea2Body: 'Plongez dans les grottes marines et les cavités sous-marines de Peñíscola. Nos moniteurs certifiés vous accompagnent dans un monde sous-marin vibrant.',
+    sea3Title: 'Pêche Traditionnelle',
+    sea3Body: 'Partez à l\'aube avec les pêcheurs locaux et apprenez les techniques de pêche méditerranéenne traditionnelle.',
+    seaCta: 'Vérifier la disponibilité',
+    cultureLabel: 'Culture & Gastronomie',
+    cultureHeading: 'Peñíscola, histoire et saveurs',
+    culture1Title: 'Peñíscola Historique',
+    culture1Body: 'Découvrez les secrets du château templier où le pape Luna écrivit ses bulles et flânez dans les ruelles pavées de la ville fortifiée.',
+    culture2Title: 'Dégustation de Vins & Gastronomie',
+    culture2Body: 'Notre sommelier vous guidera à travers l\'histoire, les arômes et les saveurs du terroir dans une expérience intime et très limitée.',
+    cultureCta: 'Explorer',
+    partnersLabel: 'Partenaires',
+    partnersHeading: 'Nos partenaires locaux',
+    partnersBody: 'Nous travaillons avec les meilleurs prestataires de la région pour offrir des expériences authentiques.',
+    formLabel: 'Planifiez votre séjour',
+    formHeading: 'Concevez votre expérience parfaite',
+    formBody: 'Dites-nous ce qui vous fait envie et nous organisons tout pour vous',
+    formName: 'Nom *',
+    formNamePlaceholder: 'Votre nom complet',
+    formEmail: 'Email *',
+    formEmailPlaceholder: 'votre@email.com',
+    formPhone: 'Téléphone',
+    formPhonePlaceholder: '+34 600 000 000',
+    formType: 'Type d\'expérience *',
+    formTypePlaceholder: 'Sélectionnez une option',
+    formTypeOptions: ['Sierra de Irta', 'Activités nautiques', 'Culture & Histoire', 'Gastronomie', 'Combinaison personnalisée'],
+    formDate: 'Date d\'arrivée',
+    formPeople: 'Nb de personnes',
+    formPeoplePlaceholder: 'ex. 4',
+    formMessage: 'Message spécial',
+    formMessagePlaceholder: 'Dites-nous vos préférences, votre niveau physique, vos allergies alimentaires ou tout détail particulier...',
+    formSubmit: 'Planifier mon expérience',
+    formSuccess: 'Merci ! Nous avons bien reçu votre demande.',
+    formSuccessSub: 'Nous vous contacterons dans les 24 heures pour organiser votre expérience.',
+    formError: 'Une erreur est survenue. Veuillez réessayer ou nous appeler directement.',
+    formPrivacy: "J'ai lu et j'accepte la",
+    formPrivacyLink: 'Politique de confidentialité',
+    formPrivacyTail: '. Je consens au traitement de mes données pour gérer ma demande d\'expérience. *',
+    formNote: 'Inclus dans les séjours de 3 nuits ou plus · Sinon sur réservation préalable',
+    moreLabel: 'Découvrir plus',
+    moreHotel: "L'Hôtel",
+    moreRestaurant: 'Le Restaurant',
+    moreEvents: 'Événements & Célébrations',
+    hiEventsPackages: {
+      'ruta-guiada-sierra-de-irta': {
+        title: 'Route guidée de la Sierra de Irta',
+        body: 'Découvrez la réserve naturelle de la Sierra de Irta avec un guide expert. Parcours de 3 heures sur les sentiers côtiers et les belvédères méditerranéens.',
+        cover: '/assets/images/sierra-trail-vertical.jpg',
+      },
+      'visita-guiada-al-castillo-papal': {
+        title: 'Visite guidée du Château Papal',
+        body: 'Le château du pape Luna, joyau médiéval de Peñíscola, vous attend. Visite guidée de 90 minutes entre histoire, remparts et vues sur la mer.',
+        cover: '/assets/images/property-aerial-dusk.jpg',
+      },
+      'cata-de-vinos-y-gastronomia': {
+        title: 'Dégustation de Vins et Gastronomie',
+        body: 'Une soirée de gastronomie valencienne : dégustation guidée de 4 vins A.O. Valence avec accords de produits locaux.',
+        cover: '/assets/images/food-paella-close.jpg',
+      },
+      'kayak-y-snorkel-en-la-costa': {
+        title: 'Kayak et Snorkeling sur la Côte',
+        body: 'Explorez les criques et les fonds marins de la Sierra de Irta lors d’une sortie guidée avec équipement inclus et pauses snorkeling.',
+        cover: '/assets/images/sierra-tower-sea.jpg',
+      },
+    },
+  },
+  de: {
+    title: 'Erlebnisse',
+    description: 'Entdecken Sie die Costa del Azahar mit Ausflügen, Wasseraktivitäten, Kultur und Gastronomie, die exklusiv für Gäste von Porta D\'irta in Peñíscola konzipiert sind.',
+    heroLabel: 'Erlebnisse',
+    heroHeading: 'Entdecken Sie die Costa del Azahar',
+    heroBody: 'Ausflüge, Gastronomie und Abenteuer für unsere Gäste',
+    heroPills: ['Natur', 'Meer', 'Kultur', 'Gastronomie'],
+    introLabel: 'Für unsere Gäste',
+    introHeading: 'Alles, was Peñíscola zu bieten hat',
+    introBody1: 'Bei Porta D\'irta glauben wir, dass ein perfekter Aufenthalt weit über den Komfort der Villa hinausgeht. Deshalb haben wir die besten Erlebnisse an der Costa del Azahar exklusiv für unsere Gäste zusammengestellt.',
+    introBody2: 'Wir arbeiten mit zertifizierten lokalen Guides und vertrauenswürdigen Partnern zusammen, um Authentizität, Sicherheit und besondere Momente zu gewährleisten.',
+    introImg1: 'Wandern in der Sierra de Irta',
+    introImg2: 'Kajakfahren im Mittelmeer',
+    introImg3: 'Burg von Peñíscola',
+    introImg4: 'Lokale Gastronomie — arroz a banda',
+    packagesDisclaimer: '⚠️ Testsystem. Für Buchungen rufen Sie uns bitte direkt an:',
+    packagesLabel: 'Buchen Sie Ihr Erlebnis',
+    packagesHeading: 'Unsere Pakete',
+    packagesBody: 'Begrenzte Plätze. Bitte frühzeitig buchen, um Ihr Erlebnis zu sichern.',
+    packagesEmptyTitle: 'Neue Erlebnisse bald verfügbar',
+    packagesEmptyBody: 'Wir bereiten neue Pakete für die nächste Saison vor. Kontaktieren Sie uns für weitere Informationen.',
+    packagesEmptyCta: 'Kontakt aufnehmen',
+    sierraLabel: 'Natur',
+    sierraHeading: 'Sierra de Irta',
+    sierraBody1: 'Der Naturpark Sierra de Irta ist einer der letzten unberührten Küstenabschnitte des spanischen Mittelmeers. Mit über 5.000 Hektar Macchia, Klippen und versteckten Buchten ist er der ideale Ort, um wieder mit der Natur in Kontakt zu kommen.',
+    sierraBody2: 'Unsere lokalen Guides führen Sie auf den spektakulärsten Wegen und passen die Route an Ihr Fitnesslevel und Ihre Interessen an.',
+    sierraActivities: ['Geführte Wanderung', 'Radtouren', 'Vogelbeobachtung', 'Naturfotografie'],
+    sierraCta: 'Ausflug buchen',
+    sierraPricePrefix: 'ab',
+    seaLabel: 'Meer & Strand',
+    seaHeading: 'Das Mittelmeer vor Ihrer Tür',
+    sea1Title: 'Kajak & Schnorcheln',
+    sea1Body: 'Entdecken Sie die Buchten und Meeresgründe der Sierra de Irta per Kajak. Eine 2,5-stündige Tour mit zertifiziertem Guide und kompletter Ausrüstung.',
+    sea2Title: 'Höhlenschnorcheln',
+    sea2Body: 'Tauchen Sie in die Meeresgrotten und Unterwasserhöhlen von Peñíscola ein. Unsere zertifizierten Guides begleiten Sie in eine lebendige Unterwasserwelt.',
+    sea3Title: 'Traditionelles Fischen',
+    sea3Body: 'Fahren Sie bei Sonnenaufgang mit lokalen Fischern hinaus und lernen Sie die traditionellen mediterranen Fangtechniken kennen.',
+    seaCta: 'Verfügbarkeit prüfen',
+    cultureLabel: 'Kultur & Gastronomie',
+    cultureHeading: 'Peñíscola, Geschichte und Geschmack',
+    culture1Title: 'Historisches Peñíscola',
+    culture1Body: 'Entdecken Sie die Geheimnisse der Templerburg, in der Papst Luna seine Bullen verfasste, und schlendern Sie durch die gepflasterten Gassen der Altstadt.',
+    culture2Title: 'Wein- & Gastronomieverkostung',
+    culture2Body: 'Unser Sommelier führt Sie in einer sehr begrenzten, intimen Erfahrung durch Geschichte, Aromen und Geschmäcker der Region.',
+    cultureCta: 'Entdecken',
+    partnersLabel: 'Partner',
+    partnersHeading: 'Unsere lokalen Partner',
+    partnersBody: 'Wir arbeiten mit den besten Anbietern der Region zusammen, um authentische Erlebnisse zu bieten.',
+    formLabel: 'Planen Sie Ihren Aufenthalt',
+    formHeading: 'Gestalten Sie Ihr perfektes Erlebnis',
+    formBody: 'Sagen Sie uns, worauf Sie Lust haben, und wir organisieren alles für Sie',
+    formName: 'Name *',
+    formNamePlaceholder: 'Ihr vollständiger Name',
+    formEmail: 'E-Mail *',
+    formEmailPlaceholder: 'ihre@email.com',
+    formPhone: 'Telefon',
+    formPhonePlaceholder: '+34 600 000 000',
+    formType: 'Erlebnisart *',
+    formTypePlaceholder: 'Option auswählen',
+    formTypeOptions: ['Sierra de Irta', 'Wasseraktivitäten', 'Kultur & Geschichte', 'Gastronomie', 'Individuelle Kombination'],
+    formDate: 'Anreisedatum',
+    formPeople: 'Anzahl Personen',
+    formPeoplePlaceholder: 'z. B. 4',
+    formMessage: 'Besondere Nachricht',
+    formMessagePlaceholder: 'Teilen Sie uns Ihre Wünsche, Ihr Fitnesslevel, Lebensmittelallergien oder besondere Details mit...',
+    formSubmit: 'Mein Erlebnis planen',
+    formSuccess: 'Danke! Wir haben Ihre Anfrage erhalten.',
+    formSuccessSub: 'Wir melden uns innerhalb von 24 Stunden, um Ihr Erlebnis zu organisieren.',
+    formError: 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an.',
+    formPrivacy: 'Ich habe die',
+    formPrivacyLink: 'Datenschutzerklärung',
+    formPrivacyTail: ' gelesen und akzeptiere sie. Ich willige in die Verarbeitung meiner Daten zur Bearbeitung meiner Erlebnisanfrage ein. *',
+    formNote: 'In Aufenthalten ab 3 Nächten enthalten · Sonst nur mit Vorabreservierung',
+    moreLabel: 'Mehr entdecken',
+    moreHotel: 'Das Hotel',
+    moreRestaurant: 'Das Restaurant',
+    moreEvents: 'Veranstaltungen & Feiern',
+    hiEventsPackages: {
+      'ruta-guiada-sierra-de-irta': {
+        title: 'Geführte Route Sierra de Irta',
+        body: 'Entdecken Sie das Naturschutzgebiet Sierra de Irta mit einem erfahrenen Guide. 3-stündige Tour über Küstenpfade und Aussichtspunkte am Mittelmeer.',
+        cover: '/assets/images/sierra-trail-vertical.jpg',
+      },
+      'visita-guiada-al-castillo-papal': {
+        title: 'Geführter Besuch des Papstschlosses',
+        body: 'Das Schloss von Papst Luna, das mittelalterliche Juwel von Peñíscola, erwartet Sie. 90-minütige Führung durch Geschichte, Mauern und Meeresblicke.',
+        cover: '/assets/images/property-aerial-dusk.jpg',
+      },
+      'cata-de-vinos-y-gastronomia': {
+        title: 'Wein- und Gastronomieverkostung',
+        body: 'Ein Abend valencianischer Gastronomie: geführte Verkostung von 4 Weinen aus der D.O. Valencia mit lokalen Produkten.',
+        cover: '/assets/images/food-paella-close.jpg',
+      },
+      'kayak-y-snorkel-en-la-costa': {
+        title: 'Kajak und Schnorcheln an der Küste',
+        body: 'Erkunden Sie die Buchten und Meeresgründe der Sierra de Irta bei einem geführten Ausflug mit Ausrüstung und Schnorchelstopps.',
+        cover: '/assets/images/sierra-tower-sea.jpg',
+      },
+    },
+  },
+} as const;
+
+const c = copy[lang];
+
+const colaboradores = (await getCollection('colaboradores')).sort((a, b) => a.data.orden - b.data.orden);
+
+const hieventsUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'http://localhost:8082';
+const tastyigniterUrl = import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081';
+
+let hiEvents: any[] = [];
+try {
+  const res = await fetch(`${hieventsUrl}/api/public/organizers/1/events`, { headers: { Accept: 'application/json' } });
+  if (res.ok) {
+    const json = await res.json();
+    hiEvents = json.data ?? [];
+  }
+} catch (e: any) {
+  console.warn('[experiencias] Hi.Events unavailable:', e.message);
+}
+
+function getExp(slug: string) {
+  const ev = hiEvents.find((e) => e.slug === slug);
+  if (!ev) return { price: null, label: slug, anchor: '#contacto' };
+  const rawPrice = ev.product_categories?.flatMap((cat: any) => cat.products ?? [])?.find((p: any) => p.price != null)?.price ?? null;
+  return { price: rawPrice != null ? Math.round(rawPrice / 100) : null, label: ev.title as string, anchor: '#contacto' };
+}
+
+const sierra = getExp('ruta-guiada-sierra-de-irta');
+const kayak = getExp('kayak-y-snorkel-en-la-costa');
+const vinos = getExp('cata-de-vinos-y-gastronomia');
+const castle = getExp('visita-guiada-al-castillo-papal');
+
+interface HiPackage {
+  id: number;
+  title: string;
+  slug: string;
+  description_preview: string;
+  start_date: string;
+  lifecycle_status: 'UPCOMING' | 'PAST' | 'ENDED';
+  cover_url: string | null;
+  price: number | null;
+  booking_url: string;
+}
+
+const hiEventsBaseUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'https://events.hobbitonranch.com';
+
+const livePackages: HiPackage[] = hiEvents
+  .filter((e: any) => e.status === 'LIVE')
+  .sort((a: any, b: any) => {
+    if (a.lifecycle_status === 'UPCOMING' && b.lifecycle_status !== 'UPCOMING') return -1;
+    if (a.lifecycle_status !== 'UPCOMING' && b.lifecycle_status === 'UPCOMING') return 1;
+    return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+  })
+  .map((e: any) => {
+    const rawPrice = e.product_categories?.flatMap((cat: any) => cat.products ?? [])?.find((p: any) => p.price != null)?.price ?? null;
+    return {
+      id: e.id,
+      title: e.title,
+      slug: e.slug,
+      description_preview: e.description_preview ?? '',
+      start_date: e.start_date,
+      lifecycle_status: e.lifecycle_status ?? 'UPCOMING',
+      cover_url: e.images?.[0]?.url ?? null,
+      price: rawPrice != null ? Math.round(rawPrice / 100) : null,
+      booking_url: `${hiEventsBaseUrl}/e/${e.slug}`,
+    };
+  });
+
+const packageCopy = c.hiEventsPackages ?? {};
+---
+
+<Layout title={c.title} description={c.description} lang={lang} ogImage="/assets/images/sierra-tower-wide.jpg">
+  <section class="relative flex items-center justify-center min-h-screen w-full overflow-hidden" aria-label={c.heroLabel}>
+    <img src="/assets/images/sierra-tower-sea.jpg" alt={c.heroHeading} class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />
+    <div class="absolute inset-0 bg-brand-forest/50" aria-hidden="true"></div>
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
+      <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">{c.heroLabel}</p>
+      <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">{c.heroHeading}</h1>
+      <GarlandDivider light />
+      <p class="font-body text-white/80 text-lg leading-relaxed max-w-xl">{c.heroBody}</p>
+      <div class="flex flex-wrap justify-center gap-3 mt-2">
+        {c.heroPills.map((pill) => (<span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">{pill}</span>))}
+      </div>
+      <a href="#experiencias" class="mt-6 inline-flex items-center gap-2 font-body text-white/70 text-xs uppercase tracking-widest hover:text-white transition-colors duration-300" aria-label={c.heroBody}>
+        {lang === 'es' ? 'Descubrir experiencias' : lang === 'fr' ? 'Découvrir les expériences' : lang === 'de' ? 'Erlebnisse entdecken' : 'Discover experiences'}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <section id="experiencias" class="bg-brand-cream py-24 md:py-32 px-4" aria-label={c.introLabel}>
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="flex flex-col gap-6">
+          <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">{c.introLabel}</p>
+          <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">{c.introHeading}</h2>
+          <GarlandDivider />
+          <p class="font-body text-brand-stone text-lg leading-relaxed">{c.introBody1}</p>
+          <p class="font-body text-brand-stone text-lg leading-relaxed">{c.introBody2}</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <img src="/assets/images/sierra-tower-wide.jpg" alt={c.introImg1} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+          <img src="/assets/images/sierra-tower-sea.jpg" alt={c.introImg2} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+          <img src="/assets/images/sierra-trail-vertical.jpg" alt={c.introImg3} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+          <img src="/assets/images/property-aerial-pool.jpg" alt={c.introImg4} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paquetes" class="bg-[#EEF4E6] py-24 md:py-32 px-4" aria-label={c.packagesLabel}>
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-10 bg-amber-400/90 border border-amber-300 text-amber-950 font-body text-sm px-4 py-3 rounded-lg text-center">
+        {c.packagesDisclaimer} <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
+      </div>
+      <div class="flex flex-col items-center gap-4 text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">{c.packagesLabel}</p>
+        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">{c.packagesHeading}</h2>
+        <GarlandDivider />
+        <p class="font-body text-brand-stone text-lg leading-relaxed max-w-2xl">{c.packagesBody}</p>
+      </div>
+      {livePackages.length === 0 ? (
+        <div class="flex flex-col items-center gap-6 py-20 text-center">
+          <p class="font-display italic text-2xl text-brand-blue/60">{c.packagesEmptyTitle}</p>
+          <p class="font-body text-brand-stone/70 text-base max-w-md">{c.packagesEmptyBody}</p>
+          <a href="#contacto" class="inline-flex items-center gap-2 border border-brand-gold text-brand-gold font-body text-sm uppercase tracking-widest px-8 py-3 hover:bg-brand-gold hover:text-white transition-colors duration-300">{c.packagesEmptyCta}</a>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {livePackages.map((pkg) => {
+            const isPast = pkg.lifecycle_status !== 'UPCOMING';
+            const dateObj = new Date(pkg.start_date);
+            const dateStr = dateObj.toLocaleDateString(lang === 'en' ? 'en-GB' : lang === 'fr' ? 'fr-FR' : lang === 'de' ? 'de-DE' : 'es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid' });
+            const localized = packageCopy[pkg.slug] ?? {};
+            const title = localized.title ?? pkg.title;
+            const body = localized.body ?? pkg.description_preview;
+            const cover = localized.cover ?? pkg.cover_url ?? '/assets/images/property-aerial-pool.jpg';
+            return (
+              <article class={`group relative flex flex-col bg-brand-linen rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ${isPast ? 'opacity-60 grayscale' : ''}`} aria-label={title}>
+                <div class="relative overflow-hidden h-56 flex-shrink-0 bg-brand-earth/20">
+                  <img
+                    src={cover}
+                    alt={title}
+                    data-fallback={cover}
+                    class={`w-full h-full object-cover transition-transform duration-500 ${isPast ? '' : 'group-hover:scale-105'}`}
+                    loading="lazy"
+                    decoding="async"
+                    onerror="if(this.dataset.fallback && this.src !== this.dataset.fallback){ this.src = this.dataset.fallback; this.onerror = null; }"
+                  />
+                  {isPast && <div class="absolute inset-0 flex items-center justify-center bg-brand-blue/40"><span class="bg-brand-blue text-white font-body text-xs uppercase tracking-widest px-4 py-2 rounded-full">{lang === 'fr' ? 'Terminé' : lang === 'de' ? 'Beendet' : 'Finalizado'}</span></div>}
+                  {!isPast && pkg.price != null && <div class="absolute top-4 right-4 bg-brand-gold text-white font-body font-semibold text-sm px-3 py-1.5 rounded-full shadow-md">{lang === 'es' ? 'Desde' : lang === 'fr' ? 'À partir de' : lang === 'de' ? 'Ab' : 'From'} {pkg.price}€</div>}
+                </div>
+                <div class="flex flex-col flex-1 gap-4 p-6">
+                  <p class="font-body text-brand-gold text-xs uppercase tracking-widest">{dateStr}</p>
+                  <h3 class="font-display font-light text-xl text-brand-blue leading-snug">{title}</h3>
+                  <p class="font-body text-brand-stone text-sm leading-relaxed line-clamp-3 flex-1">{body}</p>
+                  {!isPast && <a href={pkg.booking_url} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 bg-brand-gold text-white font-body text-sm uppercase tracking-widest px-6 py-3 hover:bg-brand-stone transition-colors duration-300">{lang === 'fr' ? 'Réserver' : lang === 'de' ? 'Buchen' : 'Reservar'}</a>}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <GarlandDivider />
+
+  <section class="bg-brand-blue min-h-screen flex flex-col lg:flex-row overflow-hidden" aria-label={c.sierraLabel}>
+    <div class="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen flex-shrink-0">
+      <img src="/assets/images/sierra-trail-vertical.jpg" alt={c.sierraHeading} class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
+    </div>
+    <div class="w-full lg:w-1/2 flex items-center py-24 md:py-32 px-8 md:px-16">
+      <div class="flex flex-col gap-8 max-w-lg">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">{c.sierraLabel}</p>
+        <h2 class="font-display italic text-4xl sm:text-5xl md:text-6xl text-white leading-tight">{c.sierraHeading}</h2>
+        <GarlandDivider />
+        <p class="font-body text-white/80 text-base leading-relaxed">{c.sierraBody1}</p>
+        <p class="font-body text-white/80 text-base leading-relaxed">{c.sierraBody2}</p>
+        <ul class="flex flex-col gap-4">
+          {c.sierraActivities.map((item) => (
+            <li class="flex items-center gap-4"><span class="text-brand-gold">✓</span><span class="font-body text-white text-base">{item}</span></li>
+          ))}
+        </ul>
+        <div class="pt-2 flex items-center gap-4 flex-wrap">
+          <a href="#contacto" data-exp="sierra-irta" class="exp-cta inline-flex items-center justify-center px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg">{c.sierraCta}</a>
+          {sierra.price && <span class="font-body text-white/60 text-sm">{c.sierraPricePrefix} €{sierra.price}/persona</span>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-cream py-24 md:py-32 px-4" aria-label={c.seaLabel}>
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">{c.seaLabel}</p>
+        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">{c.seaHeading}</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[{...kayak,title:c.sea1Title,body:c.sea1Body,img:'/assets/images/sierra-tower-wide.jpg',exp:'actividades-acuaticas'},{...vinos,title:c.sea2Title,body:c.sea2Body,img:'/assets/images/sierra-tower-sea.jpg',exp:'actividades-acuaticas'},{...castle,title:c.sea3Title,body:c.sea3Body,img:'/assets/images/property-aerial-twilight.jpg',exp:'actividades-acuaticas'}].map((card) => (
+          <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
+            <div class="relative overflow-hidden">
+              <img src={card.img} alt={card.title} class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+              <div class="absolute top-4 right-4"><span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">{card.price ? `${c.sierraPricePrefix} €${card.price}/persona` : '—'}</span></div>
+            </div>
+            <div class="flex flex-col gap-3 p-6 flex-1">
+              <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">{card.title}</h3>
+              <p class="font-body text-brand-stone text-sm leading-relaxed">{card.body}</p>
+              <div class="mt-auto pt-4"><a href="#contacto" data-exp={card.exp} class="exp-cta inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300">{c.seaCta}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-blue py-24 md:py-32 px-4" aria-label={c.cultureLabel}>
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">{c.cultureLabel}</p>
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white">{c.cultureHeading}</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
+          <div class="relative overflow-hidden">
+            <img src="/assets/images/food-paella-close.jpg" alt={c.culture1Title} class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/50 to-transparent"></div>
+            {castle.price && <div class="absolute top-4 right-4"><span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">{c.sierraPricePrefix} €{castle.price}/persona</span></div>}
+          </div>
+          <div class="flex flex-col gap-4 p-8 flex-1">
+            <h3 class="font-display text-3xl text-white font-light">{c.culture1Title}</h3>
+            <p class="font-body text-white/80 text-base leading-relaxed">{c.culture1Body}</p>
+            <div class="mt-auto pt-4"><a href="#contacto" data-exp="cultura-historia" class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">{c.cultureCta}</a></div>
+          </div>
+        </article>
+        <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
+          <div class="relative overflow-hidden">
+            <img src="/assets/images/terrace-breakfast.jpg" alt={c.culture2Title} class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/50 to-transparent"></div>
+            {vinos.price && <div class="absolute top-4 right-4"><span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">{c.sierraPricePrefix} €{vinos.price}/persona</span></div>}
+          </div>
+          <div class="flex flex-col gap-4 p-8 flex-1">
+            <h3 class="font-display text-3xl text-white font-light">{c.culture2Title}</h3>
+            <p class="font-body text-white/80 text-base leading-relaxed">{c.culture2Body}</p>
+            <div class="mt-auto pt-4"><a href="#contacto" data-exp="gastronomia" class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">{c.cultureCta}</a></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-cream py-24 md:py-32 px-4" aria-label={c.partnersLabel}>
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-6">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">{c.partnersLabel}</p>
+        <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">{c.partnersHeading}</h2>
+      </div>
+      <p class="font-body text-brand-stone text-base text-center leading-relaxed max-w-2xl mx-auto mb-16">{c.partnersBody}</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {colaboradores.map((col) => (
+          <div class="group bg-brand-linen border border-brand-sand/30 rounded-xl h-24 flex flex-col items-center justify-center gap-1 px-4 hover:border-brand-gold transition-colors duration-200">
+            {col.data.website ? <a href={col.data.website} target="_blank" rel="noopener noreferrer" class="text-center" aria-label={col.data.nombre}><span class="text-brand-blue group-hover:text-brand-gold font-body text-sm font-medium tracking-wide text-center block transition-colors duration-200">{col.data.nombre}</span><span class="text-brand-stone font-body text-xs text-center block mt-0.5">{col.data.categoria}</span></a> : <><span class="text-brand-blue font-body text-sm font-medium tracking-wide text-center">{col.data.nombre}</span><span class="text-brand-stone font-body text-xs text-center">{col.data.categoria}</span></>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="bg-brand-blue py-24 md:py-32 px-4" aria-label={c.formLabel}>
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-12">
+        <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">{c.formLabel}</p>
+        <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight">{c.formHeading}</h2>
+        <p class="font-body text-white/60 text-base mt-4 leading-relaxed">{c.formBody}</p>
+      </div>
+      <div class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12">
+        <FormHandler formId="experiencias-form" webhookUrl={tastyigniterUrl + '/api/public/contact'} successMessage={`${c.formSuccess} ${c.formSuccessSub}`} sendingText={lang === 'fr' ? 'Envoi en cours...' : lang === 'de' ? 'Wird gesendet...' : lang === 'en' ? 'Sending...' : 'Enviando...'} errorMessage={c.formError}>
+          <input type="hidden" name="source" value="experiencias" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2"><label for="nombre" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formName}</label><input type="text" id="nombre" name="nombre" required placeholder={c.formNamePlaceholder} class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200" /></div>
+            <div class="flex flex-col gap-2"><label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formEmail}</label><input type="email" id="email" name="email" required placeholder={c.formEmailPlaceholder} class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200" /></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2"><label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formPhone}</label><input type="tel" id="telefono" name="telefono" placeholder={c.formPhonePlaceholder} class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200" /></div>
+            <div class="flex flex-col gap-2"><label for="tipo-experiencia" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formType}</label><select id="tipo-experiencia" name="experiencia" required class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 appearance-none"><option value="" disabled selected class="text-brand-blue">{c.formTypePlaceholder}</option>{c.formTypeOptions.map((o) => <option value={o} class="text-brand-blue">{o}</option>)}</select></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2"><label for="fecha-llegada" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formDate}</label><input type="date" id="fecha-llegada" name="fecha" class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 [color-scheme:dark]" /></div>
+            <div class="flex flex-col gap-2"><label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formPeople}</label><input type="number" id="personas" name="personas" min="1" max="20" placeholder={c.formPeoplePlaceholder} class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200" /></div>
+          </div>
+          <div class="flex flex-col gap-2"><label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formMessage}</label><textarea id="mensaje" name="mensaje" rows="5" placeholder={c.formMessagePlaceholder} class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 resize-y"></textarea></div>
+          <div class="flex items-start gap-3"><input type="checkbox" id="rgpd" name="rgpd" required class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold" /><label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">{c.formPrivacy} <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold">{c.formPrivacyLink}</a>{c.formPrivacyTail}</label></div>
+          <div class="flex flex-col items-center gap-4 pt-2"><button type="submit" class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto">{c.formSubmit}</button><p class="font-body text-white/50 text-xs text-center">{c.formNote}</p></div>
+        </FormHandler>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-cream py-24 md:py-32 px-4 border-t border-brand-sand/30" aria-label={c.moreLabel}>
+    <div class="max-w-5xl mx-auto">
+      <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12">{c.moreLabel}</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href={getRelativeLocaleUrl(lang, 'hotel')} class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300" aria-label={c.moreHotel}><span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">{c.moreHotel}</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a href={getRelativeLocaleUrl(lang, 'restaurante')} class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300" aria-label={c.moreRestaurant}><span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">{c.moreRestaurant}</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a href={getRelativeLocaleUrl(lang, 'eventos')} class="group flex items-center justify-between px-8 py-7 border border-brand-sand/50 rounded-xl hover:border-brand-gold hover:bg-white transition-all duration-300" aria-label={c.moreEvents}><span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">{c.moreEvents}</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.querySelectorAll('a.exp-cta[data-exp]').forEach(function(link) {
+      link.addEventListener('click', function() {
+        var sel = document.getElementById('tipo-experiencia');
+        if (sel) sel.value = link.dataset.exp;
+      });
+    });
+  </script>
+</Layout>

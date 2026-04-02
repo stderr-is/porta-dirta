@@ -94,7 +94,7 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
             </a>
           </li>
           <li>
-            <a href={getRelativeLocaleUrl('es', 'experiencias')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
+            <a href={getRelativeLocaleUrl(lang, 'experiencias')} class="font-body text-sm uppercase tracking-wide lg:tracking-widest text-white hover:text-brand-gold transition-colors duration-200">
               {t('nav.experiencias')}
             </a>
           </li>
@@ -183,7 +183,7 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
           <a href={getRelativeLocaleUrl(lang, 'eventos')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.eventos')}</a>
         </li>
         <li>
-          <a href={getRelativeLocaleUrl('es', 'experiencias')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.experiencias')}</a>
+          <a href={getRelativeLocaleUrl(lang, 'experiencias')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.experiencias')}</a>
         </li>
         <li>
           <a href={getRelativeLocaleUrl(lang, 'contacto')} class="block px-6 py-3 font-body text-sm uppercase tracking-widest text-white hover:text-brand-gold transition-colors duration-200">{t('nav.contacto')}</a>
