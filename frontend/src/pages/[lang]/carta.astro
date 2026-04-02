@@ -1,0 +1,15 @@
+---
+/**
+ * carta.astro — Redirect to taperia
+ */
+export const prerender = true;
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+  ];
+}
+const { lang } = Astro.params;
+return Astro.redirect(`/${lang}/taperia`, 301);
+---
