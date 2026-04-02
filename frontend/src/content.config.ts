@@ -1,7 +1,8 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const colaboradores = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/colaboradores' }),
   schema: z.object({
     nombre: z.string(),
     categoria: z.string(),
@@ -12,7 +13,7 @@ const colaboradores = defineCollection({
 });
 
 const eventosLocales = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/eventos-locales' }),
   schema: z.object({
     titulo: z.string(),
     fecha: z.coerce.date(),
