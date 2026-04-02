@@ -342,6 +342,9 @@ export const translations: Record<Locale, Record<string, any>> = {
       form_option_otro: "Otro",
       form_success_heading: "¡Mensaje enviado!",
       form_success_body: "Gracias por ponerte en contacto con nosotros. Te responderemos en menos de 48 horas.",
+      location_text: "Peñíscola, Costa del Azahar, España",
+      drive_text: "45 min desde Valencia, 1h desde Tarragona",
+      airport_text: "Aeropuerto de Valencia (VLC) · 90 km",
     },
     eventos: {
       hero_label: "EVENTOS & CELEBRACIONES",
@@ -837,6 +840,9 @@ export const translations: Record<Locale, Record<string, any>> = {
       form_option_otro: "Other",
       form_success_heading: "Message sent!",
       form_success_body: "Thank you for contacting us. We will respond within 48 hours.",
+      location_text: "Peñíscola, Costa del Azahar, Spain",
+      drive_text: "45 min from Valencia, 1h from Tarragona",
+      airport_text: "Valencia Airport (VLC) · 90 km",
     },
     eventos: {
       hero_label: "EVENTS & CELEBRATIONS",
@@ -1332,6 +1338,9 @@ export const translations: Record<Locale, Record<string, any>> = {
       form_option_otro: "Autre",
       form_success_heading: "Message envoyé !",
       form_success_body: "Merci de nous avoir contactés. Nous répondrons dans les 48 heures.",
+      location_text: "Peñíscola, Costa del Azahar, Espagne",
+      drive_text: "45 min de Valence, 1h de Tarragone",
+      airport_text: "Aéroport de Valence (VLC) · 90 km",
     },
     eventos: {
       hero_label: "ÉVÉNEMENTS & CÉLÉBRATIONS",
@@ -1827,6 +1836,9 @@ export const translations: Record<Locale, Record<string, any>> = {
       form_option_otro: "Sonstiges",
       form_success_heading: "Nachricht gesendet!",
       form_success_body: "Danke für Ihre Kontaktaufnahme. Wir antworten innerhalb von 48 Stunden.",
+      location_text: "Peñíscola, Costa del Azahar, Spanien",
+      drive_text: "45 Min. von Valencia, 1 Std. von Tarragona",
+      airport_text: "Flughafen Valencia (VLC) · 90 km",
     },
     eventos: {
       hero_label: "VERANSTALTUNGEN & FEIERN",
