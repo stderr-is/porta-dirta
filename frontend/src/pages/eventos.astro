@@ -162,14 +162,14 @@ function fmtFecha(d: Date) {
           <GarlandDivider />
 
           <!-- Paragraphs -->
-          <p class="font-body text-brand-stone text-lg leading-relaxed">
+          <p class="font-body text-brand-stone text-lg leading-relaxed" data-i18n="eventos.venue_body1">
             Porta D'irta te ofrece un espacio privilegiado donde la naturaleza y la elegancia se
             encuentran. Nuestros jardines mediterráneos, con palmeras centenarias y buganvillas en
             flor, crean el escenario perfecto para celebraciones al aire libre. La amplia terraza
             con vistas al mar Mediterráneo transforma cualquier evento en una experiencia
             verdaderamente irrepetible.
           </p>
-          <p class="font-body text-brand-stone text-lg leading-relaxed">
+          <p class="font-body text-brand-stone text-lg leading-relaxed" data-i18n="eventos.venue_body2">
             Disponemos de distintas zonas para adaptarnos a cada tipo de celebración: desde íntimas
             reuniones familiares hasta grandes banquetes de boda. La pista de tenis, la piscina y
             los rincones ajardinados ofrecen infinitas posibilidades para que cada detalle refleje
@@ -308,7 +308,7 @@ function fmtFecha(d: Date) {
           <!-- Content -->
           <div class="flex flex-col gap-4 p-7 flex-1">
             <h3 class="font-display text-3xl text-white font-light" data-i18n="eventos.type_bodas_heading">Bodas</h3>
-            <p class="font-body text-white/80 text-base leading-relaxed">
+            <p class="font-body text-white/80 text-base leading-relaxed" data-i18n="eventos.type_bodas_body">
               Tu boda en Porta D'irta es mucho más que una ceremonia: es el inicio de una historia
               inolvidable. Nuestros paquetes nupciales incluyen decoración personalizada, menú de
               alta gastronomía mediterránea y coordinación total del evento para que solo te
@@ -319,7 +319,7 @@ function fmtFecha(d: Date) {
                 href="#contacto"
                 class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
               >
-                Solicitar Información
+                <span data-i18n="eventos.type_bodas_cta">Solicitar Información</span>
               </a>
             </div>
           </div>
@@ -345,7 +345,7 @@ function fmtFecha(d: Date) {
           <!-- Content -->
           <div class="flex flex-col gap-4 p-7 flex-1">
             <h3 class="font-display text-3xl text-white font-light" data-i18n="eventos.type_comuniones_heading">Comuniones</h3>
-            <p class="font-body text-white/80 text-base leading-relaxed">
+            <p class="font-body text-white/80 text-base leading-relaxed" data-i18n="eventos.type_comuniones_body">
               Celebra este momento único rodeado de los seres más queridos en un entorno mágico
               frente al Mediterráneo. Ofrecemos menús especialmente diseñados para todas las
               edades, animación infantil y espacios adaptados para que los más pequeños disfruten
@@ -356,7 +356,7 @@ function fmtFecha(d: Date) {
                 href="#contacto"
                 class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
               >
-                Solicitar Información
+                <span data-i18n="eventos.type_comuniones_cta">Solicitar Información</span>
               </a>
             </div>
           </div>
@@ -382,7 +382,7 @@ function fmtFecha(d: Date) {
           <!-- Content -->
           <div class="flex flex-col gap-4 p-7 flex-1">
             <h3 class="font-display text-3xl text-white font-light" data-i18n="eventos.type_private_heading">Eventos Privados</h3>
-            <p class="font-body text-white/80 text-base leading-relaxed">
+            <p class="font-body text-white/80 text-base leading-relaxed" data-i18n="eventos.type_private_body">
               Desde cumpleaños íntimos hasta cenas de empresa o retiros corporativos, nuestra
               villa se adapta a cualquier tipo de evento privado. Disponemos de espacios flexibles
               tanto en interior como en exterior, con tecnología audiovisual y catering a medida
@@ -393,7 +393,7 @@ function fmtFecha(d: Date) {
                 href="#contacto"
                 class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300"
               >
-                Solicitar Información
+                <span data-i18n="eventos.type_private_cta">Solicitar Información</span>
               </a>
             </div>
           </div>
@@ -585,12 +585,8 @@ function fmtFecha(d: Date) {
                 name="nombre"
                 required
                 placeholder="Tu nombre completo"
+                data-i18n-placeholder="eventos.form_name_placeholder"
                 class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
-              />
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label for="email" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium" data-i18n="eventos.form_email_label">
                 Email *
               </label>
               <input
@@ -668,6 +664,7 @@ function fmtFecha(d: Date) {
                 min="1"
                 max="120"
                 placeholder="Ej. 80"
+                data-i18n-placeholder="eventos.form_guests_placeholder"
                 class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200"
               />
             </div>
@@ -684,6 +681,7 @@ function fmtFecha(d: Date) {
               name="mensaje"
               rows="5"
               placeholder="Cuéntanos tu visión: tipo de celebración, necesidades especiales, preguntas..."
+              data-i18n-placeholder="eventos.form_message_placeholder"
               class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 resize-y"
             ></textarea>
           </div>
@@ -698,9 +696,8 @@ function fmtFecha(d: Date) {
               class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold"
             />
             <label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">
-              He leído y acepto la
-              <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold">Política de Privacidad</a>.
-              Consiento el tratamiento de mis datos para atender mi consulta de evento. *
+              <span data-i18n="eventos.rgpd_text">He leído y acepto la</span>
+              <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold" data-i18n="eventos.rgpd_privacy_link">Política de Privacidad</a><span data-i18n="eventos.rgpd_text2">. Consiento el tratamiento de mis datos para atender mi consulta de evento. *</span>
             </label>
           </div>
 
