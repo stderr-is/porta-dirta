@@ -144,3 +144,10 @@ When moving to the final Hostinger VPS:
 7. Deploy Astro frontend to Hostinger (static export or Node.js Docker container for SSR)
 8. Point Cloudflare DNS to Hostinger IP (proxy mode ON for CDN + SSL)
 9. Decommission Cloudflare Tunnel + Cloudflare Pages
+
+## 2026-04-03 Update (Menu + i18n stabilization)
+
+- n8n menu updates were stabilized end-to-end (`/bebidas`, `/taperia`) with strict deployment protocol on each workflow change: `workflow_history` insert -> `workflow_entity` (`versionId` + `activeVersionId`) update -> n8n restart -> Telegram webhook re-register.
+- Runtime config alignment completed: `MENU_CARTA_DOC_ID` passthrough added in `backend/docker-compose.yml` for n8n service to avoid wrong source-doc fallback behavior.
+- Frontend multilingual menu pages now use translation overlays that preserve numeric/non-text fields (prices, allergens, units) instead of replacing full objects.
+- Localized table hub routes are live at `/en/mesa`, `/fr/mesa`, `/de/mesa` after moving `[lang]/mesa` to dynamic-compatible behavior and deploying updated container image.

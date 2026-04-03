@@ -82,9 +82,26 @@ const menuDataPath = process.env.MENU_DATA_PATH;
 if (menuDataPath) {
   try { taperia = JSON.parse(fs.readFileSync(`${menuDataPath}/taperia.json`, 'utf-8')); } catch {}
 }
-// Use translated sections if available, fall back to Spanish
+// Keep numeric/allergen fields from base items and only override translatable text fields.
 const langSections = (taperia as any).translations?.[langParam]?.sections;
-const sections = langSections?.length ? langSections : taperia.sections;
+const sections = langSections?.length
+  ? taperia.sections.map((baseSection, sectionIndex) => {
+      const tSection = langSections[sectionIndex] || {};
+      return {
+        ...baseSection,
+        name: tSection.name ?? baseSection.name,
+        note: tSection.note ?? baseSection.note,
+        items: baseSection.items.map((baseItem, itemIndex) => {
+          const tItem = tSection.items?.[itemIndex] || {};
+          return {
+            ...baseItem,
+            name: tItem.name ?? baseItem.name,
+            description: tItem.description ?? baseItem.description,
+          };
+        }),
+      };
+    })
+  : taperia.sections;
 ---
 
 <Layout
@@ -102,7 +119,7 @@ const sections = langSections?.length ? langSections : taperia.sections;
   </section>
   <section class="bg-brand-cream py-10">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
-      {taperia.sections.map(section => (
+      {sections.map(section => (
         <div>
           <div class="flex items-center gap-3 mb-1">
             <h2 class="font-display text-2xl sm:text-3xl text-brand-blue shrink-0">{section.name}</h2>

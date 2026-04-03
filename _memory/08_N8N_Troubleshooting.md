@@ -331,3 +331,12 @@ When debugging, always check the `mode` column in `execution_entity`:
 - `webhook` = triggered by real Telegram message — Code nodes run in task runner sandbox
 
 If a workflow works in `manual` mode but fails in `webhook` mode, the cause is almost always the **task runner sandbox** (issue #1 above).
+
+---
+
+## 2026-04-03 Applied Fixes Reference
+
+- Silent menu-command failures can occur when error-notification nodes fail first (e.g., Telegram entity/formatting issues). Ensure error branch payloads are plain-safe and do not introduce parse-mode fragility.
+- If menu save fails with permission errors on `/var/www/data/*.json`, check container volume owner/group and writable perms before retrying parser logic.
+- For workflow JSON DB deploys, always update both `versionId` and `activeVersionId`; missing either can leave production on stale logic even though history row exists.
+- Webhook re-registration remains required after n8n restart in this environment.

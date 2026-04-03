@@ -56,3 +56,8 @@ The digital presence must mirror the physical property: spacious, elegant, and p
 * **The Entry Point:** A hero video background overlaid immediately with the Beds24 availability widget. Zero friction to start the booking process.
 * **The Restaurant (Standalone Focus):** Targeted at locals and walk-ins. Features Fixed, Weekly, and Seasonal menus. Links back to the hotel/events are present in the functional header, but there are no aggressive room-booking popups.
 * **The Events Space:** Dedicated sections for Weddings, Communions, and Birthdays, highlighting the gardens and tennis court, utilizing inquiry forms and Hi.Events where applicable.
+
+## 2026-04-03 Design System Alignment
+
+- No structural visual-system changes were introduced during menu pipeline stabilization; updates were limited to multilingual text correctness and route availability.
+- Existing component styling and spacing for restaurant QR/menu surfaces remain canonical and unchanged.

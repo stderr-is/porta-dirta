@@ -248,3 +248,15 @@ Every AI-triggered API mutation is appended to n8n workflow static data:
 | `workflow-c-yield-management.json` | Settings → Import workflow | Ready to import |
 
 **After import:** Update credential IDs for Telegram Bot, IMAP, and SMTP credentials in each workflow node.
+
+## 2026-04-03 Operational Update (Workflow B)
+
+- Workflow B menu command path was hardened for production:
+  - stronger JSON-shape enforcement and parse diagnostics in menu extraction path,
+  - safer Telegram error messaging path (avoids formatting/entity failures),
+  - doc-ID fallback compatibility for `/taperia` route selection.
+- Production deployment pattern used repeatedly and confirmed:
+  1. insert new `workflow_history` row,
+  2. set `workflow_entity.versionId` and `workflow_entity.activeVersionId` to same new UUID,
+  3. restart n8n,
+  4. re-register Telegram webhook.

@@ -532,3 +532,11 @@ portadirta.com/fr/       → FR
 - [ ] Update indexable room pricing on `/hotel` whenever Beds24 prices change
 - [ ] Publish 1 blog post (from Month 3 onwards)
 - [ ] Monitor "hotel boutique Peñíscola" rank weekly (Google Incognito / Ahrefs free tier)
+
+## 2026-04-03 Technical SEO / Routing Update
+
+- Localized restaurant table hub routes now resolve correctly:
+  - `/en/mesa`
+  - `/fr/mesa`
+  - `/de/mesa`
+- This removes avoidable 404 leakage on translated internal entry points and improves crawl consistency for localized hospitality navigation.

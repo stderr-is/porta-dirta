@@ -232,11 +232,11 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\"model\":\"deepseek-chat\",\"messages\":[{\"role\":\"user\",\"content\":$json.claudePrompt}],\"temperature\":0}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  model: \"deepseek-chat\",\n  max_tokens: 512,\n  temperature: 0,\n  messages: [{\n    role: \"user\",\n    content: (\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings:\\n  beds24.getOccupancy\\n  beds24.listBookings\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"roomName\":\"\",\"price\":null,\"bookingId\":null,\"guests\":null},\"humanReadableSummary\":\"<one sentence result confirmation in Spanish>\"}\\nRules: Dates use YYYY-MM-DD format current year. Weekly queries: startDate=Monday endDate=Sunday. Unknown commands use action=unknown. NEVER add isDestructive or confirmationMessage fields.'\n        : 'You are an API router. Output ONLY JSON.\\nActions: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    )\n  }]\n}) }}",
         "options": {
           "timeout": 30000
         },
-        "body": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings:\\n  beds24.getOccupancy\\n  beds24.listBookings\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"roomName\":\"\",\"price\":null,\"bookingId\":null,\"guests\":null},\"humanReadableSummary\":\"<one sentence result confirmation in Spanish>\"}\\nRules: Dates use YYYY-MM-DD format current year. Weekly queries: startDate=Monday endDate=Sunday. Unknown commands use action=unknown. NEVER add isDestructive or confirmationMessage fields.'\n        : 'You are an API router. Output ONLY JSON.\\nActions: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}"
+        "body": "={\n  \"model\": \"deepseek-chat\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings:\\n  beds24.getOccupancy\\n  beds24.listBookings\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"roomName\":\"\",\"price\":null,\"bookingId\":null,\"guests\":null},\"humanReadableSummary\":\"<one sentence result confirmation in Spanish>\"}\\nRules: Dates use YYYY-MM-DD format current year. Weekly queries: startDate=Monday endDate=Sunday. Unknown commands use action=unknown. NEVER add isDestructive or confirmationMessage fields.'\n        : 'You are an API router. Output ONLY JSON.\\nActions: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}"
       },
       "id": "b1000010-0000-0000-0000-000000000010",
       "name": "Gemini — Text Intent",
@@ -648,7 +648,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{\n  JSON.stringify({\n    model: \"claude-haiku-4-5-20251001\",\n    max_tokens: 512,\n    messages: [{\n      role: \"user\",\n      content: `Analiza este email y devuelve ÚNICAMENTE JSON válido (sin markdown):\\n{\\n  \\\"intent\\\": \\\"booking\\\" | \\\"restaurant\\\" | \\\"event\\\" | \\\"info\\\" | \\\"complaint\\\" | \\\"other\\\",\\n  \\\"checkIn\\\": \\\"YYYY-MM-DD\\\" o null,\\n  \\\"checkOut\\\": \\\"YYYY-MM-DD\\\" o null,\\n  \\\"guests\\\": número o null,\\n  \\\"restaurantDate\\\": \\\"YYYY-MM-DD\\\" o null,\\n  \\\"restaurantGuests\\\": número o null,\\n  \\\"language\\\": \\\"es\\\" | \\\"en\\\" | \\\"fr\\\" | \\\"de\\\" | \\\"it\\\" | \\\"nl\\\" | etc,\\n  \\\"senderName\\\": \\\"nombre del remitente\\\"\\n}\\n\\nFecha de hoy: {{ new Date().toISOString().substring(0,10) }}. Convierte fechas relativas en fechas exactas.\\n\\nEmail:\\nDe: {{ $(\\'Email Idempotency\\').first().json.from }}\\nAsunto: {{ $(\\'Email Idempotency\\').first().json.subject }}\\nCuerpo: {{ $(\\'Email Idempotency\\').first().json.bodyText }}`\n    }]\n  })\n}}",
+        "jsonBody": "={{\n  JSON.stringify({\n    model: \"deepseek-chat\",\n    max_tokens: 512,\n    messages: [{\n      role: \"user\",\n      content: `Analiza este email y devuelve ÚNICAMENTE JSON válido (sin markdown):\\n{\\n  \\\"intent\\\": \\\"booking\\\" | \\\"restaurant\\\" | \\\"event\\\" | \\\"info\\\" | \\\"complaint\\\" | \\\"other\\\",\\n  \\\"checkIn\\\": \\\"YYYY-MM-DD\\\" o null,\\n  \\\"checkOut\\\": \\\"YYYY-MM-DD\\\" o null,\\n  \\\"guests\\\": número o null,\\n  \\\"restaurantDate\\\": \\\"YYYY-MM-DD\\\" o null,\\n  \\\"restaurantGuests\\\": número o null,\\n  \\\"language\\\": \\\"es\\\" | \\\"en\\\" | \\\"fr\\\" | \\\"de\\\" | \\\"it\\\" | \\\"nl\\\" | etc,\\n  \\\"senderName\\\": \\\"nombre del remitente\\\"\\n}\\n\\nFecha de hoy: {{ new Date().toISOString().substring(0,10) }}. Convierte fechas relativas en fechas exactas.\\n\\nEmail:\\nDe: {{ $(\\'Email Idempotency\\').first().json.from }}\\nAsunto: {{ $(\\'Email Idempotency\\').first().json.subject }}\\nCuerpo: {{ $(\\'Email Idempotency\\').first().json.bodyText }}`\n    }]\n  })\n}}",
         "options": {
           "timeout": 20000
         }
@@ -871,7 +871,7 @@
         420
       ],
       "parameters": {
-        "jsCode": "const { text, chatId, tier } = items[0].json;\nconst lower = (text || '').toLowerCase().trim();\n\nlet menuType = '';\nlet docId = '';\n\nif (lower.startsWith('/taperia') || lower.startsWith('/carta')) {\n  menuType = 'taperia';\n  docId = $env.MENU_TAPERIA_DOC_ID || '';\n} else if (lower.startsWith('/menu')) {\n  menuType = 'menu';\n  docId = $env.MENU_MENU_DOC_ID || '';\n} else if (lower.startsWith('/bebidas')) {\n  menuType = 'bebidas';\n  docId = $env.MENU_BEBIDAS_DOC_ID || '';\n} else if (lower.startsWith('/desayuno')) {\n  menuType = 'desayuno';\n  docId = $env.MENU_DESAYUNO_DOC_ID || '';\n} else if (lower.startsWith('/streetfood')) {\n  menuType = 'streetfood';\n  docId = $env.MENU_STREETFOOD_DOC_ID || '';\n}\n\nif (!docId || docId.startsWith('REPLACE_')) {\n  return [{ json: {\n    error: `⚠️ No configurado: añade MENU_${menuType.toUpperCase()}_DOC_ID en las variables de entorno de n8n.`,\n    chatId,\n    menuType,\n    isError: true,\n  }}];\n}\n\nreturn [{ json: { menuType, docId, chatId, tier, isError: false } }];"
+        "jsCode": "const { text, chatId, tier } = items[0].json;\nconst lower = (text || '').toLowerCase().trim();\n\nlet menuType = '';\nlet docId = '';\n\nif (lower.startsWith('/taperia') || lower.startsWith('/carta')) {\n  menuType = 'taperia';\n  // Backward compatibility: many deployments still use MENU_CARTA_DOC_ID.\n  docId = $env.MENU_TAPERIA_DOC_ID || $env.MENU_CARTA_DOC_ID || '';\n} else if (lower.startsWith('/menu')) {\n  menuType = 'menu';\n  docId = $env.MENU_MENU_DOC_ID || '';\n} else if (lower.startsWith('/bebidas')) {\n  menuType = 'bebidas';\n  docId = $env.MENU_BEBIDAS_DOC_ID || '';\n} else if (lower.startsWith('/desayuno')) {\n  menuType = 'desayuno';\n  docId = $env.MENU_DESAYUNO_DOC_ID || '';\n} else if (lower.startsWith('/streetfood')) {\n  menuType = 'streetfood';\n  docId = $env.MENU_STREETFOOD_DOC_ID || '';\n}\n\nif (!docId || docId.startsWith('REPLACE_')) {\n  return [{ json: {\n    error: `⚠️ No configurado: añade MENU_${menuType.toUpperCase()}_DOC_ID en las variables de entorno de n8n.`,\n    chatId,\n    menuType,\n    isError: true,\n  }}];\n}\n\nreturn [{ json: { menuType, docId, chatId, tier, isError: false } }];"
       }
     },
     {
@@ -936,9 +936,9 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"model\": \"deepseek-chat\",\n  \"max_tokens\": 4096,\n  \"messages\": [{ \"role\": \"user\", \"content\": {{ JSON.stringify($json.prompt) }} }]\n}",
+        "jsonBody": "={\n  \"model\": \"deepseek-chat\",\n  \"temperature\": 0,\n  \"response_format\": { \"type\": \"json_object\" },\n  \"max_tokens\": 8192,\n  \"messages\": [{ \"role\": \"user\", \"content\": {{ JSON.stringify($json.prompt + '\\n\\nIMPORTANT: Return compact minified JSON with no markdown fences and no trailing text.') }} }]\n}",
         "options": {
-          "timeout": 60000
+          "timeout": 180000
         }
       }
     },
@@ -952,7 +952,7 @@
         420
       ],
       "parameters": {
-        "jsCode": "\nconst raw = items[0].json.choices?.[0]?.message?.content || items[0].json.choices?.[0]?.message?.content || items[0].json.content?.[0]?.text || '';\nconst { menuType, chatId } = $('Build Menu Prompt').first().json;\n\n// Strip markdown fences if Claude added them\nconst cleaned = raw.replace(/^```(?:json)?\\s*/i, '').replace(/\\s*```\\s*$/, '').trim();\n\nlet parsed;\ntry {\n  parsed = JSON.parse(cleaned);\n} catch (e) {\n  return [{ json: {\n    isError: true,\n    error: `❌ Claude devolvió JSON inválido para /${menuType}. Error: ${e.message}\\n\\nRespuesta raw (primeros 200 chars):\\n${raw.slice(0, 200)}`,\n    chatId,\n    menuType,\n  }}];\n}\n\nreturn [{ json: { parsed, menuType, chatId, isError: false } }];\n"
+        "jsCode": "\nconst raw = items[0].json.choices?.[0]?.message?.content || items[0].json.content?.[0]?.text || '';\nconst finishReason = items[0].json.choices?.[0]?.finish_reason || '';\nconst usage = items[0].json.usage || {};\nconst { menuType, chatId } = $('Build Menu Prompt').first().json;\n\n// Strip markdown fences if provider still adds them.\nconst cleaned = raw.replace(/^```(?:json)?\\s*/i, '').replace(/\\s*```\\s*$/, '').trim();\n\nlet parsed;\ntry {\n  parsed = JSON.parse(cleaned);\n} catch (e) {\n  const tokenHint = (finishReason === 'length')\n    ? ` Posible corte por límite de tokens (finish_reason=length, completion_tokens=${usage.completion_tokens || 'n/a'}).`\n    : '';\n\n  return [{ json: {\n    isError: true,\n    error: `❌ DeepSeek devolvió JSON inválido para /${menuType}. Error: ${e.message}.${tokenHint}\\n\\nRespuesta raw (primeros 240 chars):\\n${raw.slice(0, 240)}`,\n    chatId,\n    menuType,\n  }}];\n}\n\nreturn [{ json: { parsed, menuType, chatId, isError: false } }];\n"
       }
     },
     {
@@ -1030,7 +1030,32 @@
         340
       ],
       "parameters": {
-        "jsCode": "const saveResult = items[0].json;\nconst ctx = $('Menu Parse OK?').first().json;\nconst { menuType, chatId } = ctx;\n\nconst labels = {\n  taperia: 'La Tapería',\n  carta: 'La Tapería',\n  menu: 'Menú Especial',\n  bebidas: 'Bebidas',\n  desayuno: 'Desayuno',\n  streetfood: 'Street Food',\n};\nconst label = labels[menuType] || menuType;\nconst updatedDate = ctx.parsed?.updated || new Date().toISOString().split('T')[0];\nconst sectionCount = ctx.parsed?.sections?.length || 0;\n\nconst msg = `✅ *${label} actualizada*\\n📅 ${updatedDate} · ${sectionCount} secciones\\n🌐 portadirta.com/${menuType}`;\n\nconst BOT = $env.TELEGRAM_BOT_TOKEN;\nawait $helpers.httpRequest({\n  method: 'POST',\n  url: `https://api.telegram.org/bot${BOT}/sendMessage`,\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' }),\n});\nreturn [{ json: { sent: true } }];\n"
+        "jsCode": "const ctx = $('Menu Parse OK?').first().json;\nconst { menuType, chatId } = ctx;\n\nconst labels = {\n  taperia: 'La Tapería', carta: 'La Tapería',\n  menu: 'Menú Especial', bebidas: 'Bebidas',\n  desayuno: 'Desayuno', streetfood: 'Street Food',\n};\nconst label = labels[menuType] || menuType;\nconst updatedDate = ctx.parsed?.updated || new Date().toISOString().split('T')[0];\nconst sectionCount = ctx.parsed?.sections?.length || 0;\n\nreturn [{ json: {\n  chatId,\n  text: `✅ *${label} actualizada*\\n📅 ${updatedDate} · ${sectionCount} secciones\\n🌐 portadirta.com/${menuType}`,\n} }];\n"
+      }
+    },
+    {
+      "id": "menu-tg-send-ok-000000001",
+      "name": "Send Menu Updated",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        3330,
+        340
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
+        }
+      },
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
       }
     },
     {
@@ -1043,7 +1068,30 @@
         520
       ],
       "parameters": {
-        "jsCode": "\nconst { error, chatId } = items[0].json;\nconst BOT = $env.TELEGRAM_BOT_TOKEN;\nawait $helpers.httpRequest({\n  method: 'POST',\n  url: `https://api.telegram.org/bot${BOT}/sendMessage`,\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ chat_id: chatId, text: error || '❌ Error desconocido al actualizar el menú.' }),\n});\nreturn [{ json: { sent: true } }];\n"
+        "jsCode": "const { error, chatId } = items[0].json;\n\nconst fallback = 'Error al actualizar el menu.';\nconst raw = String(error || fallback);\n\n// Telegram can reject malformed markdown entities depending on parse mode defaults.\n// Force plain-safe text for error messages.\nconst safe = raw\n  .replace(/[\\*_`\\[\\]()~>#+\\-=|{}.!]/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim()\n  .slice(0, 900);\n\nreturn [{ json: {\n  chatId,\n  text: safe || fallback,\n} }];\n"
+      }
+    },
+    {
+      "id": "menu-tg-send-err-000000002",
+      "name": "Send Menu Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        3110,
+        520
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "CAysEtjkeAcp4qSC",
+          "name": "Porta D'irta Telegram Bot"
+        }
+      },
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
       }
     }
   ],
@@ -1557,6 +1605,28 @@
         [
           {
             "node": "Telegram — Menu Updated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram — Menu Updated": {
+      "main": [
+        [
+          {
+            "node": "Send Menu Updated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram — Menu Error": {
+      "main": [
+        [
+          {
+            "node": "Send Menu Error",
             "type": "main",
             "index": 0
           }
@@ -2821,11 +2891,11 @@
           },
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={{ JSON.stringify({\"model\":\"claude-haiku-4-5-20251001\",\"max_tokens\":512,\"messages\":[{\"role\":\"user\",\"content\":$json.claudePrompt}]}) }}",
+          "jsonBody": "={{ JSON.stringify({\"model\":\"deepseek-chat\",\"max_tokens\":512,\"messages\":[{\"role\":\"user\",\"content\":$json.claudePrompt}]}) }}",
           "options": {
             "timeout": 30000
           },
-          "body": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings:\\n  beds24.getOccupancy\\n  beds24.listBookings\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"roomName\":\"\",\"price\":null,\"bookingId\":null,\"guests\":null},\"humanReadableSummary\":\"<one sentence result confirmation in Spanish>\"}\\nRules: Dates use YYYY-MM-DD format current year. Weekly queries: startDate=Monday endDate=Sunday. Unknown commands use action=unknown. NEVER add isDestructive or confirmationMessage fields.'\n        : 'You are an API router. Output ONLY JSON.\\nActions: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}"
+          "body": "={\n  \"model\": \"deepseek-chat\",\n  \"max_tokens\": 512,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      ($('Identity Router').first().json.tier === 'admin'\n        ? 'You are an API router for Porta D\\'irta hotel. Today is ' + new Date().toISOString().split('T')[0] + '.\\nOutput ONLY a JSON object, no markdown, no explanation.\\nThe \"action\" field MUST be EXACTLY one of these strings:\\n  beds24.getOccupancy\\n  beds24.listBookings\\n  beds24.updatePrice\\n  beds24.blockRoom\\n  beds24.cancelBooking\\n  tastyigniter.listReservations\\n  tastyigniter.checkAvailability\\n  hievents.getTicketCounts\\n  unknown\\nSchema: {\"action\":\"<exact string from list>\",\"payload\":{\"date\":\"YYYY-MM-DD\",\"startDate\":\"YYYY-MM-DD\",\"endDate\":\"YYYY-MM-DD\",\"roomId\":null,\"roomName\":\"\",\"price\":null,\"bookingId\":null,\"guests\":null},\"humanReadableSummary\":\"<one sentence result confirmation in Spanish>\"}\\nRules: Dates use YYYY-MM-DD format current year. Weekly queries: startDate=Monday endDate=Sunday. Unknown commands use action=unknown. NEVER add isDestructive or confirmationMessage fields.'\n        : 'You are an API router. Output ONLY JSON.\\nActions: beds24.getOccupancy, tastyigniter.listReservations, tastyigniter.checkAvailability, hievents.getTicketCounts, unknown.\\nSchema: {\"action\":\"\",\"payload\":{},\"humanReadableSummary\":\"\"}')\n      + '\\n\\nCOMMAND: ' + $json.text\n    ) }}\n  }]\n}"
         },
         "id": "b1000010-0000-0000-0000-000000000010",
         "name": "Gemini — Text Intent",
@@ -3091,7 +3161,7 @@
           },
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 400,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      `You are the internal operations assistant for Porta D'irta hotel staff.\nRewrite the following data into a clear, concise operational message in Spanish.\nRules:\n- You are talking TO STAFF, not to guests — never say \"te recomendamos reservar\", \"primavera es ideal\", or any guest-facing marketing copy\n- Lead with the key fact (room name, guest name, count, amount)\n- Keep emojis that are in the data, do not add decoration\n- Max 5 lines. Be direct, like a good hotel PMS system\n- If it's an error, just say what failed and how to fix it\n- If it's a success action (price updated, reservation created), confirm it clearly\n- CONTEXT: if the action is a restaurant reservation (tastyigniter.createReservation / tastyigniter.cancelReservation), NEVER mention \"habitación\" or \"liberar habitación\" — it's a TABLE booking (mesa). Say \"mesa\" or \"reserva de restaurante\".\n- A short useful operational note at the end is ok (e.g. \"checkout mañana a las 12h\", \"recordad llamar al huésped si no aparece\")\n\nDATA:\n` + $('Format Response').first().json.summary\n    ) }}\n  }]\n}",
+          "jsonBody": "={\n  \"model\": \"deepseek-chat\",\n  \"max_tokens\": 400,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify(\n      `You are the internal operations assistant for Porta D'irta hotel staff.\nRewrite the following data into a clear, concise operational message in Spanish.\nRules:\n- You are talking TO STAFF, not to guests — never say \"te recomendamos reservar\", \"primavera es ideal\", or any guest-facing marketing copy\n- Lead with the key fact (room name, guest name, count, amount)\n- Keep emojis that are in the data, do not add decoration\n- Max 5 lines. Be direct, like a good hotel PMS system\n- If it's an error, just say what failed and how to fix it\n- If it's a success action (price updated, reservation created), confirm it clearly\n- CONTEXT: if the action is a restaurant reservation (tastyigniter.createReservation / tastyigniter.cancelReservation), NEVER mention \"habitación\" or \"liberar habitación\" — it's a TABLE booking (mesa). Say \"mesa\" or \"reserva de restaurante\".\n- A short useful operational note at the end is ok (e.g. \"checkout mañana a las 12h\", \"recordad llamar al huésped si no aparece\")\n\nDATA:\n` + $('Format Response').first().json.summary\n    ) }}\n  }]\n}",
           "options": {
             "timeout": 15000
           }
@@ -3245,7 +3315,7 @@
           },
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={{\n  JSON.stringify({\n    model: \"claude-haiku-4-5-20251001\",\n    max_tokens: 1024,\n    messages: [{\n      role: \"user\",\n      content:\n`Eres el asistente de email de Porta D'Irta, hotel rural en Peñíscola (Castellón), España.\n\nINFORMACIÓN DEL ESTABLECIMIENTO:\n- Dirección: Camí del Pebret, s/n, 12598 Peñíscola (Castellón)\n- Tel: +34 644 026 066\n- Web: portadirta.com\n- Restaurante: abierto todos los días, comida 13-16h, cena 20-22h, menú único 35€\n- Reservas hotel: https://www.portadirta.com/hotel\n- Restaurante (reservar): https://www.portadirta.com/restaurante\n- Experiencias: https://www.portadirta.com/experiencias\n\nREGLAS ESTRICTAS:\n- Responde en el MISMO idioma del email entrante (es, en, fr, de, it, nl…)\n- Tono profesional pero cálido, hospitalidad mediterránea\n- Nunca confirmes disponibilidad — usa \"sujeto a disponibilidad / subject to availability\"\n- Firma: \"El equipo de Porta D'Irta\" (en español) o traducción equivalente\n- Para reservas: incluye el enlace portadirta.com/hotel\n- Para restaurante: incluye portadirta.com/restaurante\n- Para experiencias: incluye portadirta.com/experiencias\n- NO escribas \"Subject:\" en el cuerpo\n- Máximo 180 palabras en draftBody\n- Devuelve ÚNICAMENTE JSON válido sin markdown ni explicaciones\n\nEMAIL ENTRANTE:\nDe: ` + $('Email Idempotency').first().json.from + `\nAsunto: ` + $('Email Idempotency').first().json.subject + `\n\n` + $('Email Idempotency').first().json.bodyText + `\n\nRESPONDE CON ESTE JSON EXACTO (sin \\`\\`\\`):\n{\"language\":\"es\",\"intent\":\"booking|restaurant|experience|info|complaint|other\",\"draftSubject\":\"Re: ...\",\"draftBody\":\"...\"}`\n    }]\n  })\n}}",
+          "jsonBody": "={{\n  JSON.stringify({\n    model: \"deepseek-chat\",\n    max_tokens: 1024,\n    messages: [{\n      role: \"user\",\n      content:\n`Eres el asistente de email de Porta D'Irta, hotel rural en Peñíscola (Castellón), España.\n\nINFORMACIÓN DEL ESTABLECIMIENTO:\n- Dirección: Camí del Pebret, s/n, 12598 Peñíscola (Castellón)\n- Tel: +34 644 026 066\n- Web: portadirta.com\n- Restaurante: abierto todos los días, comida 13-16h, cena 20-22h, menú único 35€\n- Reservas hotel: https://www.portadirta.com/hotel\n- Restaurante (reservar): https://www.portadirta.com/restaurante\n- Experiencias: https://www.portadirta.com/experiencias\n\nREGLAS ESTRICTAS:\n- Responde en el MISMO idioma del email entrante (es, en, fr, de, it, nl…)\n- Tono profesional pero cálido, hospitalidad mediterránea\n- Nunca confirmes disponibilidad — usa \"sujeto a disponibilidad / subject to availability\"\n- Firma: \"El equipo de Porta D'Irta\" (en español) o traducción equivalente\n- Para reservas: incluye el enlace portadirta.com/hotel\n- Para restaurante: incluye portadirta.com/restaurante\n- Para experiencias: incluye portadirta.com/experiencias\n- NO escribas \"Subject:\" en el cuerpo\n- Máximo 180 palabras en draftBody\n- Devuelve ÚNICAMENTE JSON válido sin markdown ni explicaciones\n\nEMAIL ENTRANTE:\nDe: ` + $('Email Idempotency').first().json.from + `\nAsunto: ` + $('Email Idempotency').first().json.subject + `\n\n` + $('Email Idempotency').first().json.bodyText + `\n\nRESPONDE CON ESTE JSON EXACTO (sin \\`\\`\\`):\n{\"language\":\"es\",\"intent\":\"booking|restaurant|experience|info|complaint|other\",\"draftSubject\":\"Re: ...\",\"draftBody\":\"...\"}`\n    }]\n  })\n}}",
           "options": {
             "timeout": 20000
           }

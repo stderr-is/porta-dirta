@@ -34,3 +34,7 @@ Based on 2026 hospitality CRO data, we must avoid cognitive overload. The user j
 ## 4. Technical UI Constraints
 * **Mobile-First Touch Targets:** All interactive elements must be easily tap-able via one-handed thumb reach, optimized for high-DPI screens.
 * **Data-Driven Transparency:** Create a specific UI component (a "Live Tech" card) that can eventually pull real-time data from the Easun inverter or SmartLife system, displaying live solar generation or battery capacity to the guest.
+
+## 2026-04-03 UI i18n Note
+
+- The multilingual table hub (`/[lang]/mesa`) now follows per-locale labels for all user-visible card titles (breakfast, taperia, special menu, drinks, street food) while preserving existing visual component structure and spacing.

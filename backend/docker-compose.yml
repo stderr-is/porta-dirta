@@ -126,6 +126,7 @@ services:
       # ── Menu System ───────────────────────────────────────────────
       # Google Doc IDs — share each doc as "anyone with link can view"
       # then paste the ID from the URL: docs.google.com/document/d/<ID>/edit
+      - MENU_CARTA_DOC_ID=${MENU_CARTA_DOC_ID}
       - MENU_TAPERIA_DOC_ID=${MENU_TAPERIA_DOC_ID}
       - MENU_MENU_DOC_ID=${MENU_MENU_DOC_ID}
       - MENU_BEBIDAS_DOC_ID=${MENU_BEBIDAS_DOC_ID}

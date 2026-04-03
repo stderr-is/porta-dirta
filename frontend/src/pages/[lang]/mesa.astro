@@ -7,7 +7,6 @@ import fs from 'node:fs';
 import Layout from '../../layouts/Layout.astro';
 import menuFallback from '../../data/menu.json';
 
-export const prerender = true;
 export function getStaticPaths() {
   return [
     { params: { lang: 'en' } },
@@ -17,53 +16,60 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
+const langParam = lang as string;
+if (!langParam || !['en', 'fr', 'de'].includes(langParam)) {
+  return new Response(null, { status: 404 });
+}
 
 const ui = {
   en: {
     subtitle: 'Restaurant',
-    desayuno_title: 'Desayuno',
+    description: "View all menus for the Porta D'irta restaurant.",
+    desayuno_title: 'Breakfast',
     desayuno_desc: 'Mediterranean breakfast',
-    taperia_title: 'La Taperia',
+    taperia_title: 'The Tapas Bar',
     taperia_desc: 'Tapas · 10:00 \u2013 13:00',
-    menu_title: 'Men\u00fa Semana Santa',
+    menu_title: 'Holy Week Menu',
     menu_desc: 'Special Menu',
     streetfood_title: 'Street Food',
     streetfood_desc: 'by Fifty-Five · 18:00 \u2013 22:00',
-    bebidas_title: 'Bebidas',
+    bebidas_title: 'Drinks',
     bebidas_desc: 'Wines · Beers · Cocktails',
     reservar: 'Book a table',
   },
   fr: {
     subtitle: 'Restaurant',
-    desayuno_title: 'Desayuno',
+    description: "Consultez tous les menus du restaurant Porta D'irta.",
+    desayuno_title: 'Petit d\u00e9jeuner',
     desayuno_desc: 'Petit-d\u00e9jeuner m\u00e9diterran\u00e9en',
-    taperia_title: 'La Taperia',
+    taperia_title: 'Le bar \u00e0 tapas',
     taperia_desc: 'Tapas · 10h00 \u2013 13h00',
-    menu_title: 'Men\u00fa Semana Santa',
+    menu_title: 'Menu de Semaine Sainte',
     menu_desc: 'Menu Sp\u00e9cial',
-    streetfood_title: 'Street Food',
+    streetfood_title: 'Cuisine de rue',
     streetfood_desc: 'by Fifty-Five · 18h00 \u2013 22h00',
-    bebidas_title: 'Bebidas',
+    bebidas_title: 'Boissons',
     bebidas_desc: 'Vins · Bi\u00e8res · Cocktails',
     reservar: 'R\u00e9server une table',
   },
   de: {
     subtitle: 'Restaurant',
-    desayuno_title: 'Desayuno',
+    description: "Alle Men\u00fcs des Restaurants Porta D'irta einsehen.",
+    desayuno_title: 'Fr\u00fchst\u00fcck',
     desayuno_desc: 'Mediterranes Fr\u00fchst\u00fcck',
-    taperia_title: 'La Taperia',
+    taperia_title: 'Die Tapas-Bar',
     taperia_desc: 'Tapas · 10:00 \u2013 13:00',
-    menu_title: 'Men\u00fa Semana Santa',
+    menu_title: 'Men\u00fc Karwoche',
     menu_desc: 'Spezielles Men\u00fc',
-    streetfood_title: 'Street Food',
+    streetfood_title: 'Straßenessen',
     streetfood_desc: 'by Fifty-Five · 18:00 \u2013 22:00',
-    bebidas_title: 'Bebidas',
+    bebidas_title: 'Getr\u00e4nke',
     bebidas_desc: 'Weine · Biere · Cocktails',
     reservar: 'Tisch reservieren',
   },
 };
 
-const t = ui[lang as keyof typeof ui];
+const t = ui[langParam as keyof typeof ui];
 
 let menu: typeof menuFallback = menuFallback;
 const menuDataPath = process.env.MENU_DATA_PATH;
@@ -74,7 +80,7 @@ if (menuDataPath) {
 
 <Layout
   title={`${t.subtitle} \u2014 Mesa`}
-  description="Consulta todos los men\u00fas del restaurante Porta D'irta."
+  description={t.description}
   noindex={true}
 >
 
@@ -91,7 +97,7 @@ if (menuDataPath) {
 
       <!-- Desayuno -->
       <a
-        href={`/${lang}/desayuno`}
+        href={`/${langParam}/desayuno`}
         class="group flex items-center justify-between gap-4 bg-white/10 hover:bg-white/15 active:bg-white/20 border border-white/20 hover:border-brand-gold/50 rounded-2xl px-6 py-5 transition-all duration-200"
       >
         <div class="flex items-center gap-4">
@@ -112,7 +118,7 @@ if (menuDataPath) {
 
       <!-- La Taperia -->
       <a
-        href={`/${lang}/taperia`}
+        href={`/${langParam}/taperia`}
         class="group flex items-center justify-between gap-4 bg-white/10 hover:bg-white/15 active:bg-white/20 border border-white/20 hover:border-brand-gold/50 rounded-2xl px-6 py-5 transition-all duration-200"
       >
         <div class="flex items-center gap-4">
@@ -134,7 +140,7 @@ if (menuDataPath) {
 
       <!-- Menu Semana Santa (highlighted) -->
       <a
-        href={`/${lang}/menu`}
+        href={`/${langParam}/menu`}
         class="group flex items-center justify-between gap-4 bg-brand-gold/10 hover:bg-brand-gold/15 active:bg-brand-gold/20 border border-brand-gold/30 hover:border-brand-gold/60 rounded-2xl px-6 py-5 transition-all duration-200"
       >
         <div class="flex items-center gap-4">
@@ -158,7 +164,7 @@ if (menuDataPath) {
 
       <!-- Street Food -->
       <a
-        href={`/${lang}/streetfood`}
+        href={`/${langParam}/streetfood`}
         class="group flex items-center justify-between gap-4 bg-white/10 hover:bg-white/15 active:bg-white/20 border border-white/20 hover:border-brand-gold/50 rounded-2xl px-6 py-5 transition-all duration-200"
       >
         <div class="flex items-center gap-4">
@@ -180,7 +186,7 @@ if (menuDataPath) {
 
       <!-- Bebidas -->
       <a
-        href={`/${lang}/bebidas`}
+        href={`/${langParam}/bebidas`}
         class="group flex items-center justify-between gap-4 bg-white/10 hover:bg-white/15 active:bg-white/20 border border-white/20 hover:border-brand-gold/50 rounded-2xl px-6 py-5 transition-all duration-200"
       >
         <div class="flex items-center gap-4">
@@ -204,7 +210,7 @@ if (menuDataPath) {
 
       <!-- Reservar -->
       <a
-        href={`/${lang}/reservar`}
+        href={`/${langParam}/reservar`}
         class="flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-brand-gold hover:bg-brand-stone active:scale-[0.98] text-brand-blue font-body text-sm uppercase tracking-widest font-semibold transition-all duration-200"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">

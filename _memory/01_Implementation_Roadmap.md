@@ -24,9 +24,9 @@ tags: [wbs, planning, execution]
 *Goal: Add rich content and key integrations.*
 - [ ] **i18n Wave 2 (FR/DE):** Full translation of core pages.
 - [ ] **Blog:** Implement blog content and structure.
-- [ ] **Restaurant Sub-menus:** Add detail pages for specific menu sections.
+- [x] **Restaurant Sub-menus:** Add detail pages for specific menu sections. (Done 2026-04-03)
 - [ ] **Experiencias/Eventos:** Detail pages for unique offerings.
-- [ ] **AI Automation:** Integrate n8n workflows for automated tasks (e.g., event processing, customer support).
+- [x] **AI Automation:** Integrate n8n workflows for automated tasks (e.g., event processing, customer support). (Done 2026-04-03)
 - [ ] **SEO Priority 2:** Implement `hreflang` tags across all pages.
 
 ## Phase 4: Optimization (SEO & Conversion)
@@ -41,3 +41,8 @@ tags: [wbs, planning, execution]
 - [ ] **Monitoring:** Set up uptime monitoring for critical services.
 - [ ] **Infrastructure:** Establish maintenance schedule (e.g., Ubuntu/Docker updates on Tuesday mornings).
 **Tech Stack:** OBS Studio (Screen recording for SOPs).
+
+## 2026-04-03 Progress Notes
+- [x] Menu bot command pipeline stabilized for `/bebidas` and `/taperia` with production deployment protocol enforced after each n8n workflow change.
+- [x] Multilingual menu rendering fixed on `[lang]` pages (`menu`, `taperia`, `bebidas`, `desayuno`, `streetfood`) with safe merge of translated text over base structured menu data.
+- [x] Localized table hub routes `/en/mesa`, `/fr/mesa`, `/de/mesa` fixed and fully translated labels deployed.

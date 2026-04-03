@@ -284,3 +284,15 @@ A legend is shown at the bottom of each menu page.
 5. `docker compose up -d n8n` to pick up new env vars
 6. In n8n UI: delete old Workflow B, import `workflow-b-command-center.json`
 7. Test: send `/carta` to the Telegram bot → should reply `✅ Carta actualizada`
+
+---
+
+## 2026-04-03 Status Update
+
+- `/bebidas` update command: confirmed working end-to-end.
+- `/taperia` update command: confirmed working end-to-end after:
+  - runtime env passthrough correction (`MENU_CARTA_DOC_ID`) for n8n container,
+  - route availability extension in restaurant API for `taperia/desayuno/streetfood`,
+  - container rebuild/redeploy (restart-only was insufficient for source changes).
+- Multilingual menu pages now render translated text while preserving base numeric/allergen fields.
+- Localized table hub pages `/en/mesa`, `/fr/mesa`, `/de/mesa` are live and translated.

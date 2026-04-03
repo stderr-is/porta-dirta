@@ -29,3 +29,11 @@ tags: [black-swan, mitigation, security]
 | **AI Layer** | Unauthorized Telegram user reverse-engineers bot token and sends commands. | Identity Router drops all unknown `from.id` values before any processing. Bot token stored as n8n env var, never in workflow JSON. Set bot privacy mode via @BotFather (disable group adds). |
 | **AI Layer** | Yield management autonomously sets price below break-even. | Hard floor prices in `pricing-rules.json`. Schema validator rejects any recommended price below floor. Human approval required before any Beds24 price write. |
 | **AI Layer** | Voice note misheard by Gemini, executes wrong destructive action. | All destructive actions (room block, price change, cancel) require explicit `[✅ Confirm]` in Telegram before API call. Read-only actions execute immediately. |
+
+## 2026-04-03 Risk Addendum
+
+| Stage | Risk | Mitigation |
+|---|---|---|
+| Execution | Workflow JSON deployed without updating both `versionId` and `activeVersionId` in n8n DB; live bot keeps old logic. | Treat DB version sync as mandatory in deployment checklist: insert `workflow_history`, then update both fields, then restart n8n and re-register webhook. |
+| Execution | Menu translation payloads overwrite structured numeric fields (price/unit/allergens), causing data loss or zero pricing on localized pages. | Merge translated text fields onto base menu objects; never replace full item objects with translation-only payloads. |
+| Monitoring | Runtime env drift between compose and container causes wrong source doc IDs in menu parser path. | Keep all `MENU_*_DOC_ID` vars explicitly passed through in compose and verify container env after restart. |
