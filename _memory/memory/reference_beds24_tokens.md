@@ -16,8 +16,8 @@ type: reference
 | 662795 | Ermita Sant Antoni |
 
 ## V1 credentials
-- API key: `portadirta2026xK9mR4vL`
-- Prop key: `318433_151ad25191cd7515eb857044e0958f1c16e37aafc6fa8fae`
+- API key: `${BEDS24_V1_API_KEY}` (stored in local `.env`, never commit real value)
+- Prop key: `${BEDS24_V1_PROP_KEY}` (stored in local `.env`, never commit real value)
 
 ## V2 Refresh token
 ⚠️ **EXPIRED** — needs regeneration.

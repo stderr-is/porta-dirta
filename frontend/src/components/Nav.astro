@@ -154,6 +154,8 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
             for="nav-toggle"
             class="hamburger sm:hidden flex flex-col justify-center gap-[5px] w-8 h-8 cursor-pointer"
             aria-label="Abrir menú de navegación"
+            role="button"
+            aria-expanded="false"
           >
             <span class="bar block h-[2px] w-full bg-white rounded transition-all duration-300"></span>
             <span class="bar block h-[2px] w-full bg-white rounded transition-all duration-300"></span>
@@ -230,6 +232,8 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
 <script>
   (function () {
     const nav = document.getElementById('main-nav');
+    const navToggle = document.getElementById('nav-toggle');
+    const hamburger = document.querySelector('label[for="nav-toggle"]');
     if (!nav) return;
 
     function onScroll() {
@@ -244,6 +248,14 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll(); // Initialise on page load
+
+    if (navToggle instanceof HTMLInputElement && hamburger instanceof HTMLLabelElement) {
+      const syncExpanded = () => {
+        hamburger.setAttribute('aria-expanded', navToggle.checked ? 'true' : 'false');
+      };
+      navToggle.addEventListener('change', syncExpanded);
+      syncExpanded();
+    }
 
     // Close lang dropdown when clicking outside
     document.addEventListener('click', (e) => {

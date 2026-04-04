@@ -186,7 +186,7 @@ docker compose up -d n8n
 # Re-register Telegram webhook (CRITICAL — n8n clears it on restart)
 sleep 15
 curl -s -X POST \
-  "https://api.telegram.org/bot8348668157:AAEMAD_F37GNJJZxOd4C5krZg4OnPaZ_MD4/setWebhook" \
+  "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook" \
   -d "url=https://n8n.portadirta.com/webhook/475cd6ce-bb05-46ee-aea8-663b6e9d8433/webhook"
 
 # Restart TastyIgniter (PHP changes)
@@ -703,7 +703,7 @@ docker compose up -d n8n
 # Re-register Telegram webhook (n8n clears it on restart):
 sleep 10
 curl -s -X POST \
-  "https://api.telegram.org/bot8348668157:AAEMAD_F37GNJJZxOd4C5krZg4OnPaZ_MD4/setWebhook" \
+  "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook" \
   -d "url=https://n8n.portadirta.com/webhook/475cd6ce-bb05-46ee-aea8-663b6e9d8433/webhook"
 ```
 
@@ -769,7 +769,7 @@ Steps 1–6 can be done in parallel. Steps 7–10 are sequential.
 - **n8n running locally** (`backend-n8n-1`, up 2 days) exposed via Cloudflare Tunnel at `n8n.hobbitonranch.com`
 - **Workflow-b imported** — `/carta` command has been tested at least once
 - **carta.json in shared Docker volume** (16KB, 2026-03-24) WITH EN/FR/DE translations
-- **PHP proxy functional** at `http://restaurant/api/internal/menu/{type}` (auth: `X-Internal-Token: portadirta-n8n-2026`)
+- **PHP proxy functional** at `http://restaurant/api/internal/menu/{type}` (auth: `X-Internal-Token: ${INTERNAL_API_TOKEN}`)
 - **Spanish root pages are SSR** — read from `MENU_DATA_PATH` at request time with fallback to bundled JSON
 - **5 Google Docs** exist — one per sub-menu, all shared publicly
 

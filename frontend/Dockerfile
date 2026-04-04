@@ -30,4 +30,6 @@ ENV NODE_ENV=production
 
 EXPOSE 4321
 
+USER node
+
 CMD ["node", "./dist/server/entry.mjs"]

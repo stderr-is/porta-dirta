@@ -26,6 +26,41 @@ const getAgendaCopy = (eventId: string, fallbackTitle: string, fallbackBody: str
   agendaCards[eventId] ?? { title: fallbackTitle, body: fallbackBody };
 
 const formWebhookUrl = import.meta.env.PUBLIC_N8N_EVENTOS_WEBHOOK ?? import.meta.env.PUBLIC_N8N_WEBHOOK ?? 'REPLACE_WITH_N8N_WEBHOOK_URL';
+
+const upcomingEventSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": t('eventos.meta_title'),
+  "itemListElement": eventosLocales.map((ev, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "Event",
+      "name": ev.data.titulo,
+      "description": ev.data.descripcion,
+      "startDate": ev.data.fecha.toISOString(),
+      ...(ev.data.fechaFin ? { "endDate": ev.data.fechaFin.toISOString() } : {}),
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "image": [ev.data.imagen ?? "/assets/images/property-aerial-pool.jpg"].map((img) =>
+        img.startsWith("http") ? img : `https://www.portadirta.com${img}`
+      ),
+      ...(ev.data.ticketsUrl ? { "offers": { "@type": "Offer", "url": ev.data.ticketsUrl, "priceCurrency": "EUR" } } : {}),
+      "location": {
+        "@type": "Place",
+        "name": "Porta D'irta",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Camí del Pebret, s/n",
+          "addressLocality": "Peñíscola",
+          "addressRegion": "Castellón",
+          "postalCode": "12598",
+          "addressCountry": "ES"
+        }
+      }
+    }
+  }))
+};
 ---
 
 <Layout
@@ -52,6 +87,7 @@ const formWebhookUrl = import.meta.env.PUBLIC_N8N_EVENTOS_WEBHOOK ?? import.meta
       }
     ]
   })} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(upcomingEventSchema)} />
 
   <section class="relative flex items-center justify-center min-h-screen w-full overflow-hidden" aria-label={t('eventos.hero_label')}>
     <img src="/assets/images/property-aerial-dusk.jpg" alt={t('eventos.intro_img1_alt')} class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />

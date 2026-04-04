@@ -45,7 +45,7 @@ Reference upstream nodes by name: `$('Email Callback Handler').first().json.body
 ```bash
 docker restart backend-n8n-1
 sleep 22
-BOT="8348668157:AAEMAD_F37GNJJZxOd4C5krZg4OnPaZ_MD4"
+BOT="${TELEGRAM_BOT_TOKEN}"
 curl -s -X POST "https://api.telegram.org/bot${BOT}/setWebhook" \
   -H "Content-Type: application/json" \
   -d '{"url":"https://n8n.portadirta.com/webhook/475cd6ce-bb05-46ee-aea8-663b6e9d8433/webhook","allowed_updates":["message","callback_query"]}'

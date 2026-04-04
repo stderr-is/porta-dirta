@@ -27,6 +27,41 @@ const eventosLocales = (await getCollection('eventos-locales'))
   .filter((e) => e.data.fecha >= today)
   .sort((a, b) => a.data.fecha.getTime() - b.data.fecha.getTime());
 
+const upcomingEventSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Próximos eventos en Porta D'irta",
+  "itemListElement": eventosLocales.map((ev, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "Event",
+      "name": ev.data.titulo,
+      "description": ev.data.descripcion,
+      "startDate": ev.data.fecha.toISOString(),
+      ...(ev.data.fechaFin ? { "endDate": ev.data.fechaFin.toISOString() } : {}),
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "image": [ev.data.imagen ?? "/assets/images/property-aerial-pool.jpg"].map((img) =>
+        img.startsWith("http") ? img : `https://www.portadirta.com${img}`
+      ),
+      ...(ev.data.ticketsUrl ? { "offers": { "@type": "Offer", "url": ev.data.ticketsUrl, "priceCurrency": "EUR" } } : {}),
+      "location": {
+        "@type": "Place",
+        "name": "Porta D'irta",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Camí del Pebret, s/n",
+          "addressLocality": "Peñíscola",
+          "addressRegion": "Castellón",
+          "postalCode": "12598",
+          "addressCountry": "ES"
+        }
+      }
+    }
+  }))
+};
+
 function fmtFecha(d: Date) {
   return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
 }
@@ -57,6 +92,7 @@ function fmtFecha(d: Date) {
       }
     ]
   })} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(upcomingEventSchema)} />
 
   <!-- ============================================================
        SECTION 1: HERO

@@ -39,7 +39,7 @@ Boolean conditions use `"type": "boolean", "operation": "equals"`. All 5 IF node
 }
 ```
 `specifyBody: "string"` also broken — URL-form-encodes the entire JSON string as a key with empty value.
-**Workaround for complex payloads:** TastyIgniter PHP proxy at `POST /api/internal/beds24/calendar` accepts flat JSON, builds nested Beds24 structure in real PHP, forwards via curl. Auth header: `X-Internal-Token: portadirta-n8n-2026`.
+**Workaround for complex payloads:** TastyIgniter PHP proxy at `POST /api/internal/beds24/calendar` accepts flat JSON, builds nested Beds24 structure in real PHP, forwards via curl. Auth header: `X-Internal-Token: ${INTERNAL_API_TOKEN}`.
 
 ### n8n REST API (for scripted workflow updates)
 - Login: `POST /rest/login` with `{"emailOrLdapLoginId":"...", "password":"..."}` + `browser-id` header → session cookie
@@ -96,9 +96,9 @@ Cron 02:00 → n8n → Beds24 occupancy → Gemini yield analysis → Telegram a
 ### Services & Public URLs (Testing)
 | Service | Container Port | Public URL | Credentials | Purpose |
 |---------|---------------|------------|-------------|---------|
-| TastyIgniter | 8081 | https://restaurant.hobbitonranch.com | info@portadirta.com / Portadirta2026! | Restaurant admin + API |
-| Hi.Events | 8082 | https://events.hobbitonranch.com | info@portadirta.com / Portadirta2026! | Ticketing admin + booking UI + API |
-| n8n | 5678 | https://n8n.hobbitonranch.com | stderr.is@gmail.com / Portadirta2026! | Workflow automation UI |
+| TastyIgniter | 8081 | https://restaurant.hobbitonranch.com | `TASTYIGNITER_ADMIN_EMAIL` / `${TASTYIGNITER_ADMIN_PASSWORD}` | Restaurant admin + API |
+| Hi.Events | 8082 | https://events.hobbitonranch.com | `HIEVENTS_ADMIN_EMAIL` / `${HIEVENTS_ADMIN_PASSWORD}` | Ticketing admin + booking UI + API |
+| n8n | 5678 | https://n8n.hobbitonranch.com | `N8N_ADMIN_EMAIL` / `${N8N_ADMIN_PASSWORD}` | Workflow automation UI |
 | Uptime Kuma | 3001 | https://monitor.hobbitonranch.com | (first-run setup in browser) | Service uptime monitoring + alerts |
 
 ### Cloudflare Tunnel
@@ -118,14 +118,14 @@ Cron 02:00 → n8n → Beds24 occupancy → Gemini yield analysis → Telegram a
 
 ### Uptime Kuma (configured 2026-03-21)
 - **URL:** https://monitor.hobbitonranch.com
-- **Login:** portadirta / Portadirta2026!
+- **Login:** `UPTIME_KUMA_ADMIN_USER` / `${UPTIME_KUMA_ADMIN_PASSWORD}`
 - **5 monitors:** Porta D'irta Web, Restaurante, Hi.Events, n8n Automation, Beds24 API
 - **Notifications:** Telegram alerts to admin (bot token in n8n env, chat ID: 1330098629)
 - **Beds24 monitor** accepts HTTP 401 as "UP" (auth required endpoint — 401 means server alive)
 
 ### TastyIgniter Admin (configured 2026-03-21)
 - **URL:** https://restaurant.hobbitonranch.com/admin
-- **Login:** info@portadirta.com / Portadirta2026!
+- **Login:** `TASTYIGNITER_ADMIN_EMAIL` / `${TASTYIGNITER_ADMIN_PASSWORD}`
 - Note: install created account as diogojorgepinto86@gmail.com — already changed to info@portadirta.com via DB
 
 ### Cloudflare Pages (frontend)

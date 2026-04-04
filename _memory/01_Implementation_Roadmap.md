@@ -46,3 +46,5 @@ tags: [wbs, planning, execution]
 - [x] Menu bot command pipeline stabilized for `/bebidas` and `/taperia` with production deployment protocol enforced after each n8n workflow change.
 - [x] Multilingual menu rendering fixed on `[lang]` pages (`menu`, `taperia`, `bebidas`, `desayuno`, `streetfood`) with safe merge of translated text over base structured menu data.
 - [x] Localized table hub routes `/en/mesa`, `/fr/mesa`, `/de/mesa` fixed and fully translated labels deployed.
+- [x] Security hardening baseline: docker secrets externalized from compose, internal token moved to env vars, n8n/uptime images pinned, tracked memory credentials sanitized. (Done 2026-04-04)
+- [x] Performance/SEO/a11y/infra hardening pass: self-hosted fonts, hero video compressed + WebM source, JSON-LD added to home/hotel/event pages, accessible mobile nav toggle state, legal CIF surfaced in footer, Docker DB healthchecks + service_healthy dependencies, and shared volume permissions tightened. (Done 2026-04-04)

@@ -19,7 +19,28 @@ const t = useTranslations(lang);
   lang={lang}
   ogImage={t('home.og_image')}
 >
-  <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" slot="head" />
+  <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" slot="head" />
+
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": ["Organization", "LodgingBusiness"],
+    "name": "Porta D'irta",
+    "url": "https://www.portadirta.com/",
+    "logo": "https://www.portadirta.com/assets/logos/logo-negativo.png",
+    "telephone": "+34644026066",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Camí del Pebret, s/n",
+      "addressLocality": "Peñíscola",
+      "addressRegion": "Castellón",
+      "postalCode": "12598",
+      "addressCountry": "ES"
+    },
+    "sameAs": [
+      "https://instagram.com/portadirta",
+      "https://facebook.com/portadirta"
+    ]
+  })} />
 
   <!-- SECTION 1: HERO -->
   <section
@@ -35,6 +56,7 @@ const t = useTranslations(lang);
       poster="/assets/video/hero-poster.jpg"
       aria-hidden="true"
     >
+      <source src="/assets/video/hero.webm" type="video/webm" />
       <source src="/assets/video/hero.mp4" type="video/mp4" />
     </video>
 

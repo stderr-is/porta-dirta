@@ -19,6 +19,35 @@ const t = useTranslations(lang);
   lang={lang}
   ogImage={t('hotel.og_image')}
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Hotel",
+    "name": "Porta D'irta",
+    "url": "https://www.portadirta.com/hotel",
+    "description": t('hotel.meta_description'),
+    "telephone": "+34644026066",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Camí del Pebret, s/n",
+      "addressLocality": "Peñíscola",
+      "addressRegion": "Castellón",
+      "postalCode": "12598",
+      "addressCountry": "ES"
+    },
+    "amenityFeature": [
+      { "@type": "LocationFeatureSpecification", "name": t('hotel.amenity1_title'), "value": true },
+      { "@type": "LocationFeatureSpecification", "name": t('hotel.amenity2_title'), "value": true },
+      { "@type": "LocationFeatureSpecification", "name": t('hotel.amenity3_title'), "value": true },
+      { "@type": "LocationFeatureSpecification", "name": t('hotel.amenity4_title'), "value": true }
+    ],
+    "containsPlace": [
+      { "@type": "HotelRoom", "name": t('hotel.room1_title') },
+      { "@type": "HotelRoom", "name": t('hotel.room2_title') },
+      { "@type": "HotelRoom", "name": t('hotel.room3_title') },
+      { "@type": "HotelRoom", "name": t('hotel.room4_title') }
+    ]
+  })} />
+
   <!-- SECTION 1: HERO -->
   <section
     class="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
