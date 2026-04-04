@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import Layout from '../../layouts/Layout.astro';
 import GarlandDivider from '../../components/GarlandDivider.astro';
 import bebidasFallback from '../../data/bebidas.json';
+import type { DynamicMenuData, MenuSection, MenuTranslationSection } from '../../types/menu';
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'de' } }];
 }
@@ -44,25 +45,25 @@ const ui = {
   },
 };
 const t = ui[lang as keyof typeof ui];
-let bebidas: typeof bebidasFallback = bebidasFallback;
+let bebidas: DynamicMenuData = bebidasFallback;
 const menuDataPath = process.env.MENU_DATA_PATH;
 if (menuDataPath) {
   try { bebidas = JSON.parse(fs.readFileSync(`${menuDataPath}/bebidas.json`, 'utf-8')); } catch {}
 }
 // Keep numeric fields from base items and only override translatable text fields.
-const langSections = (bebidas as any).translations?.[langParam]?.sections;
-const sections = langSections?.length
+const langSections: MenuTranslationSection[] | undefined = bebidas.translations?.[langParam]?.sections;
+const sections: MenuSection[] = langSections?.length
   ? bebidas.sections.map((baseSection, sectionIndex) => {
-      const tSection = langSections[sectionIndex] || {};
+      const tSection = langSections[sectionIndex];
       return {
         ...baseSection,
-        name: tSection.name ?? baseSection.name,
+        name: tSection?.name ?? baseSection.name,
         items: baseSection.items.map((baseItem, itemIndex) => {
-          const tItem = tSection.items?.[itemIndex] || {};
+          const tItem = tSection?.items?.[itemIndex];
           return {
             ...baseItem,
-            name: tItem.name ?? baseItem.name,
-            description: tItem.description ?? baseItem.description,
+            name: tItem?.name ?? baseItem.name,
+            description: tItem?.description ?? baseItem.description,
           };
         }),
       };

@@ -20,6 +20,7 @@
 import Layout from '../layouts/Layout.astro';
 import GarlandDivider from '../components/GarlandDivider.astro';
 import { getCollection } from 'astro:content';
+import type { HiEvent, HiEventPackage } from '../types/hievents';
 
 // ── Content collections ───────────────────────────────────────────────────────
 const colaboradores = (await getCollection('colaboradores'))
@@ -29,17 +30,18 @@ const colaboradores = (await getCollection('colaboradores'))
 const hieventsUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'http://localhost:8082';
 const tastyigniterUrl = import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081';
 
-let hiEvents: any[] = [];
+let hiEvents: HiEvent[] = [];
 try {
   const res = await fetch(`${hieventsUrl}/api/public/organizers/1/events`, {
     headers: { Accept: 'application/json' },
   });
   if (res.ok) {
-    const json = await res.json();
+    const json = (await res.json()) as { data?: HiEvent[] };
     hiEvents = json.data ?? [];
   }
-} catch (e: any) {
-  console.warn('[experiencias] Hi.Events unavailable:', e.message);
+} catch (error) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.warn('[experiencias] Hi.Events unavailable:', message);
 }
 
 /** Return price in whole euros and a pre-filled inquiry anchor for a given event slug. */
@@ -47,8 +49,8 @@ function getExp(slug: string) {
   const ev = hiEvents.find((e) => e.slug === slug);
   if (!ev) return { price: null, label: slug, anchor: '#contacto' };
   const rawPrice = ev.product_categories
-    ?.flatMap((c: any) => c.products ?? [])
-    ?.find((p: any) => p.price != null)?.price ?? null;
+    ?.flatMap((category) => category.products ?? [])
+    ?.find((product) => product.price != null)?.price ?? null;
   const price = rawPrice != null ? Math.round(rawPrice / 100) : null;
   return {
     price,
@@ -62,43 +64,30 @@ const kayak  = getExp('kayak-y-snorkel-en-la-costa');  // €45
 const vinos  = getExp('cata-de-vinos-y-gastronomia');  // €28
 const castle = getExp('visita-guiada-al-castillo-papal'); // €15
 
-// ── Nuestros Paquetes: structured data for the dynamic grid ───────────────────
-interface HiPackage {
-  id: number;
-  title: string;
-  slug: string;
-  description_preview: string;
-  start_date: string;
-  lifecycle_status: 'UPCOMING' | 'PAST' | 'ENDED';
-  cover_url: string | null;
-  price: number | null; // whole euros
-  booking_url: string;
-}
-
 const hiEventsBaseUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'https://events.hobbitonranch.com';
 
-const livePackages: HiPackage[] = hiEvents
-  .filter((e: any) => e.status === 'LIVE')
-  .sort((a: any, b: any) => {
+const livePackages: HiEventPackage[] = hiEvents
+  .filter((event) => event.status === 'LIVE')
+  .sort((a, b) => {
     // UPCOMING first, PAST/ENDED last
     if (a.lifecycle_status === 'UPCOMING' && b.lifecycle_status !== 'UPCOMING') return -1;
     if (a.lifecycle_status !== 'UPCOMING' && b.lifecycle_status === 'UPCOMING') return 1;
     return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
   })
-  .map((e: any) => {
-    const rawPrice = e.product_categories
-      ?.flatMap((c: any) => c.products ?? [])
-      ?.find((p: any) => p.price != null)?.price ?? null;
+  .map((event) => {
+    const rawPrice = event.product_categories
+      ?.flatMap((category) => category.products ?? [])
+      ?.find((product) => product.price != null)?.price ?? null;
     return {
-      id: e.id,
-      title: e.title,
-      slug: e.slug,
-      description_preview: e.description_preview ?? '',
-      start_date: e.start_date,
-      lifecycle_status: e.lifecycle_status ?? 'UPCOMING',
-      cover_url: e.images?.[0]?.url ?? null,
+      id: event.id,
+      title: event.title,
+      slug: event.slug,
+      description_preview: event.description_preview ?? '',
+      start_date: event.start_date,
+      lifecycle_status: event.lifecycle_status ?? 'UPCOMING',
+      cover_url: event.images?.[0]?.url ?? null,
       price: rawPrice != null ? Math.round(rawPrice / 100) : null,
-      booking_url: `${hiEventsBaseUrl}/e/${e.slug}`,
+      booking_url: `${hiEventsBaseUrl}/e/${event.slug}`,
     };
   });
 ---

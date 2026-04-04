@@ -5,6 +5,14 @@ import FormHandler from '../../components/FormHandler.astro';
 import { getLangFromUrl } from '../../i18n/utils';
 import { getCollection } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Image } from 'astro:assets';
+import sierraTowerSea from '../../assets/images/sierra-tower-sea.jpg';
+import sierraTowerWide from '../../assets/images/sierra-tower-wide.jpg';
+import sierraTrailVertical from '../../assets/images/sierra-trail-vertical.jpg';
+import propertyAerialPool from '../../assets/images/property-aerial-pool.jpg';
+import propertyAerialTwilight from '../../assets/images/property-aerial-twilight.jpg';
+import foodPaellaClose from '../../assets/images/food-paella-close.jpg';
+import terraceBreakfast from '../../assets/images/terrace-breakfast.jpg';
 
 const lang = getLangFromUrl(Astro.url);
 
@@ -486,7 +494,7 @@ const packageCopy = c.hiEventsPackages ?? {};
 
 <Layout title={c.title} description={c.description} lang={lang} ogImage="/assets/images/sierra-tower-wide.jpg">
   <section class="relative flex items-center justify-center min-h-screen w-full overflow-hidden" aria-label={c.heroLabel}>
-    <img src="/assets/images/sierra-tower-sea.jpg" alt={c.heroHeading} class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />
+    <Image src={sierraTowerSea} alt={c.heroHeading} class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />
     <div class="absolute inset-0 bg-brand-forest/50" aria-hidden="true"></div>
     <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
       <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">{c.heroLabel}</p>
@@ -514,10 +522,10 @@ const packageCopy = c.hiEventsPackages ?? {};
           <p class="font-body text-brand-stone text-lg leading-relaxed">{c.introBody2}</p>
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <img src="/assets/images/sierra-tower-wide.jpg" alt={c.introImg1} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
-          <img src="/assets/images/sierra-tower-sea.jpg" alt={c.introImg2} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
-          <img src="/assets/images/sierra-trail-vertical.jpg" alt={c.introImg3} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
-          <img src="/assets/images/property-aerial-pool.jpg" alt={c.introImg4} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+          <Image src={sierraTowerWide} alt={c.introImg1} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+          <Image src={sierraTowerSea} alt={c.introImg2} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+          <Image src={sierraTrailVertical} alt={c.introImg3} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
+          <Image src={propertyAerialPool} alt={c.introImg4} class="w-full h-full object-cover rounded-xl shadow-md" loading="lazy" decoding="async" />
         </div>
       </div>
     </div>
@@ -583,7 +591,7 @@ const packageCopy = c.hiEventsPackages ?? {};
 
   <section class="bg-brand-blue min-h-screen flex flex-col lg:flex-row overflow-hidden" aria-label={c.sierraLabel}>
     <div class="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen flex-shrink-0">
-      <img src="/assets/images/sierra-trail-vertical.jpg" alt={c.sierraHeading} class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
+      <Image src={sierraTrailVertical} alt={c.sierraHeading} class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
     </div>
     <div class="w-full lg:w-1/2 flex items-center py-24 md:py-32 px-8 md:px-16">
       <div class="flex flex-col gap-8 max-w-lg">
@@ -612,10 +620,10 @@ const packageCopy = c.hiEventsPackages ?? {};
         <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">{c.seaHeading}</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {[{...kayak,title:c.sea1Title,body:c.sea1Body,img:'/assets/images/sierra-tower-wide.jpg',exp:'actividades-acuaticas'},{...vinos,title:c.sea2Title,body:c.sea2Body,img:'/assets/images/sierra-tower-sea.jpg',exp:'actividades-acuaticas'},{...castle,title:c.sea3Title,body:c.sea3Body,img:'/assets/images/property-aerial-twilight.jpg',exp:'actividades-acuaticas'}].map((card) => (
+        {[{...kayak,title:c.sea1Title,body:c.sea1Body,img:sierraTowerWide,exp:'actividades-acuaticas'},{...vinos,title:c.sea2Title,body:c.sea2Body,img:sierraTowerSea,exp:'actividades-acuaticas'},{...castle,title:c.sea3Title,body:c.sea3Body,img:propertyAerialTwilight,exp:'actividades-acuaticas'}].map((card) => (
           <article class="bg-white rounded-xl overflow-hidden shadow-md flex flex-col">
             <div class="relative overflow-hidden">
-              <img src={card.img} alt={card.title} class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+              <Image src={card.img} alt={card.title} class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
               <div class="absolute top-4 right-4"><span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">{card.price ? `${c.sierraPricePrefix} €${card.price}/persona` : '—'}</span></div>
             </div>
             <div class="flex flex-col gap-3 p-6 flex-1">
@@ -638,7 +646,7 @@ const packageCopy = c.hiEventsPackages ?? {};
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
           <div class="relative overflow-hidden">
-            <img src="/assets/images/food-paella-close.jpg" alt={c.culture1Title} class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+            <Image src={foodPaellaClose} alt={c.culture1Title} class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
             <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/50 to-transparent"></div>
             {castle.price && <div class="absolute top-4 right-4"><span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">{c.sierraPricePrefix} €{castle.price}/persona</span></div>}
           </div>
@@ -650,7 +658,7 @@ const packageCopy = c.hiEventsPackages ?? {};
         </article>
         <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
           <div class="relative overflow-hidden">
-            <img src="/assets/images/terrace-breakfast.jpg" alt={c.culture2Title} class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+            <Image src={terraceBreakfast} alt={c.culture2Title} class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
             <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/50 to-transparent"></div>
             {vinos.price && <div class="absolute top-4 right-4"><span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">{c.sierraPricePrefix} €{vinos.price}/persona</span></div>}
           </div>

@@ -10,7 +10,8 @@
     "build": "astro build",
     "build:hostinger": "BUILD_TARGET=node astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
@@ -22,5 +23,12 @@
     "astro": "^6.1.1",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
+    "eslint": "^10.2.0",
+    "eslint-plugin-astro": "^1.6.0"
   }
 }

@@ -11,8 +11,14 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const menuNightTags = Array.isArray(t('restaurante.menu_night_tags') as any) ? (t('restaurante.menu_night_tags') as unknown as string[]) : [];
-const menuSpecialTags = Array.isArray(t('restaurante.menu_special_tags') as any) ? (t('restaurante.menu_special_tags') as unknown as string[]) : [];
+const menuNightTagsValue = t('restaurante.menu_night_tags', { returnObjects: true });
+const menuSpecialTagsValue = t('restaurante.menu_special_tags', { returnObjects: true });
+const menuNightTags = Array.isArray(menuNightTagsValue)
+  ? menuNightTagsValue.filter((value): value is string => typeof value === 'string')
+  : [];
+const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
+  ? menuSpecialTagsValue.filter((value): value is string => typeof value === 'string')
+  : [];
 
 export async function getStaticPaths() {
   return ['en', 'fr', 'de'].map((lang) => {

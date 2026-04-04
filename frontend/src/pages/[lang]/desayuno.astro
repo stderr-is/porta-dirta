@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import Layout from '../../layouts/Layout.astro';
 import GarlandDivider from '../../components/GarlandDivider.astro';
 import desayunoFallback from '../../data/desayuno.json';
+import type { DynamicMenuData, MenuSection, MenuTranslationSection } from '../../types/menu';
 
 export function getStaticPaths() {
   return [
@@ -83,26 +84,26 @@ for (const [key, colors] of Object.entries(ALLERGEN_COLORS)) {
   ALLERGENS[key] = { label: labels[key] ?? key, ...colors };
 }
 
-let desayuno: typeof desayunoFallback = desayunoFallback;
+let desayuno: DynamicMenuData = desayunoFallback;
 const menuDataPath = process.env.MENU_DATA_PATH;
 if (menuDataPath) {
   try { desayuno = JSON.parse(fs.readFileSync(`${menuDataPath}/desayuno.json`, 'utf-8')); } catch {}
 }
 // Keep numeric/allergen fields from base items and only override translatable text fields.
-const langSections = (desayuno as any).translations?.[langParam]?.sections;
-const sections = langSections?.length
+const langSections: MenuTranslationSection[] | undefined = desayuno.translations?.[langParam]?.sections;
+const sections: MenuSection[] = langSections?.length
   ? desayuno.sections.map((baseSection, sectionIndex) => {
-      const tSection = langSections[sectionIndex] || {};
+      const tSection = langSections[sectionIndex];
       return {
         ...baseSection,
-        name: tSection.name ?? baseSection.name,
-        note: tSection.note ?? baseSection.note,
+        name: tSection?.name ?? baseSection.name,
+        note: tSection?.note ?? baseSection.note,
         items: baseSection.items.map((baseItem, itemIndex) => {
-          const tItem = tSection.items?.[itemIndex] || {};
+          const tItem = tSection?.items?.[itemIndex];
           return {
             ...baseItem,
-            name: tItem.name ?? baseItem.name,
-            description: tItem.description ?? baseItem.description,
+            name: tItem?.name ?? baseItem.name,
+            description: tItem?.description ?? baseItem.description,
           };
         }),
       };

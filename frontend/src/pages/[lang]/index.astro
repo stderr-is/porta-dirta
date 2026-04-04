@@ -56,11 +56,13 @@ export async function getStaticPaths() {
     aria-label="Hero — Porta D'irta"
   >
     <video
-      class="absolute inset-0 w-full h-full object-cover motion-reduce:hidden"
+      id="hero-video"
+      class="absolute inset-0 w-full h-full object-cover"
       autoplay
       muted
       loop
       playsinline
+      preload="auto"
       poster="/assets/video/hero-poster.jpg"
       aria-hidden="true"
     >
@@ -69,9 +71,10 @@ export async function getStaticPaths() {
     </video>
 
     <img
+      id="hero-video-fallback"
       src="/assets/video/hero-poster.jpg"
       alt=""
-      class="absolute inset-0 w-full h-full object-cover hidden motion-reduce:block"
+      class="absolute inset-0 w-full h-full object-cover hidden"
       aria-hidden="true"
     />
 
@@ -103,6 +106,26 @@ export async function getStaticPaths() {
       </svg>
     </div>
   </section>
+
+  <script>
+    const heroVideo = document.getElementById('hero-video');
+    const heroFallback = document.getElementById('hero-video-fallback');
+
+    if (heroVideo instanceof HTMLVideoElement && heroFallback instanceof HTMLImageElement) {
+      const showFallback = () => {
+        heroVideo.classList.add('hidden');
+        heroFallback.classList.remove('hidden');
+      };
+
+      heroVideo.addEventListener('error', showFallback);
+      heroVideo.addEventListener('stalled', showFallback);
+
+      const maybePromise = heroVideo.play();
+      if (maybePromise && typeof maybePromise.catch === 'function') {
+        maybePromise.catch(showFallback);
+      }
+    }
+  </script>
 
   <!-- SECTION 2: THE HOTEL -->
   <section

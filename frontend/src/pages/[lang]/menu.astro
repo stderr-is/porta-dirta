@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import Layout from '../../layouts/Layout.astro';
 import GarlandDivider from '../../components/GarlandDivider.astro';
 import menuFallback from '../../data/menu.json';
+import type { FixedPriceMenuData, MenuSection, MenuTranslationData } from '../../types/menu';
 
 export function getStaticPaths() {
   return [
@@ -107,26 +108,26 @@ function getAllergenInfo(key: string) {
 }
 
 // On VPS (SSR), read the live file written by n8n. Fall back to bundled data on Cloudflare.
-let menu: typeof menuFallback = menuFallback;
+let menu: FixedPriceMenuData = menuFallback;
 const menuDataPath = process.env.MENU_DATA_PATH;
 if (menuDataPath) {
   try { menu = JSON.parse(fs.readFileSync(`${menuDataPath}/menu.json`, 'utf-8')); } catch {}
 }
 // Keep price/supplement/allergen fields from base items and only override translatable text fields.
-const menuTranslations = (menu as any).translations?.[langParam];
-const sections = menuTranslations?.sections?.length
+const menuTranslations: MenuTranslationData | undefined = menu.translations?.[langParam];
+const sections: MenuSection[] = menuTranslations?.sections?.length
   ? menu.sections.map((baseSection, sectionIndex) => {
-      const tSection = menuTranslations.sections[sectionIndex] || {};
+      const tSection = menuTranslations.sections?.[sectionIndex];
       return {
         ...baseSection,
-        name: tSection.name ?? baseSection.name,
-        note: tSection.note ?? baseSection.note,
+        name: tSection?.name ?? baseSection.name,
+        note: tSection?.note ?? baseSection.note,
         items: baseSection.items.map((baseItem, itemIndex) => {
-          const tItem = tSection.items?.[itemIndex] || {};
+          const tItem = tSection?.items?.[itemIndex];
           return {
             ...baseItem,
-            name: tItem.name ?? baseItem.name,
-            description: tItem.description ?? baseItem.description,
+            name: tItem?.name ?? baseItem.name,
+            description: tItem?.description ?? baseItem.description,
           };
         }),
       };

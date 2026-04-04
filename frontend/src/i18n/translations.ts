@@ -1,7 +1,7 @@
 export type Locale = 'es' | 'en' | 'fr' | 'de';
+import type { TranslationNode } from '../types/i18n';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const translations: Record<Locale, Record<string, any>> = {
+export const translations: Record<Locale, TranslationNode> = {
   es: {
     nav: {
       hotel: "El Hotel",

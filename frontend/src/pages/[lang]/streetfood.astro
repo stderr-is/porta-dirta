@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import Layout from '../../layouts/Layout.astro';
 import GarlandDivider from '../../components/GarlandDivider.astro';
 import streetfoodFallback from '../../data/streetfood.json';
+import type { DynamicMenuData, MenuSection, MenuTranslationSection } from '../../types/menu';
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'de' } }];
 }
@@ -66,26 +67,26 @@ const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
 for (const [key, colors] of Object.entries(ALLERGEN_COLORS)) {
   ALLERGENS[key] = { label: labels[key] ?? key, ...colors };
 }
-let streetfood: typeof streetfoodFallback = streetfoodFallback;
+let streetfood: DynamicMenuData = streetfoodFallback;
 const menuDataPath = process.env.MENU_DATA_PATH;
 if (menuDataPath) {
   try { streetfood = JSON.parse(fs.readFileSync(`${menuDataPath}/streetfood.json`, 'utf-8')); } catch {}
 }
 // Keep numeric/allergen fields from base items and only override translatable text fields.
-const langSections = (streetfood as any).translations?.[langParam]?.sections;
-const sections = langSections?.length
+const langSections: MenuTranslationSection[] | undefined = streetfood.translations?.[langParam]?.sections;
+const sections: MenuSection[] = langSections?.length
   ? streetfood.sections.map((baseSection, sectionIndex) => {
-      const tSection = langSections[sectionIndex] || {};
+      const tSection = langSections[sectionIndex];
       return {
         ...baseSection,
-        name: tSection.name ?? baseSection.name,
-        note: tSection.note ?? baseSection.note,
+        name: tSection?.name ?? baseSection.name,
+        note: tSection?.note ?? baseSection.note,
         items: baseSection.items.map((baseItem, itemIndex) => {
-          const tItem = tSection.items?.[itemIndex] || {};
+          const tItem = tSection?.items?.[itemIndex];
           return {
             ...baseItem,
-            name: tItem.name ?? baseItem.name,
-            description: tItem.description ?? baseItem.description,
+            name: tItem?.name ?? baseItem.name,
+            description: tItem?.description ?? baseItem.description,
           };
         }),
       };
