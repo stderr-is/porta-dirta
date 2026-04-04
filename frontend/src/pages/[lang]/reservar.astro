@@ -107,7 +107,14 @@ export async function getStaticPaths() {
 
   </section>
 
-  <script is:inline>
+  <script is:inline define:vars={{
+    translatedNight: t('reservar.night'),
+    translatedNights: t('reservar.nights'),
+    translatedAdult: t('reservar.adult'),
+    translatedAdults: t('reservar.adults'),
+    translatedChild: t('reservar.child'),
+    translatedChildren: t('reservar.children'),
+  }}>
     (function () {
       const PROP_ID = '318433';
       const BASE    = 'https://beds24.com/booking2.php';
@@ -135,16 +142,16 @@ export async function getStaticPaths() {
       var children = incoming.get('numchild') || '0';
 
       if (checkin && checkout) {
-        var fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' });
+        var fmt = new Intl.DateTimeFormat(document.documentElement.lang || 'en-GB', { day: 'numeric', month: 'short' });
         var ci  = new Date(checkin  + 'T00:00:00');
         var co  = new Date(checkout + 'T00:00:00');
         var nights = Math.round((co - ci) / 86400000);
 
         document.getElementById('summary-dates-text').textContent =
-          fmt.format(ci) + ' → ' + fmt.format(co) + ' · ' + nights + (nights === 1 ? ' night' : ' nights');
+          fmt.format(ci) + ' → ' + fmt.format(co) + ' · ' + nights + (nights === 1 ? ' ' + translatedNight : ' ' + translatedNights);
 
-        var guestParts = [adults + (adults === '1' ? ' ' + t('reservar.adult') : ' ' + t('reservar.adults'))];
-        if (parseInt(children) > 0) guestParts.push(children + (children === '1' ? ' ' + t('reservar.child') : ' ' + t('reservar.children')));
+        var guestParts = [adults + (adults === '1' ? ' ' + translatedAdult : ' ' + translatedAdults)];
+        if (parseInt(children) > 0) guestParts.push(children + (children === '1' ? ' ' + translatedChild : ' ' + translatedChildren));
         document.getElementById('summary-guests-text').textContent = guestParts.join(' · ');
 
         var summary = document.getElementById('booking-summary');
