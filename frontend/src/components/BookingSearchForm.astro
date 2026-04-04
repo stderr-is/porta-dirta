@@ -338,7 +338,8 @@ const t = useTranslations(lang);
     if (!ci){ ciCal.open(); return; }
     if (!co){ coCal.open(); return; }
     var lang = document.documentElement.lang || 'es';
-    window.location.href = '/reservar?checkin='+ci+'&checkout='+co+'&numadult='+ad+'&numchild='+ch+'&lang='+lang;
+    var reservarPath = lang === 'es' ? '/reservar' : '/' + lang + '/reservar';
+    window.location.href = reservarPath + '?checkin='+ci+'&checkout='+co+'&numadult='+ad+'&numchild='+ch+'&lang='+lang;
   });
 
 })();
