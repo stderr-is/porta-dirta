@@ -465,7 +465,7 @@ interface HiPackage {
   booking_url: string;
 }
 
-const hiEventsBaseUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'https://events.hobbitonranch.com';
+const hiEventsBaseUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'https://eventos.portadirta.com';
 
 const livePackages: HiPackage[] = hiEvents
   .filter((e: any) => e.status === 'LIVE')

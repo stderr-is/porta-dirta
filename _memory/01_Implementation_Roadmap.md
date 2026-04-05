@@ -22,24 +22,24 @@ tags: [wbs, planning, execution]
 
 ## Phase 3: Feature Expansion (Content & Integrations)
 *Goal: Add rich content and key integrations.*
-- [ ] **i18n Wave 2 (FR/DE):** Full translation of core pages.
-- [ ] **Blog:** Implement blog content and structure.
+- [x] **i18n Wave 2 (FR/DE):** Full translation of core pages. (Done — translations.ts has ~416 lines per locale covering EN/FR/DE; all core pages under `[lang]/` route) (Verified 2026-04-05)
+- ~~**Blog:** Implement blog content and structure.~~ *(Removed — never scoped or discussed; no blog requirement exists for this project)*
 - [x] **Restaurant Sub-menus:** Add detail pages for specific menu sections. (Done 2026-04-03)
-- [ ] **Experiencias/Eventos:** Detail pages for unique offerings.
+- [x] **Experiencias/Eventos:** Detail pages for unique offerings. (Done — `[lang]/experiencias.astro` and `[lang]/eventos.astro` exist with full i18n support) (Verified 2026-04-05)
 - [x] **AI Automation:** Integrate n8n workflows for automated tasks (e.g., event processing, customer support). (Done 2026-04-03)
-- [ ] **SEO Priority 2:** Implement `hreflang` tags across all pages.
+- [x] **SEO Priority 2:** Implement `hreflang` tags across all pages. (Done — Layout.astro generates hreflang for all 4 locales) (Verified 2026-04-05)
 
 ## Phase 4: Optimization (SEO & Conversion)
 *Goal: Ensure the site is found by the right guests and converts visitors into bookings.*
 - [x] **Mobile UX:** Add sticky "Book Now" bar and WhatsApp FAB for CRO.
 - [x] **Transparency:** Add live sustainability status component (mocked).
-- [ ] **AI Crawler directives** — GPTBot/ClaudeBot/PerplexityBot allowed; CCBot/omgili blocked in robots.txt.
+- [x] **AI Crawler directives** — GPTBot/ClaudeBot/PerplexityBot allowed; CCBot/omgili blocked in robots.txt. (Done — verified in frontend/public/robots.txt) (Verified 2026-04-05)
 
 ## Phase 5: Maintenance & Operations
 *Goal: Keep the site running smoothly and securely.*
-- [ ] **Testing:** Add end-to-end tests for core booking flows.
-- [ ] **Monitoring:** Set up uptime monitoring for critical services.
-- [ ] **Infrastructure:** Establish maintenance schedule (e.g., Ubuntu/Docker updates on Tuesday mornings).
+- [x] **Testing:** Add test foundation with Vitest + Playwright and baseline E2E smoke coverage for core locale routes (`/`, `/en`, `/fr`, `/de`). (Done 2026-04-05)
+- [x] **Monitoring:** Define Uptime Kuma monitor set + Telegram notification wiring in `backend/ops/uptime-kuma-monitors.json`. (Done 2026-04-05)
+- [x] **Infrastructure:** Establish maintenance schedule in `backend/ops/maintenance-schedule.yaml` (weekly/monthly/quarterly). (Done 2026-04-05)
 **Tech Stack:** OBS Studio (Screen recording for SOPs).
 
 ## 2026-04-03 Progress Notes

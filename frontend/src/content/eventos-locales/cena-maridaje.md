@@ -6,7 +6,7 @@ descripcion: Siete platos de temporada maridados con vinos D.O. Valencia selecci
 imagen: /assets/images/food-paella-wine.jpg
 precio: 75
 aforo: 24
-ticketsUrl: https://events.hobbitonranch.com
+ticketsUrl: https://eventos.portadirta.com
 ---
 
 El chef y el sumiller de Porta D'irta proponen un recorrido gastronómico por los sabores de la Costa del Azahar maridado con siete referencias de bodegas de la Terra Alta y la D.O. Valencia. Reserva previa obligatoria.

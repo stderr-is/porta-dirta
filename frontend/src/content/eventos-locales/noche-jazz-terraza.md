@@ -6,7 +6,7 @@ descripcion: Una velada mágica bajo las estrellas con los mejores músicos de j
 imagen: /assets/images/terrace-breakfast.jpg
 precio: 25
 aforo: 60
-ticketsUrl: https://events.hobbitonranch.com
+ticketsUrl: https://eventos.portadirta.com
 ---
 
 Cuatro músicos de jazz de Valencia y Barcelona se unen para una noche única en la terraza del restaurante con vistas al Mediterráneo. Acceso desde las 20:00 h. Incluye copa de bienvenida.

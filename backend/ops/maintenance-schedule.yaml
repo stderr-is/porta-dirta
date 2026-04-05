@@ -1,0 +1,37 @@
+weekly:
+  - name: uptime-kuma-status
+    command: docker compose ps
+    expected: critical services healthy and running
+  - name: disk-space
+    command: df -h /
+    expected: at least 20% disk free
+  - name: docker-footprint
+    command: docker system df
+    expected: prune if usage exceeds 80%
+  - name: nginx-errors
+    command: tail -50 /var/log/nginx/error.log
+    expected: no recurring application or proxy errors
+
+monthly:
+  - name: os-updates
+    command: apt update && apt upgrade -y
+    expected: latest security updates installed
+  - name: restaurant-db-backup
+    command: docker exec restaurant-db mysqldump --all-databases > backups/restaurant-$(date +%F).sql
+  - name: events-db-backup
+    command: docker exec events-db pg_dump -U postgres -d postgres > backups/events-$(date +%F).sql
+  - name: n8n-db-backup
+    command: docker exec n8n-db pg_dump -U postgres -d postgres > backups/n8n-$(date +%F).sql
+  - name: image-patch-review
+    command: docker compose images
+    expected: review image tags for security updates
+
+quarterly:
+  - name: backup-retention
+    command: find backups -type f -mtime +90 -delete
+  - name: csp-review
+    command: grep -n "Content-Security-Policy" ../frontend/public/_headers
+    expected: remove unused external origins
+  - name: lighthouse-audit
+    command: npm run build
+    expected: run Lighthouse against production and track regressions

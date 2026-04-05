@@ -1,0 +1,54 @@
+{
+  "notification": {
+    "type": "telegram",
+    "tokenEnv": "TELEGRAM_BOT_TOKEN",
+    "chatIdEnv": "TELEGRAM_ADMIN_ID"
+  },
+  "monitors": [
+    {
+      "name": "Frontend",
+      "type": "http",
+      "url": "https://www.portadirta.com",
+      "intervalSeconds": 300
+    },
+    {
+      "name": "Restaurant API",
+      "type": "http",
+      "url": "https://restaurante.portadirta.com",
+      "intervalSeconds": 600
+    },
+    {
+      "name": "Events API",
+      "type": "http",
+      "url": "https://eventos.portadirta.com",
+      "intervalSeconds": 600
+    },
+    {
+      "name": "n8n",
+      "type": "http",
+      "url": "https://n8n.portadirta.com",
+      "intervalSeconds": 900
+    },
+    {
+      "name": "MySQL (restaurant)",
+      "type": "tcp",
+      "hostname": "restaurant-db",
+      "port": 3306,
+      "intervalSeconds": 600
+    },
+    {
+      "name": "Postgres (events)",
+      "type": "tcp",
+      "hostname": "events-db",
+      "port": 5432,
+      "intervalSeconds": 600
+    },
+    {
+      "name": "Postgres (n8n)",
+      "type": "tcp",
+      "hostname": "n8n-db",
+      "port": 5432,
+      "intervalSeconds": 600
+    }
+  ]
+}

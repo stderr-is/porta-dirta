@@ -24,6 +24,9 @@ Disallow: /
 User-agent: omgili
 Disallow: /
 
+User-agent: Bytespider
+Disallow: /
+
 # SEO tools — rate limit (prevent server load)
 User-agent: AhrefsBot
 Crawl-delay: 10
