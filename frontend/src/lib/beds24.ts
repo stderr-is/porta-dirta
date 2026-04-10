@@ -17,6 +17,11 @@ export const BEDS24_PROPERTY_ID = import.meta.env.BEDS24_PROP_ID ?? '318433';
 
 const BASE_URL = 'https://beds24.com/api/v2';
 
+// Simple in-memory cache to prevent redundant network calls during a single execution context.
+// In a serverless environment, this cache is per-invocation.
+const cache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_TTL_MS = 60_000; // 1 minute cache TTL
+
 // ─── TypeScript interfaces ────────────────────────────────────────────────────
 
 /** A single room/unit as returned by the Beds24 API V2 */
@@ -134,8 +139,16 @@ function authHeader(): HeadersInit {
  * Backoff: 500ms → 1s → 2s → 4s → 8s (max 30s cap, 5 retries).
  */
 async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  // If it's a GET request, check the cache first
+  if (options.method === 'GET' || !options.method) {
+    const cached = cache.get(path);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return cached.data;
+    }
+  }
+
   const url = `${BASE_URL}${path}`;
-  const mergedOptions: RequestInit = {
+  const mergedOptions: RequestRequestInit = {
     ...options,
     headers: {
       ...authHeader(),
@@ -164,7 +177,14 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
       throw new Error(`Beds24 API error ${response.status} on ${path}: ${body}`);
     }
 
-    return response.json() as Promise<T>;
+    const data = await response.json() as T;
+
+    // If it's a GET request, store it in cache
+    if (options.method === 'GET' || !options.method) {
+      cache.set(path, { data, timestamp: Date.now() });
+    }
+
+    return data;
   }
 }
 
