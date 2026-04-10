@@ -148,7 +148,7 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
   }
 
   const url = `${BASE_URL}${path}`;
-  const mergedOptions: RequestRequestInit = {
+  const mergedOptions: RequestInit = {
     ...options,
     headers: {
       ...authHeader(),
