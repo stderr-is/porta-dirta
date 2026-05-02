@@ -1,16 +1,16 @@
 ---
 /**
- * experiencias.astro — Local Experiences page for Porta D'irta
+ * experiencias.astro Ã¢â‚¬â€ Local Experiences page for Porta D'irta
  *
  * Sections:
- *   1. Hero — full-viewport with overlay, badge pills, scroll chevron
- *   2. Intro ("Más allá de la villa") — two-column, image mosaic
- *   3. Sierra de Irta — dramatic full-width dark split, activity list
- *   4. Mar & Playa — 3-column activity card grid
- *   5. Cultura & Gastronomía — 2 large glassmorphism cards on dark
- *   6. Colaboraciones Locales — 4 partner logo placeholders
- *   7. Booking / Contact form — frosted glass, anchor: #contacto
- *   8. Cross-sell strip — Hotel, Restaurante, Eventos & Celebraciones
+ *   1. Hero Ã¢â‚¬â€ full-viewport with overlay, badge pills, scroll chevron
+ *   2. Intro ("MÃ¡s allÃ¡ de la villa") Ã¢â‚¬â€ two-column, image mosaic
+ *   3. Sierra de Irta Ã¢â‚¬â€ dramatic full-width dark split, activity list
+ *   4. Mar & Playa Ã¢â‚¬â€ 3-column activity card grid
+ *   5. Cultura & GastronomÃ­a Ã¢â‚¬â€ 2 large glassmorphism cards on dark
+ *   6. Colaboraciones Locales Ã¢â‚¬â€ 4 partner logo placeholders
+ *   7. Booking / Contact form Ã¢â‚¬â€ frosted glass, anchor: #contacto
+ *   8. Cross-sell strip Ã¢â‚¬â€ Hotel, Restaurante, Eventos & Celebraciones
  *
  * Wave 2 notes:
  *   - Replace all picsum images with real photography.
@@ -22,11 +22,11 @@ import GarlandDivider from '../components/GarlandDivider.astro';
 import { getCollection } from 'astro:content';
 import type { HiEvent, HiEventPackage } from '../types/hievents';
 
-// ── Content collections ───────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬ Content collections Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 const colaboradores = (await getCollection('colaboradores'))
   .sort((a, b) => a.data.orden - b.data.orden);
 
-// ── Hi.Events: fetch live experiences at build time ──────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬ Hi.Events: fetch live experiences at build time Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 const hieventsUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'http://localhost:8082';
 const tastyigniterUrl = import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'http://localhost:8081';
 
@@ -59,10 +59,10 @@ function getExp(slug: string) {
   };
 }
 
-const sierra = getExp('ruta-guiada-sierra-de-irta');   // €35
-const kayak  = getExp('kayak-y-snorkel-en-la-costa');  // €45
-const vinos  = getExp('cata-de-vinos-y-gastronomia');  // €28
-const castle = getExp('visita-guiada-al-castillo-papal'); // €15
+const sierra = getExp('ruta-guiada-sierra-de-irta');   // Ã¢â€šÂ¬35
+const kayak  = getExp('kayak-y-snorkel-en-la-costa');  // Ã¢â€šÂ¬45
+const vinos  = getExp('cata-de-vinos-y-gastronomia');  // Ã¢â€šÂ¬28
+const castle = getExp('visita-guiada-al-castillo-papal'); // Ã¢â€šÂ¬15
 
 const hiEventsBaseUrl = import.meta.env.PUBLIC_HIEVENTS_URL ?? 'https://eventos.portadirta.com';
 
@@ -94,7 +94,7 @@ const livePackages: HiEventPackage[] = hiEvents
 
 <Layout
   title="Experiencias"
-  description="Descubre la Costa del Azahar con excursiones, actividades náuticas, cultura y gastronomía diseñadas exclusivamente para los huéspedes de Porta D'irta en Peñíscola."
+  description="Descubre la Costa del Azahar con excursiones, actividades nÃ¡uticas, cultura y gastronomÃ­a diseÃ±adas exclusivamente para los huÃ©spedes de Porta D'irta en PeÃ±Ã­scola."
   lang="es"
   ogImage="/assets/images/sierra-tower-wide.jpg"
 >
@@ -116,8 +116,8 @@ const livePackages: HiEventPackage[] = hiEvents
           "name": "Porta D'irta",
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "Camí del Pebret, s/n",
-            "addressLocality": "Peñíscola",
+            "streetAddress": "CamÃ­ del Pebret, s/n",
+            "addressLocality": "PeÃ±Ã­scola",
             "postalCode": "12598",
             "addressCountry": "ES"
           }
@@ -164,14 +164,14 @@ const livePackages: HiEventPackage[] = hiEvents
        ============================================================ -->
   <section
     class="relative flex items-center justify-center min-h-screen w-full overflow-hidden"
-    aria-label="Hero — Experiencias en Peñíscola"
+    aria-label="Hero Ã¢â‚¬â€ Experiencias en PeÃ±Ã­scola"
   >
 
     <!-- Background photo -->
     <!-- REPLACE: real aerial/landscape hero photo -->
     <img
       src="/assets/images/sierra-tower-sea.jpg"
-      alt="Costa del Azahar vista desde Peñíscola"
+      alt="Costa del Azahar vista desde PeÃ±Ã­scola"
       class="absolute inset-0 w-full h-full object-cover"
       loading="eager"
       decoding="async"
@@ -184,7 +184,7 @@ const livePackages: HiEventPackage[] = hiEvents
     ></div>
 
     <!-- Hero content -->
-    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 py-20 md:py-32 text-center max-w-4xl mx-auto  md:">
 
       <!-- Section label -->
       <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">
@@ -201,7 +201,7 @@ const livePackages: HiEventPackage[] = hiEvents
 
       <!-- Subtitle -->
       <p class="font-body text-white/80 text-lg leading-relaxed max-w-xl">
-        Excursiones, gastronomía y aventuras diseñadas para nuestros huéspedes
+        Excursiones, gastronomÃ­a y aventuras diseÃ±adas para nuestros huÃ©spedes
       </p>
 
       <!-- Badge pills -->
@@ -216,7 +216,7 @@ const livePackages: HiEventPackage[] = hiEvents
           Cultura
         </span>
         <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-body text-sm px-5 py-2 rounded-full">
-          Gastronomía
+          GastronomÃ­a
         </span>
       </div>
 
@@ -238,13 +238,13 @@ const livePackages: HiEventPackage[] = hiEvents
 
 
   <!-- ============================================================
-       SECTION 2: INTRO ("MÁS ALLÁ DE LA VILLA")
-       Two-column: copy left, 2×2 image mosaic right.
+       SECTION 2: INTRO ("MÃ­ÂS ALLÃ­Â DE LA VILLA")
+       Two-column: copy left, 2Ã­â€”2 image mosaic right.
        ============================================================ -->
   <section
     id="experiencias"
     class="bg-brand-cream py-24 md:py-32 px-4"
-    aria-label="Más allá de la villa — experiencias para huéspedes"
+    aria-label="MÃ¡s allÃ¡ de la villa Ã¢â‚¬â€ experiencias para huÃ©spedes"
   >
     <div class="max-w-7xl mx-auto">
 
@@ -256,12 +256,12 @@ const livePackages: HiEventPackage[] = hiEvents
 
           <!-- Label -->
           <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium">
-            PARA NUESTROS HUÉSPEDES
+            PARA NUESTROS HUÃ­â€°SPEDES
           </p>
 
           <!-- Heading -->
           <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue leading-tight">
-            Todo lo que Peñíscola tiene que ofrecerte
+            Todo lo que PeÃ±Ã­scola tiene que ofrecerte
           </h2>
 
           <!-- Thin gold rule -->
@@ -269,21 +269,21 @@ const livePackages: HiEventPackage[] = hiEvents
 
           <!-- Paragraphs -->
           <p class="font-body text-brand-stone text-lg leading-relaxed">
-            En Porta D'irta creemos que una estancia perfecta va mucho más allá de las comodidades
+            En Porta D'irta creemos que una estancia perfecta va mucho mÃ¡s allÃ¡ de las comodidades
             de la villa. Por eso hemos seleccionado las mejores experiencias de la Costa del Azahar
-            y las hemos organizado exclusivamente para nuestros huéspedes, desde rutas de montaña
-            en la Sierra de Irta hasta aventuras acuáticas en el Mediterráneo cristalino.
+            y las hemos organizado exclusivamente para nuestros huÃ©spedes, desde rutas de montaÃ±a
+            en la Sierra de Irta hasta aventuras acuÃ¡ticas en el MediterrÃ¡neo cristalino.
           </p>
           <p class="font-body text-brand-stone text-lg leading-relaxed">
-            Trabajamos con guías locales certificados y colaboradores de confianza para garantizarte
-            autenticidad, seguridad y momentos únicos. Solo tienes que decirnos qué te apetece y
+            Trabajamos con guÃ­as locales certificados y colaboradores de confianza para garantizarte
+            autenticidad, seguridad y momentos Ãºnicos. Solo tienes que decirnos quÃ© te apetece y
             nuestro equipo lo organiza todo: recogida, reservas y hasta la cesta de picnic para el
             camino.
           </p>
 
         </div>
 
-        <!-- Right: 2×2 image mosaic -->
+        <!-- Right: 2Ã­â€”2 image mosaic -->
         <div class="grid grid-cols-2 gap-4">
 
           <!-- REPLACE: real photo -->
@@ -301,7 +301,7 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="overflow-hidden rounded-xl">
             <img
               src="/assets/images/sierra-tower-sea.jpg"
-              alt="Kayak en el Mediterráneo"
+              alt="Kayak en el MediterrÃ¡neo"
               class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
@@ -312,7 +312,7 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="overflow-hidden rounded-xl">
             <img
               src="/assets/images/sierra-trail-vertical.jpg"
-              alt="Castillo de Peñíscola"
+              alt="Castillo de PeÃ±Ã­scola"
               class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
@@ -323,7 +323,7 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="overflow-hidden rounded-xl">
             <img
               src="/assets/images/property-aerial-pool.jpg"
-              alt="Gastronomía local — arroz a banda"
+              alt="GastronomÃ­a local Ã¢â‚¬â€ arroz a banda"
               class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
@@ -339,10 +339,10 @@ const livePackages: HiEventPackage[] = hiEvents
 
 
   <!-- ============================================================
-       SECTION 2b: NUESTROS PAQUETES (dynamic — Hi.Events)
-       3-column card grid. UPCOMING → full card + Reservar CTA.
-       PAST/ENDED → desaturated + "Finalizado" badge, no CTA.
-       Empty state → elegant placeholder copy.
+       SECTION 2b: NUESTROS PAQUETES (dynamic Ã¢â‚¬â€ Hi.Events)
+       3-column card grid. UPCOMING Ã¢â€ â€™ full card + Reservar CTA.
+       PAST/ENDED Ã¢â€ â€™ desaturated + "Finalizado" badge, no CTA.
+       Empty state Ã¢â€ â€™ elegant placeholder copy.
        ============================================================ -->
   <section
     id="paquetes"
@@ -351,10 +351,10 @@ const livePackages: HiEventPackage[] = hiEvents
   >
     <div class="max-w-7xl mx-auto">
 
-      <!-- TODO: REMOVE BEFORE LAUNCH — beta disclaimer -->
+      <!-- TODO: REMOVE BEFORE LAUNCH Ã¢â‚¬â€ beta disclaimer -->
       <div class="mb-10 bg-amber-400/90 border border-amber-300 text-amber-950 font-body text-sm px-4 py-3 rounded-lg text-center">
-        ⚠️ Sistema en fase de pruebas. Para reservas, contacta directamente por teléfono:
-        <a href="tel:+34644026066" class="font-semibold underline">+34 644 026 066</a>
+        Ã¢Å¡Â Ã¯Â¸Â Sistema en fase de pruebas. Para reservas, contacta directamente por telÃ©fono:
+        <a href="tel:+34964884600" class="font-semibold underline">+34 964 884 600</a>
       </div>
 
       <!-- Section header -->
@@ -367,7 +367,7 @@ const livePackages: HiEventPackage[] = hiEvents
         </h2>
         <GarlandDivider />
         <p class="font-body text-brand-stone text-lg leading-relaxed max-w-2xl">
-          Plazas limitadas. Reserva con antelación para garantizar tu experiencia.
+          Plazas limitadas. Reserva con antelaciÃ³n para garantizar tu experiencia.
         </p>
       </div>
 
@@ -378,10 +378,10 @@ const livePackages: HiEventPackage[] = hiEvents
             <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
           </svg>
           <p class="font-display italic text-2xl text-brand-blue/60">
-            Próximamente nuevas experiencias
+            PrÃ³ximamente nuevas experiencias
           </p>
           <p class="font-body text-brand-stone/70 text-base max-w-md">
-            Estamos preparando nuevos paquetes para la próxima temporada. Contacta con nosotros para más información.
+            Estamos preparando nuevos paquetes para la prÃ³xima temporada. Contacta con nosotros para mÃ¡s informaciÃ³n.
           </p>
           <a
             href="#contacto"
@@ -432,7 +432,7 @@ const livePackages: HiEventPackage[] = hiEvents
                   <!-- Price badge (upcoming only) -->
                   {!isPast && pkg.price != null && (
                     <div class="absolute top-4 right-4 bg-brand-gold text-white font-body font-semibold text-sm px-3 py-1.5 rounded-full shadow-md">
-                      Desde {pkg.price}€
+                      Desde {pkg.price}Ã¢â€šÂ¬
                     </div>
                   )}
                 </div>
@@ -489,7 +489,7 @@ const livePackages: HiEventPackage[] = hiEvents
        ============================================================ -->
   <section
     class="bg-brand-blue min-h-screen flex flex-col lg:flex-row overflow-hidden"
-    aria-label="Sierra de Irta — parque natural"
+    aria-label="Sierra de Irta Ã¢â‚¬â€ parque natural"
   >
 
     <!-- Left: large image taking full height -->
@@ -497,7 +497,7 @@ const livePackages: HiEventPackage[] = hiEvents
     <div class="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen flex-shrink-0">
       <img
         src="/assets/images/sierra-trail-vertical.jpg"
-        alt="Sierra de Irta, parque natural de Peñíscola"
+        alt="Sierra de Irta, parque natural de PeÃ±Ã­scola"
         class="absolute inset-0 w-full h-full object-cover"
         loading="lazy"
         decoding="async"
@@ -523,14 +523,14 @@ const livePackages: HiEventPackage[] = hiEvents
 
         <!-- Paragraphs -->
         <p class="font-body text-white/80 text-base leading-relaxed">
-          El Parque Natural de la Sierra de Irta es uno de los últimos tramos de litoral virgen
-          del Mediterráneo español. Con más de 5.000 hectáreas de monte bajo, acantilados y calas
+          El Parque Natural de la Sierra de Irta es uno de los Ãºltimos tramos de litoral virgen
+          del MediterrÃ¡neo espaÃ±ol. Con mÃ¡s de 5.000 hectÃ¡reas de monte bajo, acantilados y calas
           secretas, es el escenario ideal para conectar con la naturaleza a pocos minutos de la
           villa.
         </p>
         <p class="font-body text-white/80 text-base leading-relaxed">
-          Nuestros guías locales te llevan por los senderos más espectaculares, adaptando el
-          recorrido a tu nivel físico y tus intereses. Una experiencia que combina paisaje,
+          Nuestros guÃ­as locales te llevan por los senderos mÃ¡s espectaculares, adaptando el
+          recorrido a tu nivel fÃ­sico y tus intereses. Una experiencia que combina paisaje,
           historia y biodiversidad en estado puro.
         </p>
 
@@ -555,29 +555,29 @@ const livePackages: HiEventPackage[] = hiEvents
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span class="font-body text-white text-base">Observación de aves</span>
+            <span class="font-body text-white text-base">ObservaciÃ³n de aves</span>
           </li>
 
           <li class="flex items-center gap-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="flex-shrink-0">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span class="font-body text-white text-base">Fotografía de naturaleza</span>
+            <span class="font-body text-white text-base">FotografÃ­a de naturaleza</span>
           </li>
 
         </ul>
 
-        <!-- CTA — pre-selects "sierra-irta" in the contact form -->
-        <div class="pt-2 flex items-center gap-4 flex-wrap">
+        <!-- CTA Ã¢â‚¬â€ pre-selects "sierra-irta" in the contact form -->
+        <div class=" flex items-center gap-4 flex-wrap">
           <a
             href="#contacto"
             data-exp="sierra-irta"
             class="exp-cta inline-flex items-center justify-center px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg"
           >
-            Reservar Excursión
+            Reservar ExcursiÃ³n
           </a>
           {sierra.price && (
-            <span class="font-body text-white/60 text-sm">desde €{sierra.price}/persona</span>
+            <span class="font-body text-white/60 text-sm">desde Ã¢â€šÂ¬{sierra.price}/persona</span>
           )}
         </div>
 
@@ -593,7 +593,7 @@ const livePackages: HiEventPackage[] = hiEvents
        ============================================================ -->
   <section
     class="bg-brand-cream py-24 md:py-32 px-4"
-    aria-label="Actividades acuáticas — Mar y Playa"
+    aria-label="Actividades acuÃ¡ticas Ã¢â‚¬â€ Mar y Playa"
   >
     <div class="max-w-7xl mx-auto">
 
@@ -603,7 +603,7 @@ const livePackages: HiEventPackage[] = hiEvents
           MAR &amp; PLAYA
         </p>
         <h2 class="font-display font-light text-3xl sm:text-4xl md:text-5xl text-brand-blue">
-          El Mediterráneo a tu puerta
+          El MediterrÃ¡neo a tu puerta
         </h2>
       </div>
 
@@ -617,14 +617,14 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="relative overflow-hidden">
             <img
               src="/assets/images/sierra-tower-wide.jpg"
-              alt="Kayak y snorkel en Peñíscola"
+              alt="Kayak y snorkel en PeÃ±Ã­scola"
               class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
             />
             <div class="absolute top-4 right-4">
               <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                {kayak.price ? `desde €${kayak.price}/persona` : 'Consultar precio'}
+                {kayak.price ? `desde Ã¢â€šÂ¬${kayak.price}/persona` : 'Consultar precio'}
               </span>
             </div>
           </div>
@@ -634,11 +634,11 @@ const livePackages: HiEventPackage[] = hiEvents
               Kayak &amp; Snorkel
             </h3>
             <p class="font-body text-brand-stone text-sm leading-relaxed">
-              Explora las calas y fondos marinos de la Sierra de Irta en kayak. Sesión de 2.5 horas
-              con guía certificado, equipo incluido (kayak doble, chaleco, palas, gafas y tubo).
+              Explora las calas y fondos marinos de la Sierra de Irta en kayak. SesiÃ³n de 2.5 horas
+              con guÃ­a certificado, equipo incluido (kayak doble, chaleco, palas, gafas y tubo).
               Apto para todos los niveles.
             </p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a
                 href="#contacto"
                 data-exp="actividades-acuaticas"
@@ -662,14 +662,14 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="relative overflow-hidden">
             <img
               src="/assets/images/sierra-tower-sea.jpg"
-              alt="Snorkel en las cuevas marinas de Peñíscola"
+              alt="Snorkel en las cuevas marinas de PeÃ±Ã­scola"
               class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
             />
             <div class="absolute top-4 right-4">
               <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                desde €35/persona
+                desde Ã¢â€šÂ¬35/persona
               </span>
             </div>
           </div>
@@ -679,11 +679,11 @@ const livePackages: HiEventPackage[] = hiEvents
               Snorkel en las Cuevas
             </h3>
             <p class="font-body text-brand-stone text-sm leading-relaxed">
-              Sumérgete en las cuevas y grutas submarinas de la costa de Peñíscola. Nuestros
-              monitores de buceo certificados te acompañan para descubrir un mundo submarino
+              SumÃ©rgete en las cuevas y grutas submarinas de la costa de PeÃ±Ã­scola. Nuestros
+              monitores de buceo certificados te acompaÃ±an para descubrir un mundo submarino
               lleno de vida y colores, con todo el material incluido.
             </p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a
                 href="#contacto"
                 data-exp="actividades-acuaticas"
@@ -707,14 +707,14 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="relative overflow-hidden">
             <img
               src="/assets/images/property-aerial-twilight.jpg"
-              alt="Pesca tradicional en Peñíscola"
+              alt="Pesca tradicional en PeÃ±Ã­scola"
               class="w-full h-56 object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
             />
             <div class="absolute top-4 right-4">
               <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                desde €45/persona
+                desde Ã¢â€šÂ¬45/persona
               </span>
             </div>
           </div>
@@ -724,11 +724,11 @@ const livePackages: HiEventPackage[] = hiEvents
               Pesca Tradicional
             </h3>
             <p class="font-body text-brand-stone text-sm leading-relaxed">
-              Embárcate con pescadores locales al amanecer y aprende las técnicas de pesca
-              artesanal del Mediterráneo. Una experiencia auténtica que termina con los
+              EmbÃ¡rcate con pescadores locales al amanecer y aprende las tÃ©cnicas de pesca
+              artesanal del MediterrÃ¡neo. Una experiencia autÃ©ntica que termina con los
               mejores ejemplares cocinados a bordo o en nuestra cocina.
             </p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a
                 href="#contacto"
                 data-exp="actividades-acuaticas"
@@ -753,22 +753,22 @@ const livePackages: HiEventPackage[] = hiEvents
 
 
   <!-- ============================================================
-       SECTION 5: CULTURA & GASTRONOMÍA
+       SECTION 5: CULTURA & GASTRONOMÃ­ÂA
        Dark bg. Two large glassmorphism cards side by side.
        ============================================================ -->
   <section
     class="bg-brand-blue py-24 md:py-32 px-4"
-    aria-label="Cultura y Gastronomía en Peñíscola"
+    aria-label="Cultura y GastronomÃ­a en PeÃ±Ã­scola"
   >
     <div class="max-w-7xl mx-auto">
 
       <!-- Section heading -->
       <div class="text-center mb-16">
         <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-xs font-medium mb-4">
-          CULTURA &amp; GASTRONOMÍA
+          CULTURA &amp; GASTRONOMÃ­ÂA
         </p>
         <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white">
-          Peñíscola, historia y sabor
+          PeÃ±Ã­scola, historia y sabor
         </h2>
       </div>
 
@@ -782,7 +782,7 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="relative overflow-hidden">
             <img
               src="/assets/images/food-paella-close.jpg"
-              alt="Castillo templario y casco antiguo de Peñíscola"
+              alt="Castillo templario y casco antiguo de PeÃ±Ã­scola"
               class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
@@ -791,21 +791,21 @@ const livePackages: HiEventPackage[] = hiEvents
             {castle.price && (
               <div class="absolute top-4 right-4">
                 <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                  desde €{castle.price}/persona
+                  desde Ã¢â€šÂ¬{castle.price}/persona
                 </span>
               </div>
             )}
           </div>
 
           <div class="flex flex-col gap-4 p-8 flex-1">
-            <h3 class="font-display text-3xl text-white font-light">Peñíscola Histórica</h3>
+            <h3 class="font-display text-3xl text-white font-light">PeÃ±Ã­scola HistÃ³rica</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">
-              Descubre los secretos del castillo templario donde el Papa Luna escribió sus
+              Descubre los secretos del castillo templario donde el Papa Luna escribiÃ³ sus
               bulas, y pasea por las callejuelas empedradas de la ciudad amurallada. Nuestros
-              guías locales dan vida a siglos de historia medieval, árabe y cristiana en un
+              guÃ­as locales dan vida a siglos de historia medieval, Ã¡rabe y cristiana en un
               recorrido personalizado a tu ritmo.
             </p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a
                 href="#contacto"
                 data-exp="cultura-historia"
@@ -825,7 +825,7 @@ const livePackages: HiEventPackage[] = hiEvents
           <div class="relative overflow-hidden">
             <img
               src="/assets/images/terrace-breakfast.jpg"
-              alt="Ruta gastronómica — vinos y mariscos de la Costa del Azahar"
+              alt="Ruta gastronÃ³mica Ã¢â‚¬â€ vinos y mariscos de la Costa del Azahar"
               class="w-full h-72 object-cover hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
@@ -834,20 +834,20 @@ const livePackages: HiEventPackage[] = hiEvents
             {vinos.price && (
               <div class="absolute top-4 right-4">
                 <span class="bg-brand-gold text-white font-body text-xs font-medium uppercase tracking-wide px-3 py-1 rounded-full shadow">
-                  desde €{vinos.price}/persona
+                  desde Ã¢â€šÂ¬{vinos.price}/persona
                 </span>
               </div>
             )}
           </div>
 
           <div class="flex flex-col gap-4 p-8 flex-1">
-            <h3 class="font-display text-3xl text-white font-light">Cata de Vinos &amp; Gastronomía</h3>
+            <h3 class="font-display text-3xl text-white font-light">Cata de Vinos &amp; GastronomÃ­a</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">
               Cata guiada de cuatro vinos D.O. Valencia con maridaje de productos locales.
-              El sumiller del restaurante os guiará por la historia, aromas y sabores de la
-              terra. Cupos muy limitados — máximo 12 personas para una experiencia íntima.
+              El sumiller del restaurante os guiarÃ¡ por la historia, aromas y sabores de la
+              terra. Cupos muy limitados Ã¢â‚¬â€ mÃ¡ximo 12 personas para una experiencia Ã­ntima.
             </p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a
                 href="#contacto"
                 data-exp="gastronomia"
@@ -888,10 +888,10 @@ const livePackages: HiEventPackage[] = hiEvents
 
       <!-- Subtitle -->
       <p class="font-body text-brand-stone text-base text-center leading-relaxed max-w-2xl mx-auto mb-16">
-        Trabajamos con los mejores proveedores de la zona para ofrecerte experiencias auténticas
+        Trabajamos con los mejores proveedores de la zona para ofrecerte experiencias autÃ©nticas
       </p>
 
-      <!-- Partner tiles — rendered from src/content/colaboradores/ -->
+      <!-- Partner tiles Ã¢â‚¬â€ rendered from src/content/colaboradores/ -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         {colaboradores.map((c) => (
           <div class="group bg-brand-linen border border-brand-sand/30 rounded-xl h-24 flex flex-col items-center justify-center gap-1 px-4 hover:border-brand-gold transition-colors duration-200">
@@ -947,10 +947,10 @@ const livePackages: HiEventPackage[] = hiEvents
           PLANIFICA TU ESTANCIA
         </p>
         <h2 class="font-display font-light italic text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
-          Diseña tu experiencia perfecta
+          DiseÃ±a tu experiencia perfecta
         </h2>
         <p class="font-body text-white/60 text-base mt-4 leading-relaxed">
-          Cuéntanos qué te apetece y lo organizamos todo por ti
+          CuÃ©ntanos quÃ© te apetece y lo organizamos todo por ti
         </p>
       </div>
 
@@ -999,12 +999,12 @@ const livePackages: HiEventPackage[] = hiEvents
 
           </div>
 
-          <!-- Row: Teléfono + Tipo de experiencia -->
+          <!-- Row: TelÃ©fono + Tipo de experiencia -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
               <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
-                Teléfono
+                TelÃ©fono
               </label>
               <input
                 type="tel"
@@ -1025,18 +1025,18 @@ const livePackages: HiEventPackage[] = hiEvents
                 required
                 class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 appearance-none"
               >
-                <option value="" disabled selected class="text-brand-blue">Selecciona una opción</option>
+                <option value="" disabled selected class="text-brand-blue">Selecciona una opciÃ³n</option>
                 <option value="sierra-irta" class="text-brand-blue">Sierra de Irta</option>
-                <option value="actividades-acuaticas" class="text-brand-blue">Actividades Acuáticas</option>
+                <option value="actividades-acuaticas" class="text-brand-blue">Actividades AcuÃ¡ticas</option>
                 <option value="cultura-historia" class="text-brand-blue">Cultura &amp; Historia</option>
-                <option value="gastronomia" class="text-brand-blue">Gastronomía</option>
-                <option value="combinacion" class="text-brand-blue">Combinación personalizada</option>
+                <option value="gastronomia" class="text-brand-blue">GastronomÃ­a</option>
+                <option value="combinacion" class="text-brand-blue">CombinaciÃ³n personalizada</option>
               </select>
             </div>
 
           </div>
 
-          <!-- Row: Fecha de llegada + Nº personas -->
+          <!-- Row: Fecha de llegada + NÃ‚Âº personas -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div class="flex flex-col gap-2">
@@ -1053,7 +1053,7 @@ const livePackages: HiEventPackage[] = hiEvents
 
             <div class="flex flex-col gap-2">
               <label for="personas" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">
-                Nº personas
+                NÃ‚Âº personas
               </label>
               <input
                 type="number"
@@ -1077,7 +1077,7 @@ const livePackages: HiEventPackage[] = hiEvents
               id="mensaje"
               name="mensaje"
               rows="5"
-              placeholder="Cuéntanos tus preferencias, nivel físico, alergias alimentarias o cualquier detalle especial..."
+              placeholder="CuÃ©ntanos tus preferencias, nivel fÃ­sico, alergias alimentarias o cualquier detalle especial..."
               class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 resize-y"
             ></textarea>
           </div>
@@ -1092,14 +1092,14 @@ const livePackages: HiEventPackage[] = hiEvents
               class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold"
             />
             <label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">
-              He leído y acepto la
-              <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold">Política de Privacidad</a>.
+              He leÃ­do y acepto la
+              <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold">PolÃ­tica de Privacidad</a>.
               Consiento el tratamiento de mis datos para gestionar mi solicitud de experiencia. *
             </label>
           </div>
 
           <!-- Submit button -->
-          <div class="flex flex-col items-center gap-4 pt-2">
+          <div class="flex flex-col items-center gap-4 ">
             <button
               type="submit"
               class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto"
@@ -1109,7 +1109,7 @@ const livePackages: HiEventPackage[] = hiEvents
 
             <!-- Reassurance text -->
             <p class="font-body text-white/50 text-xs text-center">
-              Incluido en estancias de 3 noches o más &middot; Resto bajo reserva previa
+              Incluido en estancias de 3 noches o mÃ¡s &middot; Resto bajo reserva previa
             </p>
           </div>
 
@@ -1127,12 +1127,12 @@ const livePackages: HiEventPackage[] = hiEvents
        ============================================================ -->
   <section
     class="bg-brand-cream py-24 md:py-32 px-4 border-t border-brand-sand/30"
-    aria-label="Descubrir más en Porta D'irta"
+    aria-label="Descubrir mÃ¡s en Porta D'irta"
   >
     <div class="max-w-5xl mx-auto">
 
       <p class="font-body text-center uppercase tracking-[0.3em] text-brand-stone text-xs font-medium mb-12">
-        DESCUBRE MÁS
+        DESCUBRE MÃ­ÂS
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1144,7 +1144,7 @@ const livePackages: HiEventPackage[] = hiEvents
           aria-label="Ver El Hotel"
         >
           <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
-            El Hotel →
+            El Hotel Ã¢â€ â€™
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1159,7 +1159,7 @@ const livePackages: HiEventPackage[] = hiEvents
           aria-label="Ver El Restaurante"
         >
           <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
-            El Restaurante →
+            El Restaurante Ã¢â€ â€™
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1174,7 +1174,7 @@ const livePackages: HiEventPackage[] = hiEvents
           aria-label="Ver Eventos y Celebraciones"
         >
           <span class="font-display text-2xl text-brand-blue font-light group-hover:text-brand-gold transition-colors duration-300">
-            Eventos &amp; Celebraciones →
+            Eventos &amp; Celebraciones Ã¢â€ â€™
           </span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-sand group-hover:text-brand-gold group-hover:translate-x-1 transition-all duration-300" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1189,7 +1189,7 @@ const livePackages: HiEventPackage[] = hiEvents
 
 </Layout>
 
-<!-- ── Client scripts ──────────────────────────────────────────────────────── -->
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Client scripts Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ -->
 <script is:inline define:vars={{ tastyigniterUrl: import.meta.env.PUBLIC_TASTYIGNITER_URL ?? 'https://restaurant.portadirta.com' }}>
 
   // 1. CTA links with data-exp auto-select the experience type in the form
@@ -1200,7 +1200,7 @@ const livePackages: HiEventPackage[] = hiEvents
     });
   });
 
-  // 2. Form submission → TastyIgniter /api/public/contact
+  // 2. Form submission Ã¢â€ â€™ TastyIgniter /api/public/contact
   document.getElementById('experiencias-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     var form = e.target;
@@ -1217,7 +1217,7 @@ const livePackages: HiEventPackage[] = hiEvents
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error('Error en el servidor');
-      form.innerHTML = '<div class="text-center py-8"><p class="text-brand-gold font-display text-2xl italic mb-4">¡Gracias! Hemos recibido tu consulta.</p><p class="text-white/70 font-body text-sm">Nos pondremos en contacto contigo en menos de 24 horas para organizar tu experiencia.</p></div>';
+      form.innerHTML = '<div class="text-center py-8"><p class="text-brand-gold font-display text-2xl italic mb-4">Â¡Gracias! Hemos recibido tu consulta.</p><p class="text-white/70 font-body text-sm">Nos pondremos en contacto contigo en menos de 24 horas para organizar tu experiencia.</p></div>';
     } catch (err) {
       btn.textContent = originalText;
       btn.disabled = false;
@@ -1227,8 +1227,11 @@ const livePackages: HiEventPackage[] = hiEvents
         errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
         form.appendChild(errDiv);
       }
-      errDiv.textContent = 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+      errDiv.textContent = 'Ha ocurrido un error. Por favor intÃ©ntalo de nuevo o llÃ¡manos directamente.';
     }
   });
 
 </script>
+
+
+

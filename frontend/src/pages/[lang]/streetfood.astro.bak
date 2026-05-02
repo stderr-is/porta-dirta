@@ -1,0 +1,145 @@
+---
+/**
+ * src/pages/[lang]/streetfood.astro — Street Food by Fifty-Five (multilingual)
+ */
+import fs from 'node:fs';
+import Layout from '../../layouts/Layout.astro';
+import GarlandDivider from '../../components/GarlandDivider.astro';
+import streetfoodFallback from '../../data/streetfood.json';
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'fr' } }, { params: { lang: 'de' } }];
+}
+const { lang } = Astro.params;
+const langParam = lang as string;
+if (!langParam || !['en', 'fr', 'de'].includes(langParam)) {
+  return new Response(null, { status: 404 });
+}
+const ui = {
+  en: {
+    title: 'Street Food \u2014 Restaurant',
+    description: "Evening street food menu at Porta D'irta, Pe\u00f1\u00edscola.",
+    subtitle: "Porta D'irta Restaurant",
+    allergens_header: 'Allergens',
+    allergen_note: 'Severe intolerance or allergy? Let our team know and we\'ll take care of everything.',
+    back_link: '\u2190 All menus',
+    drinks_link: 'Drinks \u2192',
+    book_link: 'Book a table',
+  },
+  fr: {
+    title: 'Street Food \u2014 Restaurant',
+    description: "Menu street food du soir \u00e0 Porta D'irta, Pe\u00f1\u00edscola.",
+    subtitle: "Restaurant Porta D'irta",
+    allergens_header: 'Allerg\u00e8nes',
+    allergen_note: 'Intol\u00e9rance ou allergie grave\u00a0? Signalez-le \u00e0 notre \u00e9quipe et nous nous en occupons.',
+    back_link: '\u2190 Tous les menus',
+    drinks_link: 'Boissons \u2192',
+    book_link: 'R\u00e9server une table',
+  },
+  de: {
+    title: 'Street Food \u2014 Restaurant',
+    description: "Abend-Street-Food bei Porta D'irta, Pe\u00f1\u00edscola.",
+    subtitle: "Restaurant Porta D'irta",
+    allergens_header: 'Allergene',
+    allergen_note: 'Schwere Unvertr\u00e4glichkeit oder Allergie? Informieren Sie unser Team und wir k\u00fcmmern uns darum.',
+    back_link: '\u2190 Alle Men\u00fcs',
+    drinks_link: 'Getr\u00e4nke \u2192',
+    book_link: 'Tisch reservieren',
+  },
+};
+const t = ui[lang as keyof typeof ui];
+const ALLERGEN_LABELS: Record<string, Record<string, string>> = {
+  en: { 'gluten': 'Gluten', 'l\u00e1cteos': 'Dairy', 'huevo': 'Egg', 'pescado': 'Fish', 'crust\u00e1ceos': 'Crustaceans', 'moluscos': 'Molluscs', 'frutos secos': 'Tree nuts', 'cacahuetes': 'Peanuts', 'soja': 'Soya', 'sulfitos': 'Sulphites', 'mostaza': 'Mustard', 's\u00e9samo': 'Sesame', 'apio': 'Celery', 'altramuces': 'Lupin' },
+  fr: { 'gluten': 'Gluten', 'l\u00e1cteos': 'Produits laitiers', 'huevo': '\u0152ufs', 'pescado': 'Poisson', 'crust\u00e1ceos': 'Crust ac\u00e9s', 'moluscos': 'Mollusques', 'frutos secos': 'Fruits \u00e0 coque', 'cacahuetes': 'Arachides', 'soja': 'Soja', 'sulfitos': 'Sulfites', 'mostaza': 'Moutarde', 's\u00e9samo': 'S\u00e9same', 'apio': 'C\u00e9leri', 'altramuces': 'Lupin' },
+  de: { 'gluten': 'Gluten', 'l\u00e1cteos': 'Milch', 'huevo': 'Eier', 'pescado': 'Fisch', 'crust\u00e1ceos': 'Krebstiere', 'moluscos': 'Weichtiere', 'frutos secos': 'Schalenfr\u00fcchte', 'cacahuetes': 'Erdnüsse', 'soja': 'Soja', 'sulfitos': 'Sulfite', 'mostaza': 'Senf', 's\u00e9samo': 'Sesam', 'apio': 'Sellerie', 'altramuces': 'Lupinen' },
+};
+const ALLERGEN_COLORS: Record<string, { bg: string; text: string }> = {
+  'gluten': { bg: 'bg-amber-100', text: 'text-amber-800' }, 'l\u00e1cteos': { bg: 'bg-sky-100', text: 'text-sky-800' },
+  'huevo': { bg: 'bg-yellow-100', text: 'text-yellow-800' }, 'pescado': { bg: 'bg-blue-100', text: 'text-blue-800' },
+  'crust\u00e1ceos': { bg: 'bg-orange-100', text: 'text-orange-800' }, 'moluscos': { bg: 'bg-violet-100', text: 'text-violet-800' },
+  'frutos secos': { bg: 'bg-green-100', text: 'text-green-800' }, 'cacahuetes': { bg: 'bg-lime-100', text: 'text-lime-800' },
+  'soja': { bg: 'bg-emerald-100', text: 'text-emerald-800' }, 'sulfitos': { bg: 'bg-rose-100', text: 'text-rose-800' },
+  'mostaza': { bg: 'bg-yellow-50', text: 'text-yellow-700' }, 's\u00e9samo': { bg: 'bg-stone-100', text: 'text-stone-700' },
+  'apio': { bg: 'bg-teal-100', text: 'text-teal-800' }, 'altramuces': { bg: 'bg-pink-100', text: 'text-pink-800' },
+};
+const labels = ALLERGEN_LABELS[lang as keyof typeof ALLERGEN_LABELS] ?? ALLERGEN_LABELS.en;
+const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {};
+for (const [key, colors] of Object.entries(ALLERGEN_COLORS)) {
+  ALLERGENS[key] = { label: labels[key] ?? key, ...colors };
+}
+let streetfood: typeof streetfoodFallback = streetfoodFallback;
+const menuDataPath = process.env.MENU_DATA_PATH;
+if (menuDataPath) {
+  try { streetfood = JSON.parse(fs.readFileSync(`${menuDataPath}/streetfood.json`, 'utf-8')); } catch {}
+}
+// Use translated sections if available, fall back to Spanish
+const langSections = (streetfood as any).translations?.[langParam]?.sections;
+const sections = langSections?.length ? langSections : streetfood.sections;
+---
+
+<Layout
+  title={t.title}
+  description={t.description}
+  ogImage="/assets/images/streetfood-fifty-five.png"
+>
+  <section class="bg-brand-blue pt-28 pb-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-3">
+      <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">{t.subtitle}</p>
+      <h1 class="font-display font-light italic text-5xl sm:text-6xl text-white leading-tight">Street Food</h1>
+      <p class="font-body text-sm text-white/60 -mt-1">by Fifty-Five</p>
+      <GarlandDivider light />
+      <p class="font-body text-white/50 text-xs tracking-widest">18:00 – 22:00</p>
+    </div>
+  </section>
+  <section class="bg-brand-cream py-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
+      {streetfood.sections.map(section => (
+        <div>
+          <div class="flex items-center gap-3 mb-1">
+            <h2 class="font-display text-2xl sm:text-3xl text-brand-blue shrink-0">{section.name}</h2>
+            <div class="flex-1 h-px bg-brand-blue/15"></div>
+          </div>
+          {section.note && <p class="font-body text-[11px] text-brand-stone/70 uppercase tracking-widest mb-3">{section.note}</p>}
+          <ul class="flex flex-col divide-y divide-brand-sand/40">
+            {section.items.map(item => (
+              <li class="py-3.5 flex items-start justify-between gap-3">
+                <div class="flex flex-col gap-1.5 min-w-0">
+                  <span class="font-body font-medium text-brand-blue text-[15px] leading-snug">{item.name}</span>
+                  {item.description && <span class="font-body text-brand-stone text-[13px] leading-relaxed">{item.description}</span>}
+                  {item.allergens && item.allergens.length > 0 && (
+                    <div class="flex flex-wrap gap-1 mt-0.5">
+                      {item.allergens.map((a: string) => {
+                        const info = ALLERGENS[a.toLowerCase()] ?? { label: a, bg: 'bg-gray-100', text: 'text-gray-700' };
+                        return <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold leading-none ${info.bg} ${info.text}`}>{info.label}</span>;
+                      })}
+                    </div>
+                  )}
+                </div>
+                <span class="font-body font-medium text-brand-gold text-[15px] shrink-0 tabular-nums pt-0.5">{item.price.toFixed(2)} €</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div class="border-t border-brand-sand/40 pt-6 flex flex-col gap-3">
+        <p class="font-body text-[11px] uppercase tracking-widest text-brand-stone/60">{t.allergens_header}</p>
+        <div class="flex flex-wrap gap-2">
+          {Object.values(ALLERGENS).map(a => (
+            <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${a.bg} ${a.text}`}>{a.label}</span>
+          ))}
+        </div>
+        <p class="font-body text-[11px] text-brand-stone/50 italic mt-1">{t.allergen_note}</p>
+      </div>
+    </div>
+  </section>
+  <section class="bg-brand-blue py-10">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href={`/${lang}/mesa`} class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">{t.back_link}</a>
+      <span class="hidden sm:block text-white/20">|</span>
+      <a href={`/${lang}/bebidas`} class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">{t.drinks_link}</a>
+      <span class="hidden sm:block text-white/20">|</span>
+      <a href={`/${lang}/reservar`} class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
+        {t.book_link}
+      </a>
+    </div>
+  </section>
+</Layout>

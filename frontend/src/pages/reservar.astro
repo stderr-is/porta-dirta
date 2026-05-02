@@ -1,6 +1,6 @@
 ---
 /**
- * src/pages/reservar.astro — Reservations page for default locale (es)
+ * src/pages/reservar.astro â€” Reservations page for default locale (es)
  */
 
 import Layout from '../layouts/Layout.astro';
@@ -38,8 +38,8 @@ const t = useTranslations(lang);
     ]
   })} />
 
-  <!-- ── Page header ─────────────────────────────────────────────── -->
-  <section class="bg-brand-blue pt-28 pb-10 text-center">
+  <!-- â”€â”€ Page header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <section class="bg-brand-blue py-20 md:py-32 pb-10 text-center">
 
     <p class="text-brand-gold font-body tracking-[0.25em] text-sm uppercase mb-4">
       {t('reservar.hero_label')}
@@ -51,7 +51,7 @@ const t = useTranslations(lang);
 
     <div class="flex justify-center mb-6"><GarlandDivider /></div>
 
-    <!-- Summary strip — filled by JS from URL params -->
+    <!-- Summary strip â€” filled by JS from URL params -->
     <div
       id="booking-summary"
       class="hidden max-w-xl mx-auto px-6 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm
@@ -78,13 +78,13 @@ const t = useTranslations(lang);
 
   </section>
 
-  <!-- ── Booking iframe ──────────────────────────────────────────── -->
+  <!-- â”€â”€ Booking iframe â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-cream min-h-screen">
 
     <!-- Loading state shown until iframe fires load event -->
     <div id="booking-loader" class="flex flex-col items-center justify-center py-24 gap-4">
       <div class="w-8 h-8 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
-      <p class="font-body text-brand-stone text-sm">Cargando disponibilidad…</p>
+      <p class="font-body text-brand-stone text-sm">Cargando disponibilidadâ€¦</p>
     </div>
 
     <iframe
@@ -92,7 +92,7 @@ const t = useTranslations(lang);
       src=""
       width="100%"
       style="min-height: 85vh; border: none; display: none;"
-      title="Reservar habitación en Porta D'irta"
+      title="Reservar habitaciÃ³n en Porta D'irta"
       loading="eager"
     ></iframe>
 
@@ -108,7 +108,7 @@ const t = useTranslations(lang);
 
       out.set('propid', PROP_ID);
 
-      // Forward params — Beds24 booking2.php uses checkin/checkout/numadult/numchild/lang
+      // Forward params â€” Beds24 booking2.php uses checkin/checkout/numadult/numchild/lang
       ['checkin', 'checkout', 'numadult', 'numchild', 'room', 'lang'].forEach(function (key) {
         if (incoming.has(key)) out.set(key, incoming.get(key));
       });
@@ -119,7 +119,7 @@ const t = useTranslations(lang);
         if (pageLang) out.set('lang', pageLang);
       }
 
-      // ── Booking summary strip ──────────────────────────────────
+      // â”€â”€ Booking summary strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       var checkin  = incoming.get('checkin');
       var checkout = incoming.get('checkout');
       var adults   = incoming.get('numadult') || '2';
@@ -132,18 +132,18 @@ const t = useTranslations(lang);
         var nights = Math.round((co - ci) / 86400000);
 
         document.getElementById('summary-dates-text').textContent =
-          fmt.format(ci) + ' → ' + fmt.format(co) + ' · ' + nights + (nights === 1 ? ' noche' : ' noches');
+          fmt.format(ci) + ' â†’ ' + fmt.format(co) + ' Â· ' + nights + (nights === 1 ? ' noche' : ' noches');
 
         var guestParts = [adults + (adults === '1' ? ' adulto' : ' adultos')];
-        if (parseInt(children) > 0) guestParts.push(children + (children === '1' ? ' niño' : ' niños'));
-        document.getElementById('summary-guests-text').textContent = guestParts.join(' · ');
+        if (parseInt(children) > 0) guestParts.push(children + (children === '1' ? ' niÃ±o' : ' niÃ±os'));
+        document.getElementById('summary-guests-text').textContent = guestParts.join(' Â· ');
 
         var summary = document.getElementById('booking-summary');
         summary.classList.remove('hidden');
         summary.classList.add('flex');
       }
 
-      // ── Load iframe ────────────────────────────────────────────
+      // â”€â”€ Load iframe â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const iframe = document.getElementById('beds24-iframe');
       const loader = document.getElementById('booking-loader');
 
@@ -157,3 +157,4 @@ const t = useTranslations(lang);
   </script>
 
 </Layout>
+

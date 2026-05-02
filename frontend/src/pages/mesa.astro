@@ -1,9 +1,9 @@
 ---
 /**
- * mesa.astro — QR code table landing page
+ * mesa.astro â€” QR code table landing page
  *
  * This is the single URL printed on every table QR code.
- * Five tap-friendly cards: Desayuno, La Taperia, Menú Semana Santa, Street Food, Bebidas.
+ * Five tap-friendly cards: Desayuno, La Taperia, MenÃº Semana Santa, Street Food, Bebidas.
  * noindex: not meant to rank, just for in-restaurant use.
  */
 
@@ -19,15 +19,15 @@ if (menuDataPath) {
 ---
 
 <Layout
-  title="Menús — Mesa"
-  description="Consulta todos los menús del restaurante Porta D'irta."
+  title="MenÃºs â€” Mesa"
+  description="Consulta todos los menÃºs del restaurante Porta D'irta."
   noindex={true}
 >
 
   <div class="min-h-screen bg-brand-blue flex flex-col">
 
-    <!-- ── Brand header ─────────────────────────────────────────── -->
-    <header class="pt-32 pb-6 text-center px-4">
+    <!-- â”€â”€ Brand header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <header class="py-20 md:py-32 pb-6 text-center px-4">
       <img
         src="/assets/logos/logo-negativo.png"
         alt="Porta D'irta"
@@ -37,7 +37,7 @@ if (menuDataPath) {
       <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Restaurante</p>
     </header>
 
-    <!-- ── Menu cards ───────────────────────────────────────────── -->
+    <!-- â”€â”€ Menu cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
     <main class="flex-1 flex flex-col justify-center px-4 sm:px-6 pb-8 max-w-lg mx-auto w-full gap-3">
 
       <!-- Desayuno -->
@@ -53,7 +53,7 @@ if (menuDataPath) {
           </div>
           <div>
             <p class="font-display text-xl text-white group-hover:text-brand-gold transition-colors duration-200 leading-tight">Desayuno</p>
-            <p class="font-body text-xs text-white/50 mt-0.5">Desayuno mediterráneo completo</p>
+            <p class="font-body text-xs text-white/50 mt-0.5">Desayuno mediterrÃ¡neo completo</p>
           </div>
         </div>
         <svg class="w-5 h-5 text-brand-gold/50 group-hover:text-brand-gold group-hover:translate-x-0.5 transition-all duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -75,7 +75,7 @@ if (menuDataPath) {
           </div>
           <div>
             <p class="font-display text-xl text-white group-hover:text-brand-gold transition-colors duration-200 leading-tight">La Taperia</p>
-            <p class="font-body text-xs text-white/50 mt-0.5">Tapas · 10:00 – 13:00</p>
+            <p class="font-body text-xs text-white/50 mt-0.5">Tapas Â· 10:00 â€“ 13:00</p>
           </div>
         </div>
         <svg class="w-5 h-5 text-brand-gold/50 group-hover:text-brand-gold group-hover:translate-x-0.5 transition-all duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -83,7 +83,7 @@ if (menuDataPath) {
         </svg>
       </a>
 
-      <!-- Menú Semana Santa (highlighted) -->
+      <!-- MenÃº Semana Santa (highlighted) -->
       <a
         href="/menu"
         class="group flex items-center justify-between gap-4 bg-brand-gold/10 hover:bg-brand-gold/15 active:bg-brand-gold/20 border border-brand-gold/30 hover:border-brand-gold/60 rounded-2xl px-6 py-5 transition-all duration-200"
@@ -95,12 +95,12 @@ if (menuDataPath) {
             </svg>
           </div>
           <div>
-            <p class="font-display text-xl text-white group-hover:text-brand-gold transition-colors duration-200 leading-tight">Menú Semana Santa</p>
-            <p class="font-body text-xs text-brand-gold/60 mt-0.5">{menu.available} · {menu.price.toFixed(0)}€/persona</p>
+            <p class="font-display text-xl text-white group-hover:text-brand-gold transition-colors duration-200 leading-tight">MenÃº Semana Santa</p>
+            <p class="font-body text-xs text-brand-gold/60 mt-0.5">{menu.available} Â· {menu.price.toFixed(0)}â‚¬/persona</p>
           </div>
         </div>
         <div class="flex items-center gap-3 shrink-0">
-          <span class="font-display text-lg text-brand-gold leading-none">{menu.price.toFixed(0)}€</span>
+          <span class="font-display text-lg text-brand-gold leading-none">{menu.price.toFixed(0)}â‚¬</span>
           <svg class="w-5 h-5 text-brand-gold/50 group-hover:text-brand-gold group-hover:translate-x-0.5 transition-all duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
           </svg>
@@ -121,7 +121,7 @@ if (menuDataPath) {
           </div>
           <div>
             <p class="font-display text-xl text-white group-hover:text-brand-gold transition-colors duration-200 leading-tight">Street Food</p>
-            <p class="font-body text-xs text-white/50 mt-0.5">by Fifty-Five · 18:00 – 22:00</p>
+            <p class="font-body text-xs text-white/50 mt-0.5">by Fifty-Five Â· 18:00 â€“ 22:00</p>
           </div>
         </div>
         <svg class="w-5 h-5 text-brand-gold/50 group-hover:text-brand-gold group-hover:translate-x-0.5 transition-all duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -142,7 +142,7 @@ if (menuDataPath) {
           </div>
           <div>
             <p class="font-display text-xl text-white group-hover:text-brand-gold transition-colors duration-200 leading-tight">Bebidas</p>
-            <p class="font-body text-xs text-white/50 mt-0.5">Vinos · Cervezas · Cócteles</p>
+            <p class="font-body text-xs text-white/50 mt-0.5">Vinos Â· Cervezas Â· CÃ³cteles</p>
           </div>
         </div>
         <svg class="w-5 h-5 text-brand-gold/50 group-hover:text-brand-gold group-hover:translate-x-0.5 transition-all duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -166,7 +166,7 @@ if (menuDataPath) {
 
     </main>
 
-    <!-- ── Footer note ───────────────────────────────────────────── -->
+    <!-- â”€â”€ Footer note â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
     <footer class="pb-8 text-center">
       <p class="font-body text-[11px] text-white/25 uppercase tracking-widest">
         portadirta.com
@@ -176,3 +176,4 @@ if (menuDataPath) {
   </div>
 
 </Layout>
+

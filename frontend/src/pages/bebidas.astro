@@ -1,8 +1,8 @@
 ---
 /**
- * bebidas.astro — Drinks & wine list page
- * SSR · Mobile-first · QR table destination
- * NOTE: currently using mockup data — replace bebidas.json when real list is ready.
+ * bebidas.astro â€” Drinks & wine list page
+ * SSR Â· Mobile-first Â· QR table destination
+ * NOTE: currently using mockup data â€” replace bebidas.json when real list is ready.
  */
 
 import fs from 'node:fs';
@@ -20,8 +20,8 @@ if (menuDataPath) {
 const menuSchema = {
   "@context": "https://schema.org",
   "@type": "Menu",
-  "name": "Carta de Bebidas — Restaurante Porta D'irta",
-  "description": "Selección de vinos, cervezas, refrescos y cafés del restaurante Porta D'irta en Peñíscola.",
+  "name": "Carta de Bebidas â€” Restaurante Porta D'irta",
+  "description": "SelecciÃ³n de vinos, cervezas, refrescos y cafÃ©s del restaurante Porta D'irta en PeÃ±Ã­scola.",
   "url": "https://www.portadirta.com/bebidas",
   "inLanguage": "es",
   "hasMenuSection": bebidas.sections.map(section => ({
@@ -38,13 +38,13 @@ const menuSchema = {
 ---
 
 <Layout
-  title="Bebidas — Restaurante"
-  description="Carta de vinos, cervezas y bebidas del restaurante Porta D'irta en Peñíscola."
+  title="Bebidas â€” Restaurante"
+  description="Carta de vinos, cervezas y bebidas del restaurante Porta D'irta en PeÃ±Ã­scola."
   ogImage="/assets/images/food-paella-wine.jpg"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(menuSchema)} />
 
-  <!-- ── Header ───────────────────────────────────────────────────── -->
+  <!-- â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-blue pt-28 pb-10">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-3">
       <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Restaurante Porta D'irta</p>
@@ -56,7 +56,7 @@ const menuSchema = {
     </div>
   </section>
 
-  <!-- ── Sections ─────────────────────────────────────────────────── -->
+  <!-- â”€â”€ Sections â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-cream py-10">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
 
@@ -76,7 +76,7 @@ const menuSchema = {
                   )}
                 </div>
                 <div class="flex flex-col items-end shrink-0 gap-0.5 pt-0.5">
-                  <span class="font-body font-medium text-brand-gold text-[15px] tabular-nums">{item.price.toFixed(2)} €</span>
+                  <span class="font-body font-medium text-brand-gold text-[15px] tabular-nums">{item.price.toFixed(2)} â‚¬</span>
                   {item.unit && (
                     <span class="font-body text-[11px] text-brand-stone/50 uppercase tracking-wide">{item.unit}</span>
                   )}
@@ -94,15 +94,16 @@ const menuSchema = {
     </div>
   </section>
 
-  <!-- ── Bottom nav ────────────────────────────────────────────────── -->
+  <!-- â”€â”€ Bottom nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-blue py-10">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-      <a href="/mesa" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">← Todos los menús</a>
+      <a href="/mesa" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">â† Todos los menÃºs</a>
       <span class="hidden sm:block text-white/20">|</span>
-      <a href="/reservar" class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
+      <a href="https://www.booking.com/hotel/es/porta-d-irta.es.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
         Reservar mesa
       </a>
     </div>
   </section>
 
 </Layout>
+

@@ -1,9 +1,9 @@
----
+﻿---
 /**
- * menu.astro — Fixed-price set menu page
+ * menu.astro â€” Fixed-price set menu page
  *
  * SSR: reads menu.json from src/data at request time (VPS/Node adapter).
- * Mobile-first: no hero, content immediately visible — designed for QR table use.
+ * Mobile-first: no hero, content immediately visible â€” designed for QR table use.
  * JSON-LD: Schema.org Menu with fixed-price Offer for SEO and AI crawlability.
  */
 
@@ -19,20 +19,20 @@ if (menuDataPath) {
   try { menu = JSON.parse(fs.readFileSync(`${menuDataPath}/menu.json`, 'utf-8')); } catch {}
 }
 
-// EU 14 major allergens — label, colour
+// EU 14 major allergens â€” label, colour
 const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
   'gluten':       { label: 'Gluten',       bg: 'bg-amber-100',   text: 'text-amber-800'  },
-  'lácteos':      { label: 'Lácteos',      bg: 'bg-sky-100',     text: 'text-sky-800'    },
+  'lÃ¡cteos':      { label: 'LÃ¡cteos',      bg: 'bg-sky-100',     text: 'text-sky-800'    },
   'huevo':        { label: 'Huevo',        bg: 'bg-yellow-100',  text: 'text-yellow-800' },
   'pescado':      { label: 'Pescado',      bg: 'bg-blue-100',    text: 'text-blue-800'   },
-  'crustáceos':   { label: 'Crustáceos',   bg: 'bg-orange-100',  text: 'text-orange-800' },
+  'crustÃ¡ceos':   { label: 'CrustÃ¡ceos',   bg: 'bg-orange-100',  text: 'text-orange-800' },
   'moluscos':     { label: 'Moluscos',     bg: 'bg-violet-100',  text: 'text-violet-800' },
   'frutos secos': { label: 'Frutos secos', bg: 'bg-green-100',   text: 'text-green-800'  },
   'cacahuetes':   { label: 'Cacahuetes',   bg: 'bg-lime-100',    text: 'text-lime-800'   },
   'soja':         { label: 'Soja',         bg: 'bg-emerald-100', text: 'text-emerald-800'},
   'sulfitos':     { label: 'Sulfitos',     bg: 'bg-rose-100',    text: 'text-rose-800'   },
   'mostaza':      { label: 'Mostaza',      bg: 'bg-yellow-50',   text: 'text-yellow-700' },
-  'sésamo':       { label: 'Sésamo',       bg: 'bg-stone-100',   text: 'text-stone-700'  },
+  'sÃ©samo':       { label: 'SÃ©samo',       bg: 'bg-stone-100',   text: 'text-stone-700'  },
   'apio':         { label: 'Apio',         bg: 'bg-teal-100',    text: 'text-teal-800'   },
   'altramuces':   { label: 'Altramuces',   bg: 'bg-pink-100',    text: 'text-pink-800'   },
 };
@@ -40,8 +40,8 @@ const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
 const menuSchema = {
   "@context": "https://schema.org",
   "@type": "Menu",
-  "name": `${menu.name} — Restaurante Porta D'irta`,
-  "description": `Menú especial a precio fijo de ${menu.price}€ por persona. ${menu.priceNote}. Disponible: ${menu.available}.`,
+  "name": `${menu.name} â€” Restaurante Porta D'irta`,
+  "description": `MenÃº especial a precio fijo de ${menu.price}â‚¬ por persona. ${menu.priceNote}. Disponible: ${menu.available}.`,
   "url": "https://www.portadirta.com/menu",
   "inLanguage": "es",
   "offers": {
@@ -63,7 +63,7 @@ const menuSchema = {
           "@type": "Offer",
           "price": (menu.price + item.supplement).toFixed(2),
           "priceCurrency": "EUR",
-          "description": `+${item.supplement}€/pers. suplemento`
+          "description": `+${item.supplement}â‚¬/pers. suplemento`
         }
       } : {})
     }))
@@ -72,13 +72,13 @@ const menuSchema = {
 ---
 
 <Layout
-  title="Menú Especial — Restaurante"
-  description={`Menú especial de ${menu.price}€ por persona en el restaurante Porta D'irta, Peñíscola. ${menu.priceNote}. Disponible ${menu.available}.`}
+  title="MenÃº Especial â€” Restaurante"
+  description={`MenÃº especial de ${menu.price}â‚¬ por persona en el restaurante Porta D'irta, PeÃ±Ã­scola. ${menu.priceNote}. Disponible ${menu.available}.`}
   ogImage="/assets/images/food-paella-wine.jpg"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(menuSchema)} />
 
-  <!-- ── Page header ─────────────────────────────────────────────── -->
+  <!-- â”€â”€ Page header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-blue pt-28 pb-12">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-4">
       <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Restaurante Porta D'irta</p>
@@ -89,7 +89,7 @@ const menuSchema = {
 
       <!-- Price badge -->
       <div class="flex flex-col items-center gap-1">
-        <span class="font-display text-4xl text-brand-gold font-light">{menu.price.toFixed(0)}€</span>
+        <span class="font-display text-4xl text-brand-gold font-light">{menu.price.toFixed(0)}â‚¬</span>
         <span class="font-body text-white/60 text-sm">{menu.priceNote}</span>
       </div>
 
@@ -101,7 +101,7 @@ const menuSchema = {
     </div>
   </section>
 
-  <!-- ── Menu sections ───────────────────────────────────────────── -->
+  <!-- â”€â”€ Menu sections â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-cream py-12">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
 
@@ -158,7 +158,7 @@ const menuSchema = {
                 </div>
                 {item.supplement && (
                   <span class="font-body text-brand-gold text-sm shrink-0 tabular-nums whitespace-nowrap">
-                    +{item.supplement.toFixed(0)}€/pers.
+                    +{item.supplement.toFixed(0)}â‚¬/pers.
                   </span>
                 )}
               </li>
@@ -176,28 +176,28 @@ const menuSchema = {
 
       <!-- Allergen legend -->
       <div class="border-t border-brand-sand/40 pt-6 flex flex-col gap-3">
-        <p class="font-body text-[11px] uppercase tracking-widest text-brand-stone/60">Alérgenos</p>
+        <p class="font-body text-[11px] uppercase tracking-widest text-brand-stone/60">AlÃ©rgenos</p>
         <div class="flex flex-wrap gap-2">
           {Object.values(ALLERGENS).map(a => (
             <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${a.bg} ${a.text}`}>{a.label}</span>
           ))}
         </div>
         <p class="font-body text-[11px] text-brand-stone/50 italic mt-1">
-          Intolerancia o alergia grave? Indícalo a nuestro equipo y lo gestionamos con todo el cuidado.
+          Intolerancia o alergia grave? IndÃ­calo a nuestro equipo y lo gestionamos con todo el cuidado.
         </p>
       </div>
 
     </div>
   </section>
 
-  <!-- ── CTA ─────────────────────────────────────────────────────── -->
+  <!-- â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-blue py-12">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
       <a
         href="/carta"
         class="font-body text-sm uppercase tracking-widest text-white/70 hover:text-brand-gold transition-colors duration-200"
       >
-        Ver La Carta →
+        Ver La Carta â†’
       </a>
       <span class="hidden sm:block text-white/20">|</span>
       <a
@@ -210,3 +210,4 @@ const menuSchema = {
   </section>
 
 </Layout>
+

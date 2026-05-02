@@ -92,7 +92,7 @@ const upcomingEventSchema = {
   <section class="relative flex items-center justify-center min-h-screen w-full overflow-hidden" aria-label={t('eventos.hero_label')}>
     <img src="/assets/images/property-aerial-dusk.jpg" alt={t('eventos.intro_img1_alt')} class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />
     <div class="absolute inset-0 bg-brand-forest/52" aria-hidden="true"></div>
-    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 py-20 md:py-32 text-center max-w-4xl mx-auto  md:">
       <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">{t('eventos.hero_label')}</p>
       <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
         {t('eventos.hero_heading')}
@@ -133,7 +133,7 @@ const upcomingEventSchema = {
         </div>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-12 border-t border-brand-sand/40">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20  border-t border-brand-sand/40">
         <div class="flex flex-col items-center text-center gap-3">
           <div class="w-12 h-12 rounded-full bg-brand-blue/10 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D2B45" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -184,7 +184,7 @@ const upcomingEventSchema = {
           <div class="flex flex-col gap-4 p-7 flex-1">
             <h3 class="font-display text-3xl text-white font-light">{t('eventos.card1_title')}</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">{t('eventos.card1_body')}</p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a href={getRelativeLocaleUrl(lang, 'contacto')} class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">
                 {t('eventos.card1_cta')}
               </a>
@@ -199,7 +199,7 @@ const upcomingEventSchema = {
           <div class="flex flex-col gap-4 p-7 flex-1">
             <h3 class="font-display text-3xl text-white font-light">{t('eventos.card2_title')}</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">{t('eventos.card2_body')}</p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a href={getRelativeLocaleUrl(lang, 'contacto')} class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">
                 {t('eventos.card2_cta')}
               </a>
@@ -214,7 +214,7 @@ const upcomingEventSchema = {
           <div class="flex flex-col gap-4 p-7 flex-1">
             <h3 class="font-display text-3xl text-white font-light">{t('eventos.card3_title')}</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">{t('eventos.card3_body')}</p>
-            <div class="mt-auto pt-4">
+            <div class="mt-auto ">
               <a href={getRelativeLocaleUrl(lang, 'contacto')} class="inline-flex items-center justify-center w-full px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">
                 {t('eventos.card3_cta')}
               </a>
@@ -252,7 +252,7 @@ const upcomingEventSchema = {
                 <div class="flex flex-col gap-3 p-6 flex-1">
                   <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">{copy.title}</h3>
                   <p class="font-body text-brand-stone text-sm leading-relaxed">{copy.body}</p>
-                  <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream">
+                  <div class="flex items-center justify-between mt-auto  border-t border-brand-cream">
                     {ev.data.precio ? (
                       <span class="font-display text-xl text-brand-blue">€{ev.data.precio}<span class="font-body text-sm text-brand-stone font-normal"> / persona</span></span>
                     ) : (
@@ -354,7 +354,7 @@ const upcomingEventSchema = {
             </label>
           </div>
 
-          <div class="flex flex-col items-center gap-4 pt-2">
+          <div class="flex flex-col items-center gap-4 ">
             <button type="submit" class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto">
               {t('eventos.form_submit')}
             </button>
