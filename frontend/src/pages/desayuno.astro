@@ -1,7 +1,7 @@
 ---
 /**
- * desayuno.astro — Breakfast menu
- * SSR · Mobile-first · QR table destination
+ * desayuno.astro â€” Breakfast menu
+ * SSR Â· Mobile-first Â· QR table destination
  */
 
 import fs from 'node:fs';
@@ -17,29 +17,29 @@ if (menuDataPath) {
 
 const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
   'gluten':       { label: 'Gluten',       bg: 'bg-amber-100',   text: 'text-amber-800'  },
-  'lácteos':      { label: 'Lácteos',      bg: 'bg-sky-100',     text: 'text-sky-800'    },
+  'lÃ¡cteos':      { label: 'LÃ¡cteos',      bg: 'bg-sky-100',     text: 'text-sky-800'    },
   'huevo':        { label: 'Huevo',        bg: 'bg-yellow-100',  text: 'text-yellow-800' },
   'pescado':      { label: 'Pescado',      bg: 'bg-blue-100',    text: 'text-blue-800'   },
-  'crustáceos':   { label: 'Crustáceos',   bg: 'bg-orange-100',  text: 'text-orange-800' },
+  'crustÃ¡ceos':   { label: 'CrustÃ¡ceos',   bg: 'bg-orange-100',  text: 'text-orange-800' },
   'moluscos':     { label: 'Moluscos',     bg: 'bg-violet-100',  text: 'text-violet-800' },
   'frutos secos': { label: 'Frutos secos', bg: 'bg-green-100',   text: 'text-green-800'  },
   'cacahuetes':   { label: 'Cacahuetes',   bg: 'bg-lime-100',    text: 'text-lime-800'   },
   'soja':         { label: 'Soja',         bg: 'bg-emerald-100', text: 'text-emerald-800'},
   'sulfitos':     { label: 'Sulfitos',     bg: 'bg-rose-100',    text: 'text-rose-800'   },
   'mostaza':      { label: 'Mostaza',      bg: 'bg-yellow-50',   text: 'text-yellow-700' },
-  'sésamo':       { label: 'Sésamo',       bg: 'bg-stone-100',   text: 'text-stone-700'  },
+  'sÃ©samo':       { label: 'SÃ©samo',       bg: 'bg-stone-100',   text: 'text-stone-700'  },
   'apio':         { label: 'Apio',         bg: 'bg-teal-100',    text: 'text-teal-800'   },
   'altramuces':   { label: 'Altramuces',   bg: 'bg-pink-100',    text: 'text-pink-800'   },
 };
 ---
 
 <Layout
-  title="Desayuno — Restaurante"
-  description="Desayuno mediterráneo en Porta D'irta, Peñíscola. Tostadas, embutidos, huevos y bacon con café y zumo."
+  title="Desayuno â€” Restaurante"
+  description="Desayuno mediterrÃ¡neo en Porta D'irta, PeÃ±Ã­scola. Tostadas, embutidos, huevos y bacon con cafÃ© y zumo."
   ogImage="/assets/images/food-paella-wine.jpg"
 >
 
-  <!-- ── Header ───────────────────────────────────────────────────── -->
+  <!-- â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-blue pt-28 pb-10">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-3">
       <p class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">Restaurante Porta D'irta</p>
@@ -48,7 +48,7 @@ const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
     </div>
   </section>
 
-  <!-- ── Sections ─────────────────────────────────────────────────── -->
+  <!-- â”€â”€ Sections â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-cream py-10">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col gap-10">
 
@@ -80,7 +80,7 @@ const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
                   )}
                 </div>
                 <span class="font-body font-medium text-brand-gold text-[15px] shrink-0 tabular-nums pt-0.5">
-                  {item.price.toFixed(2)} €
+                  {item.price.toFixed(2)} â‚¬
                 </span>
               </li>
             ))}
@@ -91,24 +91,25 @@ const ALLERGENS: Record<string, { label: string; bg: string; text: string }> = {
       <!-- Allergen note -->
       <div class="border-t border-brand-sand/40 pt-6">
         <p class="font-body text-[11px] text-brand-stone/50 italic">
-          Intolerancia o alergia grave? Indícalo a nuestro equipo y lo gestionamos con todo el cuidado.
+          Intolerancia o alergia grave? IndÃ­calo a nuestro equipo y lo gestionamos con todo el cuidado.
         </p>
       </div>
 
     </div>
   </section>
 
-  <!-- ── Bottom nav ────────────────────────────────────────────────── -->
+  <!-- â”€â”€ Bottom nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <section class="bg-brand-blue py-10">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-      <a href="/mesa" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">← Todos los menús</a>
+      <a href="/mesa" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">â† Todos los menÃºs</a>
       <span class="hidden sm:block text-white/20">|</span>
-      <a href="/bebidas" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">Bebidas →</a>
+      <a href="/bebidas" class="font-body text-sm uppercase tracking-widest text-white/60 hover:text-brand-gold transition-colors duration-200">Bebidas â†’</a>
       <span class="hidden sm:block text-white/20">|</span>
-      <a href="/reservar" class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
+      <a href="https://www.booking.com/hotel/es/porta-d-irta.es.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-6 py-3 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-200">
         Reservar mesa
       </a>
     </div>
   </section>
 
 </Layout>
+

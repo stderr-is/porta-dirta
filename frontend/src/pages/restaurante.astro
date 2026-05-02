@@ -1,6 +1,6 @@
 ---
 /**
- * src/pages/restaurante.astro — Restaurant page for default locale (es)
+ * src/pages/restaurante.astro Ã¢â‚¬â€ Restaurant page for default locale (es)
  */
 
 import Layout from '../layouts/Layout.astro';
@@ -59,14 +59,8 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
         {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-          "opens": "13:00",
-          "closes": "16:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-          "opens": "20:00",
-          "closes": "22:00"
+          "opens": "12:00",
+          "closes": "17:00"
         }
       ],
       "hasMap": t('restaurante.schema_hasMap')
@@ -92,7 +86,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
   ])} />
 
   <!-- ================================================================
-       SECTION 1 — HERO
+       SECTION 1 Ã¢â‚¬â€ HERO
        ================================================================ -->
   <section
     class="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
@@ -110,7 +104,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
     <div class="absolute inset-0 bg-brand-forest/52"></div>
 
     <!-- Content -->
-    <div class="relative z-10 flex flex-col items-center gap-6 px-4">
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 py-20 md:py-32  md:">
       <!-- Eyebrow label -->
       <span class="font-body text-xs uppercase tracking-[0.3em] text-brand-gold">
         {t('restaurante.hero_label')}
@@ -167,7 +161,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
   </section>
 
   <!-- ================================================================
-       SECTION 2 — PHILOSOPHY / ABOUT
+       SECTION 2 Ã¢â‚¬â€ PHILOSOPHY / ABOUT
        ================================================================ -->
   <section
     id="filosofia"
@@ -210,7 +204,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
   </section>
 
   <!-- ================================================================
-       SECTION 2b — MENÚ ESPECIAL SEMANA SANTA (temporary — remove after ~April 27 2026)
+       SECTION 2b Ã¢â‚¬â€ MENÃ­Å¡ ESPECIAL SEMANA SANTA (temporary Ã¢â‚¬â€ remove after ~April 27 2026)
        ================================================================ -->
   <section
     class="relative bg-brand-cream py-24 md:py-32 overflow-hidden border-t border-brand-forest/5"
@@ -299,7 +293,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                   <span class="font-body text-sm text-brand-blue/90 font-medium tracking-tight">{t('restaurante.easter_aperitivo_item')}</span>
                   <div class="flex flex-wrap gap-2">
                     <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
-                    <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
+                    <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">LÃ¡cteos</span>
                   </div>
                 </div>
               </div>
@@ -319,7 +313,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                     <span class="font-body text-sm text-brand-blue/90 font-medium max-w-sm leading-snug tracking-tight">{t('restaurante.easter_entrantes_item1')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
-                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">LÃ¡cteos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Sulfitos</span>
                     </div>
                   </div>
@@ -353,7 +347,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                     <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">{t('restaurante.easter_principales_item1')}</span>
                     <div class="flex flex-wrap gap-2">
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Gluten</span>
-                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Crustáceos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">CrustÃ¡ceos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Pescado</span>
                     </div>
                   </div>
@@ -368,10 +362,10 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                   <div class="flex flex-col gap-1">
                     <div class="flex items-center justify-between gap-4">
                       <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">{t('restaurante.easter_principales_item3')}</span>
-                      <span class="font-body text-[7px] text-brand-gold border border-brand-gold/20 px-1.5 py-0.5 rounded-sm font-bold bg-white/50">+5€</span>
+                      <span class="font-body text-[7px] text-brand-gold border border-brand-gold/20 px-1.5 py-0.5 rounded-sm font-bold bg-white/50">+5Ã¢â€šÂ¬</span>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Crustáceos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">CrustÃ¡ceos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Sulfitos</span>
                     </div>
                   </div>
@@ -379,7 +373,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                   <div class="flex flex-col gap-1">
                     <span class="font-body text-sm text-brand-blue/90 font-medium leading-snug tracking-tight">{t('restaurante.easter_principales_item4')}</span>
                     <div class="flex flex-wrap gap-2">
-                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Lácteos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">LÃ¡cteos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Sulfitos</span>
                     </div>
                   </div>
@@ -399,7 +393,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                   <div class="flex flex-col gap-1">
                     <span class="font-body text-sm text-brand-blue/90 font-medium leading-none tracking-tight">{t('restaurante.easter_postres_item1')}</span>
                     <div class="flex flex-wrap gap-2">
-                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">Lácteos</span>
+                      <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1 py-0.5 rounded-sm">LÃ¡cteos</span>
                       <span class="text-[7px] uppercase tracking-wider text-brand-stone/40 border border-brand-stone/10 px-1.5 py-0.5 rounded-sm">Gluten</span>
                     </div>
                   </div>
@@ -424,7 +418,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
               </p>
               <a
                 href="#reservar"
-                onclick="document.querySelector('[name=observaciones]') ? document.querySelector('[name=observaciones]').value = 'Reserva para Menú Semana Santa' : null"
+                onclick="document.querySelector('[name=observaciones]') ? document.querySelector('[name=observaciones]').value = 'Reserva para MenÃº Semana Santa' : null"
                 class="inline-flex items-center px-8 py-3.5 rounded-sm bg-brand-forest/90 hover:bg-brand-blue text-white font-body text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-300 shadow-md"
               >
                 {t('restaurante.hero_cta_reserve')}
@@ -445,7 +439,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
   </section>
 
   <!-- ================================================================
-       SECTION 3 — DAY & NIGHT MENUS
+       SECTION 3 Ã¢â‚¬â€ DAY & NIGHT MENUS
        ================================================================ -->
   <section
     class="bg-brand-blue py-24 md:py-32"
@@ -469,7 +463,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
       <!-- Two editorial cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 
-        <!-- Card: De Día -->
+        <!-- Card: De DÃ­a -->
         <a
           href={getRelativeLocaleUrl(lang, 'taperia')}
           class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
@@ -516,7 +510,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
 
             <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
               {t('restaurante.menu_day_cta')}
-              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+              <span class="transition-transform duration-200 group-hover:translate-x-1">Ã¢â€ â€™</span>
             </span>
           </div>
         </a>
@@ -566,12 +560,12 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
 
             <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
               {t('restaurante.menu_night_cta')}
-              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+              <span class="transition-transform duration-200 group-hover:translate-x-1">Ã¢â€ â€™</span>
             </span>
           </div>
         </a>
 
-        <!-- Card: Menú Especial -->
+        <!-- Card: MenÃº Especial -->
         <a
           href={getRelativeLocaleUrl(lang, 'menu')}
           class="group relative rounded-2xl overflow-hidden flex flex-col min-h-[520px] shadow-2xl"
@@ -617,7 +611,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
 
             <span class="inline-flex items-center gap-2 font-body text-sm uppercase tracking-widest text-brand-gold group-hover:gap-3 transition-all duration-200 mt-1">
               {t('restaurante.menu_special_cta')}
-              <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+              <span class="transition-transform duration-200 group-hover:translate-x-1">Ã¢â€ â€™</span>
             </span>
           </div>
         </a>
@@ -627,7 +621,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
   </section>
 
   <!-- ================================================================
-       SECTION 4 — GALLERY STRIP
+       SECTION 4 Ã¢â‚¬â€ GALLERY STRIP
        ================================================================ -->
   <section
     class="bg-brand-cream py-24 md:py-32"
@@ -693,7 +687,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
   </section>
 
   <!-- ================================================================
-       SECTION 5 — TABLE BOOKING
+       SECTION 5 Ã¢â‚¬â€ TABLE BOOKING
        ================================================================ -->
   <section
     id="reservar"
@@ -715,7 +709,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
       <!-- Frosted glass form card -->
       <div class="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-4 sm:p-6 lg:p-8">
 
-        <!-- Form wrapper — hidden on success -->
+        <!-- Form wrapper Ã¢â‚¬â€ hidden on success -->
         <div id="form-wrapper">
           <form
             id="restaurant-form"
@@ -759,7 +753,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
               </div>
             </div>
 
-            <!-- Row 2: Teléfono + Nº personas -->
+            <!-- Row 2: TelÃ©fono + NÃ‚Âº personas -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="flex flex-col gap-2">
                 <label for="telefono" class="font-body text-xs uppercase tracking-widest text-white/70">
@@ -817,7 +811,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                   class="bg-white/20 border border-white/30 text-white rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold transition-colors duration-200 appearance-none"
                 >
                   <option value="" disabled selected class="text-brand-blue">{t('restaurante.form_time_placeholder')}</option>
-                  <optgroup label="Mediodía" class="text-brand-blue">
+                  <optgroup label="MediodÃ­a" class="text-brand-blue">
                     <option value="13:00" class="text-brand-blue">13:00</option>
                     <option value="13:30" class="text-brand-blue">13:30</option>
                     <option value="14:00" class="text-brand-blue">14:00</option>
@@ -886,9 +880,9 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
           </p>
         </div>
 
-        <!-- Success message — shown on successful submit -->
+        <!-- Success message Ã¢â‚¬â€ shown on successful submit -->
         <div id="form-success" class="hidden text-center py-8">
-          <p class="text-brand-gold font-display text-2xl italic">¡Reserva confirmada! Nos pondremos en contacto pronto.</p>
+          <p class="text-brand-gold font-display text-2xl italic">Â¡Reserva confirmada! Nos pondremos en contacto pronto.</p>
         </div>
 
       </div>
@@ -905,7 +899,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
       var form = e.target;
       var btn = form.querySelector('button[type="submit"]');
       var originalText = btn.textContent;
-      btn.textContent = 'Enviando…';
+      btn.textContent = 'EnviandoÃ¢â‚¬Â¦';
       btn.disabled = true;
 
       try {
@@ -926,7 +920,7 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
         });
         if (!res.ok) {
           var errBody = await res.json().catch(function() { return {}; });
-          throw new Error(errBody.message || 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.');
+          throw new Error(errBody.message || 'Ha ocurrido un error. Por favor intÃ©ntalo de nuevo o llÃ¡manos directamente.');
         }
         document.getElementById('form-wrapper').classList.add('hidden');
         document.getElementById('form-success').classList.remove('hidden');
@@ -939,13 +933,13 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
           errDiv.className = 'form-error text-red-400 text-sm text-center mt-2';
           form.appendChild(errDiv);
         }
-        errDiv.textContent = err.message || 'Ha ocurrido un error. Por favor inténtalo de nuevo o llámanos directamente.';
+        errDiv.textContent = err.message || 'Ha ocurrido un error. Por favor intÃ©ntalo de nuevo o llÃ¡manos directamente.';
       }
     });
   </script>
 
   <!-- ================================================================
-       SECTION 6 — HOURS & LOCATION
+       SECTION 6 Ã¢â‚¬â€ HOURS & LOCATION
        ================================================================ -->
   <section
     class="bg-brand-cream py-24 md:py-32"
@@ -971,8 +965,6 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
                 <td class="py-4 pr-6 text-brand-stone font-medium">{t('restaurante.hours_all_days')}</td>
                 <td class="py-4 text-brand-blue">
                   {t('restaurante.hours_time_lunch')}
-                  <span class="mx-2 text-brand-stone/40" aria-hidden="true">·</span>
-                  {t('restaurante.hours_time_dinner')}
                 </td>
               </tr>
             </tbody>
@@ -1044,3 +1036,5 @@ const menuSpecialTags = Array.isArray(menuSpecialTagsValue)
   </section>
 
 </Layout>
+
+

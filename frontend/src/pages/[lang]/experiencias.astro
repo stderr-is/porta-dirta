@@ -496,7 +496,7 @@ const packageCopy = c.hiEventsPackages ?? {};
   <section class="relative flex items-center justify-center min-h-screen w-full overflow-hidden" aria-label={c.heroLabel}>
     <Image src={sierraTowerSea} alt={c.heroHeading} class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />
     <div class="absolute inset-0 bg-brand-forest/50" aria-hidden="true"></div>
-    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-4xl mx-auto">
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 py-20 md:py-32 text-center max-w-4xl mx-auto  md:">
       <p class="font-body uppercase tracking-[0.3em] text-brand-gold text-sm font-medium">{c.heroLabel}</p>
       <h1 class="font-display italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight">{c.heroHeading}</h1>
       <GarlandDivider light />
@@ -605,7 +605,7 @@ const packageCopy = c.hiEventsPackages ?? {};
             <li class="flex items-center gap-4"><span class="text-brand-gold">✓</span><span class="font-body text-white text-base">{item}</span></li>
           ))}
         </ul>
-        <div class="pt-2 flex items-center gap-4 flex-wrap">
+        <div class=" flex items-center gap-4 flex-wrap">
           <a href="#contacto" data-exp="sierra-irta" class="exp-cta inline-flex items-center justify-center px-8 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg">{c.sierraCta}</a>
           {sierra.price && <span class="font-body text-white/60 text-sm">{c.sierraPricePrefix} €{sierra.price}/persona</span>}
         </div>
@@ -629,7 +629,7 @@ const packageCopy = c.hiEventsPackages ?? {};
             <div class="flex flex-col gap-3 p-6 flex-1">
               <h3 class="font-display text-2xl text-brand-blue font-light leading-snug">{card.title}</h3>
               <p class="font-body text-brand-stone text-sm leading-relaxed">{card.body}</p>
-              <div class="mt-auto pt-4"><a href="#contacto" data-exp={card.exp} class="exp-cta inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300">{c.seaCta}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+              <div class="mt-auto "><a href="#contacto" data-exp={card.exp} class="exp-cta inline-flex items-center gap-1 font-body text-xs uppercase tracking-widest text-brand-gold hover:text-brand-stone font-medium transition-colors duration-300">{c.seaCta}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
             </div>
           </article>
         ))}
@@ -653,7 +653,7 @@ const packageCopy = c.hiEventsPackages ?? {};
           <div class="flex flex-col gap-4 p-8 flex-1">
             <h3 class="font-display text-3xl text-white font-light">{c.culture1Title}</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">{c.culture1Body}</p>
-            <div class="mt-auto pt-4"><a href="#contacto" data-exp="cultura-historia" class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">{c.cultureCta}</a></div>
+            <div class="mt-auto "><a href="#contacto" data-exp="cultura-historia" class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">{c.cultureCta}</a></div>
           </div>
         </article>
         <article class="backdrop-blur-sm bg-white/10 border border-white/20 rounded-xl overflow-hidden flex flex-col">
@@ -665,7 +665,7 @@ const packageCopy = c.hiEventsPackages ?? {};
           <div class="flex flex-col gap-4 p-8 flex-1">
             <h3 class="font-display text-3xl text-white font-light">{c.culture2Title}</h3>
             <p class="font-body text-white/80 text-base leading-relaxed">{c.culture2Body}</p>
-            <div class="mt-auto pt-4"><a href="#contacto" data-exp="gastronomia" class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">{c.cultureCta}</a></div>
+            <div class="mt-auto "><a href="#contacto" data-exp="gastronomia" class="exp-cta inline-flex items-center justify-center px-6 py-3 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300">{c.cultureCta}</a></div>
           </div>
         </article>
       </div>
@@ -713,7 +713,7 @@ const packageCopy = c.hiEventsPackages ?? {};
           </div>
           <div class="flex flex-col gap-2"><label for="mensaje" class="font-body text-xs uppercase tracking-widest text-white/70 font-medium">{c.formMessage}</label><textarea id="mensaje" name="mensaje" rows="5" placeholder={c.formMessagePlaceholder} class="bg-white/20 border border-white/30 text-white placeholder-white/50 rounded-lg p-3 w-full font-body text-sm focus:outline-none focus:border-brand-gold focus:bg-white/25 transition-colors duration-200 resize-y"></textarea></div>
           <div class="flex items-start gap-3"><input type="checkbox" id="rgpd" name="rgpd" required class="mt-1 h-4 w-4 flex-shrink-0 rounded border-white/40 bg-white/20 text-brand-gold focus:ring-brand-gold" /><label for="rgpd" class="font-body text-xs text-white/70 leading-relaxed">{c.formPrivacy} <a href="/privacidad" target="_blank" class="underline hover:text-brand-gold">{c.formPrivacyLink}</a>{c.formPrivacyTail}</label></div>
-          <div class="flex flex-col items-center gap-4 pt-2"><button type="submit" class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto">{c.formSubmit}</button><p class="font-body text-white/50 text-xs text-center">{c.formNote}</p></div>
+          <div class="flex flex-col items-center gap-4 "><button type="submit" class="inline-flex items-center justify-center px-10 py-4 bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium rounded-lg transition-colors duration-300 shadow-lg w-full sm:w-auto">{c.formSubmit}</button><p class="font-body text-white/50 text-xs text-center">{c.formNote}</p></div>
         </FormHandler>
       </div>
     </div>

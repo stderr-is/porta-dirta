@@ -5,6 +5,7 @@ export const ui = {
     'nav.eventos': 'Eventos',
     'nav.experiencias': 'Experiencias',
     'nav.contacto': 'Contacto',
+    'nav.irtapark': 'Irta Park Junior',
     'nav.reservar': 'Reservar',
   },
   en: {
@@ -13,14 +14,16 @@ export const ui = {
     'nav.eventos': 'Events',
     'nav.experiencias': 'Experiences',
     'nav.contacto': 'Contact',
+    'nav.irtapark': 'Irta Park Junior',
     'nav.reservar': 'Book Now',
   },
   fr: {
-    'nav.hotel': "L'Hôtel",
+    'nav.hotel': "L'Hí´tel",
     'nav.restaurante': 'Le Restaurant',
-    'nav.eventos': 'Événements',
+    'nav.eventos': 'í‰vénements',
     'nav.experiencias': 'Expériences',
     'nav.contacto': 'Contact',
+    'nav.irtapark': 'Irta Park Junior',
     'nav.reservar': 'Réserver',
   },
   de: {
@@ -29,6 +32,8 @@ export const ui = {
     'nav.eventos': 'Veranstaltungen',
     'nav.experiencias': 'Erlebnisse',
     'nav.contacto': 'Kontakt',
+    'nav.irtapark': 'Irta Park Junior',
     'nav.reservar': 'Buchen',
   },
 } as const;
+

@@ -16,3 +16,4 @@
 ## Project Context
 - [project_portadirta.md](project_portadirta.md) — High-level project overview and working directory
 - [project_cunyado_pending_info.md](project_cunyado_pending_info.md) — ⚠️ CRITICAL: Missing info from brother-in-law blocking go-live (legal placeholders, eventos content, email addresses, social handles)
+- [machine_testing_setup.md](machine_testing_setup.md) -- Configuration of the Windows testing environment synced with VPS and Git

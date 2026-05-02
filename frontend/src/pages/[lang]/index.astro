@@ -5,7 +5,6 @@
 
 import Layout from '../../layouts/Layout.astro';
 import GarlandDivider from '../../components/GarlandDivider.astro';
-import BookingSearchForm from '../../components/BookingSearchForm.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 
@@ -80,7 +79,7 @@ export async function getStaticPaths() {
 
     <div class="absolute inset-0 bg-brand-forest/55 pointer-events-none" aria-hidden="true"></div>
 
-    <div class="relative z-10 flex flex-col items-center gap-6 px-4 text-center w-full max-w-3xl mx-auto">
+    <div class="relative z-10 flex flex-col items-center gap-6 px-4 py-20 md:py-32 text-center w-full max-w-3xl mx-auto">
       <h1 class="font-display font-light italic text-5xl sm:text-8xl md:text-9xl text-white leading-none tracking-tight">
         Porta D'irta
       </h1>
@@ -91,8 +90,27 @@ export async function getStaticPaths() {
 
       <GarlandDivider light />
 
-      <div class="w-full backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl px-5 py-4 shadow-lg">
-        <BookingSearchForm formId="home" lang={lang} />
+      <!-- Restaurant Priority CTA -->
+            <!-- Botones duales de reserva -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 mt-6">
+        <!-- BOTÓN MESA -->
+        <a
+          href={getRelativeLocaleUrl(lang, 'restaurante') + '#reservar'}
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-bold transition-all shadow-lg"
+        >
+          {t('home.cta_restaurant')}
+        </a>
+        
+        <!-- BOTÓN HABITACIÓN (BOOKING) -->
+        <a
+          href="https://www.booking.com/hotel/es/porta-d-irta.es.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-all backdrop-blur-sm bg-white/5"
+        >
+          {t('home.cta_hotel')}
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg" class="h-3.5 invert brightness-0 invert" alt="Booking" />
+        </a>
       </div>
     </div>
 
@@ -100,7 +118,7 @@ export async function getStaticPaths() {
       class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 animate-bounce z-10"
       aria-hidden="true"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"     
         fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 12 15 18 9"/>
       </svg>
@@ -111,7 +129,7 @@ export async function getStaticPaths() {
     const heroVideo = document.getElementById('hero-video');
     const heroFallback = document.getElementById('hero-video-fallback');
 
-    if (heroVideo instanceof HTMLVideoElement && heroFallback instanceof HTMLImageElement) {
+    if (heroVideo instanceof HTMLVideoElement && heroFallback instanceof HTMLImageElement) { 
       const showFallback = () => {
         heroVideo.classList.add('hidden');
         heroFallback.classList.remove('hidden');
@@ -127,61 +145,9 @@ export async function getStaticPaths() {
     }
   </script>
 
-  <!-- SECTION 2: THE HOTEL -->
+  <!-- SECTION 2: THE RESTAURANT -->
   <section
-    id="hotel"
-    class="bg-brand-cream min-h-screen flex items-center py-24 md:py-32"
-    aria-labelledby="hotel-heading"
-  >
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div class="flex flex-col gap-6">
-          <span class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">
-            {t('home.hotel_label')}
-          </span>
-          <h2
-            id="hotel-heading"
-            class="font-display font-light text-5xl md:text-6xl text-brand-blue leading-tight"
-          >
-            {t('home.hotel_heading')}
-          </h2>
-          <GarlandDivider />
-          <p class="font-body text-brand-stone text-lg leading-relaxed max-w-md">
-            {t('home.hotel_body')}
-          </p>
-          <div class="mt-2">
-            <a
-              href={getRelativeLocaleUrl(lang, 'hotel')}
-              class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-md"
-            >
-              {t('home.hotel_cta')}
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div class="overflow-hidden rounded-sm">
-            <img src={t('home.img_url_room1')} alt={t('home.img_alt_room1')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
-          </div>
-          <div class="overflow-hidden rounded-sm">
-            <img src={t('home.img_url_room2')} alt={t('home.img_alt_room2')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
-          </div>
-          <div class="overflow-hidden rounded-sm">
-            <img src={t('home.img_url_room3')} alt={t('home.img_alt_room3')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
-          </div>
-          <div class="overflow-hidden rounded-sm">
-            <img src={t('home.img_url_room4')} alt={t('home.img_alt_room4')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3: THE RESTAURANT -->
-  <section
+    id="restaurante"
     class="relative min-h-screen flex items-center bg-brand-blue py-24 md:py-32 overflow-hidden"
     aria-label="Restaurant"
   >
@@ -220,13 +186,66 @@ export async function getStaticPaths() {
       >
         {t('home.restaurant_cta')}
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>        
         </svg>
       </a>
     </div>
 
     <div class="absolute bottom-0 left-0 w-full translate-y-1/2 z-10">
       <GarlandDivider />
+    </div>
+  </section>
+
+  <!-- SECTION 3: THE HOTEL -->
+  <section
+    id="hotel"
+    class="bg-brand-cream min-h-screen flex items-center py-24 md:py-32"
+    aria-labelledby="hotel-heading"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="flex flex-col gap-6">
+          <span class="font-body text-xs uppercase tracking-[0.35em] text-brand-gold">       
+            {t('home.hotel_label')}
+          </span>
+          <h2
+            id="hotel-heading"
+            class="font-display font-light text-5xl md:text-6xl text-brand-blue leading-tight"
+          >
+            {t('home.hotel_heading')}
+          </h2>
+          <GarlandDivider />
+          <p class="font-body text-brand-stone text-lg leading-relaxed max-w-md">
+            {t('home.hotel_body')}
+          </p>
+          <div class="mt-2">
+            <a
+              https://www.booking.com/hotel/es/porta-d-irta.es.html" target="_blank" rel="noopener noreferrer
+              class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-md"
+            >
+              {t('home.hotel_cta')}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>  
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="overflow-hidden rounded-sm">
+            <img src={t('home.img_url_room1')} alt={t('home.img_alt_room1')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+          </div>
+          <div class="overflow-hidden rounded-sm">
+            <img src={t('home.img_url_room2')} alt={t('home.img_alt_room2')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+          </div>
+          <div class="overflow-hidden rounded-sm">
+            <img src={t('home.img_url_room3')} alt={t('home.img_alt_room3')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+          </div>
+          <div class="overflow-hidden rounded-sm">
+            <img src={t('home.img_url_room4')} alt={t('home.img_alt_room4')} class="w-full h-48 md:h-56 object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -297,18 +316,21 @@ export async function getStaticPaths() {
         {t('home.cta_body')}
       </p>
 
-      <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
+            <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
         <a
-          href={getRelativeLocaleUrl(lang, 'hotel')}
-          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300 shadow-lg"
-        >
-          {t('home.cta_hotel')}
-        </a>
-        <a
-          href={getRelativeLocaleUrl(lang, 'restaurante')}
-          class="inline-flex items-center px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-colors duration-300"
+          href={getRelativeLocaleUrl(lang, 'restaurante') + '#reservar'}
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-bold transition-all shadow-lg"
         >
           {t('home.cta_restaurant')}
+        </a>
+        <a
+          href="https://www.booking.com/hotel/es/porta-d-irta.es.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-all"
+        >
+          {t('home.cta_hotel')}
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg" class="h-3.5 invert brightness-0 invert" alt="Booking" />
         </a>
       </div>
     </div>
