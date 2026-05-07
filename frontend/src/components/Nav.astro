@@ -23,8 +23,6 @@ const enHref = canonPath ? `/en/${canonPath}` : '/en';
 const homeHref = lang === 'es' ? '/' : `/${lang}`;
 ---
 
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
-
 <div class="nav-root">
   <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true" />
 
@@ -56,11 +54,6 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
             <a href={getRelativeLocaleUrl(lang, 'restaurante') + '#reservar'} class="inline-flex items-center px-4 py-2 border border-white/30 rounded-sm text-white font-body text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all font-bold">
               {lang === 'es' ? 'Reservar Mesa' : 'Book a Table'}
             </a>
-
-            <!-- BOTÓN IRTA PARK JUNIOR -->
-            <a href={getRelativeLocaleUrl(lang, 'irta-park-junior')} class="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-full font-['Fredoka'] text-[10px] sm:text-[11px] uppercase tracking-wider font-bold transition-all shadow-lg animate-pulse hover:animate-none">
-              Irta Park Junior
-            </a>
           </div>
 
           <label for="nav-toggle" class="hamburger xl:hidden flex flex-col justify-center gap-1.5 w-8 h-8 cursor-pointer ml-2">
@@ -81,11 +74,6 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
         <li class="pt-4 border-t border-white/10">
            <a href={getRelativeLocaleUrl(lang, 'restaurante') + '#reservar'} class="block text-center border border-white/30 text-white px-6 py-4 rounded-sm font-bold uppercase tracking-widest">
             Reservar Mesa
-           </a>
-        </li>
-        <li>
-           <a href={getRelativeLocaleUrl(lang, 'irta-park-junior')} class="block text-center bg-orange-500 text-white px-6 py-4 rounded-full font-['Fredoka'] font-bold uppercase tracking-widest text-lg">
-            Irta Park Junior
            </a>
         </li>
       </ul>
@@ -110,13 +98,4 @@ const homeHref = lang === 'es' ? '/' : `/${lang}`;
   .nav-toggle-input { position: absolute; opacity: 0; pointer-events: none; }
   .mobile-menu { max-height: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
   .nav-toggle-input:checked ~ nav .mobile-menu { max-height: 100vh; }
-  
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-  .animate-pulse {
-    animation: pulse 3s infinite ease-in-out;
-  }
 </style>
