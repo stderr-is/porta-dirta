@@ -54,6 +54,7 @@ export const translations: Record<Locale, TranslationNode> = {
       cta_body: "Reserva tu estancia o mesa en Porta D'irta y déjate envolver por el Mediterráneo. Te esperamos en Peñíscola.",
       cta_hotel: "Reservar Habitación",
       cta_restaurant: "Reservar Mesa",
+      cta_contact: "Contacto",
       og_image: "/assets/images/property-aerial-twilight.jpg",
     },
     eventos: {
@@ -470,6 +471,7 @@ export const translations: Record<Locale, TranslationNode> = {
       cta_body: "Book your stay or table at Porta D'irta and let the Mediterranean embrace you. We look forward to welcoming you in Peñíscola.",
       cta_hotel: "Book a Room",
       cta_restaurant: "Book a Table",
+      cta_contact: "Contact",
       og_image: "/assets/images/property-aerial-twilight.jpg",
     },
     eventos: {
@@ -886,6 +888,7 @@ export const translations: Record<Locale, TranslationNode> = {
       cta_body: "Réservez votre séjour ou votre table í  Porta D'irta et laissez-vous envelopper par la Méditerranée.",
       cta_hotel: "Réserver une Chambre",
       cta_restaurant: "Réserver une Table",
+      cta_contact: "Contact",
       og_image: "/assets/images/property-aerial-twilight.jpg",
     },
     eventos: {
@@ -1302,6 +1305,7 @@ export const translations: Record<Locale, TranslationNode> = {
       cta_body: "Buchen Sie Ihren Aufenthalt oder Ihren Tisch in Porta D'irta und lassen Sie sich vom Mittelmeer verzaubern.",
       cta_hotel: "Zimmer buchen",
       cta_restaurant: "Tisch buchen",
+      cta_contact: "Kontakt",
       og_image: "/assets/images/property-aerial-twilight.jpg",
     },
     eventos: {

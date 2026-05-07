@@ -100,6 +100,14 @@ export async function getStaticPaths() {
         >
           {t('home.cta_restaurant')}
         </a>
+
+        <!-- BOTÓN CONTACTO -->
+        <a
+          href={getRelativeLocaleUrl(lang, 'contacto')}
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-all backdrop-blur-sm bg-white/5"
+        >
+          {t('home.cta_contact')}
+        </a>
         
         <!-- BOTÓN HABITACIÓN (BOOKING) -->
         <a
@@ -322,6 +330,12 @@ export async function getStaticPaths() {
           class="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-brand-gold hover:bg-brand-stone text-brand-blue font-body text-sm uppercase tracking-widest font-bold transition-all shadow-lg"
         >
           {t('home.cta_restaurant')}
+        </a>
+        <a
+          href={getRelativeLocaleUrl(lang, 'contacto')}
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-sm border border-white/60 hover:border-white text-white font-body text-sm uppercase tracking-widest font-medium transition-all"
+        >
+          {t('home.cta_contact')}
         </a>
         <a
           href="https://www.booking.com/hotel/es/porta-d-irta.es.html"
