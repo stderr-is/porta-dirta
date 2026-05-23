@@ -48,3 +48,6 @@ tags: [wbs, planning, execution]
 - [x] Localized table hub routes `/en/mesa`, `/fr/mesa`, `/de/mesa` fixed and fully translated labels deployed.
 - [x] Security hardening baseline: docker secrets externalized from compose, internal token moved to env vars, n8n/uptime images pinned, tracked memory credentials sanitized. (Done 2026-04-04)
 - [x] Performance/SEO/a11y/infra hardening pass: self-hosted fonts, hero video compressed + WebM source, JSON-LD added to home/hotel/event pages, accessible mobile nav toggle state, legal CIF surfaced in footer, Docker DB healthchecks + service_healthy dependencies, and shared volume permissions tightened. (Done 2026-04-04)
+
+## 2026-05-23 Progress Notes
+- [x] **Contact Update:** Replaced legacy phone number `644026066` with new contact `632460981` across frontend (components, pages, translations) and backend (n8n yield management workflow).

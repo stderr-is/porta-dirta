@@ -26,14 +26,14 @@ const subjectOptions = t('contacto.form_subject_options') as unknown as Array<{v
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Inicio",
-        "item": "https://www.portadirta.com/"
+        "name": t('nav.home') || "Inicio",
+        "item": `https://www.portadirta.com/${lang}/`
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "Contacto",
-        "item": "https://www.portadirta.com/contacto"
+        "name": t('contacto.meta_title') || "Contacto",
+        "item": `https://www.portadirta.com/${lang}/contacto`
       }
     ]
   })} />
